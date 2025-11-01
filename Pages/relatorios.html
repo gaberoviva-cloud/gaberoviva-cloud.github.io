@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Relatório com Fotos - Tradimaq</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 40px; background-color: #f2f2f2; }
+    h2 { color: #d35400; margin-bottom: 20px; text-align: center; }
+    .container { background-color: #ffffff; border: 2px solid #d35400; border-radius: 10px; padding: 30px; max-width: 700px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); box-sizing: border-box; }
+    label { font-weight: bold; display: block; margin-top: 15px; color: #2c3e50; }
+    input[type="file"], input[type="text"], input[type="date"] { margin-top: 5px; width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; height: 36px; }
+    input[type="file"] { height: auto; padding: 6px; }
+    button { margin-top: 25px; padding: 12px 20px; font-size: 16px; background-color: #d35400; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; box-sizing: border-box; }
+    button:hover { background-color: #e67e22; }
+    .preview { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+    .preview-item { position: relative; width: 75px; height: 100px; cursor: move; display:flex; align-items:center; justify-content:center; background:#fff; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden; }
+    .preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .remove-btn { position: absolute; top: 6px; right: 6px; background-color: rgba(231, 76, 60, 0.95); color: white; border: none; border-radius: 12px; width: 24px; height: 24px; font-size: 14px; cursor: pointer; line-height: 20px; text-align: center; display:flex; align-items:center; justify-content:center; }
+    .note { font-size:12px; color:#555; margin-top:6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Relatório com Fotos - Tradimaq</h2>
+
+    <label for="tpeInput">🔧 TPE:</label>
+    <input type="text" id="tpeInput" placeholder="Digite o TPE" />
+
+    <label for="dataInput">📅 DATA:</label>
+    <input type="date" id="dataInput" />
+
+    <label for="imageInput">📸 Selecione até 20 fotos (2 por página):</label>
+    <input type="file" id="imageInput" multiple accept="image/*" />
+    <div class="preview" id="previewContainer"></div>
+    <div class="note">Arraste para reordenar. Clique em ✕ para remover.</div>
+
+    <button onclick="gerarPDF()">Gerar Relatório PDF</button>
+  </div>
+
+  <script>
+    let imagensSelecionadas = [];
+    const previewContainer = document.getElementById('previewContainer');
+    const fundoURL = "https://victorrgr.github.io/fundo.jpeg";
+
+    document.getElementById('imageInput').addEventListener('change', function () {
+      const files = [...this.files].slice(0, 20 - imagensSelecionadas.length);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          imagensSelecionadas.push(e.target.result);
+          atualizarPreview();
+        };
+        reader.readAsDataURL(file);
+      });
+      this.value = '';
+    });
+
+    function atualizarPreview() {
+      previewContainer.innerHTML = '';
+      imagensSelecionadas.forEach((src, index) => {
+        const item = document.createElement('div');
+        item.className = 'preview-item';
+        item.draggable = true;
+        item.dataset.index = index;
+
+        const img = document.createElement('img');
+        img.src = src;
+        img.alt = `Foto ${index + 1}`;
+
+        const btn = document.createElement('button');
+        btn.className = 'remove-btn';
+        btn.type = 'button';
+        btn.innerHTML = '✕';
+        btn.onclick = () => {
+          imagensSelecionadas.splice(index, 1);
+          atualizarPreview();
+        };
+
+        item.appendChild(img);
+        item.appendChild(btn);
+        previewContainer.appendChild(item);
+      });
+
+      const items = document.querySelectorAll('.preview-item');
+      items.forEach(item => {
+        item.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', item.dataset.index));
+        item.addEventListener('dragover', e => e.preventDefault());
+        item.addEventListener('drop', e => {
+          e.preventDefault();
+          const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
+          const toIndex = parseInt(item.dataset.index, 10);
+          if (isNaN(fromIndex) || isNaN(toIndex) || fromIndex === toIndex) return;
+          const moved = imagensSelecionadas.splice(fromIndex, 1)[0];
+          imagensSelecionadas.splice(toIndex, 0, moved);
+          atualizarPreview();
+        });
+      });
+    }
+
+    async function gerarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+
+      const tpeRaw = (document.getElementById('tpeInput').value || '').trim();
+      const dataInput = document.getElementById('dataInput').value;
+      const dataFormatada = dataInput ? new Date(dataInput).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
+
+      if (imagensSelecionadas.length === 0) {
+        alert("Selecione as fotos para gerar o relatório.");
+        return;
+      }
+
+      const fundoData = await fetch(fundoURL).then(r => r.blob()).then(b => new Promise(res => {
+        const reader = new FileReader();
+        reader.onload = () => res(reader.result);
+        reader.readAsDataURL(b);
+      }));
+
+      const larguraPagina = doc.internal.pageSize.getWidth();
+      const alturaPagina = doc.internal.pageSize.getHeight();
+      const larguraFoto = 100;
+      const alturaFoto = 75;
+      const posicoes = [
+        { x: (larguraPagina - larguraFoto) / 2, y: 60 },
+        { x: (larguraPagina - larguraFoto) / 2, y: 60 + alturaFoto + 10 }
+      ];
+
+      for (let i = 0; i < imagensSelecionadas.length; i++) {
+        if (i % 2 === 0) {
+          if (i > 0) doc.addPage();
+          doc.addImage(fundoData, 'JPEG', 0, 0, larguraPagina, alturaPagina);
+
+          doc.setFontSize(14);
+          doc.setFont(undefined, 'bold');
+          doc.setTextColor(40, 40, 40);
+          doc.text(`${tpeRaw}`, 45, 50);
+          doc.text(`${dataFormatada}`, larguraPagina - 55, 50);
+          doc.setFont(undefined, 'normal');
+        }
+
+        const pos = posicoes[i % 2];
+        try {
+          doc.addImage(imagensSelecionadas[i], 'JPEG', pos.x, pos.y, larguraFoto, alturaFoto);
+        } catch {
+          doc.addImage(imagensSelecionadas[i], 'PNG', pos.x, pos.y, larguraFoto, alturaFoto);
+        }
+
+        if (i === imagensSelecionadas.length - 1) {
+          const yBase = alturaPagina - 50;
+          const margem = 30;
+          const espacoEntre = 20;
+          const assinaturaWidth = (larguraPagina - margem * 2 - espacoEntre) / 2;
+          const leftX = margem;
+          const rightX = margem + assinaturaWidth + espacoEntre;
+
+          doc.setFontSize(14);
+          doc.setFont(undefined, 'bold');
+          doc.text("Assinatura do Responsável", leftX, yBase - 8);
+          doc.text("Assinatura do Cliente", rightX, yBase - 8);
+          doc.setLineWidth(0.5);
+          doc.line(leftX, yBase, leftX + assinaturaWidth, yBase);
+          doc.line(rightX, yBase, rightX + assinaturaWidth, yBase);
+        }
+      }
+
+      doc.save("relatorio_fotos_tradimaq.pdf");
+    }
+  </script>
+</body>
+</html>
