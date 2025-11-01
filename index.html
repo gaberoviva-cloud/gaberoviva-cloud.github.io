@@ -54,6 +54,8 @@
       cursor: pointer;
       font-size: 1em;
       transition: background 0.3s, transform 0.3s;
+      opacity: 0;
+      animation: buttonSlideIn 0.5s ease-out forwards;
     }
 
     .btn:hover {
@@ -83,6 +85,17 @@
       100% { transform: scale(1); }
     }
 
+    @keyframes buttonSlideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .menu:first-of-type .btn:nth-child(1) { animation-delay: 0.1s; }
+    .menu:first-of-type .btn:nth-child(2) { animation-delay: 0.2s; }
+    .menu:first-of-type .btn:nth-child(3) { animation-delay: 0.3s; }
+    .menu:first-of-type .btn:nth-child(4) { animation-delay: 0.4s; }
+    .menu:last-of-type .btn { animation-delay: 0.1s; }
+
     @media (max-width: 600px) {
       .menu {
         width: 200px;
@@ -99,6 +112,7 @@
         padding: 8px;
         font-size: 0.9em;
         transition: background 0.2s, transform 0.2s;
+        animation: buttonSlideInMobile 0.6s ease-out forwards;
       }
 
       .btn:hover {
@@ -111,7 +125,7 @@
       }
 
       .logo {
-        max-width: 120px;
+        max-width: 150px;
         animation: bounceInMobile 1.2s ease-out;
       }
 
@@ -126,6 +140,17 @@
         70% { transform: scale(0.95); }
         100% { transform: scale(1); }
       }
+
+      @keyframes buttonSlideInMobile {
+        from { opacity: 0; transform: translateX(-15px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+
+      .menu:first-of-type .btn:nth-child(1) { animation-delay: 0.05s; }
+      .menu:first-of-type .btn:nth-child(2) { animation-delay: 0.1s; }
+      .menu:first-of-type .btn:nth-child(3) { animation-delay: 0.15s; }
+      .menu:first-of-type .btn:nth-child(4) { animation-delay: 0.2s; }
+      .menu:last-of-type .btn { animation-delay: 0.05s; }
     }
   </style>
 </head>
