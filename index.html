@@ -31,7 +31,8 @@
       width: 40%;
       max-width: 150px;
       height: auto;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      animation: bounceIn 1s ease-out;
     }
 
     .menu h1 {
@@ -52,12 +53,16 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 1em;
-      transition: 0.2s;
+      transition: background 0.3s, transform 0.3s;
     }
 
     .btn:hover {
       background: #e76f51;
-      transform: scale(1.03);
+      transform: scale(1.05);
+    }
+
+    .btn:active {
+      transform: scale(0.95);
     }
 
     footer {
@@ -71,11 +76,19 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: scale(0.3); }
+      50% { opacity: 1; transform: scale(1.05); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+
     @media (max-width: 600px) {
       .menu {
         width: 200px;
         padding: 15px 20px;
         border-radius: 8px;
+        animation: fadeInMobile 0.6s ease-in-out;
       }
 
       .menu h1 {
@@ -85,14 +98,33 @@
       .btn {
         padding: 8px;
         font-size: 0.9em;
+        transition: background 0.2s, transform 0.2s;
       }
 
-      footer {
-        font-size: 0.7em;
+      .btn:hover {
+        background: #e76f51;
+        transform: scale(1.03);
+      }
+
+      .btn:active {
+        transform: scale(0.97);
       }
 
       .logo {
         max-width: 120px;
+        animation: bounceInMobile 1.2s ease-out;
+      }
+
+      @keyframes fadeInMobile {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes bounceInMobile {
+        0% { opacity: 0; transform: scale(0.4); }
+        50% { opacity: 1; transform: scale(1.03); }
+        70% { transform: scale(0.95); }
+        100% { transform: scale(1); }
       }
     }
   </style>
@@ -123,4 +155,3 @@
   </script>
 </body>
 </html>
-
