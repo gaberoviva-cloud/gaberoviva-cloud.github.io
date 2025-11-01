@@ -8,13 +8,15 @@
     body {
       font-family: 'Segoe UI', Tahoma, sans-serif;
       background: linear-gradient(135deg, #f4a261, #e76f51);
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 20px;
+      padding: 20px 0;
+      box-sizing: border-box;
     }
 
     .menu {
@@ -23,7 +25,8 @@
       box-shadow: 0 5px 20px rgba(0,0,0,0.2);
       padding: 20px 30px;
       text-align: center;
-      width: 250px;
+      max-width: 250px;
+      width: 90%;
       animation: fadeIn 0.5s ease-in-out;
     }
 
@@ -56,6 +59,7 @@
       transition: background 0.3s, transform 0.3s;
       opacity: 0;
       animation: buttonSlideIn 0.5s ease-out forwards;
+      touch-action: manipulation;
     }
 
     .btn:hover {
@@ -97,20 +101,25 @@
     .menu:last-of-type .btn { animation-delay: 0.1s; }
 
     @media (max-width: 600px) {
+      body {
+        gap: 15px;
+        padding: 15px 0;
+      }
+
       .menu {
-        width: 200px;
-        padding: 15px 20px;
+        max-width: 240px;
+        padding: 18px 25px;
         border-radius: 8px;
         animation: fadeInMobile 0.6s ease-in-out;
       }
 
       .menu h1 {
-        font-size: 1.2em;
+        font-size: 1.3em;
       }
 
       .btn {
-        padding: 8px;
-        font-size: 0.9em;
+        padding: 9px;
+        font-size: 0.95em;
         transition: background 0.2s, transform 0.2s;
         animation: buttonSlideInMobile 0.6s ease-out forwards;
       }
@@ -125,7 +134,7 @@
       }
 
       .logo {
-        max-width: 150px;
+        max-width: 210px;
         animation: bounceInMobile 1.2s ease-out;
       }
 
@@ -151,6 +160,17 @@
       .menu:first-of-type .btn:nth-child(3) { animation-delay: 0.15s; }
       .menu:first-of-type .btn:nth-child(4) { animation-delay: 0.2s; }
       .menu:last-of-type .btn { animation-delay: 0.05s; }
+    }
+
+    @media (min-width: 601px) and (max-width: 900px) {
+      .menu {
+        max-width: 300px;
+        padding: 25px 35px;
+      }
+
+      .logo {
+        max-width: 180px;
+      }
     }
   </style>
 </head>
