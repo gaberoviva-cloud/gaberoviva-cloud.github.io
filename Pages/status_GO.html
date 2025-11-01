@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Status Diário - Genie (Excel/PDF)</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 8px;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 100%;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    header {
+      background: #f4a261;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.4em;
+    }
+
+    .title {
+      font-size: 0.95em;
+      margin-top: 3px;
+      color: white;
+      font-weight: normal;
+    }
+    
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 15px;
+      padding: 10px 12px;
+      font-size: 11px;
+      border-bottom: 1px solid #eee;
+      background: #fcfcfc;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+    }
+    .legend-disponivel { background-color: #c3e6cb; }
+    .legend-preventiva { background-color: #bbdefb; }
+    .legend-corretiva { background-color: #f5c6cb; }
+    .legend-checklist { background-color: #d6d6d6; }
+    .legend-alugada { background-color: #f0f0f0; } /* Cor do gráfico */
+
+    .form-header {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .form-group { flex: 1; min-width: 140px; }
+
+    label {
+      display: block;
+      margin-bottom: 3px;
+      font-weight: 600;
+    }
+
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      max-height: 58vh;
+    }
+
+    table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f4a261;
+      color: white;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 11;
+    }
+
+    tr.disponivel { background-color: #c3e6cb; }
+    tr.preventiva { background-color: #bbdefb; }
+    tr.corretiva { background-color: #f5c6cb; }
+    tr.checklist { background-color: #d6d6d6; }
+    tr.alugada { background-color: #ffffff; }
+
+    /* --- Colunas Fixas --- */
+    th:nth-child(1), td:nth-child(1) {
+        min-width: 85px;
+        width: 85px;
+    }
+    th:nth-child(2), td:nth-child(2) {
+        min-width: 85px;
+        width: 85px;
+    }
+    th:nth-child(1) { left: 0; z-index: 12; }
+    td:nth-child(1) { position: sticky; left: 0; z-index: 10; background: white; }
+    th:nth-child(2) { left: 85px; z-index: 12; }
+    td:nth-child(2) { position: sticky; left: 85px; z-index: 10; background: white; }
+    
+    tr.disponivel td:nth-child(1),
+    tr.disponivel td:nth-child(2) { background-color: #c3e6cb; }
+    
+    tr.preventiva td:nth-child(1),
+    tr.preventiva td:nth-child(2) { background-color: #bbdefb; }
+    
+    tr.corretiva td:nth-child(1),
+    tr.corretiva td:nth-child(2) { background-color: #f5c6cb; }
+    
+    tr.checklist td:nth-child(1),
+    tr.checklist td:nth-child(2) { background-color: #d6d6d6; }
+    
+    tr.alugada td:nth-child(1),
+    tr.alugada td:nth-child(2) { background-color: #ffffff; }
+    /* --- Fim Colunas Fixas --- */
+
+    .horimetro-input {
+      width: 100%;
+      text-align: center;
+      padding: 3px;
+      font-size: 11px;
+      border: none;
+      background: transparent;
+      box-sizing: border-box; 
+    }
+
+    .checkbox-group {
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+    }
+
+    .obs-container {
+      padding: 12px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .obs {
+      margin: 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      min-height: 120px;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: vertical;
+      white-space: pre-line;
+    }
+
+    .obs-print {
+      display: none; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-line;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      border: 1px solid #ccc;
+      padding: 8px;
+      min-height: 120px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 11px;
+      color: #555;
+      background: #f9f9f9;
+      border-top: 1px solid #ccc;
+    }
+    
+    .chart-container {
+        position: relative;
+        height: 300px; /* Mais altura para gráfico de barras */
+        width: 95%;   
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    .btn {
+      background: #e63946;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 12px;
+      width: calc(100% - 24px);
+      font-weight: bold;
+    }
+
+    .btn-pdf {
+      background: #457b9d;
+      margin-top: 0;
+    }
+    
+    /* Estilos para PDF */
+    body.pdf-generating {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    body.pdf-generating .container {
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+    }
+
+    body.pdf-generating .table-container {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    body.pdf-generating th,
+    body.pdf-generating td:nth-child(1),
+    body.pdf-generating td:nth-child(2) {
+        position: static !important;
+    }
+    
+    body.pdf-generating .btn,
+    body.pdf-generating .btn-pdf {
+        display: none !important;
+    }
+    
+    body.pdf-generating .obs {
+      display: none !important; 
+    }
+    body.pdf-generating .obs-print {
+      display: block !important;
+    }
+    
+    /* --- INÍCIO: ALTERAÇÃO (Garante que gráfico não quebre no PDF) --- */
+    body.pdf-generating .chart-container {
+        page-break-inside: avoid;
+    }
+    /* --- FIM: ALTERAÇÃO --- */
+
+
+    @media print {
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .table-container {
+        max-height: none;
+        overflow: visible;
+      }
+      th, td, tr {
+        page-break-inside: avoid;
+      }
+      .obs-container, .form-header {
+        page-break-after: avoid; 
+      }
+      thead { display: table-header-group; }
+      tfoot { display: table-footer-group; }
+      
+      .obs, .obs-print {
+        white-space: pre-line;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+      
+      /* --- INÍCIO: ALTERAÇÃO (Garante que gráfico não quebre na impressão) --- */
+      .chart-container {
+        page-break-inside: avoid;
+      }
+      /* --- FIM: ALTERAÇÃO --- */
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo">TRADIMAQ GO</div>
+    <div class="title">STATUS DIÁRIO - PÁTIO - PLATAFORMAS GENIE</div>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-color legend-disponivel"></span> Disponível</div>
+    <div class="legend-item"><span class="legend-color legend-preventiva"></span> Preventiva</div>
+    <div class="legend-item"><span class="legend-color legend-corretiva"></span> Corretiva</div>
+    <div class="legend-item"><span class="legend-color legend-checklist"></span> Checklist</div>
+    <div class="legend-item"><span class="legend-color legend-alugada" style="border: 1px solid #ccc;"></span> Alugada (vazio)</div>
+  </div>
+
+  <div class="obs-container">
+    <label>OBSERVAÇÕES</label>
+    <textarea class="obs" id="observacoes" placeholder="Digite aqui..."></textarea>
+    <div class="obs-print" id="observacoes-print"></div>
+  </div>
+
+  <div class="form-header">
+    <div class="form-group">
+      <label>Mantenedor:</label>
+      <input type="text" id="mantenedor" placeholder="Nome" />
+    </div>
+    <div class="form-group">
+      <label>Data:</label>
+      <input type="date" id="data" />
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table id="equipamentos-table">
+      <thead>
+        <tr>
+          <th>MODELO</th>
+          <th>TAG</th>
+          <th>HORÍMETRO</th>
+          <th>DISPONÍVEL</th>
+          <th>PREVENTIVA</th>
+          <th>CORRETIVA</th>
+          <th>CHECKLIST</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <strong>OBS: TOTAL 72 EQUIPAMENTOS</strong><br>
+    *Arquivo salvo em: T:\Plataformas_MG\Manutenção\Documentos Gerais Plataformas
+  </div>
+  
+  <div class="chart-container">
+    <canvas id="statusChart"></canvas>
+  </div>
+
+</div>
+
+<button class="btn" onclick="gerarExcel()">GERAR EXCEL</button>
+<button class="btn btn-pdf" onclick="gerarPDF()">GERAR PDF</button>
+
+<script>
+const equipamentos = 
+[
+ // ... (lista de equipamentos original mantida, sem alterações)
+ { modelo: "GS1930", tag: "TPE-2499" },
+ { modelo: "GS1930", tag: "TPE-2500" },
+ { modelo: "GS1930", tag: "TPE-2501" },
+ { modelo: "GS1930", tag: "TPE-2502" },
+ { modelo: "GS1930", tag: "TPE-2503" },
+ { modelo: "GS1930", tag: "TPE-2504" },
+ { modelo: "GS-2646", tag: "TPE-1330" },
+ { modelo: "GS-2646", tag: "TPE-1331" },
+ { modelo: "GS-2646", tag: "TPE-1332" },
+ { modelo: "GS-2646", tag: "TPE-1333" },
+ { modelo: "GS-2646", tag: "TPE-1513" },
+ { modelo: "GS-2646", tag: "TPE-1514" },
+ { modelo: "GS-2646", tag: "TPE-1515" },
+ { modelo: "GS-2646", tag: "TPE-1516" },
+ { modelo: "GS-2646", tag: "TPE-1517" },
+ { modelo: "GS-2646", tag: "TPE-1525" },
+ { modelo: "GS-2646", tag: "TPE-1528" },
+ { modelo: "GS-3246", tag: "TPE-1296" },
+ { modelo: "GS-3246", tag: "TPE-1297" },
+ { modelo: "GS-3246", tag: "TPE-1298" },
+ { modelo: "GS-3246", tag: "TPE-1549" },
+ { modelo: "GS-3246", tag: "TPE-1550" },
+ { modelo: "GS-3246", tag: "TPE-1551" },
+ { modelo: "GS-3246", tag: "TPE-1552" },
+ { modelo: "GS-3246", tag: "TPE-1553" },
+ { modelo: "GS-3246", tag: "TPE-3693" },
+ { modelo: "GS-3246", tag: "TPE-3694" },
+ { modelo: "GS-3246", tag: "TPE-3695" },
+ { modelo: "GS-4046", tag: "TPE-3696" },
+ { modelo: "GS-4046", tag: "TPE-3697" },
+ { modelo: "Z-34", tag: "TPE-1599" },
+ { modelo: "Z-34", tag: "TPE-1602" },
+ { modelo: "Z-34", tag: "TPE-3607" },
+ { modelo: "Z-34", tag: "TPE-3608" },
+ { modelo: "Z-45 DC", tag: "TPE-1301" },
+ { modelo: "Z-45 DC", tag: "TPE-1554" },
+ { modelo: "Z-45 DC", tag: "TPE-1555" },
+ { modelo: "Z-45 DC", tag: "TPE-1556" },
+ { modelo: "Z-45 DC", tag: "TPE-1662" },
+ { modelo: "Z-45 DC", tag: "TPE-2217" },
+ { modelo: "Z-45 DC", tag: "TPE-2218" },
+ { modelo: "Z-45 DC", tag: "TPE-2219" },
+ { modelo: "Z-45 DC", tag: "TPE-2220" },
+ { modelo: "Z-45 DC", tag: "TPE-2301" },
+ { modelo: "Z-45 DC", tag: "TPE-2385" },
+ { modelo: "Z-45 DC", tag: "TPE-2386" },
+ { modelo: "Z-45 DC", tag: "TPE-2387" },
+ { modelo: "Z-45 DC", tag: "TPE-2388" },
+ { modelo: "Z-45 DC", tag: "TPE-2390" },
+ { modelo: "Z-45 DC", tag: "TPE-2391" },
+ { modelo: "Z-45 DC", tag: "TPE-2392" },
+ { modelo: "Z-45 DC", tag: "TPE-2394" },
+ { modelo: "Z-45 DC", tag: "TPE-3609" },
+ { modelo: "Z-45 DC", tag: "TPE-3610" },
+ { modelo: "Z-45 DC", tag: "TPE-3611" },
+ { modelo: "Z-45 DC", tag: "TPE-3612" },
+ { modelo: "Z-45 DC", tag: "TPE-3613" },
+ { modelo: "Z-45 DC", tag: "TPE-3614" },
+ { modelo: "Z-45 DC", tag: "TPE-3615" },
+ { modelo: "Z-45 DC", tag: "TPE-3616" },
+ { modelo: "Z-45 RT", tag: "TPE-0476" },
+ { modelo: "Z-45 RT", tag: "TPE-0864" },
+ { modelo: "Z-45 RT", tag: "TPE-1303" },
+ { modelo: "Z-45 RT", tag: "TPE-3433" },
+ { modelo: "Z-45 RT", tag: "TPE-3617" },
+ { modelo: "Z-45 RT", tag: "TPE-3618" },
+ { modelo: "Z-60", tag: "TPE-1653" },
+ { modelo: "Z-62", tag: "TPE-3434" },
+ { modelo: "Z-62", tag: "TPE-3635" },
+ { modelo: "Z-80", tag: "TPE-2333" },
+ { modelo: "Z-80", tag: "TPE-3636" },
+ { modelo: "S-80J", tag: "TPE-3763" }
+];
+
+let myStatusChart = null;
+const tbody = document.querySelector('#equipamentos-table tbody');
+
+equipamentos.forEach(eq => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td>${eq.modelo}</td>
+    <td>${eq.tag}</td>
+    <td><input type="text" class="horimetro-input" data-tag="${eq.tag}" placeholder="0"></td>
+    <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="disp_${eq.tag}"></div></td>
+    <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="prev_${eq.tag}"></div></td>
+    <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="corr_${eq.tag}"></div></td>
+    <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="check_${eq.tag}"></div></td>
+  `;
+  tbody.appendChild(tr);
+});
+
+// Listeners (Cache, Gráfico, Filtro de Números)
+document.querySelectorAll('.status-check').forEach(cb => {
+  cb.addEventListener('change', function() {
+    const row = this.closest('tr');
+    row.classList.remove('disponivel','preventiva','corretiva','checklist', 'alugada');
+    
+    const tag = this.id.split('_')[1];
+    localStorage.removeItem('status_' + tag); 
+
+    if (this.checked) {
+      row.querySelectorAll('.status-check').forEach(o => { if (o !== this) o.checked = false; });
+      
+      let status = '';
+      if (this.id.startsWith('disp_')) {
+        row.classList.add('disponivel');
+        status = 'disponivel';
+      } else if (this.id.startsWith('prev_')) {
+        row.classList.add('preventiva');
+        status = 'preventiva';
+      } else if (this.id.startsWith('corr_')) {
+        row.classList.add('corretiva');
+        status = 'corretiva';
+      } else if (this.id.startsWith('check_')) {
+        row.classList.add('checklist');
+        status = 'checklist';
+      }
+      localStorage.setItem('status_' + tag, status);
+    } else {
+      row.classList.add('alugada');
+    }
+    
+    updateChart(); 
+  });
+});
+
+document.querySelectorAll('.horimetro-input').forEach(input => {
+  input.addEventListener('input', function(e) {
+    this.value = this.value.replace(/[^0-9]/g, '');
+    localStorage.setItem('horimetro_' + this.dataset.tag, this.value);
+  });
+});
+
+const obsInput = document.getElementById('observacoes');
+const obsPrint = document.getElementById('observacoes-print');
+const mantenedorInput = document.getElementById('mantenedor');
+const dataInput = document.getElementById('data');
+
+obsInput.addEventListener('input', () => {
+  obsPrint.textContent = obsInput.value;
+  localStorage.setItem('status_observacoes', obsInput.value);
+});
+
+mantenedorInput.addEventListener('input', () => {
+  localStorage.setItem('status_mantenedor', mantenedorInput.value);
+});
+
+dataInput.addEventListener('input', () => {
+  localStorage.setItem('status_data', dataInput.value);
+});
+
+// Funções de Geração (Excel, PDF)
+function gerarExcel() {
+  // ... (função gerarExcel original mantida)
+  const wb = XLSX.utils.book_new();
+  const ws_data = [
+    ["TRADIMAQ - STATUS DIÁRIO - PLATAFORMAS GENIE"],
+    [`Mantenedor: ${document.getElementById('mantenedor').value || ''}`],
+    [`Data: ${document.getElementById('data').value || ''}`],
+    [`Observações: ${document.getElementById('observacoes').value || ''}`],
+    [""],
+    ["MODELO","TAG","HORÍMETRO","DISPONÍVEL","PREVENTIVA","CORRETIVA","CHECKLIST"]
+  ];
+
+  const borderStyle = { style: "thin", color: { rgb: "000000" } };
+  const borderAll = { top: borderStyle, bottom: borderStyle, left: borderStyle, right: borderStyle };
+  const fillHeader = { fgColor: { rgb: "F4A261" } };
+  const fontHeader = { color: { rgb: "FFFFFF" }, bold: true };
+  const fillDisponivel = { fgColor: { rgb: "C3E6CB" } };
+  const fillPreventiva = { fgColor: { rgb: "BBDEFB" } };
+  const fillCorretiva = { fgColor: { rgb: "F5C6CB" } };
+  const fillChecklist = { fgColor: { rgb: "D6D6D6" } };
+  const cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  
+  const htmlRows = document.querySelectorAll('#equipamentos-table tbody tr');
+  const rowStyles = []; 
+
+  htmlRows.forEach(tr => {
+    const modelo = tr.cells[0].textContent;
+    const tag = tr.cells[1].textContent;
+    const horimetro = tr.querySelector('.horimetro-input').value;
+    const disp = tr.querySelector('#disp_' + tag)?.checked ? "OK" : "";
+    const prev = tr.querySelector('#prev_' + tag)?.checked ? "OK" : "";
+    const corr = tr.querySelector('#corr_' + tag)?.checked ? "OK" : "";
+    const check = tr.querySelector('#check_' + tag)?.checked ? "OK" : "";
+    ws_data.push([modelo, tag, horimetro, disp, prev, corr, check]);
+
+    let rowFill = null;
+    if (tr.classList.contains('disponivel')) {
+      rowFill = fillDisponivel;
+    } else if (tr.classList.contains('preventiva')) {
+      rowFill = fillPreventiva;
+    } else if (tr.classList.contains('corretiva')) {
+      rowFill = fillCorretiva;
+    } else if (tr.classList.contains('checklist')) {
+      rowFill = fillChecklist;
+    }
+    rowStyles.push(rowFill);
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(ws_data);
+
+  cols.forEach(col => {
+    const cellAddress = col + '6';
+    let cell = ws[cellAddress];
+    if (!cell) cell = {}; 
+    if (!cell.s) cell.s = {}; 
+    cell.s.border = borderAll;
+    cell.s.fill = fillHeader;
+    cell.s.font = fontHeader;
+  });
+
+  rowStyles.forEach((rowFill, rowIndex) => {
+    const excelRowIndex = rowIndex + 7;
+    cols.forEach(col => {
+      const cellAddress = col + excelRowIndex;
+      let cell = ws[cellAddress];
+      if (!cell) cell = { t: 's', v: '' }; 
+      if (!cell.s) cell.s = {};
+      cell.s.border = borderAll;
+      if (rowFill) {
+        cell.s.fill = rowFill; 
+      }
+    });
+  });
+
+  ws['!cols'] = [{ wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
+  XLSX.utils.book_append_sheet(wb, ws, "Status Diário");
+  const nome = `Status_Diario_Genie_${new Date().toISOString().split('T')[0].replace(/-/g, '')}.xlsx`;
+  XLSX.writeFile(wb, nome);
+  alert("Excel gerado com sucesso!");
+}
+
+function gerarPDF() {
+  // ... (função gerarPDF original mantida, com as correções anteriores)
+  const data = document.getElementById('data').value || new Date().toISOString().split('T')[0];
+  const nome = `Status_Diario_Genie_${data.replace(/-/g, '')}.pdf`;
+  const element = document.querySelector('.container');
+
+  document.getElementById('observacoes-print').textContent = document.getElementById('observacoes').value;
+  window.scrollTo(0, 0);
+
+  const opt = {
+    margin:       [0.4, 0.4, 0.4, 0.4],
+    filename:     nome,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'], avoid: 'tr' } 
+  };
+
+  document.body.classList.add('pdf-generating');
+
+  html2pdf().from(element).set(opt).save().then(() => {
+    document.body.classList.remove('pdf-generating');
+    alert("PDF gerado com sucesso!");
+  }).catch((err) => {
+    document.body.classList.remove('pdf-generating');
+    alert("Erro ao gerar PDF: " + err);
+  });
+}
+
+// --- INÍCIO: ALTERAÇÃO (Função do Gráfico de Barras) ---
+function updateChart() {
+  const total = equipamentos.length;
+  let disponivel = 0;
+  let preventiva = 0;
+  let corretiva = 0;
+  let checklist = 0;
+  
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
+    if (tr.classList.contains('disponivel')) disponivel++;
+    else if (tr.classList.contains('preventiva')) preventiva++;
+    else if (tr.classList.contains('corretiva')) corretiva++;
+    else if (tr.classList.contains('checklist')) checklist++;
+  });
+  
+  const alugada = total - (disponivel + preventiva + corretiva + checklist);
+  const ctx = document.getElementById('statusChart').getContext('2d');
+  
+  if (myStatusChart) {
+    myStatusChart.destroy(); // Destrói o gráfico antigo para redesenhar
+  }
+
+  myStatusChart = new Chart(ctx, {
+    type: 'bar', // Tipo de gráfico alterado para 'bar' (barras/colunas)
+    data: {
+      labels: ['Disponível', 'Preventiva', 'Corretiva', 'Checklist', 'Alugada'],
+      datasets: [{
+        label: 'Quantidade',
+        data: [disponivel, preventiva, corretiva, checklist, alugada],
+        backgroundColor: [
+          '#c3e6cb', // Disponível
+          '#bbdefb', // Preventiva
+          '#f5c6cb', // Corretiva
+          '#d6d6d6', // Checklist
+          '#f0f0f0'  // Alugada
+        ],
+        borderColor: [
+          '#888',
+          '#888',
+          '#888',
+          '#888',
+          '#888'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false, // Legenda desativada (eixos já são claros)
+        },
+        title: {
+          display: true,
+          text: `Resumo do Status (Total: ${total})`
+        }
+      },
+      scales: { // Configuração dos eixos
+        y: {
+          beginAtZero: true, // Eixo Y começa no zero
+          title: {
+            display: true,
+            text: 'Quantidade'
+          },
+          ticks: {
+             stepSize: 1 // Força o eixo Y a usar apenas números inteiros
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Status'
+          }
+        }
+      }
+    }
+  });
+}
+// --- FIM: ALTERAÇÃO ---
+
+// --- INÍCIO: ALTERAÇÃO (Função de Carregar Cache com Data Automática) ---
+function loadFromCache() {
+  // 1. Carrega campos de texto
+  mantenedorInput.value = localStorage.getItem('status_mantenedor') || '';
+  
+  // 2. Carrega a data (automática se vazia)
+  let savedData = localStorage.getItem('status_data');
+  if (!savedData) {
+      // Se não houver data salva, define a data de hoje
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0'); // Mês +1 e com 2 dígitos
+      const dd = String(today.getDate()).padStart(2, '0'); // Dia com 2 dígitos
+      savedData = `${yyyy}-${mm}-${dd}`;
+      localStorage.setItem('status_data', savedData); // Salva a data de hoje
+  }
+  dataInput.value = savedData;
+  
+  // 3. Carrega observações
+  const savedObs = localStorage.getItem('status_observacoes') || '';
+  obsInput.value = savedObs;
+  obsPrint.textContent = savedObs;
+
+  // 4. Carrega dados da tabela
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
+    const tag = tr.cells[1].textContent;
+    
+    const horimetroInput = tr.querySelector('.horimetro-input');
+    horimetroInput.value = localStorage.getItem('horimetro_' + tag) || '';
+
+    const savedStatus = localStorage.getItem('status_' + tag);
+    let isAlugada = true;
+    
+    if (savedStatus) {
+      let checkboxId = '';
+      if (savedStatus === 'disponivel') {
+        checkboxId = 'disp_' + tag;
+        tr.classList.add('disponivel');
+      } else if (savedStatus === 'preventiva') {
+        checkboxId = 'prev_' + tag;
+        tr.classList.add('preventiva');
+      } else if (savedStatus === 'corretiva') {
+        checkboxId = 'corr_' + tag;
+        tr.classList.add('corretiva');
+      } else if (savedStatus === 'checklist') {
+        checkboxId = 'check_' + tag;
+        tr.classList.add('checklist');
+      }
+      
+      const checkbox = document.getElementById(checkboxId);
+      if (checkbox) {
+        checkbox.checked = true;
+        isAlugada = false;
+      }
+    }
+    
+    if (isAlugada) {
+      tr.classList.add('alugada');
+    }
+  });
+  
+  // 5. Desenha o gráfico inicial
+  updateChart();
+}
+
+// Carrega os dados do cache assim que a página é carregada
+loadFromCache();
+// --- FIM: ALTERAÇÃO ---
+
+</script>
+</body>
+</html>
