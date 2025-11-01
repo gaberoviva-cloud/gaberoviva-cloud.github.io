@@ -21,9 +21,9 @@
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      padding: 30px 40px;
+      padding: 20px 30px;
       text-align: center;
-      width: 300px;
+      width: 250px;
       animation: fadeIn 0.5s ease-in-out;
     }
 
@@ -35,23 +35,23 @@
     }
 
     .menu h1 {
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       color: #e76f51;
-      font-size: 1.6em;
+      font-size: 1.4em;
     }
 
     .btn {
       display: block;
       width: 100%;
-      margin: 10px 0;
-      padding: 12px;
+      margin: 8px 0;
+      padding: 10px;
       background: #f4a261;
       color: #fff;
       font-weight: bold;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 1.1em;
+      font-size: 1em;
       transition: 0.2s;
     }
 
@@ -61,8 +61,8 @@
     }
 
     footer {
-      margin-top: 15px;
-      font-size: 0.9em;
+      margin-top: 10px;
+      font-size: 0.8em;
       color: #666;
     }
 
@@ -70,10 +70,35 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    @media (max-width: 600px) {
+      .menu {
+        width: 200px;
+        padding: 15px 20px;
+        border-radius: 8px;
+      }
+
+      .menu h1 {
+        font-size: 1.2em;
+      }
+
+      .btn {
+        padding: 8px;
+        font-size: 0.9em;
+      }
+
+      footer {
+        font-size: 0.7em;
+      }
+
+      .logo {
+        max-width: 120px;
+      }
+    }
   </style>
 </head>
-  <img src="LOGO_tradimaq_branca.png" alt="Tradimaq" class="logo">
 <body>
+  <img src="LOGO_tradimaq_branca.png" alt="Tradimaq" class="logo">
   <div class="menu">
     <h1>Status Diário</h1>
     <button class="btn" onclick="abrir('/Pages/status_MG.html')">Status MG</button>
@@ -90,8 +115,6 @@
     <footer>By Gabriel Roza</footer>
   </div>
 
-  </div>
-
   <script>
     function abrir(arquivo) {
       window.location.href = arquivo;
@@ -100,7 +123,3 @@
   </script>
 </body>
 </html>
-
-
-
-
