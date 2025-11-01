@@ -11,9 +11,12 @@
       height: 100vh;
       margin: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 20px;
     }
+
     .menu {
       background: #fff;
       border-radius: 12px;
@@ -22,17 +25,21 @@
       text-align: center;
       width: 300px;
       animation: fadeIn 0.5s ease-in-out;
+    }
+
     .logo {
       width: 40%;
       max-width: 150px;
       height: auto;
       margin-bottom: 10px;
     }
+
     .menu h1 {
       margin-bottom: 20px;
       color: #e76f51;
       font-size: 1.6em;
     }
+
     .btn {
       display: block;
       width: 100%;
@@ -47,10 +54,18 @@
       font-size: 1.1em;
       transition: 0.2s;
     }
+
     .btn:hover {
       background: #e76f51;
       transform: scale(1.03);
     }
+
+    footer {
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -65,20 +80,23 @@
     <button class="btn" onclick="abrir('/Pages/status_GO.html')">Status GO</button>
     <button class="btn" onclick="abrir('/Pages/status_ES.html')">Status ES</button>
     <button class="btn" onclick="abrir('/Pages/status_PA.html')">Status PA</button>
-        <footer>By Gabriel Roza</footer>
+    <footer>By Gabriel Roza</footer>
+  </div>
+
+  <!-- Nova caixa: Gerador de Relatórios -->
+  <div class="menu">
+    <h1>Gerador de Relatórios</h1>
+    <button class="btn" onclick="abrir('/Pages/relatorios.html')">Abrir Gerador</button>
+    <footer>By Gabriel Roza</footer>
+  </div>
+
   </div>
 
   <script>
     function abrir(arquivo) {
-      // 👉 abrir na mesma aba:
       window.location.href = arquivo;
-
-      // ou se quiser abrir em nova aba:
-      // window.open(arquivo, '_blank');
+      // ou: window.open(arquivo, '_blank');
     }
   </script>
 </body>
 </html>
-
-
-
