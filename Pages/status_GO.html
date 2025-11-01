@@ -240,6 +240,13 @@
       margin-top: 0;
     }
     
+    /* --- ESTILO ADICIONADO --- */
+    .btn-clear {
+      background: #6c757d; /* Um cinza neutro */
+      margin-top: 0;
+    }
+    /* --- FIM DO ESTILO ADICIONADO --- */
+    
     /* Estilos para PDF */
     body.pdf-generating {
         padding: 0 !important;
@@ -264,7 +271,8 @@
     }
     
     body.pdf-generating .btn,
-    body.pdf-generating .btn-pdf {
+    body.pdf-generating .btn-pdf,
+    body.pdf-generating .btn-clear { /* Adicionado btn-clear aqui */
         display: none !important;
     }
     
@@ -275,11 +283,9 @@
       display: block !important;
     }
     
-    /* --- INÍCIO: ALTERAÇÃO (Garante que gráfico não quebre no PDF) --- */
     body.pdf-generating .chart-container {
         page-break-inside: avoid;
     }
-    /* --- FIM: ALTERAÇÃO --- */
 
 
     @media print {
@@ -307,11 +313,9 @@
         hyphens: auto;
       }
       
-      /* --- INÍCIO: ALTERAÇÃO (Garante que gráfico não quebre na impressão) --- */
       .chart-container {
         page-break-inside: avoid;
       }
-      /* --- FIM: ALTERAÇÃO --- */
     }
 
   </style>
@@ -379,11 +383,10 @@
 
 <button class="btn" onclick="gerarExcel()">GERAR EXCEL</button>
 <button class="btn btn-pdf" onclick="gerarPDF()">GERAR PDF</button>
-
+<button class="btn btn-clear" onclick="limparTudo()">LIMPAR TUDO</button>
 <script>
 const equipamentos = 
 [
- // ... (lista de equipamentos original mantida, sem alterações)
  { modelo: "GS1930", tag: "TPE-2499" },
  { modelo: "GS1930", tag: "TPE-2500" },
  { modelo: "GS1930", tag: "TPE-2501" },
@@ -537,7 +540,6 @@ dataInput.addEventListener('input', () => {
 
 // Funções de Geração (Excel, PDF)
 function gerarExcel() {
-  // ... (função gerarExcel original mantida)
   const wb = XLSX.utils.book_new();
   const ws_data = [
     ["TRADIMAQ - STATUS DIÁRIO - PLATAFORMAS GENIE"],
@@ -618,7 +620,6 @@ function gerarExcel() {
 }
 
 function gerarPDF() {
-  // ... (função gerarPDF original mantida, com as correções anteriores)
   const data = document.getElementById('data').value || new Date().toISOString().split('T')[0];
   const nome = `Status_Diario_Genie_${data.replace(/-/g, '')}.pdf`;
   const element = document.querySelector('.container');
@@ -646,7 +647,23 @@ function gerarPDF() {
   });
 }
 
-// --- INÍCIO: ALTERAÇÃO (Função do Gráfico de Barras) ---
+// --- FUNÇÃO ADICIONADA ---
+function limparTudo() {
+  // Pede confirmação ao usuário, pois é uma ação destrutiva
+  if (confirm("Tem certeza que deseja limpar TODOS os dados salvos? \n\nIsso irá apagar o mantenedor, data, observações e todos os status e horímetros da tabela.")) {
+    
+    // Limpa todo o localStorage (cache) associado a esta página
+    localStorage.clear();
+    
+    // Recarrega a página. 
+    // Ao recarregar, a função loadFromCache() será executada
+    // e não encontrará dados, redefinindo o formulário para o estado inicial.
+    location.reload();
+  }
+}
+// --- FIM DA FUNÇÃO ADICIONADA ---
+
+
 function updateChart() {
   const total = equipamentos.length;
   let disponivel = 0;
@@ -725,9 +742,7 @@ function updateChart() {
     }
   });
 }
-// --- FIM: ALTERAÇÃO ---
 
-// --- INÍCIO: ALTERAÇÃO (Função de Carregar Cache com Data Automática) ---
 function loadFromCache() {
   // 1. Carrega campos de texto
   mantenedorInput.value = localStorage.getItem('status_mantenedor') || '';
@@ -794,7 +809,6 @@ function loadFromCache() {
 
 // Carrega os dados do cache assim que a página é carregada
 loadFromCache();
-// --- FIM: ALTERAÇÃO ---
 
 </script>
 </body>
