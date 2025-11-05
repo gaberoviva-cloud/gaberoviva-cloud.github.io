@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Laudo Técnico - TRADIMAQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        /* PAINEL DE CONTROLE (JANELA DE EDIÇÃO) */
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .form-container div {
+            margin-bottom: 15px;
+        }
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+        .form-container input[type="text"] {
+            width: calc(100% - 18px); /* Ajuste para o padding */
+            padding: 8px;
+            font-size: 11pt;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            padding: 12px 20px;
+            font-size: 1.1em;
+            background-color: #FF6600; /* Orange from logo */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .form-container button:hover {
+            background-color: #CC5200; /* Darker orange */
+        }
+        #btn-preview {
+            background-color: #7D7D7D; /* Gray from logo */
+        }
+        #btn-preview:hover {
+            background-color: #5A5A5A; /* Darker gray */
+        }
+
+        /* O DOCUMENTO A4 PARA IMPRESSÃO */
+        #laudo-container {
+            display: none; 
+            width: 210mm; 
+            min-height: 297mm; 
+            padding: 2.5cm; 
+            border: 1px solid #ddd;
+            background-color: #fff;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #000;
+        }
+        #laudo-logo {
+            max-width: 300px; 
+            height: auto;
+            margin-bottom: 25px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .date {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin-top: 20px;
+        }
+        
+        /* --- ESTILOS DA ASSINATURA E CARIMBO --- */
+        .signature-block {
+            margin-top: 60px;
+            text-align: center;
+            position: relative; /* Necessário para posicionar o carimbo absolutamente */
+            display: flex; /* Para centralizar os itens de forma mais flexível */
+            flex-direction: column; /* Organiza os itens em coluna */
+            align-items: center; /* Centraliza horizontalmente */
+            justify-content: center; /* Centraliza verticalmente */
+        }
+        .signature-image {
+            max-width: 150px;
+            height: auto;
+            margin-bottom: -56px; 
+            z-index: 1; /* Garante que a assinatura fique acima da linha se houver sobreposição */
+        }
+        .signature-line {
+            border-top: 1px solid #000;
+            width: 300px; 
+            margin: 40px auto 0 auto; 
+            z-index: 0;
+        }
+        
+        /* NOVO ESTILO: Carimbo */
+        .stamp-image {
+            position: absolute; /* Posicionamento absoluto dentro do bloco da assinatura */
+            top: 10px; /* Ajuste a posição vertical */
+            left: calc(50% + 80px); /* Ajuste a posição horizontal - 50% do bloco + offset */
+            transform: rotate(45deg); /* Rotação de 45 graus */
+            width: 150px; /* Tamanho do carimbo */
+            height: auto;
+            opacity: 0.7; /* Suave transparência para parecer um carimbo */
+            z-index: 2; /* Garante que o carimbo fique sobre a assinatura se for o caso */
+            transform-origin: center center; /* Ponto de rotação no centro */
+        }
+        /* Ajuste fino para carimbo em telas menores (opcional) */
+        @media (max-width: 768px) {
+            .stamp-image {
+                left: calc(50% + 40px); /* Ajusta a posição em telas menores */
+                width: 80px;
+            }
+        }
+        
+        /* Oculta o painel de controle e força o A4 no modo de impressão nativa */
+        @media print {
+            body {
+                background-color: #fff;
+            }
+            .form-container {
+                display: none;
+            }
+            #laudo-container {
+                display: block !important;
+                position: static !important;
+                left: auto !important;
+                box-shadow: none;
+                border: none;
+                width: 210mm !important; /* Força A4 no print */
+                min-height: 297mm !important; /* Força A4 no print */
+                padding: 2.5cm !important; /* Força padding no print */
+            }
+            .signature-line {
+                width: 300px !important; 
+                max-width: 300px !important; 
+                margin: 40px auto 0 auto !important;
+            }
+            /* Garante que o carimbo também apareça na impressão */
+            .stamp-image {
+                display: block !important;
+            }
+            #download-btn {
+                display: none !important;
+            }
+        }
+
+        /* Estilos para o Modal (Pré-visualização) */
+        #preview-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 900px;
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+        #modal-laudo {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 2.5cm;
+            background-color: #fff;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-size: 12pt;
+            line-height: 1.5;
+            color: #000;
+            margin: 0 auto;
+            overflow: auto; 
+            position: relative; /* Para que o carimbo no modal também se posicione corretamente */
+        }
+        #modal-laudo .signature-block {
+             position: relative; /* Recria o contexto de posicionamento para o carimbo no modal */
+        }
+        #download-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 20px;
+            font-size: 1.1em;
+            background-color: #FF6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #download-btn:hover {
+            background-color: #CC5200;
+        }
+
+        /* Melhorias para responsividade em dispositivos móveis (Android) */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                overflow-x: auto;
+            }
+            .form-container {
+                max-width: 100%;
+                padding: 15px;
+            }
+            .form-container button {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .modal-content {
+                width: 95%;
+                padding: 10px;
+            }
+            #modal-laudo {
+                width: 100%;
+                min-height: auto;
+                padding: 1cm;
+            }
+            .signature-line {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Preencher Informações do Laudo</h2>
+        <div>
+            <label for="input-data">Data:</label>
+            <input type="text" id="input-data">
+        </div>
+        <div>
+            <label for="input-modelo">Modelo (Ex: Z45/25):</label>
+            <input type="text" id="input-modelo" placeholder="Z45/25">
+        </div>
+        <div>
+            <label for="input-frota">Frota (Ex: TPE-3664):</label>
+            <input type="text" id="input-frota" placeholder="TPE-3664">
+        </div>
+        
+        <button id="btn-pdf">Gerar PDF (Abre em Nova Aba)</button>
+        <button id="btn-preview">Atualizar Pré-visualização</button>
+    </div>
+
+    <div id="laudo-container">
+    
+        <img id="laudo-logo" src="https://gaberoviva-cloud.github.io/LOGO_tradimaq.png" alt="Logo TRADIMAQ">
+
+        <h1 style="font-size: 1.2em; text-align: center; font-weight: bold; margin-bottom: 30px;">
+            Laudo Técnico de Liberação de Plataforma
+        </h1>
+        
+        <p class="date">
+            <span id="output-data" class="editable">[DATA]</span>
+        </p>
+
+        <div class="content">
+            <p>
+                Atestamos, para os devidos fins, que a plataforma modelo Genie <span id="output-modelo" class="editable">[MODELO]</span> 
+                número de frota <span id="output-frota" class="editable">[FROTA]</span> marca Genie está devidamente liberada para uso que se destina considerando os aspectos de:<br>
+
+         </p>
+            <p>
+                1 Parte Estrutural<br>
+                2 Componentes Hidráulicos<br>
+                3 Componentes Elétricos<br>
+                4 Pneus<br>
+                5 Motores (Propulsão), Elétricos, inclusive com combustíveis<br>
+                6 Pintura a devidamente sinalização de segurança de operação<br>
+                7 Manuais de Operação e Manutenção<br>
+                8 Cumprimento da NR-18<br>
+                9 Preventivas em dia
+            </p>
+            
+            <p style="margin-top: 30px;">
+                Este documento é único e intransferível para o modelo de plataforma descrito acima<br>
+                Este laudo tem validade de 3 meses a partir da data de sua emissão
+            </p>
+
+            <p style="margin-top: 30px;">Por ser verdade firmo o presente</p>
+        </div>
+
+        <div class="signature-block">
+            <img class="stamp-image" 
+                 src="https://gaberoviva-cloud.github.io/Carimbo-Lucas.png" 
+                 alt="Carimbo Lucas Aguiar">
+
+            <p>TRADIMAQ LTDA</p>
+            
+            <img class="signature-image" 
+                 src="https://gaberoviva-cloud.github.io/Assinatura%20Lucas%20Aguiar.png" 
+                 alt="Assinatura Lucas Aguiar">
+            
+            <div class="signature-line"></div>
+            
+            <p style="line-height: 1.4;">
+                Lucas de Aguiar<br>
+                Gestor de Manutenção<br>
+                Engenheiro Mecânico – CREA MG 292707
+            </p>
+        </div>
+    </div>
+
+    <div id="preview-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-laudo"></div>
+            <button id="download-btn">Imprimir PDF (Nativo)</button>
+        </div>
+    </div>
+
+    <script>
+        
+        // FUNÇÃO PARA PEGAR DATA NO FORMATO DD-MM-AAAA
+        function getFileNameDate() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+        
+        // FUNÇÃO PARA PREENCHER A DATA AUTOMATICAMENTE
+        function preencherDataAutomatica() {
+            const today = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            let dateString = today.toLocaleString('pt-BR', options);
+            
+            dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+            
+            const finalDateString = `Contagem, ${dateString}`;
+            
+            document.getElementById('input-data').value = finalDateString;
+        }
+
+        // Função para atualizar o conteúdo do laudo (template e modal)
+        function atualizarLaudo() {
+            const data = document.getElementById('input-data').value;
+            const modelo = document.getElementById('input-modelo').value;
+            const frota = document.getElementById('input-frota').value;
+
+            document.getElementById('output-data').textContent = data || "[DATA]";
+            document.getElementById('output-modelo').textContent = modelo || "[MODELO]";
+            document.getElementById('output-frota').textContent = frota || "[FROTA]";
+        }
+
+        // MÉTODO DE IMPRESSÃO NATIVA (ABRIR NOVA ABA)
+        function imprimirLaudoNativo() {
+            atualizarLaudo(); 
+            
+            // Obter Frota e Data formatada para o nome do arquivo
+            const frota = document.getElementById('input-frota').value;
+            const dataFormatada = getFileNameDate();
+            
+            // Formatar o nome do arquivo
+            const frotaDisplay = frota ? frota.toUpperCase() : 'SEM-FROTA';
+            const fileName = `LAUDO PADRAO - ${frotaDisplay} - ${dataFormatada}`;
+
+            const laudoHTML = document.getElementById('laudo-container').outerHTML;
+
+            // Pega o CSS da página atual
+            const styleContent = document.querySelector('style').innerHTML;
+
+            // Monta o conteúdo HTML completo para a nova janela
+            const printContent = `
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                    <title>${fileName}</title>
+                    <style>
+                        /* Injeta o CSS do documento original */
+                        ${styleContent}
+                        
+                        /* Sobrescreve e garante que apenas o laudo seja visível e tenha formato A4 */
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            background-color: #fff;
+                        }
+                        #laudo-container {
+                            display: block !important; 
+                            position: static !important;
+                            left: auto !important;
+                            box-shadow: none;
+                            border: none;
+                            width: 210mm !important; /* Força o A4 */
+                            min-height: 297mm !important;
+                            padding: 2.5cm !important;
+                        }
+                        /* Forçar a largura da linha de assinatura para evitar expansão */
+                        .signature-line {
+                            width: 300px !important; 
+                            max-width: 300px !important; 
+                            margin: 40px auto 0 auto !important;
+                        }
+                        /* Garante que o carimbo também apareça na impressão */
+                        .stamp-image {
+                            display: block !important;
+                        }
+                        /* Oculta o botão de download dentro do modal se a nova janela for aberta do modal */
+                        #download-btn {
+                            display: none !important;
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${laudoHTML}
+                    <script>
+                        // Aciona a impressão assim que a página carregar
+                        window.onload = function() {
+                            window.print();
+                            // Não precisa fechar a janela automaticamente, o usuário pode querer salvar
+                            // setTimeout(() => window.close(), 1000); 
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `;
+
+            // Abre a nova janela e escreve o conteúdo
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(printContent);
+            printWindow.document.close();
+            
+            // Define o nome do arquivo para o navegador
+            printWindow.document.title = fileName;
+        }
+
+        // Configuração do Modal
+        const modal = document.getElementById('preview-modal');
+        const btnPreview = document.getElementById('btn-preview');
+        const spanClose = document.getElementsByClassName('close')[0];
+        const downloadBtn = document.getElementById('download-btn'); 
+
+        // Ao clicar em Preview, atualiza e mostra modal
+        btnPreview.addEventListener('click', () => {
+            atualizarLaudo();
+            const laudoContent = document.getElementById('laudo-container').innerHTML;
+            document.getElementById('modal-laudo').innerHTML = laudoContent;
+            modal.style.display = 'block';
+        });
+
+        // Fecha modal ao clicar no X
+        spanClose.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        // Fecha modal ao clicar fora
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Download PDF do modal
+        downloadBtn.addEventListener('click', imprimirLaudoNativo);
+
+        // Botão Gerar PDF direto
+        document.getElementById('btn-pdf').addEventListener('click', imprimirLaudoNativo);
+
+        // Roda as funções quando a página carregar
+        window.addEventListener('DOMContentLoaded', () => {
+            preencherDataAutomatica();
+            atualizarLaudo();
+        });
+    </script>
+
+</body>
+</html>
