@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Status Diário - Genie (Excel/PDF)</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    /* O CSS foi mantido igual, pois já estava bem estruturado. */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 8px;
+      font-size: 13px;
+    }
+
+    .container {
+      max-width: 100%;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    header {
+      background: #f4a261;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.4em;
+    }
+
+    .title {
+      font-size: 0.95em;
+      margin-top: 3px;
+      color: white;
+      font-weight: normal;
+    }
+    
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 15px;
+      padding: 10px 12px;
+      font-size: 11px;
+      border-bottom: 1px solid #eee;
+      background: #fcfcfc;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+    }
+    .legend-disponivel { background-color: #c3e6cb; }
+    .legend-preventiva { background-color: #bbdefb; }
+    .legend-corretiva { background-color: #f5c6cb; }
+    .legend-checklist { background-color: #d6d6d6; }
+    .legend-alugada { background-color: #f0f0f0; } /* Cor do gráfico */
+
+    .form-header {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .form-group { flex: 1; min-width: 140px; }
+
+    label {
+      display: block;
+      margin-bottom: 3px;
+      font-weight: 600;
+    }
+
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      max-height: 58vh;
+    }
+
+    table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    th {
+      background: #f4a261;
+      color: white;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 11;
+    }
+
+    tr.disponivel { background-color: #c3e6cb; }
+    tr.preventiva { background-color: #bbdefb; }
+    tr.corretiva { background-color: #f5c6cb; }
+    tr.checklist { background-color: #d6d6d6; }
+    tr.alugada { background-color: #ffffff; }
+
+    /* --- Colunas Fixas --- */
+    th:nth-child(1), td:nth-child(1) {
+        min-width: 85px;
+        width: 85px;
+    }
+    th:nth-child(2), td:nth-child(2) {
+        min-width: 85px;
+        width: 85px;
+    }
+    th:nth-child(1) { left: 0; z-index: 12; }
+    td:nth-child(1) { position: sticky; left: 0; z-index: 10; background: white; }
+    th:nth-child(2) { left: 85px; z-index: 12; }
+    td:nth-child(2) { position: sticky; left: 85px; z-index: 10; background: white; }
+    
+    tr.disponivel td:nth-child(1),
+    tr.disponivel td:nth-child(2) { background-color: #c3e6cb; }
+    
+    tr.preventiva td:nth-child(1),
+    tr.preventiva td:nth-child(2) { background-color: #bbdefb; }
+    
+    tr.corretiva td:nth-child(1),
+    tr.corretiva td:nth-child(2) { background-color: #f5c6cb; }
+    
+    tr.checklist td:nth-child(1),
+    tr.checklist td:nth-child(2) { background-color: #d6d6d6; }
+    
+    tr.alugada td:nth-child(1),
+    tr.alugada td:nth-child(2) { background-color: #ffffff; }
+    /* --- Fim Colunas Fixas --- */
+
+    .horimetro-input {
+      width: 100%;
+      text-align: center;
+      padding: 3px;
+      font-size: 11px;
+      border: none;
+      background: transparent;
+      box-sizing: border-box; 
+    }
+
+    .checkbox-group {
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+      font-size: 10px;
+    }
+
+    .obs-container {
+      padding: 12px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .obs {
+      margin: 0;
+      padding: 8px;
+      border: 1px solid #ccc;
+      min-height: 120px;
+      font-size: 13px;
+      line-height: 1.5;
+      resize: vertical;
+      white-space: pre-line;
+    }
+
+    .obs-print {
+      display: none; 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      white-space: pre-line;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      border: 1px solid #ccc;
+      padding: 8px;
+      min-height: 120px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 11px;
+      color: #555;
+      background: #f9f9f9;
+      border-top: 1px solid #ccc;
+    }
+    
+    .chart-container {
+        position: relative;
+        height: 300px; /* Mais altura para gráfico de barras */
+        width: 95%;   
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    .btn {
+      background: #e63946;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 12px;
+      width: calc(100% - 24px);
+      font-weight: bold;
+    }
+
+    .btn-pdf {
+      background: #457b9d;
+      margin-top: 0;
+    }
+    
+    .btn-clear {
+      background: #6c757d; 
+      margin-top: 0;
+    }
+    
+    /* Estilos para PDF */
+    body.pdf-generating {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    body.pdf-generating .container {
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        overflow: visible !important;
+    }
+
+    body.pdf-generating .table-container {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    body.pdf-generating th,
+    body.pdf-generating td:nth-child(1),
+    body.pdf-generating td:nth-child(2) {
+        position: static !important;
+    }
+    
+    body.pdf-generating .btn,
+    body.pdf-generating .btn-pdf,
+    body.pdf-generating .btn-clear {
+        display: none !important;
+    }
+    
+    body.pdf-generating .obs {
+      display: none !important; 
+    }
+    body.pdf-generating .obs-print {
+      display: block !important;
+    }
+    
+    body.pdf-generating .chart-container {
+        page-break-inside: avoid;
+    }
+
+
+    @media print {
+      .container {
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .table-container {
+        max-height: none;
+        overflow: visible;
+      }
+      th, td, tr {
+        page-break-inside: avoid;
+      }
+      .obs-container, .form-header {
+        page-break-after: avoid; 
+      }
+      thead { display: table-header-group; }
+      tfoot { display: table-footer-group; }
+      
+      .obs, .obs-print {
+        white-space: pre-line;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+      
+      .chart-container {
+        page-break-inside: avoid;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="logo">TRADIMAQ SP</div>
+    <div class="title">STATUS DIÁRIO - PÁTIO - PLATAFORMAS GENIE</div>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-color legend-disponivel"></span> Disponível</div>
+    <div class="legend-item"><span class="legend-color legend-preventiva"></span> Preventiva</div>
+    <div class="legend-item"><span class="legend-color legend-corretiva"></span> Corretiva</div>
+    <div class="legend-item"><span class="legend-color legend-checklist"></span> Checklist</div>
+    <div class="legend-item"><span class="legend-color legend-alugada" style="border: 1px solid #ccc;"></span> Alugada (vazio)</div>
+  </div>
+
+  <div class="obs-container">
+    <label>OBSERVAÇÕES</label>
+    <textarea class="obs" id="observacoes" placeholder="Digite aqui..."></textarea>
+    <div class="obs-print" id="observacoes-print"></div>
+  </div>
+
+  <div class="form-header">
+    <div class="form-group">
+      <label>Mantenedor:</label>
+      <input type="text" id="mantenedor" placeholder="Nome" />
+    </div>
+    <div class="form-group">
+      <label>Data:</label>
+      <input type="date" id="data" />
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table id="equipamentos-table">
+      <thead>
+        <tr>
+          <th>MODELO</th>
+          <th>TAG</th>
+          <th>HORÍMETRO</th>
+          <th>DISPONÍVEL</th>
+          <th>PREVENTIVA</th>
+          <th>CORRETIVA</th>
+          <th>CHECKLIST</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <strong>OBS: TOTAL 91 EQUIPAMENTOS</strong><br>
+    *Arquivo salvo em: T:\Plataformas_MG\Manutenção\Documentos Gerais Plataformas
+  </div>
+  
+  <div class="chart-container">
+    <canvas id="statusChart"></canvas>
+  </div>
+
+</div>
+
+<button class="btn">GERAR EXCEL</button>
+<button class="btn btn-pdf">GERAR PDF</button>
+<button class="btn btn-clear">LIMPAR TUDO</button>
+
+<script>
+// Mantido no array aninhado original, mas corrigindo o acesso abaixo.
+const equipamentos = 
+[
+ [
+  { modelo: "AWP 30S-DC", tag: "TPE-4109" },
+
+  { modelo: "GS1930", tag: "TPE-1532" },
+  { modelo: "GS1930", tag: "TPE-2493" },
+  { modelo: "GS1930", tag: "TPE-2494" },
+  { modelo: "GS1930", tag: "TPE-2495" },
+  { modelo: "GS1930", tag: "TPE-2496" },
+  { modelo: "GS1930", tag: "TPE-2497" },
+  { modelo: "GS1930", tag: "TPE-2498" },
+  { modelo: "GS1930", tag: "TPE-3725" },
+  { modelo: "GS1930", tag: "TPE-3726" },
+  { modelo: "GS1930", tag: "TPE-3727" },
+
+  { modelo: "GS-2646", tag: "TPE-1334" },
+  { modelo: "GS-2646", tag: "TPE-1335" },
+  { modelo: "GS-2646", tag: "TPE-1336" },
+  { modelo: "GS-2646", tag: "TPE-1520" },
+  { modelo: "GS-2646", tag: "TPE-1523" },
+  { modelo: "GS-2646", tag: "TPE-1526" },
+  { modelo: "GS-2646", tag: "TPE-1527" },
+  { modelo: "GS-2646", tag: "TPE-1529" },
+
+  { modelo: "GS3246", tag: "TPE-1286" },
+  { modelo: "GS3246", tag: "TPE-1337" },
+  { modelo: "GS3246", tag: "TPE-1338" },
+  { modelo: "GS3246", tag: "TPE-1558" },
+  { modelo: "GS3246", tag: "TPE-1561" },
+
+  { modelo: "GS-4046", tag: "TPE-3285" },
+  { modelo: "GS-4046", tag: "TPE-3723" },
+  { modelo: "GS-4046", tag: "TPE-3724" },
+
+  { modelo: "GS-4047", tag: "TPE-2343" },
+  { modelo: "GS-4047", tag: "TPE-2344" },
+
+  { modelo: "Z-34", tag: "TPE-1252" },
+  { modelo: "Z-34", tag: "TPE-1276" },
+  { modelo: "Z-34", tag: "TPE-1285" },
+  { modelo: "Z-34", tag: "TPE-1600" },
+  { modelo: "Z-34", tag: "TPE-1601" },
+  { modelo: "Z-34", tag: "TPE-1603" },
+  { modelo: "Z-34", tag: "TPE-1604" },
+  { modelo: "Z-34", tag: "TPE-1605" },
+  { modelo: "Z-34", tag: "TPE-1606" },
+  { modelo: "Z-34", tag: "TPE-1607" },
+  { modelo: "Z-34", tag: "TPE-3619" },
+  { modelo: "Z-34", tag: "TPE-3620" },
+
+  { modelo: "Z-45/25 DC", tag: "TPE-1302" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1325" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1340" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1562" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1565" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1567" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1568" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1640" },
+  { modelo: "Z-45/25 DC", tag: "TPE-1663" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2222" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2224" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2375" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2376" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2377" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2378" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2379" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2380" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2381" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2382" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2383" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2384" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2389" },
+  { modelo: "Z-45/25 DC", tag: "TPE-2393" },
+  { modelo: "Z-45/25 DC", tag: "TPE-3621" },
+  { modelo: "Z-45/25 DC", tag: "TPE-3622" },
+  { modelo: "Z-45/25 DC", tag: "TPE-3623" },
+  { modelo: "Z-45/25 DC", tag: "TPE-3627" },
+
+  { modelo: "Z-45/25 RT", tag: "TPE-1320" },
+  { modelo: "Z-45/25 RT", tag: "TPE-1326" },
+  { modelo: "Z-45/25 RT", tag: "TPE-1327" },
+  { modelo: "Z-45/25 RT", tag: "TPE-1328" },
+  { modelo: "Z-45/25 RT", tag: "TPE-1535" },
+  { modelo: "Z-45/25 RT", tag: "TPE-1729" },
+  { modelo: "Z-45/25 RT", tag: "TPE-3289" },
+  { modelo: "Z-45/25 RT", tag: "TPE-3290" },
+  { modelo: "Z-45/25 RT", tag: "TPE-3628" },
+  { modelo: "Z-45/25 RT", tag: "TPE-3629" },
+  { modelo: "Z-45/25 RT", tag: "TPE-3630" },
+  { modelo: "Z-45/25 RT", tag: "TPE-3631" },
+  { modelo: "Z-45/25 RT", tag: "TPE-3632" },
+
+  { modelo: "Z-60/34", tag: "TPE-1275" },
+  { modelo: "Z-60/34", tag: "TPE-1654" },
+
+  { modelo: "Z62/40", tag: "TPE-2835" },
+  { modelo: "Z62/40", tag: "TPE-2836" },
+  { modelo: "Z62/40", tag: "TPE-3435" },
+  { modelo: "Z62/40", tag: "TPE-3644" },
+  { modelo: "Z62/40", tag: "TPE-3645" },
+
+  { modelo: "Z-80", tag: "TPE-1714" },
+  { modelo: "Z-80", tag: "TPE-3704" },
+
+  { modelo: "S-80J", tag: "TPE-3775" }
+]
+];
+
+// OTIMIZAÇÃO: Acessa o array de equipamentos corretamente
+const listaDeEquipamentos = equipamentos[0] || [];
+
+let myStatusChart = null;
+const tbody = document.querySelector('#equipamentos-table tbody');
+const obsInput = document.getElementById('observacoes');
+const obsPrint = document.getElementById('observacoes-print');
+const mantenedorInput = document.getElementById('mantenedor');
+const dataInput = document.getElementById('data');
+
+// --- 1. Geração da Tabela e Event Listeners (Corrigido e Otimizado) ---
+function createTableRows() {
+  tbody.innerHTML = ''; 
+  listaDeEquipamentos.forEach(eq => {
+    const tr = document.createElement('tr');
+    // OTIMIZAÇÃO: Adicionado data-status para simplificar a lógica de eventos
+    tr.innerHTML = `
+      <td>${eq.modelo}</td>
+      <td>${eq.tag}</td>
+      <td><input type="text" class="horimetro-input" data-tag="${eq.tag}" placeholder="0"></td>
+      <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="disp_${eq.tag}" data-status="disponivel"></div></td>
+      <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="prev_${eq.tag}" data-status="preventiva"></div></td>
+      <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="corr_${eq.tag}" data-status="corretiva"></div></td>
+      <td><div class="checkbox-group"><input type="checkbox" class="status-check" id="check_${eq.tag}" data-status="checklist"></div></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function handleStatusChange() {
+  const row = this.closest('tr');
+  const tag = this.id.split('_')[1];
+  const status = this.dataset.status; 
+
+  // Limpa classes e cache
+  row.classList.remove('disponivel', 'preventiva', 'corretiva', 'checklist', 'alugada');
+  localStorage.removeItem('status_' + tag);
+
+  if (this.checked) {
+    // Desmarca outros na mesma linha (lógica original)
+    row.querySelectorAll('.status-check').forEach(o => { if (o !== this) o.checked = false; });
+    
+    // Adiciona a classe e salva o status
+    row.classList.add(status);
+    localStorage.setItem('status_' + tag, status);
+  } else {
+    // Se desmarcou, assume alugada (classe base)
+    row.classList.add('alugada');
+  }
+  
+  updateChart();
+}
+
+function handleHorimetroInput() {
+  // Mantido filtro apenas para números, conforme sua lógica original
+  this.value = this.value.replace(/[^0-9]/g, '');
+  localStorage.setItem('horimetro_' + this.dataset.tag, this.value);
+}
+
+function addTableEventListeners() {
+  document.querySelectorAll('.status-check').forEach(cb => {
+    cb.addEventListener('change', handleStatusChange);
+  });
+
+  document.querySelectorAll('.horimetro-input').forEach(input => {
+    input.addEventListener('input', handleHorimetroInput);
+  });
+}
+
+// --- 2. Listeners de Campos de Formulário ---
+function addFormEventListeners() {
+  obsInput.addEventListener('input', () => {
+    obsPrint.textContent = obsInput.value;
+    localStorage.setItem('status_observacoes', obsInput.value);
+  });
+
+  mantenedorInput.addEventListener('input', () => {
+    localStorage.setItem('status_mantenedor', mantenedorInput.value);
+  });
+
+  dataInput.addEventListener('input', () => {
+    localStorage.setItem('status_data', dataInput.value);
+  });
+
+  // OTIMIZAÇÃO: Listener para os botões de ação (Substitui os 'onclick' no HTML)
+  document.querySelector('.btn').addEventListener('click', gerarExcel);
+  document.querySelector('.btn-pdf').addEventListener('click', gerarPDF);
+  document.querySelector('.btn-clear').addEventListener('click', limparTudo);
+}
+
+// --- 3. Funções de Geração (Excel, PDF) ---
+function gerarExcel() {
+  const wb = XLSX.utils.book_new();
+  const dataValue = dataInput.value || '';
+  const mantenedorValue = mantenedorInput.value || '';
+  const observacoesValue = obsInput.value || '';
+
+  const ws_data = [
+    ["TRADIMAQ - STATUS DIÁRIO - PLATAFORMAS GENIE"],
+    [`Mantenedor: ${mantenedorValue}`],
+    [`Data: ${dataValue}`],
+    [`Observações: ${observacoesValue}`],
+    [""],
+    ["MODELO","TAG","HORÍMETRO","DISPONÍVEL","PREVENTIVA","CORRETIVA","CHECKLIST"]
+  ];
+
+  // Estilos
+  const borderStyle = { style: "thin", color: { rgb: "000000" } };
+  const borderAll = { top: borderStyle, bottom: borderStyle, left: borderStyle, right: borderStyle };
+  const fillHeader = { fgColor: { rgb: "F4A261" } };
+  const fontHeader = { color: { rgb: "FFFFFF" }, bold: true };
+  const fillDisponivel = { fgColor: { rgb: "C3E6CB" } };
+  const fillPreventiva = { fgColor: { rgb: "BBDEFB" } };
+  const fillCorretiva = { fgColor: { rgb: "F5C6CB" } };
+  const fillChecklist = { fgColor: { rgb: "D6D6D6" } };
+  const cols = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  
+  const htmlRows = document.querySelectorAll('#equipamentos-table tbody tr');
+  const rowStyles = []; 
+
+  htmlRows.forEach(tr => {
+    const modelo = tr.cells[0].textContent;
+    const tag = tr.cells[1].textContent;
+    const horimetro = tr.querySelector('.horimetro-input').value;
+    
+    // OTIMIZAÇÃO: Usando data-status para encontrar o checkbox
+    const disp = tr.querySelector('[data-status="disponivel"]')?.checked ? "OK" : "";
+    const prev = tr.querySelector('[data-status="preventiva"]')?.checked ? "OK" : "";
+    const corr = tr.querySelector('[data-status="corretiva"]')?.checked ? "OK" : "";
+    const check = tr.querySelector('[data-status="checklist"]')?.checked ? "OK" : "";
+
+    ws_data.push([modelo, tag, horimetro, disp, prev, corr, check]);
+
+    let rowFill = null;
+    if (tr.classList.contains('disponivel')) {
+      rowFill = fillDisponivel;
+    } else if (tr.classList.contains('preventiva')) {
+      rowFill = fillPreventiva;
+    } else if (tr.classList.contains('corretiva')) {
+      rowFill = fillCorretiva;
+    } else if (tr.classList.contains('checklist')) {
+      rowFill = fillChecklist;
+    }
+    rowStyles.push(rowFill);
+  });
+
+  const ws = XLSX.utils.aoa_to_sheet(ws_data);
+
+  // Aplicação de estilos de cabeçalho
+  cols.forEach(col => {
+    const cellAddress = col + '6';
+    let cell = ws[cellAddress] || {}; 
+    if (!cell.s) cell.s = {}; 
+    cell.s.border = borderAll;
+    cell.s.fill = fillHeader;
+    cell.s.font = fontHeader;
+    ws[cellAddress] = cell; 
+  });
+
+  // Aplicação de estilos de linhas de dados
+  rowStyles.forEach((rowFill, rowIndex) => {
+    const excelRowIndex = rowIndex + 7;
+    cols.forEach(col => {
+      const cellAddress = col + excelRowIndex;
+      let cell = ws[cellAddress] || { t: 's', v: '' }; 
+      if (!cell.s) cell.s = {};
+      cell.s.border = borderAll;
+      if (rowFill) {
+        cell.s.fill = rowFill; 
+      }
+      ws[cellAddress] = cell; 
+    });
+  });
+
+  ws['!cols'] = [{ wch: 12 }, { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }];
+  XLSX.utils.book_append_sheet(wb, ws, "Status Diário");
+  const nome = `Status_Diario_Genie_${new Date().toISOString().split('T')[0].replace(/-/g, '')}.xlsx`;
+  XLSX.writeFile(wb, nome);
+  console.log("Excel gerado com sucesso!");
+}
+
+function gerarPDF() {
+  const data = dataInput.value || new Date().toISOString().split('T')[0];
+  const nome = `Status_Diario_Genie_${data.replace(/-/g, '')}.pdf`;
+  const element = document.querySelector('.container');
+
+  obsPrint.textContent = obsInput.value;
+  window.scrollTo(0, 0);
+
+  const opt = {
+    margin:       [0.4, 0.4, 0.4, 0.4],
+    filename:     nome,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['css', 'legacy'], avoid: 'tr' } 
+  };
+
+  document.body.classList.add('pdf-generating');
+
+  html2pdf().from(element).set(opt).save().then(() => {
+    document.body.classList.remove('pdf-generating');
+    console.log("PDF gerado com sucesso!");
+  }).catch((err) => {
+    document.body.classList.remove('pdf-generating');
+    alert("Erro ao gerar PDF: " + err);
+  });
+}
+
+// --- 4. Função Limpar Tudo (mantida igual) ---
+function limparTudo() {
+  if (confirm("Tem certeza que deseja limpar TODOS os dados salvos? \n\nIsso irá apagar o mantenedor, data, observações e todos os status e horímetros da tabela.")) {
+    localStorage.clear();
+    location.reload();
+  }
+}
+
+// --- 5. Função de Atualização do Gráfico (mantida igual) ---
+function updateChart() {
+  const total = listaDeEquipamentos.length;
+  let disponivel = 0;
+  let preventiva = 0;
+  let corretiva = 0;
+  let checklist = 0;
+  
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
+    if (tr.classList.contains('disponivel')) disponivel++;
+    else if (tr.classList.contains('preventiva')) preventiva++;
+    else if (tr.classList.contains('corretiva')) corretiva++;
+    else if (tr.classList.contains('checklist')) checklist++;
+  });
+  
+  const alugada = total - (disponivel + preventiva + corretiva + checklist);
+  const ctx = document.getElementById('statusChart').getContext('2d');
+  
+  if (myStatusChart) {
+    myStatusChart.destroy();
+  }
+
+  myStatusChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Disponível', 'Preventiva', 'Corretiva', 'Checklist', 'Alugada'],
+      datasets: [{
+        label: 'Quantidade',
+        data: [disponivel, preventiva, corretiva, checklist, alugada],
+        backgroundColor: [
+          '#c3e6cb', 
+          '#bbdefb', 
+          '#f5c6cb', 
+          '#d6d6d6', 
+          '#f0f0f0'  
+        ],
+        borderColor: [
+          '#888',
+          '#888',
+          '#888',
+          '#888',
+          '#888'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: `Resumo do Status (Total: ${total})`
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Quantidade'
+          },
+          ticks: {
+             stepSize: 1
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Status'
+          }
+        }
+      }
+    }
+  });
+}
+
+// --- 6. Função de Carregamento de Cache (Aprimorada) ---
+function loadFromCache() {
+  // 1. Carrega Mantenedor
+  mantenedorInput.value = localStorage.getItem('status_mantenedor') || '';
+  
+  // 2. Carrega ou define a Data de Hoje
+  let savedData = localStorage.getItem('status_data');
+  if (!savedData) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      savedData = `${yyyy}-${mm}-${dd}`;
+      // Não salva no cache automaticamente para que a data seja sempre 'hoje' após o clear.
+  }
+  dataInput.value = savedData;
+  
+  // 3. Carrega Observações
+  const savedObs = localStorage.getItem('status_observacoes') || '';
+  obsInput.value = savedObs;
+  obsPrint.textContent = savedObs;
+
+  // 4. Carrega dados da tabela
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
+    const tag = tr.cells[1].textContent;
+    
+    const horimetroInput = tr.querySelector('.horimetro-input');
+    horimetroInput.value = localStorage.getItem('horimetro_' + tag) || '';
+
+    const savedStatus = localStorage.getItem('status_' + tag);
+    let isAlugada = true;
+    
+    if (savedStatus) {
+      // OTIMIZAÇÃO: Procura o checkbox pelo data-status em vez do ID longo
+      const checkbox = tr.querySelector(`[data-status="${savedStatus}"]`);
+      
+      if (checkbox) {
+        checkbox.checked = true;
+        tr.classList.add(savedStatus);
+        isAlugada = false;
+      }
+    }
+    
+    if (isAlugada) {
+      // Se não tem status salvo, define como alugada
+      tr.classList.add('alugada');
+    }
+    
+    // OTIMIZAÇÃO: Garante que se um status foi carregado (por exemplo, 'disponivel'),
+    // as outras classes (como 'alugada' se tiver sido definido antes) sejam removidas.
+    // Isso é tratado no CSS (tr.alugada), mas forçar a remoção de classes de status anteriores ao carregar ajuda.
+    if (!savedStatus && isAlugada) {
+        tr.classList.add('alugada');
+    }
+  });
+  
+  // 5. Desenha o gráfico inicial
+  updateChart();
+}
+
+// --- 7. Inicialização da Aplicação ---
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Cria as linhas da tabela (deve ser antes de carregar o cache)
+    createTableRows();
+    // 2. Carrega o estado do cache e atualiza classes/gráfico
+    loadFromCache();
+    // 3. Adiciona Listeners para campos e botões
+    addTableEventListeners();
+    addFormEventListeners();
+});
+
+</script>
+</body>
+</html>
