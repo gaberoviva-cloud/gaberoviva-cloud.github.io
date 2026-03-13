@@ -236,21 +236,43 @@ render()
 }catch{alert("Código inválido")}
 }
 
-function gerarPDF(){
-const {jsPDF}=window.jspdf
-let lista=[...selectedCodes]
-if(lista.length==0)return alert("Nenhuma ferramenta selecionada")
+function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    let lista = [...selectedCodes];
+    if (lista.length == 0) return alert("Nenhuma ferramenta selecionada");
 
-let doc=new jsPDF()
-doc.text("Controle de Ferramentas",20,20)
+    // Captura os valores dos campos
+    let dataDoc = document.getElementById("data").value;
+    let mecanico = document.getElementById("mecanico").value || "Não informado";
+    let responsavel = document.getElementById("responsavel").value || "Não informado";
 
-let tabela=lista.map((c,i)=>{
-let f=ferramentas.find(x=>x.codigo===c)
-return[i+1,f?f.codigo:c,f?f.descricao:""]
-})
+    let doc = new jsPDF();
 
-doc.autoTable({startY:30,head:[["#","Código","Descrição"]],body:tabela})
-doc.save("controle_ferramentas.pdf")
+    // Título e Informações de Cabeçalho
+    doc.setFontSize(16);
+    doc.text("Controle de Ferramentas - Tradimaq", 14, 20);
+    
+    doc.setFontSize(11);
+    doc.text(`Data: ${dataDoc.split('-').reverse().join('/')}`, 14, 30);
+    doc.text(`Mecânico: ${mecanico}`, 14, 37);
+    doc.text(`Responsável: ${responsavel}`, 14, 44);
+
+    // Monta o corpo da tabela
+    let dadosTabela = lista.map((c, i) => {
+        let f = ferramentas.find(x => x.codigo === c);
+        return [i + 1, f ? f.codigo : c, f ? f.descricao : ""];
+    });
+
+    // Gera a tabela (começando após os textos acima)
+    doc.autoTable({
+        startY: 50,
+        head: [["#", "Código", "Descrição"]],
+        body: dadosTabela,
+        theme: 'grid',
+        headStyles: { fillColor: [75, 85, 99] } // Cor cinza do cabeçalho original
+    });
+
+    doc.save(`controle_ferramentas_${mecanico.replace(/\s+/g, '_')}.pdf`);
 }
 
 function gerarExcel(){
