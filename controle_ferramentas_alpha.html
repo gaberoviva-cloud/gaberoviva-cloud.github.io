@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Controle de Ferramentas - Tradimaq</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        body{font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;margin:0;background:#f4f6f8}
+        header{display:flex;align-items:center;gap:15px;background:white;padding:12px 20px;border-bottom:4px solid #ff7a00}
+        header img{height:35px}
+        .container{padding:20px}
+        #dashboard{display:flex;gap:15px;flex-wrap:wrap;margin-bottom:15px}
+        .card{background:white;padding:15px;border-left:5px solid #ff7a00;min-width:150px;box-shadow: 0 2px 4px rgba(0,0,0,0.1)}
+        .card h2{margin:5px 0 0 0}
+        label{font-weight: bold; display: block; margin-bottom: 5px; color: #4b5563}
+        input{padding:10px;font-size:16px;border:1px solid #ccc;border-radius:4px;width:100%;box-sizing:border-box}
+        button{background:#ff7a00;border:none;padding:12px;color:white;font-weight:bold;border-radius:4px;cursor:pointer;transition: 0.2s}
+        button:hover{background:#e56700}
+        
+        table{width:100%;border-collapse:collapse;background:white;margin-top:10px;box-shadow: 0 2px 4px rgba(0,0,0,0.1)}
+        th,td{border:1px solid #ddd;padding:10px;font-size:14px;text-align: left}
+        th{background:#4b5563;color:white}
+        
+        .status-pendente { color: #d32f2f; font-weight: bold; }
+        .status-ok { color: #2e7d32; font-weight: bold; }
+        tr.row-ok { background-color: #e8f5e9 !important; }
+        
+        .campos{display:grid;gap:15px;margin-top:20px;background: #fff; padding: 15px; border-radius: 4px}
+        .codigoBox{background:white;padding:15px;margin-top:20px;border-radius:4px; display: flex; flex-direction: column; gap: 10px}
+        .exportBox{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
+        #busca{margin-top: 20px; border: 2px solid #ff7a00}
+
+        .btn-entregar { background: #4b5563; padding: 5px 10px; font-size: 12px; }
+        .btn-entregar.ok { background: #2e7d32; }
+
+        @media(min-width:700px){
+            .campos{grid-template-columns:1fr 1fr 1fr}
+            .codigoBox{flex-direction: row; align-items: center}
+            .codigoBox input{flex-grow: 1}
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq">
+    <h2>CONTROLE E DEVOLUÇÃO DE FERRAMENTAS</h2>
+</header>
+
+<div class="container">
+
+    <div id="dashboard">
+        <div class="card">Total Banco<h2 id="totalFerramentas">0</h2></div>
+        <div class="card">Selecionadas<h2 id="totalSelecionado">0</h2></div>
+        <div class="card">Pendentes Devolução<h2 id="totalPendentes" style="color: #d32f2f;">0</h2></div>
+    </div>
+
+    <div class="campos">
+        <div>
+            <label>Data</label>
+            <input type="date" id="data">
+        </div>
+        <div>
+            <label>Mecânico</label>
+            <input id="mecanico" placeholder="Nome do mecânico">
+        </div>
+        <div>
+            <label>Responsável</label>
+            <input id="responsavel" placeholder="Quem está entregando">
+        </div>
+    </div>
+
+    <div class="codigoBox">
+        <input id="codigoSave" placeholder="Código de backup/rastreio...">
+        <button onclick="copiarCodigo()">Copiar</button>
+        <button onclick="gerarCodigo()">Gerar Backup</button>
+        <button onclick="carregarCodigo()">Carregar Backup</button>
+    </div>
+
+    <div class="exportBox">
+        <button onclick="gerarPDF()" style="background: #d32f2f;">Exportar PDF</button>
+        <button onclick="gerarExcel()" style="background: #2e7d32;">Exportar Excel</button>
+        <button onclick="limparTudo()" style="background: #4b5563;">Limpar Seleção</button>
+    </div>
+
+    <div class="exportBox" style="background: #eee; padding: 10px; border-radius: 4px;">
+        <span style="width: 100%; font-weight: bold; color: #4b5563; margin-bottom: 5px;">Presets de Carga:</span>
+        <button onclick="limparPreset()" style="background: #607d8b;">Lista Geral (Reset)</button>
+        <button onclick="carregarPreset('https://gaberoviva-cloud.github.io/ferramentas_campo.csv')" style="background: #ff7a00;">Técnico Campo</button>
+        <button onclick="carregarPreset('https://gaberoviva-cloud.github.io/ferramentas_ajudante.csv')" style="background: #ff7a00;">Técnico Ajudante</button>
+    </div>
+
+    <input id="busca" placeholder="🔎 Buscar ferramenta para adicionar à lista...">
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 40px;"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+                <th style="width: 120px;">Código</th>
+                <th>Descrição</th>
+                <th style="width: 120px;">Status</th>
+                <th style="width: 100px;">Ação</th>
+            </tr>
+        </thead>
+        <tbody id="tabela">
+            <tr><td colspan="5" style="text-align:center">Carregando dados...</td></tr>
+        </tbody>
+    </table>
+
+</div>
+
+<script>
+    document.getElementById("data").value = new Date().toISOString().split("T")[0];
+
+    let ferramentas = []; 
+    let filtrado = [];    
+    let selectedCodes = new Map(); 
+    let bancoBase = [];
+
+    function normalizeStr(str) {
+        return str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    async function carregarCSV() {
+        try {
+            const response = await fetch('https://gaberoviva-cloud.github.io/ferr.csv');
+            const arrayBuffer = await response.arrayBuffer();
+            const decoder = new TextDecoder('windows-1252');
+            const data = decoder.decode(arrayBuffer);
+            const linhas = data.split(/\r?\n/);
+            
+            ferramentas = [];
+            linhas.forEach((linha, i) => {
+                if (!linha.trim()) return;
+                const colunas = linha.split(/,|;/);
+                if (i === 0 && normalizeStr(colunas[0]).includes("codigo")) return;
+                if (colunas.length >= 2) {
+                    ferramentas.push({ codigo: colunas[0].trim(), descricao: colunas[1].trim() });
+                }
+            });
+            bancoBase = [...ferramentas];
+            filtrado = [...ferramentas];
+            render();
+        } catch (e) { alert("Erro ao carregar banco de dados."); }
+    }
+
+    async function carregarPreset(url) {
+        try {
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+            const decoder = new TextDecoder('windows-1252');
+            const data = decoder.decode(arrayBuffer);
+            const linhas = data.split(/\r?\n/);
+            
+            ferramentas = [];
+            linhas.forEach((linha, i) => {
+                if (!linha.trim()) return;
+                const colunas = linha.split(/,|;/);
+                if (i === 0 && normalizeStr(colunas[0]).includes("codigo")) return;
+                if (colunas.length >= 2) {
+                    ferramentas.push({ codigo: colunas[0].trim(), descricao: colunas[1].trim() });
+                }
+            });
+            filtrado = [...ferramentas];
+            selectedCodes.clear();
+            render();
+        } catch (e) { alert("Erro ao carregar preset."); }
+    }
+
+    function limparPreset() {
+        ferramentas = [...bancoBase];
+        filtrado = [...bancoBase];
+        document.getElementById("busca").value = "";
+        selectedCodes.clear();
+        render();
+    }
+
+    function render() {
+        let tabela = document.getElementById("tabela");
+        tabela.innerHTML = "";
+
+        filtrado.forEach((f) => {
+            let tr = document.createElement("tr");
+            let isSelected = selectedCodes.has(f.codigo);
+            let status = selectedCodes.get(f.codigo); 
+            
+            if (isSelected && status === 1) tr.classList.add('row-ok');
+
+            tr.innerHTML = `
+                <td><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect(this, '${f.codigo}')"></td>
+                <td>${f.codigo}</td>
+                <td>${f.descricao}</td>
+                <td>${isSelected ? (status === 1 ? '<span class="status-ok">✔ OK</span>' : '<span class="status-pendente">✘ Pendente</span>') : '-'}</td>
+                <td>
+                    ${isSelected ? `<button class="btn-entregar ${status === 1 ? 'ok' : ''}" onclick="toggleStatus('${f.codigo}')">${status === 1 ? 'Estornar' : 'Entregar'}</button>` : ''}
+                </td>`;
+            tabela.appendChild(tr);
+        });
+
+        atualizarDashboard();
+        document.getElementById("selectAll").checked = filtrado.length > 0 && filtrado.every(f => selectedCodes.has(f.codigo));
+    }
+
+    function toggleSelect(checkbox, code) {
+        if (checkbox.checked) selectedCodes.set(code, 0); 
+        else selectedCodes.delete(code);
+        render();
+    }
+
+    function toggleStatus(code) {
+        let currentStatus = selectedCodes.get(code);
+        selectedCodes.set(code, currentStatus === 0 ? 1 : 0);
+        render();
+    }
+
+    function toggleAll(masterCheckbox) {
+        filtrado.forEach(f => {
+            if (masterCheckbox.checked) {
+                if (!selectedCodes.has(f.codigo)) selectedCodes.set(f.codigo, 0);
+            } else {
+                selectedCodes.delete(f.codigo);
+            }
+        });
+        render();
+    }
+
+    function atualizarDashboard() {
+        let pendentes = 0;
+        selectedCodes.forEach(status => { if(status === 0) pendentes++; });
+        document.getElementById("totalFerramentas").innerText = ferramentas.length;
+        document.getElementById("totalSelecionado").innerText = selectedCodes.size;
+        document.getElementById("totalPendentes").innerText = pendentes;
+    }
+
+    function gerarCodigo() {
+        let entries = [];
+        selectedCodes.forEach((status, code) => entries.push(`${code}:${status}`));
+        document.getElementById("codigoSave").value = btoa(entries.join("|"));
+    }
+
+    function carregarCodigo() {
+        try {
+            let texto = atob(document.getElementById("codigoSave").value);
+            let partes = texto.split("|");
+            selectedCodes.clear();
+            partes.forEach(p => {
+                let [code, status] = p.split(":");
+                selectedCodes.set(code, parseInt(status));
+            });
+            render();
+        } catch { alert("Código de backup inválido."); }
+    }
+
+    function copiarCodigo() {
+        let input = document.getElementById("codigoSave");
+        input.select();
+        navigator.clipboard.writeText(input.value);
+    }
+
+    function limparTudo() {
+        if(confirm("Deseja limpar toda a seleção atual?")) {
+            selectedCodes.clear();
+            render();
+        }
+    }
+
+    function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        if (selectedCodes.size === 0) return alert("Nenhuma ferramenta na lista");
+        let doc = new jsPDF();
+        let dataDoc = document.getElementById("data").value;
+        let mecanico = document.getElementById("mecanico").value || "---";
+
+        doc.setFontSize(16);
+        doc.text("RELATÓRIO DE MOVIMENTAÇÃO DE FERRAMENTAS", 14, 20);
+        doc.setFontSize(10);
+        doc.text(`Mecânico: ${mecanico.toUpperCase()}`, 14, 30);
+        doc.text(`Data: ${dataDoc.split('-').reverse().join('/')}`, 14, 35);
+        doc.text(`Responsável: ${document.getElementById("responsavel").value}`, 14, 40);
+
+        let dadosTabela = [];
+        selectedCodes.forEach((status, code) => {
+            let f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
+            dadosTabela.push([code, f ? f.descricao : "Desconhecida", status === 1 ? "OK" : "DIVERGENTE"]);
+        });
+
+        doc.autoTable({
+            startY: 45,
+            head: [["Código", "Descrição", "Status"]],
+            body: dadosTabela,
+            headStyles: { fillColor: [255, 122, 0] },
+            didDrawCell: (data) => {
+                if (data.section === 'body' && data.column.index === 2) {
+                    if (data.cell.raw === 'PENDENTE') doc.setTextColor(200, 0, 0);
+                    else doc.setTextColor(0, 150, 0);
+                }
+            }
+        });
+
+        doc.text("__________________________________________", 14, doc.lastAutoTable.finalY + 30);
+        doc.text("Assinatura do Mecânico", 14, doc.lastAutoTable.finalY + 35);
+        doc.save(`Controle_${mecanico}.pdf`);
+    }
+
+    function gerarExcel() {
+        let lista = [];
+        selectedCodes.forEach((status, code) => {
+            let f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
+            lista.push([code, f ? f.descricao : "", status === 1 ? "OK" : "PENDENTE"]);
+        });
+        let dados = [
+            ["Mecânico:", document.getElementById("mecanico").value],
+            ["Data:", document.getElementById("data").value],
+            [],
+            ["Código", "Descrição", "Status"]
+        ].concat(lista);
+        let ws = XLSX.utils.aoa_to_sheet(dados);
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Ferramentas");
+        XLSX.writeFile(wb, "controle_ferramentas.xlsx");
+    }
+
+    document.getElementById("busca").addEventListener("input", function() {
+        let termo = normalizeStr(this.value);
+        filtrado = ferramentas.filter(f => 
+            normalizeStr(f.codigo).includes(termo) || 
+            normalizeStr(f.descricao).includes(termo)
+        );
+        render();
+    });
+
+    carregarCSV();
+</script>
+
+</body>
+</html>
