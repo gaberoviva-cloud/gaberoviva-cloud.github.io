@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Controle de Ferramentas - Tradimaq</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+
+body{
+font-family:Segoe UI;
+margin:0;
+background:#f4f6f8;
+}
+
+header{
+display:flex;
+align-items:center;
+gap:15px;
+background:white;
+padding:12px 20px;
+border-bottom:4px solid #ff7a00;
+}
+
+header img{
+height:35px;
+}
+
+.container{
+padding:20px;
+}
+
+#dashboard{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:15px;
+}
+
+.card{
+background:white;
+padding:15px;
+border-left:5px solid #ff7a00;
+min-width:150px;
+}
+
+.card h2{
+margin:5px 0 0 0;
+}
+
+input{
+padding:10px;
+font-size:16px;
+border:1px solid #ccc;
+border-radius:4px;
+width:100%;
+box-sizing:border-box;
+}
+
+button{
+background:#ff7a00;
+border:none;
+padding:12px;
+color:white;
+font-weight:bold;
+border-radius:4px;
+cursor:pointer;
+margin-top:8px;
+}
+
+button:hover{
+background:#e56700;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+margin-top:10px;
+}
+
+th,td{
+border:1px solid #ddd;
+padding:8px;
+font-size:14px;
+}
+
+th{
+background:#4b5563;
+color:white;
+}
+
+.campos{
+display:grid;
+gap:10px;
+margin-top:20px;
+}
+
+.codigoBox{
+background:white;
+padding:10px;
+margin-top:20px;
+border-radius:4px;
+}
+
+.exportBox{
+margin-top:20px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+@media(min-width:700px){
+
+.campos{
+grid-template-columns:1fr 1fr 1fr;
+}
+
+button{
+width:auto;
+margin-top:0;
+}
+
+.codigoBox{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.codigoBox input{
+margin-top:0;
+}
+
+.exportBox button{
+margin-top:0;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png">
+
+<h2>CONTROLE DE FERRAMENTAS</h2>
+
+</header>
+
+<div class="container">
+
+<div id="dashboard">
+
+<div class="card">
+Ferramentas totais
+<h2 id="totalFerramentas">0</h2>
+</div>
+
+<div class="card">
+Filtradas
+<h2 id="totalFiltrado">0</h2>
+</div>
+
+<div class="card">
+Selecionadas
+<h2 id="totalSelecionado">0</h2>
+</div>
+
+</div>
+
+<div class="campos">
+
+<div>
+<label>Data</label>
+<input type="date" id="data">
+</div>
+
+<div>
+<label>Mecânico</label>
+<input id="mecanico">
+</div>
+
+<div>
+<label>Responsável</label>
+<input id="responsavel">
+</div>
+
+</div>
+
+<div class="codigoBox">
+
+<input id="codigoSave" placeholder="Código da seleção...">
+
+<button onclick="gerarCodigo()">Gerar Código</button>
+
+<button onclick="copiarCodigo()">Copiar Código</button>
+
+<button onclick="carregarCodigo()">Carregar Código</button>
+
+</div>
+
+<div class="exportBox">
+
+<button onclick="gerarPDF()">Exportar PDF</button>
+
+<button onclick="gerarExcel()">Exportar Excel</button>
+
+</div>
+
+<input id="busca" placeholder="🔎 Buscar ferramenta...">
+
+<table>
+
+<thead>
+<tr>
+<th></th>
+<th>#</th>
+<th>Código</th>
+<th>Descrição</th>
+</tr>
+</thead>
+
+<tbody id="tabela">
+    <tr><td colspan="4" style="text-align: center;">Carregando ferramentas...</td></tr>
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+document.getElementById("data").value = new Date().toISOString().split("T")[0]
+
+let ferramentas = []
+let filtrado = []
+let selectedCodes = new Set()
+
+// Função para evitar que aspas (como em polegadas: 1/2") quebrem o HTML
+function escapeHTML(str) {
+    if (!str) return "";
+    return str.toString().replace(/[&<>'"]/g, match => {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        };
+        return map[match];
+    });
+}
+
+function normalizeStr(str) {
+    return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+async function carregarCSV() {
+    try {
+        const response = await fetch('https://gaberoviva-cloud.github.io/ferr.csv');
+        const arrayBuffer = await response.arrayBuffer();
+        const decoder = new TextDecoder('windows-1252');
+        const data = decoder.decode(arrayBuffer);
+        
+        const linhas = data.split(/\r?\n/);
+        
+        ferramentas = []; 
+        
+        linhas.forEach((linha, i) => {
+            if (!linha.trim()) return; 
+            
+            const colunas = linha.split(/,|;/);
+            
+            if (i === 0 && normalizeStr(colunas[0]).includes("codigo")) {
+                return;
+            }
+            
+            if (colunas.length >= 2) {
+                ferramentas.push({
+                    codigo: colunas[0].trim(),
+                    descricao: colunas[1].trim()
+                });
+            }
+        });
+
+        filtrado = [...ferramentas];
+        render();
+
+    } catch (error) {
+        console.error("Erro ao carregar o CSV:", error);
+        document.getElementById("tabela").innerHTML = `<tr><td colspan="4" style="text-align: center; color: red;">Erro ao carregar os dados. Verifique a conexão ou o link do CSV.</td></tr>`;
+    }
+}
+
+carregarCSV();
+
+function render(){
+    let tabela = document.getElementById("tabela")
+    tabela.innerHTML = ""
+
+    filtrado.forEach((f, i) => {
+        let tr = document.createElement("tr")
+        tr.innerHTML = `
+            <td>
+                <input type="checkbox"
+                class="check"
+                data-codigo="${escapeHTML(f.codigo)}"
+                data-desc="${escapeHTML(f.descricao)}"
+                ${selectedCodes.has(f.codigo) ? 'checked' : ''}
+                onchange="toggleSelect(this)">
+            </td>
+            <td>${i+1}</td>
+            <td>${escapeHTML(f.codigo)}</td>
+            <td>${escapeHTML(f.descricao)}</td>
+        `
+        tabela.appendChild(tr)
+    })
+
+    atualizarDashboard()
+}
+
+document.getElementById("busca").addEventListener("input", function(){
+    let termo = normalizeStr(this.value)
+    filtrado = []
+
+    for(let i = 0; i < ferramentas.length; i++){
+        let f = ferramentas[i]
+        if(normalizeStr(f.codigo).includes(termo) || normalizeStr(f.descricao).includes(termo)){
+            filtrado.push(f)
+        }
+    }
+    render()
+})
+
+function toggleSelect(checkbox) {
+    const code = checkbox.dataset.codigo;
+    if (checkbox.checked) {
+        selectedCodes.add(code);
+    } else {
+        selectedCodes.delete(code);
+    }
+    atualizarDashboard();
+}
+
+function selecionados(){
+    return Array.from(selectedCodes).sort((a, b) => a.localeCompare(b))
+}
+
+function atualizarDashboard(){
+    document.getElementById("totalFerramentas").innerText = ferramentas.length
+    document.getElementById("totalFiltrado").innerText = filtrado.length
+    document.getElementById("totalSelecionado").innerText = selecionados().length
+}
+
+function gerarCodigo(){
+    let texto = selecionados().join("|")
+    let codigo = btoa(texto)
+    document.getElementById("codigoSave").value = codigo
+}
+
+function copiarCodigo(){
+    let campo = document.getElementById("codigoSave")
+    navigator.clipboard.writeText(campo.value)
+    alert("Código copiado")
+}
+
+function carregarCodigo(){
+    try{
+        let texto = atob(document.getElementById("codigoSave").value)
+        let lista = texto.split("|")
+        
+        selectedCodes.clear()
+        
+        lista.forEach(cod => {
+            if (cod) selectedCodes.add(cod)
+        })
+        render()
+        atualizarDashboard()
+    }catch{
+        alert("Código inválido")
+    }
+}
+
+function gerarPDF(){
+    const { jsPDF } = window.jspdf
+    let lista = selecionados()
+
+    if(lista.length == 0){
+        alert("Nenhuma ferramenta selecionada")
+        return
+    }
+
+    let doc = new jsPDF()
+
+    doc.setFont("helvetica", "normal")
+    doc.setFontSize(18)
+    doc.setTextColor(255,122,0)
+    doc.text("TRADIMAQ",20,20)
+
+    doc.setTextColor(0,0,0)
+    doc.setFontSize(12)
+    doc.text("Controle de Ferramentas",20,30)
+    doc.text("Data: " + document.getElementById("data").value,20,38)
+
+    // Proteção extra: se a ferramenta não for encontrada no array principal, não trava.
+    let tabela = lista.map((c, i) => {
+        let f = ferramentas.find(x => x.codigo === c)
+        return [i+1, f ? f.codigo : c, f ? f.descricao : "Descrição não encontrada"]
+    })
+
+    doc.autoTable({
+        startY: 45, 
+        head: [["#","Código","Descrição"]],
+        body: tabela,
+        headStyles: { fillColor: [255,122,0], font: "helvetica", fontStyle: "bold" },
+        styles: { font: "helvetica", fontStyle: "normal" }
+    })
+
+    let final = doc.lastAutoTable.finalY + 20
+
+    doc.setFont("helvetica", "normal")
+    doc.text("_________________________",20,final)
+    doc.text("Mecânico: " + document.getElementById("mecanico").value,20,final+8)
+
+    doc.text("_________________________",120,final)
+    doc.text("Responsável: " + document.getElementById("responsavel").value,120,final+8)
+
+    doc.save("controle_ferramentas_tradimaq.pdf")
+}
+
+function gerarExcel(){
+    let lista = selecionados()
+    if(lista.length == 0){
+        alert("Nenhuma ferramenta selecionada")
+        return
+    }
+
+    let dados = [["Controle de Ferramentas"]]
+
+    dados.push(["Data", document.getElementById("data").value])
+    dados.push([])
+    dados.push(["Código","Descrição"])
+
+    lista.forEach(c => {
+        let f = ferramentas.find(x => x.codigo === c)
+        if(f) {
+            dados.push([f.codigo, f.descricao])
+        } else {
+            dados.push([c, "Descrição não encontrada"]) // Proteção extra
+        }
+    })
+
+    let ws = XLSX.utils.aoa_to_sheet(dados)
+    let wb = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(wb, ws, "Ferramentas")
+    
+    XLSX.writeFile(wb, "controle_ferramentas_tradimaq.xlsx")
+}
+
+</script>
+
+</body>
+</html>
