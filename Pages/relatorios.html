@@ -3,188 +3,227 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Relatório Automático Timbrado</title>
+  <title>Relatório Tradimaq</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f2f2f2; }
-    h2 { color: #d35400; margin-bottom: 20px; text-align: center; font-size: 24px; }
-    .container { background-color: #ffffff; border: 2px solid #d35400; border-radius: 10px; padding: 20px; max-width: 100%; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); box-sizing: border-box; }
-    label { font-weight: bold; display: block; margin-top: 15px; color: #2c3e50; font-size: 16px; }
-    input[type="file"], input[type="text"], input[type="date"] { margin-top: 5px; width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 16px; height: auto; }
-    input[type="file"] { padding: 10px; }
-    button { margin-top: 25px; padding: 15px 20px; font-size: 18px; background-color: #d35400; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; box-sizing: border-box; }
-    button:hover { background-color: #e67e22; }
-    .preview { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; justify-content: center; }
-    .preview-item { position: relative; width: 120px; height: 160px; cursor: move; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); overflow: hidden; }
-    .preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .remove-btn { position: absolute; top: 8px; right: 8px; background-color: rgba(231, 76, 60, 0.95); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; line-height: 30px; text-align: center; display: flex; align-items: center; justify-content: center; }
-    .note { font-size: 14px; color: #555; margin-top: 10px; text-align: center; }
-    @media (max-width: 600px) {
-      body { padding: 10px; }
-      .container { padding: 15px; }
-      h2 { font-size: 22px; }
-      label { font-size: 15px; }
-      input[type="file"], input[type="text"], input[type="date"] { padding: 10px; font-size: 15px; }
-      button { padding: 12px 20px; font-size: 16px; }
-      .preview-item { width: 100px; height: 133px; }
-      .remove-btn { width: 28px; height: 28px; font-size: 16px; line-height: 28px; }
-      .note { font-size: 13px; }
+    :root {
+      --tradimaq-orange: #e36b1e;
+      --tradimaq-gray: #575756;
+      --bg-light: #f4f4f4;
     }
+
+    body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 20px; background-color: var(--bg-light); color: var(--tradimaq-gray); }
+    
+    .container { 
+      background-color: #ffffff; border-top: 6px solid var(--tradimaq-orange); border-radius: 12px; 
+      padding: 30px; max-width: 650px; margin: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+    }
+
+    .header-logo { text-align: center; margin-bottom: 20px; }
+    .header-logo img { max-width: 200px; }
+
+    h2 { color: var(--tradimaq-gray); text-align: center; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 1px; margin-bottom: 25px; }
+
+    label { font-weight: bold; display: block; margin-top: 15px; font-size: 14px; }
+    
+    input[type="text"], input[type="date"], input[type="file"] { 
+      margin-top: 5px; width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; 
+      box-sizing: border-box; font-size: 16px; transition: border 0.3s;
+    }
+    
+    input:focus { border-color: var(--tradimaq-orange); outline: none; }
+
+    .preview { 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); 
+      gap: 15px; margin-top: 25px; min-height: 50px;
+    }
+
+    .preview-item { 
+      position: relative; aspect-ratio: 3/4; background: #fff; 
+      border: 2px solid #eee; border-radius: 8px; cursor: grab;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+
+    .preview-item:active { cursor: grabbing; }
+
+    .preview img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+
+    .btn-action { 
+      position: absolute; width: 24px; height: 24px; border-radius: 50%; border: none; 
+      color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;
+    }
+    .remove-btn { top: 4px; right: 4px; background: #e74c3c; font-size: 12px; }
+    .rotate-btn { bottom: 4px; right: 4px; background: var(--tradimaq-orange); font-size: 16px; }
+
+    .main-btn { 
+      margin-top: 30px; padding: 18px; font-size: 16px; font-weight: bold;
+      background-color: var(--tradimaq-orange); color: white; border: none; border-radius: 8px; 
+      cursor: pointer; width: 100%; text-transform: uppercase; transition: transform 0.2s, background 0.3s;
+    }
+    .main-btn:hover { background-color: #c45a16; transform: translateY(-2px); }
+
+    .note { font-size: 12px; color: #999; text-align: center; margin-top: 15px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Relatório Automático Timbrado</h2>
 
-    <label for="tpeInput">🔧 TPE:</label>
-    <input type="text" id="tpeInput" placeholder="Digite o TPE (somente números)" inputmode="numeric" pattern="[0-9]*" />
-
-    <label for="dataInput">📅 DATA:</label>
-    <input type="date" id="dataInput" />
-
-    <label for="imageInput">📸 Selecione até 20 fotos (2 por página):</label>
-    <input type="file" id="imageInput" multiple accept="image/*" />
-    <div class="note">Fotos na horizontal formato 3x4</div>
-    <div class="preview" id="previewContainer"></div>
-    <div class="note">Arraste para reordenar (Funciona somente no PC). Clique em ✕ para remover.</div>
-
-    <button onclick="gerarPDF()">Gerar Relatório PDF</button>
+<div class="container">
+  <div class="header-logo">
+    <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Logo Tradimaq">
   </div>
+  
+  <h2>Relatório de Inspeção / TPE</h2>
 
-  <script>
-    let imagensSelecionadas = [];
-    const previewContainer = document.getElementById('previewContainer');
-    const fundoURL = "https://victorrgr.github.io/fundo.jpeg";
+  <label>🔧 NÚMERO DO TPE:</label>
+  <input type="text" id="tpeInput" placeholder="Digite apenas números" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
 
-    document.getElementById('imageInput').addEventListener('change', function () {
-      const files = [...this.files].slice(0, 20 - imagensSelecionadas.length);
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = e => {
-          imagensSelecionadas.push(e.target.result);
-          atualizarPreview();
-        };
-        reader.readAsDataURL(file);
+  <label>📅 DATA:</label>
+  <input type="date" id="dataInput" />
+
+  <label>📸 FOTOS DO EQUIPAMENTO:</label>
+  <input type="file" id="imageInput" multiple accept="image/*" />
+  
+  <div class="preview" id="previewContainer"></div>
+  <p class="note">Segure e arraste as fotos para mudar a ordem. Use ↻ para girar.</p>
+
+  <button class="main-btn" onclick="gerarPDF()">Gerar Relatório Profissional</button>
+</div>
+
+<script>
+  let imagensSelecionadas = [];
+  const previewContainer = document.getElementById('previewContainer');
+  const fundoURL = "https://victorrgr.github.io/fundo.jpeg";
+
+  // Inicializa o arraste das fotos (SortableJS)
+  const sortable = new Sortable(previewContainer, {
+    animation: 150,
+    onEnd: function() {
+      // Atualiza o array conforme a nova ordem visual
+      const novasImagens = [];
+      document.querySelectorAll('.preview-item').forEach(el => {
+        novasImagens.push(imagensSelecionadas[el.dataset.index]);
       });
-      this.value = '';
+      imagensSelecionadas = novasImagens;
+      renderPreview();
+    }
+  });
+
+  document.getElementById('imageInput').addEventListener('change', function(e) {
+    const files = [...e.target.files];
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        imagensSelecionadas.push({ src: event.target.result, rotation: 0 });
+        renderPreview();
+      };
+      reader.readAsDataURL(file);
     });
+    this.value = '';
+  });
 
-    function atualizarPreview() {
-      previewContainer.innerHTML = '';
-      imagensSelecionadas.forEach((src, index) => {
-        const item = document.createElement('div');
-        item.className = 'preview-item';
-        item.draggable = true;
-        item.dataset.index = index;
+  function renderPreview() {
+    previewContainer.innerHTML = '';
+    imagensSelecionadas.forEach((imgObj, index) => {
+      const div = document.createElement('div');
+      div.className = 'preview-item';
+      div.dataset.index = index;
+      
+      const img = document.createElement('img');
+      img.src = imgObj.src;
+      img.style.transform = `rotate(${imgObj.rotation}deg)`;
 
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = `Foto ${index + 1}`;
+      const btnRot = document.createElement('button');
+      btnRot.className = 'btn-action rotate-btn';
+      btnRot.innerHTML = '↻';
+      btnRot.onclick = (e) => { 
+        e.stopPropagation();
+        imgObj.rotation = (imgObj.rotation + 90) % 360; 
+        renderPreview(); 
+      };
 
-        const btn = document.createElement('button');
-        btn.className = 'remove-btn';
-        btn.type = 'button';
-        btn.innerHTML = '✕';
-        btn.onclick = () => {
-          imagensSelecionadas.splice(index, 1);
-          atualizarPreview();
-        };
+      const btnRem = document.createElement('button');
+      btnRem.className = 'btn-action remove-btn';
+      btnRem.innerHTML = '✕';
+      btnRem.onclick = (e) => { 
+        e.stopPropagation();
+        imagensSelecionadas.splice(index, 1); 
+        renderPreview(); 
+      };
 
-        item.appendChild(img);
-        item.appendChild(btn);
-        previewContainer.appendChild(item);
-      });
+      div.appendChild(img);
+      div.appendChild(btnRot);
+      div.appendChild(btnRem);
+      previewContainer.appendChild(div);
+    });
+  }
 
-      const items = document.querySelectorAll('.preview-item');
-      items.forEach(item => {
-        item.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', item.dataset.index));
-        item.addEventListener('dragover', e => e.preventDefault());
-        item.addEventListener('drop', e => {
-          e.preventDefault();
-          const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
-          const toIndex = parseInt(item.dataset.index, 10);
-          if (isNaN(fromIndex) || isNaN(toIndex) || fromIndex === toIndex) return;
-          const moved = imagensSelecionadas.splice(fromIndex, 1)[0];
-          imagensSelecionadas.splice(toIndex, 0, moved);
-          atualizarPreview();
-        });
-      });
+  async function gerarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    
+    const tpe = document.getElementById('tpeInput').value || "S/N";
+    const dataVal = document.getElementById('dataInput').value;
+    
+    let dataFormatada = "";
+    if(dataVal) {
+      const [ano, mes, dia] = dataVal.split('-');
+      dataFormatada = `${dia}/${mes}/${ano}`;
+    } else {
+      dataFormatada = new Date().toLocaleDateString('pt-BR');
     }
 
-    async function gerarPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
+    const fundoImg = await fetch(fundoURL).then(r => r.blob()).then(b => new Promise(res => {
+      const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(b);
+    }));
 
-      const tpeRaw = (document.getElementById('tpeInput').value || '').trim();
-      const dataInput = document.getElementById('dataInput').value;
-      const dataFormatada = dataInput ? new Date(dataInput).toLocaleDateString('pt-BR') : new Date().toLocaleDateString('pt-BR');
+    const larguraFoto = 110;
+    const alturaFoto = 82;
+    const xPos = (210 - larguraFoto) / 2;
 
-      if (imagensSelecionadas.length === 0) {
-        alert("Selecione as fotos para gerar o relatório.");
-        return;
+    for (let i = 0; i < imagensSelecionadas.length; i++) {
+      if (i % 2 === 0) {
+        if (i > 0) doc.addPage();
+        doc.addImage(fundoImg, 'JPEG', 0, 0, 210, 297);
+        doc.setFontSize(14);
+        doc.setTextColor(87, 87, 86); // Cinza Tradimaq
+        doc.text(tpe, 45, 50);
+        doc.text(dataFormatada, 155, 50);
       }
 
-      if (!tpeRaw) {
-        alert("Por favor, insira o TPE.");
-        return;
+      const imgObj = imagensSelecionadas[i];
+      const yPos = (i % 2 === 0) ? 30 : 115; 
+
+      // Renderização com Rotação
+      if (imgObj.rotation === 0) {
+        doc.addImage(imgObj.src, 'JPEG', xPos, yPos, larguraFoto, alturaFoto);
+      } else if (imgObj.rotation === 90) {
+        doc.addImage(imgObj.src, 'JPEG', xPos + larguraFoto, yPos, alturaFoto, larguraFoto, null, 'MEDIUM', 90);
+      } else if (imgObj.rotation === 180) {
+        doc.addImage(imgObj.src, 'JPEG', xPos + larguraFoto, yPos + alturaFoto, larguraFoto, alturaFoto, null, 'MEDIUM', 180);
+      } else if (imgObj.rotation === 270) {
+        doc.addImage(imgObj.src, 'JPEG', xPos, yPos + alturaFoto, alturaFoto, larguraFoto, null, 'MEDIUM', 270);
       }
 
-      const fundoData = await fetch(fundoURL).then(r => r.blob()).then(b => new Promise(res => {
-        const reader = new FileReader();
-        reader.onload = () => res(reader.result);
-        reader.readAsDataURL(b);
-      }));
-
-      const larguraPagina = doc.internal.pageSize.getWidth();
-      const alturaPagina = doc.internal.pageSize.getHeight();
-      const larguraFoto = 100;
-      const alturaFoto = 75;
-      const posicoes = [
-        { x: (larguraPagina - larguraFoto) / 2, y: 60 },
-        { x: (larguraPagina - larguraFoto) / 2, y: 60 + alturaFoto + 10 }
-      ];
-
-      for (let i = 0; i < imagensSelecionadas.length; i++) {
-        if (i % 2 === 0) {
-          if (i > 0) doc.addPage();
-          doc.addImage(fundoData, 'JPEG', 0, 0, larguraPagina, alturaPagina);
-
-          doc.setFontSize(14);
-          doc.setFont(undefined, 'bold');
-          doc.setTextColor(40, 40, 40);
-          doc.text(`${tpeRaw}`, 45, 50);
-          doc.text(`${dataFormatada}`, larguraPagina - 55, 50);
-          doc.setFont(undefined, 'normal');
-        }
-
-        const pos = posicoes[i % 2];
-        try {
-          doc.addImage(imagensSelecionadas[i], 'JPEG', pos.x, pos.y, larguraFoto, alturaFoto);
-        } catch {
-          doc.addImage(imagensSelecionadas[i], 'PNG', pos.x, pos.y, larguraFoto, alturaFoto);
-        }
-
-        if (i === imagensSelecionadas.length - 1) {
-          const yBase = alturaPagina - 50;
-          const margem = 30;
-          const espacoEntre = 20;
-          const assinaturaWidth = (larguraPagina - margem * 2 - espacoEntre) / 2;
-          const leftX = margem;
-          const rightX = margem + assinaturaWidth + espacoEntre;
-
-          doc.setFontSize(14);
-          doc.setFont(undefined, 'bold');
-          doc.text("Assinatura do Responsável", leftX, yBase - 8);
-          doc.text("Assinatura do Cliente", rightX, yBase - 8);
-          doc.setLineWidth(0.5);
-          doc.line(leftX, yBase, leftX + assinaturaWidth, yBase);
-          doc.line(rightX, yBase, rightX + assinaturaWidth, yBase);
-        }
+      // Se for a ÚLTIMA imagem do relatório, adiciona as assinaturas
+      if (i === imagensSelecionadas.length - 1) {
+        const yAssinatura = 240;
+        doc.setFontSize(10);
+        doc.setDrawColor(87, 87, 86);
+        
+        // Linha Responsável
+        doc.line(30, yAssinatura, 95, yAssinatura);
+        doc.text("Responsável Tradimaq", 35, yAssinatura + 5);
+        
+        // Linha Cliente
+        doc.line(115, yAssinatura, 180, yAssinatura);
+        doc.text("Assinatura do Cliente", 125, yAssinatura + 5);
       }
-
-      const dataFilename = dataFormatada.replace(/\//g, '-');
-      doc.save(`relatorio_TPE-${tpeRaw}_${dataFilename}.pdf`);
     }
-  </script>
+
+    doc.save(`Relatorio_TPE_${tpe}.pdf`);
+  }
+</script>
+
 </body>
 </html>
