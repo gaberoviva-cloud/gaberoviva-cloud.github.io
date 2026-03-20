@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Técnico - Tradimaq</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{--brand:#ff7a00;--g9:#1a1a1a;--g7:#374151;--g5:#6b7280;--g3:#d1d5db;--g1:#f3f4f6;--g0:#f9fafb;--green:#16a34a;--red:#dc2626;--r:6px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9);font-size:14px;min-height:100vh}
+
+/* ─ APP SHELL ─ */
+.app-header{background:white;border-bottom:3px solid var(--brand);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.app-header .logo{font-size:17px;font-weight:600;letter-spacing:-.03em}
+.app-header .logo span{color:var(--brand)}
+.app-header .right{display:flex;align-items:center;gap:10px}
+.save-badge{font-size:10px;color:var(--g5);background:var(--g1);border:1px solid var(--g3);padding:3px 8px;border-radius:99px}
+.save-badge.saved{color:var(--green);border-color:var(--green);background:#f0fdf4}
+
+.app-body{display:grid;grid-template-columns:380px 1fr;min-height:calc(100vh - 52px)}
+@media(max-width:860px){.app-body{grid-template-columns:1fr}}
+
+/* ─ EDITOR ─ */
+.editor{background:white;border-right:1px solid var(--g3);padding:18px;overflow-y:auto;max-height:calc(100vh - 52px);position:sticky;top:52px}
+.s-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--g5);margin:16px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--g1)}
+.s-title:first-child{margin-top:0}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--g7);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.field input,.field textarea{width:100%;padding:7px 9px;font-size:13px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);color:var(--g9);background:white;outline:none;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(255,122,0,.1)}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+
+/* ─ BULK UPLOAD ─ */
+.bulk-zone{border:2px dashed var(--g3);border-radius:var(--r);padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;position:relative;background:white;margin-bottom:8px}
+.bulk-zone:hover,.bulk-zone.over{border-color:var(--brand);background:#fff8f3}
+.bulk-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.bulk-zone .bz-icon{font-size:20px;margin-bottom:3px}
+.bulk-zone p{font-size:11px;color:var(--g5);line-height:1.4}
+.bulk-zone strong{color:var(--brand)}
+
+/* galeria de fotos carregadas */
+.galeria{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px}
+.gitem{position:relative;border-radius:4px;overflow:hidden;border:2px solid transparent;cursor:grab;aspect-ratio:1;background:var(--g1)}
+.gitem:hover{border-color:var(--brand)}
+.gitem.dragging{opacity:.35;border-color:var(--brand)}
+.gitem img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
+.gitem-num{position:absolute;bottom:2px;left:3px;background:rgba(0,0,0,.55);color:white;font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px}
+.gitem-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.55);border:none;color:white;cursor:pointer;font-size:10px;padding:2px 5px;border-radius:3px;line-height:1.3}
+.gitem-del:hover{background:var(--red)}
+
+/* pares */
+.foto-par{background:var(--g0);border:1px solid var(--g3);border-radius:var(--r);padding:10px;margin-bottom:8px}
+.par-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.par-num{font-size:11px;font-weight:600;color:var(--g5);text-transform:uppercase;letter-spacing:.06em}
+.par-acts{display:flex;gap:3px}
+.bti{background:none;border:1px solid var(--g3);cursor:pointer;color:var(--g5);font-size:12px;padding:3px 6px;border-radius:4px;transition:all .15s;line-height:1;font-family:inherit}
+.bti:hover{border-color:var(--brand);color:var(--brand);background:#fff8f3}
+.bti.del:hover{border-color:var(--red);color:var(--red);background:#fee2e2}
+
+/* drop slots */
+.drop-slots{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.dslot{border:1.5px dashed var(--g3);border-radius:var(--r);min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;text-align:center;background:white}
+.dslot:hover,.dslot.over{border-color:var(--brand);background:#fff8f3}
+.dslot.filled{border-style:solid;border-color:var(--g3);padding:0;justify-content:flex-start}
+.dslot-lbl{text-transform:uppercase;letter-spacing:.07em;padding:3px 0}
+.dslot-lbl.A{color:var(--green)}
+.dslot-lbl.D{color:var(--red)}
+.dslot-hint{font-size:9px;color:var(--g5);font-weight:400}
+.dslot img{width:100%;flex:1;object-fit:cover;display:block}
+.dslot-overlay{position:absolute;bottom:0;left:0;right:0;display:flex;gap:2px;padding:3px;background:rgba(0,0,0,.45);justify-content:center}
+.dslot-act{background:rgba(255,255,255,.15);border:none;color:white;cursor:pointer;font-size:10px;padding:2px 6px;border-radius:3px;transition:background .1s;font-family:inherit;font-weight:600}
+.dslot-act:hover{background:rgba(255,255,255,.35)}
+
+.par-actions-row{display:flex;gap:5px;margin-bottom:5px}
+.par-actions-row .bti{flex:1;text-align:center;padding:4px 6px;font-size:11px}
+.caption-input{width:100%;padding:5px 7px;font-size:11px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);outline:none;color:var(--g7)}
+.caption-input:focus{border-color:var(--brand)}
+.btn-add-par{width:100%;padding:8px;font-size:12px;font-family:inherit;font-weight:600;border:1.5px dashed var(--g3);border-radius:var(--r);background:white;color:var(--g5);cursor:pointer;transition:all .15s;margin-top:3px}
+.btn-add-par:hover{border-color:var(--brand);color:var(--brand);background:#fff8f3}
+
+/* actions */
+.actions{margin-top:16px;display:flex;flex-direction:column;gap:7px}
+.btn{width:100%;padding:10px;font-size:13px;font-family:inherit;font-weight:600;border:none;border-radius:var(--r);cursor:pointer;color:white;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-pdf{background:var(--brand)}
+.btn-save{background:var(--green)}
+.btn-clear{background:var(--g7);font-size:12px;padding:7px}
+
+/* ─ PREVIEW ─ */
+.preview-panel{padding:22px;overflow-y:auto;background:var(--g1)}
+.preview-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--g5);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.preview-label::after{content:'';flex:1;height:1px;background:var(--g3)}
+
+/* ═══ DOCUMENTO ═══ */
+#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 2px 16px rgba(0,0,0,.1);font-family:'IBM Plex Sans',Arial,sans-serif;font-size:13px}
+.doc-page{padding:20px 20px 0}
+
+/* header do doc — logo carregada via img com fallback texto */
+.doc-page-hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:2px solid var(--g1);margin-bottom:12px}
+.doc-logo{height:28px;object-fit:contain;display:block}
+.doc-logo-txt{font-size:19px;font-weight:700;letter-spacing:-.03em}
+.doc-logo-txt span{color:var(--brand)}
+.doc-hdr-right{text-align:right;font-size:9px;color:var(--g5);line-height:1.5}
+
+.doc-info{margin-bottom:12px;border:1.5px solid var(--g9);border-radius:4px;overflow:hidden}
+.doc-info-title{background:var(--g9);color:white;padding:5px 11px;font-size:11px;font-weight:600;letter-spacing:.04em}
+.doc-info-grid{display:grid;grid-template-columns:1fr 1fr}
+.doc-info-cell{padding:6px 11px;border-right:1px solid var(--g3);border-bottom:1px solid var(--g3);display:flex;gap:5px;align-items:baseline}
+.doc-info-cell:nth-child(even){border-right:none}
+.doc-info-cell:nth-last-child(-n+2){border-bottom:none}
+.doc-info-key{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g5);white-space:nowrap}
+.doc-info-val{font-size:11px;font-weight:500;color:var(--g9);font-family:'IBM Plex Mono',monospace}
+
+.doc-sec{margin-bottom:12px}
+.doc-sec-title{background:var(--g9);color:white;padding:4px 11px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:3px 3px 0 0}
+.doc-sec-body{border:1px solid var(--g3);border-top:none;padding:9px 11px;font-size:11px;line-height:1.7;color:var(--g9);min-height:52px;white-space:pre-line;border-radius:0 0 3px 3px}
+
+/* foto par no documento — pan/zoom com imagem em tamanho natural */
+.doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;margin-bottom:12px}
+.doc-foto-cols{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.doc-foto-box{border:1px solid var(--g3);border-radius:4px;overflow:hidden}
+.doc-foto-lbl{padding:4px 9px;font-size:10px;font-weight:700;text-align:center;color:white;letter-spacing:.04em}
+.doc-foto-lbl.A{background:var(--green)}
+.doc-foto-lbl.D{background:var(--red)}
+.doc-foto-viewport{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--g1);position:relative;cursor:grab}
+.doc-foto-viewport.grabbing{cursor:grabbing}
+.doc-foto-viewport img{position:absolute;top:0;left:0;width:auto;height:auto;min-width:100%;min-height:100%;max-width:none;transform-origin:top left;user-select:none;pointer-events:none;display:block}
+.doc-foto-caption{padding:3px 9px 5px;font-size:9px;color:var(--g5);text-align:center;background:var(--g0);border-top:1px solid var(--g1)}
+
+/* controles de pan/zoom (visíveis apenas no preview, ocultos no PDF) */
+.foto-controls{display:flex;gap:4px;padding:4px 6px;background:var(--g0);border-top:1px solid var(--g1);justify-content:center}
+.fctl{background:white;border:1px solid var(--g3);border-radius:3px;cursor:pointer;font-size:11px;padding:2px 7px;color:var(--g7);font-family:inherit;transition:all .1s}
+.fctl:hover{border-color:var(--brand);color:var(--brand)}
+
+.doc-assinatura{page-break-inside:avoid;break-inside:avoid;margin-bottom:12px}
+.doc-assin-body{border:1px solid var(--g3);border-top:none;padding:22px 14px 10px;border-radius:0 0 3px 3px}
+.doc-assin-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.doc-assin-box{border-top:1.5px solid var(--g9);padding-top:4px}
+.doc-assin-lbl{font-size:9px;color:var(--g5)}
+.doc-assin-name{font-size:10px;font-weight:600;color:var(--g9);margin-top:2px;min-height:13px}
+
+/* rodapé */
+.doc-footer{padding-bottom:14px;margin-top:12px}
+.doc-footer hr{border:none;border-top:1px solid var(--g3);margin-bottom:7px}
+.doc-footer-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.doc-footer-col{font-size:7.5px;color:var(--g5);line-height:1.55}
+.doc-footer-col strong{display:block;color:var(--g7);font-size:7.5px;margin-bottom:1px}
+.doc-footer-brand{display:flex;align-items:center;justify-content:space-between;margin-top:5px;padding-top:4px;border-top:1px solid var(--g1)}
+.doc-footer-site{font-size:7.5px;color:var(--g5)}
+.doc-footer-logo{height:14px;object-fit:contain;opacity:.4}
+
+/* toast */
+#toast{position:fixed;bottom:14px;right:14px;background:var(--g9);color:white;padding:8px 13px;border-radius:var(--r);font-size:12px;font-weight:500;opacity:0;transform:translateY(5px);transition:all .2s;pointer-events:none;z-index:9999}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* PDF mode */
+body.pdf-mode .app-header,body.pdf-mode .editor,body.pdf-mode .preview-label,body.pdf-mode .foto-controls{display:none!important}
+body.pdf-mode .app-body{display:block}
+body.pdf-mode .preview-panel{padding:0;background:white}
+body.pdf-mode #documento{box-shadow:none;max-width:100%}
+body.pdf-mode .doc-foto-viewport{overflow:hidden!important}
+body.pdf-mode .doc-foto-viewport img{position:static!important;width:100%!important;height:100%!important;min-width:unset!important;min-height:unset!important;object-fit:cover!important;transform:none!important}
+body.pdf-mode .doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;display:block!important}
+body.pdf-mode .doc-foto-box{page-break-inside:avoid!important;break-inside:avoid!important}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="logo">TRADI<span>MAQ</span></div>
+  <div class="right">
+    <span class="save-badge" id="save-badge">Sem alterações</span>
+  </div>
+</div>
+
+<div class="app-body">
+<div class="editor">
+
+  <div class="s-title">Identificação</div>
+  <div class="f2">
+    <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Z-34/22 DC" oninput="changed()"></div>
+    <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Z3413-9493" oninput="changed()"></div>
+  </div>
+  <div class="f2">
+    <div class="field"><label>Data</label><input type="date" id="f-data" oninput="changed()"></div>
+    <div class="field"><label>Local</label><input id="f-local" placeholder="TRADIMAQ SP" oninput="changed()"></div>
+  </div>
+  <div class="f2">
+    <div class="field"><label>TAG</label><input id="f-tag" placeholder="TPE-1605" oninput="changed()"></div>
+    <div class="field"><label>Cliente</label><input id="f-cliente" placeholder="Nome do cliente" oninput="changed()"></div>
+  </div>
+
+  <div class="s-title">Descrição</div>
+  <div class="field"><textarea id="f-descricao" placeholder="Descreva o ocorrido, avarias identificadas..." oninput="changed()"></textarea></div>
+
+  <div class="s-title">Assinaturas</div>
+  <div class="f2">
+    <div class="field"><label>Responsável 1</label><input id="f-resp1" placeholder="Técnico" oninput="changed()"></div>
+    <div class="field"><label>Responsável 2</label><input id="f-resp2" placeholder="Cliente" oninput="changed()"></div>
+  </div>
+
+  <div class="s-title">Fotos</div>
+
+  <!-- BULK UPLOAD -->
+  <div class="bulk-zone" id="bulk-zone"
+    ondragover="event.preventDefault();this.classList.add('over')"
+    ondragleave="this.classList.remove('over')"
+    ondrop="onBulkDrop(event)">
+    <input type="file" accept="image/*" multiple onchange="bulkUpload(event)">
+    <div class="bz-icon">📁</div>
+    <p>Selecione <strong>todas as fotos de uma vez</strong><br>
+    Elas aparecem numeradas abaixo — arraste para os slots</p>
+  </div>
+
+  <div class="galeria" id="galeria"></div>
+
+  <div id="foto-pares"></div>
+  <button class="btn-add-par" onclick="adicionarPar()">+ Adicionar par Antes/Depois</button>
+
+  <div class="actions">
+    <div style="background:var(--g0);border:1px solid var(--g3);border-radius:var(--r);padding:10px;margin-bottom:2px;">
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g5);margin-bottom:8px;">Configuração do PDF</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <label style="font-size:11px;color:var(--g7);white-space:nowrap;">Escala das fotos</label>
+        <input type="range" id="pdf-scale" min="0.4" max="1.0" step="0.05" value="0.75"
+          style="flex:1;" oninput="document.getElementById('pdf-scale-val').textContent=Math.round(this.value*100)+'%'">
+        <span id="pdf-scale-val" style="font-size:11px;font-weight:600;color:var(--brand);min-width:32px;text-align:right;">75%</span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <label style="font-size:11px;color:var(--g7);">Orientação:</label>
+          <label style="font-size:11px;display:flex;align-items:center;gap:3px;cursor:pointer;">
+            <input type="radio" name="pdf-orient" value="portrait" checked> Retrato
+          </label>
+          <label style="font-size:11px;display:flex;align-items:center;gap:3px;cursor:pointer;">
+            <input type="radio" name="pdf-orient" value="landscape"> Paisagem
+          </label>
+        </div>
+        <label style="font-size:11px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
+          <input type="checkbox" id="toggle-labels" checked onchange="atualizar()">
+          <span style="color:var(--g7);">Títulos Antes/Depois</span>
+        </label>
+      </div>
+    </div>
+    <button class="btn btn-pdf" onclick="gerarPDF()">⬇ Gerar PDF</button>
+    <button class="btn btn-save" onclick="salvarCache()">💾 Salvar agora</button>
+    <button class="btn" style="background:#0ea5e9;font-size:12px;padding:7px;" onclick="limparFotos()">🗑 Limpar só as fotos</button>
+    <button class="btn btn-clear" onclick="limpar()">Limpar tudo</button>
+  </div>
+
+</div>
+
+<div class="preview-panel">
+  <div class="preview-label">Pré-visualização</div>
+  <div id="documento"></div>
+</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ════════ CONSTANTES ════════ */
+const LOGO_URL = 'https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
+let LOGO = ''; // será preenchido com base64 no init
+
+const CACHE_KEY = 'tradimaq_relatorio_v1';
+const DESC_TEMPLATE = `Inspeção do equipamento (TAG), realizada no cliente (CLIENTE).
+Durante a inspeção do equipamento, foram identificadas avarias no (Ex: adesivo do painel do cesto), caracterizando dano incompatível com as condições normais de uso.`;
+
+/* ════════ STATE ════════ */
+let pares = [];
+let parCounter = 0;
+let galeria = [];
+let galeriaCounter = 0;
+let draggingGId = null;
+let autoSaveTimer = null;
+let hasUnsaved = false;
+
+/* ════════ INIT ════════ */
+document.getElementById('f-data').value = new Date().toISOString().split('T')[0];
+
+// Converte logo para base64 para funcionar no canvas do html2pdf (sem CORS)
+async function initApp() {
+  try {
+    const resp = await fetch(LOGO_URL);
+    const blob = await resp.blob();
+    LOGO = await new Promise(res => {
+      const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(blob);
+    });
+  } catch(e) {
+    // fallback: texto se não conseguir carregar
+    LOGO = '';
+  }
+  carregarCache();
+  if (!pares.length) adicionarPar();
+  // Se descrição ainda vazia (sem cache), coloca template
+  if (!v('f-descricao')) document.getElementById('f-descricao').value = DESC_TEMPLATE;
+  renderGaleria();
+  atualizar();
+}
+initApp();
+
+/* ════════ TOAST ════════ */
+function toast(msg, dur=2400){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+/* ════════ CACHE ════════ */
+function changed(){
+  hasUnsaved=true;
+  badge('⏳ Não salvo','');
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer=setTimeout(salvarCacheAuto,3000);
+  atualizar();
+}
+
+function badge(txt,cls){
+  const b=document.getElementById('save-badge');
+  b.textContent=txt;b.className='save-badge'+(cls?' '+cls:'');
+}
+
+function salvarCacheAuto(){salvarCache(true);}
+
+function salvarCache(silencioso=false){
+  try{
+    const dados={
+      modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),
+      tag:v('f-tag'),cliente:v('f-cliente'),descricao:v('f-descricao'),
+      resp1:v('f-resp1'),resp2:v('f-resp2'),
+      pares: pares.map(p=>({
+        id:p.id,antesData:p.antesData,depoisData:p.depoisData,
+        caption:p.caption,
+        antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
+        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1
+      })),
+      galeria:galeria.map(g=>({id:g.id,data:g.data,name:g.name})),
+      parCounter,galeriaCounter
+    };
+    localStorage.setItem(CACHE_KEY,JSON.stringify(dados));
+    hasUnsaved=false;
+    badge('✓ Salvo','saved');
+    if(!silencioso) toast('Salvo com sucesso!');
+  }catch(e){toast('Erro ao salvar (armazenamento cheio?)');}
+}
+
+function carregarCache(){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY);
+    if(!raw) return;
+    const d=JSON.parse(raw);
+    ['modelo','serie','data','local','tag','cliente','descricao','resp1','resp2'].forEach(k=>{
+      const el=document.getElementById('f-'+k);
+      if(el&&d[k]!==undefined) el.value=d[k];
+    });
+    parCounter=d.parCounter||0;
+    galeriaCounter=d.galeriaCounter||0;
+    galeria=(d.galeria||[]);
+    pares=[];
+    const container=document.getElementById('foto-pares');
+    container.innerHTML='';
+    (d.pares||[]).forEach(p=>{
+      pares.push({
+        id:p.id,antesData:p.antesData||null,depoisData:p.depoisData||null,
+        caption:p.caption||'',
+        antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
+        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1
+      });
+      criarParDOM(p.id);
+      syncThumbs(p.id);
+    });
+    renumerar();
+    badge('✓ Cache carregado','saved');
+  }catch(e){console.warn('Cache inválido',e);}
+}
+
+function v(id){return document.getElementById(id)?.value||'';}
+
+/* ════════ GALERIA BULK ════════ */
+function bulkUpload(event){
+  const files=[...event.target.files];
+  if(!files.length)return;
+  let n=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      galeriaCounter++;
+      galeria.push({id:galeriaCounter,data:e.target.result,name:f.name});
+      n++;if(n===files.length){renderGaleria();autoAssign();}
+    };
+    r.readAsDataURL(f);
+  });
+  event.target.value='';
+}
+
+function onBulkDrop(event){
+  event.preventDefault();
+  document.getElementById('bulk-zone').classList.remove('over');
+  const files=[...event.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
+  if(!files.length)return;
+  let n=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      galeriaCounter++;
+      galeria.push({id:galeriaCounter,data:e.target.result,name:f.name});
+      n++;if(n===files.length){renderGaleria();autoAssign();}
+    };
+    r.readAsDataURL(f);
+  });
+}
+
+/* distribui automaticamente: foto 1→par1 antes, foto2→par1 depois, foto3→par2 antes... */
+function autoAssign(){
+  let gi=0;
+  pares.forEach(par=>{
+    if(gi<galeria.length&&!par.antesData){par.antesData=galeria[gi].data;gi++;}
+    if(gi<galeria.length&&!par.depoisData){par.depoisData=galeria[gi].data;gi++;}
+  });
+  // se ainda sobram fotos, criar novos pares
+  while(gi<galeria.length){
+    adicionarParSilencioso();
+    const par=pares[pares.length-1];
+    if(gi<galeria.length){par.antesData=galeria[gi].data;gi++;}
+    if(gi<galeria.length){par.depoisData=galeria[gi].data;gi++;}
+  }
+  pares.forEach(p=>{syncThumbs(p.id);});
+  renumerar();
+  atualizar();
+  toast(`${galeria.length} fotos distribuídas automaticamente!`);
+}
+
+function renderGaleria(){
+  const grid=document.getElementById('galeria');
+  grid.innerHTML=galeria.map((g,i)=>`
+    <div class="gitem" id="gi-${g.id}" draggable="true"
+      ondragstart="onGDragStart(event,${g.id})"
+      ondragend="onGDragEnd()">
+      <img src="${g.data}" alt="${g.name}">
+      <span class="gitem-num">${i+1}</span>
+      <button class="gitem-del" onclick="delGaleria(${g.id})">✕</button>
+    </div>`).join('');
+}
+
+function delGaleria(id){
+  galeria=galeria.filter(g=>g.id!==id);
+  renderGaleria();
+}
+
+function onGDragStart(event,id){
+  draggingGId=id;
+  event.dataTransfer.effectAllowed='copy';
+  event.dataTransfer.setData('text/plain',String(id));
+  setTimeout(()=>document.getElementById('gi-'+id)?.classList.add('dragging'),0);
+}
+function onGDragEnd(){
+  document.querySelectorAll('.gitem').forEach(el=>el.classList.remove('dragging'));
+  document.querySelectorAll('.dslot').forEach(el=>el.classList.remove('over'));
+  draggingGId=null;
+}
+
+function onSlotOver(event){event.preventDefault();event.currentTarget.classList.add('over');}
+function onSlotLeave(event){event.currentTarget.classList.remove('over');}
+function onSlotDrop(event,parId,lado){
+  event.preventDefault();event.currentTarget.classList.remove('over');
+  const gId=parseInt(event.dataTransfer.getData('text/plain'));
+  const g=galeria.find(x=>x.id===gId);
+  if(!g)return;
+  const par=pares.find(p=>p.id===parId);
+  if(!par)return;
+  if(lado==='A'){par.antesData=g.data;par.antesOX=0;par.antesOY=0;par.antesScale=1;}
+  else{par.depoisData=g.data;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+  syncThumbs(parId);
+  atualizar();
+  changed();
+}
+
+/* ════════ PARES ════════ */
+function adicionarPar(){
+  parCounter++;
+  const id=parCounter;
+  pares.push({id,antesData:null,depoisData:null,caption:'',
+    antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1});
+  criarParDOM(id);
+  renumerar();
+  changed();
+}
+function adicionarParSilencioso(){
+  parCounter++;
+  const id=parCounter;
+  pares.push({id,antesData:null,depoisData:null,caption:'',
+    antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1});
+  criarParDOM(id);
+}
+
+function criarParDOM(id){
+  const div=document.createElement('div');
+  div.className='foto-par';div.id='pe-'+id;
+  div.innerHTML=`
+    <div class="par-head">
+      <span class="par-num">Par 1</span>
+      <div class="par-acts">
+        <button class="bti" onclick="moverPar(${id},-1)">↑</button>
+        <button class="bti" onclick="moverPar(${id},1)">↓</button>
+        <button class="bti del" onclick="removerPar(${id})">✕</button>
+      </div>
+    </div>
+    <div class="drop-slots">
+      <div class="dslot" id="ds-A-${id}"
+        ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)"
+        ondrop="onSlotDrop(event,${id},'A')"
+        onclick="triggerFileInput(${id},'A')">
+        <span class="dslot-lbl A">Antes</span>
+        <span class="dslot-hint">Arraste ou clique</span>
+      </div>
+      <div class="dslot" id="ds-D-${id}"
+        ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)"
+        ondrop="onSlotDrop(event,${id},'D')"
+        onclick="triggerFileInput(${id},'D')">
+        <span class="dslot-lbl D">Depois</span>
+        <span class="dslot-hint">Arraste ou clique</span>
+      </div>
+    </div>
+    <div class="par-actions-row">
+      <button class="bti" onclick="trocar(${id})">⇄ Trocar</button>
+      <button class="bti" onclick="rotacionar(${id},'A')">↻ Antes</button>
+      <button class="bti" onclick="rotacionar(${id},'D')">↻ Depois</button>
+    </div>
+    <input class="caption-input" type="text" placeholder="Legenda opcional..." oninput="setCaption(${id},this.value)">
+    <input type="file" accept="image/*" id="fi-A-${id}" style="display:none" onchange="fileInputChange(event,${id},'A')">
+    <input type="file" accept="image/*" id="fi-D-${id}" style="display:none" onchange="fileInputChange(event,${id},'D')">
+  `;
+  document.getElementById('foto-pares').appendChild(div);
+}
+
+function triggerFileInput(id,lado){
+  document.getElementById(`fi-${lado}-${id}`).click();
+}
+function fileInputChange(event,id,lado){
+  const f=event.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const par=pares.find(p=>p.id===id);if(!par)return;
+    if(lado==='A'){par.antesData=e.target.result;par.antesOX=0;par.antesOY=0;par.antesScale=1;}
+    else{par.depoisData=e.target.result;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+    syncThumbs(id);atualizar();changed();
+  };r.readAsDataURL(f);
+}
+
+function syncThumbs(id){
+  const par=pares.find(p=>p.id===id);if(!par)return;
+  ['A','D'].forEach(lado=>{
+    const slot=document.getElementById(`ds-${lado}-${id}`);if(!slot)return;
+    const data=lado==='A'?par.antesData:par.depoisData;
+    const lbl=lado==='A'?'Antes':'Depois';
+    if(data){
+      slot.classList.add('filled');
+      slot.innerHTML=`<img src="${data}" alt="${lbl}">
+        <div class="dslot-overlay">
+          <button class="dslot-act" onclick="event.stopPropagation();rotacionar(${id},'${lado}')">↻</button>
+          <button class="dslot-act" onclick="event.stopPropagation();clearSlot(${id},'${lado}')">✕</button>
+        </div>`;
+    }else{
+      slot.classList.remove('filled');
+      slot.innerHTML=`<span class="dslot-lbl ${lado}">${lbl}</span><span class="dslot-hint">Arraste ou clique</span>`;
+    }
+  });
+  // restaurar event listeners após innerHTML
+  const sA=document.getElementById(`ds-A-${id}`);
+  const sD=document.getElementById(`ds-D-${id}`);
+  if(sA){sA.ondragover=onSlotOver;sA.ondragleave=onSlotLeave;sA.ondrop=e=>onSlotDrop(e,id,'A');sA.onclick=()=>triggerFileInput(id,'A');}
+  if(sD){sD.ondragover=onSlotOver;sD.ondragleave=onSlotLeave;sD.ondrop=e=>onSlotDrop(e,id,'D');sD.onclick=()=>triggerFileInput(id,'D');}
+}
+
+function clearSlot(id,lado){
+  const par=pares.find(p=>p.id===id);if(!par)return;
+  if(lado==='A'){par.antesData=null;}else{par.depoisData=null;}
+  syncThumbs(id);atualizar();changed();
+}
+
+function removerPar(id){
+  pares=pares.filter(p=>p.id!==id);
+  document.getElementById('pe-'+id)?.remove();
+  renumerar();atualizar();changed();
+}
+function moverPar(id,dir){
+  const idx=pares.findIndex(p=>p.id===id);
+  const dest=idx+dir;
+  if(dest<0||dest>=pares.length)return;
+  [pares[idx],pares[dest]]=[pares[dest],pares[idx]];
+  const c=document.getElementById('foto-pares');
+  const els=[...c.children];
+  if(dir===-1)c.insertBefore(els[idx],els[dest]);
+  else c.insertBefore(els[dest],els[idx]);
+  renumerar();atualizar();changed();
+}
+function renumerar(){
+  document.querySelectorAll('.par-num').forEach((el,i)=>el.textContent=`Par ${i+1}`);
+}
+
+function rotacionar(id,lado){
+  const par=pares.find(p=>p.id===id);
+  const src=lado==='A'?par.antesData:par.depoisData;
+  if(!src)return;
+  const img=new Image();
+  img.onload=()=>{
+    const c=document.createElement('canvas');
+    c.width=img.height;c.height=img.width;
+    const ctx=c.getContext('2d');
+    ctx.translate(c.width/2,c.height/2);ctx.rotate(Math.PI/2);
+    ctx.drawImage(img,-img.width/2,-img.height/2);
+    const novo=c.toDataURL('image/jpeg',.92);
+    if(lado==='A'){par.antesData=novo;par.antesOX=0;par.antesOY=0;par.antesScale=1;}
+    else{par.depoisData=novo;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+    syncThumbs(id);atualizar();changed();
+  };img.src=src;
+}
+function trocar(id){
+  const par=pares.find(p=>p.id===id);if(!par)return;
+  [par.antesData,par.depoisData]=[par.depoisData,par.antesData];
+  syncThumbs(id);atualizar();changed();
+}
+function setCaption(id,val){
+  const par=pares.find(p=>p.id===id);
+  if(par){par.caption=val;atualizar();changed();}
+}
+
+/* ════════ PAN / ZOOM no preview ════════ */
+function calcInitialOffset(vp, par, lado) {
+  // Centraliza a imagem no viewport na primeira vez (ox/oy === 0 e scale === 1)
+  const img = vp.querySelector('img');
+  if (!img) return;
+  const sc = lado==='A' ? (par.antesScale||1) : (par.depoisScale||1);
+  const ox = lado==='A' ? par.antesOX : par.depoisOX;
+  const oy = lado==='A' ? par.antesOY : par.depoisOY;
+  // Só centraliza se ainda não foi movido (ox e oy são 0)
+  if (ox === 0 && oy === 0) {
+    const vW = vp.offsetWidth;
+    const vH = vp.offsetHeight;
+    const iW = img.naturalWidth  || img.offsetWidth;
+    const iH = img.naturalHeight || img.offsetHeight;
+    if (!iW || !iH) return;
+    // Escala para cobrir o viewport (como object-fit:cover)
+    const coverScale = Math.max(vW / iW, vH / iH);
+    const finalSc = coverScale * sc;
+    const centX = (vW - iW * finalSc) / 2;
+    const centY = (vH - iH * finalSc) / 2;
+    if (lado==='A') { par.antesOX = centX; par.antesOY = centY; par.antesScale = coverScale; }
+    else { par.depoisOX = centX; par.depoisOY = centY; par.depoisScale = coverScale; }
+    applyImgTransform(img, centX, centY, finalSc);
+  } else {
+    applyImgTransform(img, ox, oy, sc);
+  }
+}
+
+function applyImgTransform(img, ox, oy, sc) {
+  img.style.transform = `translate(${ox}px,${oy}px) scale(${sc})`;
+  img.style.transformOrigin = '0 0';
+}
+
+function initPanZoom(viewportEl, par, lado) {
+  let dragging=false, startX, startY, startOX, startOY;
+
+  const getState = () => lado==='A'
+    ? {ox:par.antesOX, oy:par.antesOY, sc:par.antesScale||1}
+    : {ox:par.depoisOX, oy:par.depoisOY, sc:par.depoisScale||1};
+
+  const setState = (ox, oy) => {
+    if(lado==='A'){par.antesOX=ox;par.antesOY=oy;}
+    else{par.depoisOX=ox;par.depoisOY=oy;}
+    const img = viewportEl.querySelector('img');
+    const {sc} = getState();
+    if(img) applyImgTransform(img, ox, oy, sc);
+  };
+
+  // Aguarda imagem carregar para centralizar
+  const img = viewportEl.querySelector('img');
+  if (img) {
+    if (img.complete) { calcInitialOffset(viewportEl, par, lado); }
+    else { img.onload = () => calcInitialOffset(viewportEl, par, lado); }
+  }
+
+  viewportEl.addEventListener('mousedown', e => {
+    dragging=true; viewportEl.classList.add('grabbing');
+    const {ox,oy} = getState();
+    startX=e.clientX; startY=e.clientY; startOX=ox; startOY=oy;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => {
+    if(!dragging) return;
+    setState(startOX+(e.clientX-startX), startOY+(e.clientY-startY));
+  });
+  window.addEventListener('mouseup', () => {
+    if(dragging){ dragging=false; viewportEl.classList.remove('grabbing'); changed(); }
+  });
+  viewportEl.addEventListener('touchstart', e => {
+    dragging=true;
+    const {ox,oy} = getState();
+    startX=e.touches[0].clientX; startY=e.touches[0].clientY; startOX=ox; startOY=oy;
+    e.preventDefault();
+  },{passive:false});
+  viewportEl.addEventListener('touchmove', e => {
+    if(!dragging) return;
+    setState(startOX+(e.touches[0].clientX-startX), startOY+(e.touches[0].clientY-startY));
+    e.preventDefault();
+  },{passive:false});
+  viewportEl.addEventListener('touchend', () => { dragging=false; changed(); });
+}
+
+function zoomFoto(par, lado, delta) {
+  const oldSc = lado==='A' ? (par.antesScale||1) : (par.depoisScale||1);
+  const newSc = Math.max(.3, Math.min(4, oldSc + delta));
+  // Ajusta offset para manter o centro visual fixo durante zoom
+  const vp = document.getElementById(`vp-${lado}-${par.id}`);
+  const vW = vp ? vp.offsetWidth  : 330;
+  const vH = vp ? vp.offsetHeight : 185;
+  const ox = lado==='A' ? par.antesOX : par.depoisOX;
+  const oy = lado==='A' ? par.antesOY : par.depoisOY;
+  // Ponto de pivot = centro do viewport
+  const px = vW / 2;
+  const py = vH / 2;
+  const ratio = newSc / oldSc;
+  const newOx = px - ratio * (px - ox);
+  const newOy = py - ratio * (py - oy);
+  if(lado==='A'){par.antesScale=newSc;par.antesOX=newOx;par.antesOY=newOy;}
+  else{par.depoisScale=newSc;par.depoisOX=newOx;par.depoisOY=newOy;}
+  atualizar(); changed();
+}
+function resetFoto(par, lado) {
+  // Força recentralização zerando offsets — calcInitialOffset vai recentrar no próximo render
+  if(lado==='A'){par.antesOX=0;par.antesOY=0;par.antesScale=1;}
+  else{par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+  atualizar(); changed();
+}
+
+/* ════════ RENDER DOCUMENTO ════════ */
+function rodape(){
+  const logoFooter = LOGO ? `<img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">` : '';
+  return`<div class="doc-footer">
+    <hr>
+    <div class="doc-footer-cols">
+      <div class="doc-footer-col"><strong>Matriz Contagem</strong>Rua Humberto Demoro, nº 333<br>Bairro Inconfidentes<br>Contagem/MG — CEP 32260-000<br>Tel.: (31) 2104-8000</div>
+      <div class="doc-footer-col"><strong>Filial Goiânia</strong>Av. Perimetral Norte, nº 11.365<br>Quadra 32 • Lote 17/18<br>Goiânia/GO — CEP 74665-510<br>Tel.: (62) 3202-8004</div>
+      <div class="doc-footer-col"><strong>Filial Taubaté</strong>Rua Cmte. José Renato C. de Moura, 1000<br>Parque Aeroporto<br>Taubaté/SP — CEP 12051-150<br>Tel.: 0800 007 8004</div>
+      <div class="doc-footer-col"><strong>Filial Cariacica</strong>Rod. Gov. Mário Covas, 10.600<br>Galpão 72/75 — Serra do Anil<br>Cariacica/ES — CEP 29147-030<br>Tel.: (27) 99915-7103</div>
+    </div>
+    <div class="doc-footer-brand">
+      <span class="doc-footer-site">www.tradimaq.com.br</span>
+      ${logoFooter}
+    </div>
+  </div>`;
+}
+
+function hdr(clienteExtra){
+  const logoHtml = LOGO
+    ? `<img class="doc-logo" src="${LOGO}" alt="Tradimaq">`
+    : `<div class="doc-logo-txt">TRADI<span>MAQ</span></div>`;
+  return`<div class="doc-page-hdr">
+    ${logoHtml}
+    <div class="doc-hdr-right">www.tradimaq.com.br${clienteExtra?'<br>'+clienteExtra:''}</div>
+  </div>`;
+}
+
+function atualizar(){
+  const modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',local=v('f-local')||'—';
+  const tag=v('f-tag')||'—',cliente=v('f-cliente')||'—',descricao=v('f-descricao')||'—';
+  const resp1=v('f-resp1'),resp2=v('f-resp2');
+  const raw=v('f-data');
+  const dataFmt=raw?raw.split('-').reverse().join('/'):'—';
+
+  const ordemIds=[...document.querySelectorAll('.foto-par')].map(el=>parseInt(el.id.replace('pe-','')));
+  const paresOrd=ordemIds.map(id=>pares.find(p=>p.id===id)).filter(Boolean);
+
+  const showLabels = document.getElementById('toggle-labels')?.checked !== false;
+
+  const fotosHtml=paresOrd.map((par,i)=>{
+    const sc_a=par.antesScale||1, ox_a=par.antesOX||0, oy_a=par.antesOY||0;
+    const sc_d=par.depoisScale||1, ox_d=par.depoisOX||0, oy_d=par.depoisOY||0;
+    const lblA = showLabels ? `<div class="doc-foto-lbl A">Antes</div>` : '';
+    const lblD = showLabels ? `<div class="doc-foto-lbl D">Depois</div>` : '';
+    const vA=par.antesData
+      ?`<div class="doc-foto-viewport" id="vp-A-${par.id}"><img src="${par.antesData}" style="transform:translate(${ox_a}px,${oy_a}px) scale(${sc_a});transform-origin:0 0"></div>
+        <div class="foto-controls">
+          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'A',.15)">＋</button>
+          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'A',-.15)">－</button>
+          <button class="fctl" onclick="resetFoto(pares.find(p=>p.id==${par.id}),'A')">↺</button>
+        </div>`
+      :`<div class="doc-foto-viewport" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--g5)">Sem imagem</div>`;
+    const vD=par.depoisData
+      ?`<div class="doc-foto-viewport" id="vp-D-${par.id}"><img src="${par.depoisData}" style="transform:translate(${ox_d}px,${oy_d}px) scale(${sc_d});transform-origin:0 0"></div>
+        <div class="foto-controls">
+          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'D',.15)">＋</button>
+          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'D',-.15)">－</button>
+          <button class="fctl" onclick="resetFoto(pares.find(p=>p.id==${par.id}),'D')">↺</button>
+        </div>`
+      :`<div class="doc-foto-viewport" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--g5)">Sem imagem</div>`;
+    const cap=par.caption?`Figura ${i+1} — ${par.caption}`:`Figura ${i+1}`;
+    return`<div class="doc-foto-par">
+      <div class="doc-foto-cols">
+        <div class="doc-foto-box">${lblA}${vA}</div>
+        <div class="doc-foto-box">${lblD}${vD}</div>
+      </div>
+      <div class="doc-foto-caption">${cap}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('documento').innerHTML=`
+    <div class="doc-page">
+      ${hdr(cliente!=='—'?cliente:'')}
+      <div class="doc-info">
+        <div class="doc-info-title">Relatório Técnico</div>
+        <div class="doc-info-grid">
+          <div class="doc-info-cell"><span class="doc-info-key">Modelo:</span><span class="doc-info-val">${modelo}</span></div>
+          <div class="doc-info-cell"><span class="doc-info-key">Data:</span><span class="doc-info-val">${dataFmt}</span></div>
+          <div class="doc-info-cell"><span class="doc-info-key">Nº Série:</span><span class="doc-info-val">${serie}</span></div>
+          <div class="doc-info-cell"><span class="doc-info-key">Local:</span><span class="doc-info-val">${local}</span></div>
+          <div class="doc-info-cell"><span class="doc-info-key">TAG:</span><span class="doc-info-val">${tag}</span></div>
+          <div class="doc-info-cell"><span class="doc-info-key">Cliente:</span><span class="doc-info-val">${cliente}</span></div>
+        </div>
+      </div>
+      <div class="doc-sec">
+        <div class="doc-sec-title">Descrição</div>
+        <div class="doc-sec-body">${descricao}</div>
+      </div>
+      ${fotosHtml?`<div class="doc-sec-title" style="margin-bottom:10px;">Fotos</div>${fotosHtml}`:''}
+      <div class="doc-assinatura">
+        <div class="doc-sec-title">Assinaturas</div>
+        <div class="doc-assin-body">
+          <div class="doc-assin-grid">
+            <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Técnico</div><div class="doc-assin-name">${resp1}</div></div>
+            <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Cliente</div><div class="doc-assin-name">${resp2}</div></div>
+          </div>
+        </div>
+      </div>
+      ${rodape()}
+    </div>`;
+
+  // Inicia pan/zoom em cada viewport
+  paresOrd.forEach(par=>{
+    ['A','D'].forEach(lado=>{
+      const vp=document.getElementById(`vp-${lado}-${par.id}`);
+      if(vp) initPanZoom(vp,par,lado);
+    });
+  });
+}
+
+/* ════════ LIMPAR ════════ */
+function limpar(){
+  if(!confirm('Limpar tudo? Isso também apaga o cache salvo.'))return;
+  localStorage.removeItem(CACHE_KEY);
+  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
+  pares=[];parCounter=0;galeria=[];galeriaCounter=0;
+  document.getElementById('foto-pares').innerHTML='';
+  renderGaleria();adicionarPar();atualizar();
+  badge('Sem alterações','');
+}
+
+/* ════════ LIMPAR FOTOS ════════ */
+function limparFotos(){
+  if(!confirm('Limpar todas as fotos? Os dados do relatório serão mantidos.'))return;
+  pares.forEach(par=>{
+    par.antesData=null; par.depoisData=null;
+    par.antesOX=0; par.antesOY=0; par.antesScale=1;
+    par.depoisOX=0; par.depoisOY=0; par.depoisScale=1;
+    syncThumbs(par.id);
+  });
+  galeria=[]; galeriaCounter=0;
+  renderGaleria();
+  atualizar();
+  changed();
+  toast('Fotos limpas!');
+}
+async function gerarPDF(){
+  salvarCache(true);
+  const serie  = v('f-serie')||'SEM-SERIE';
+  const cliente= v('f-cliente')||'SEM-CLIENTE';
+  const raw    = v('f-data')||new Date().toISOString().split('T')[0];
+  const slug   = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');
+  const nome   = `Relatorio_${slug(serie)}_${slug(cliente)}_${raw.replace(/-/g,'')}.pdf`;
+
+  const scale   = parseFloat(document.getElementById('pdf-scale').value) || 0.75;
+  const orient  = document.querySelector('input[name="pdf-orient"]:checked')?.value || 'portrait';
+
+  /* ── 1. Converte viewports em imagens estáticas (bake) ── */
+  const viewports=[...document.querySelectorAll('.doc-foto-viewport')];
+  const snaps=[];
+
+  for(const vp of viewports){
+    const img=vp.querySelector('img');
+    if(!img||!img.src) continue;
+
+    // Altura real do viewport (aspect-ratio 4:3 baseado na largura atual)
+    const VW=vp.offsetWidth||320;
+    const VH=vp.offsetHeight||Math.round(VW*3/4);
+
+    const vpId=vp.id||'';
+    const parts=vpId.split('-');
+    const lado=parts[1], parId=parseInt(parts[2]);
+    const par=pares.find(p=>p.id===parId);
+    let ox=0,oy=0,sc=1;
+    if(par){
+      ox = lado==='A'?(par.antesOX||0):(par.depoisOX||0);
+      oy = lado==='A'?(par.antesOY||0):(par.depoisOY||0);
+      sc = lado==='A'?(par.antesScale||1):(par.depoisScale||1);
+    }
+
+    const DPR=2;
+    const canvas=document.createElement('canvas');
+    canvas.width=VW*DPR; canvas.height=VH*DPR;
+    const ctx=canvas.getContext('2d');
+    ctx.scale(DPR,DPR);
+
+    await new Promise(res=>{
+      const src=new Image();
+      src.onload=()=>{
+        const iW=src.naturalWidth, iH=src.naturalHeight;
+        ctx.fillStyle='#f3f4f6';
+        ctx.fillRect(0,0,VW,VH);
+        const isDefault=(sc===1&&ox===0&&oy===0);
+        if(isDefault){
+          const coverSc=Math.max(VW/iW,VH/iH);
+          const dW=iW*coverSc, dH=iH*coverSc;
+          ctx.drawImage(src,(VW-dW)/2,(VH-dH)/2,dW,dH);
+        } else {
+          const sx=-ox/sc, sy=-oy/sc, sw=VW/sc, sh=VH/sc;
+          const csx=Math.max(0,sx), csy=Math.max(0,sy);
+          const csw=Math.min(sw,iW-csx), csh=Math.min(sh,iH-csy);
+          ctx.drawImage(src,csx,csy,csw,csh,(csx-sx)*sc,(csy-sy)*sc,csw*sc,csh*sc);
+        }
+        res();
+      };
+      src.onerror=res;
+      src.src=img.src;
+    });
+
+    snaps.push({el:vp,html:vp.innerHTML,origH:vp.style.height,origAR:vp.style.aspectRatio});
+
+    // Substitui por imagem estática com altura fixa em px (necessário para html2canvas)
+    const fixedH = Math.round(VW * 3/4 * scale);
+    vp.style.aspectRatio='unset';
+    vp.style.height=fixedH+'px';
+    vp.innerHTML=`<img src="${canvas.toDataURL('image/jpeg',.95)}"
+      style="width:100%;height:100%;object-fit:fill;display:block;">`;
+  }
+
+  /* ── 2. Garante que os grids de foto ficam lado a lado no PDF ── */
+  document.body.classList.add('pdf-mode');
+
+  // Força grid a ser table-like para html2canvas respeitar 2 colunas
+  const fotoGrids=[...document.querySelectorAll('.doc-foto-cols')];
+  fotoGrids.forEach(g=>{
+    g.style.cssText='display:table;width:100%;border-spacing:7px;border-collapse:separate;table-layout:fixed;';
+    [...g.children].forEach(box=>{
+      box.style.cssText='display:table-cell;width:50%;vertical-align:top;';
+    });
+  });
+
+  const opt={
+    margin:[0.3,0.3,0.3,0.3],
+    filename:nome,
+    image:{type:'jpeg',quality:.97},
+    html2canvas:{scale:2,useCORS:true,allowTaint:true,scrollY:0,logging:false,imageTimeout:25000},
+    jsPDF:{unit:'in',format:'a4',orientation:orient},
+    pagebreak:{mode:['css','avoid-all'],avoid:['.doc-foto-par','.doc-assinatura','.doc-info','.doc-footer']}
+  };
+
+  try{
+    await html2pdf().from(document.getElementById('documento')).set(opt).save();
+    toast('PDF gerado!');
+  }catch(err){
+    toast('Erro ao gerar PDF.');console.error(err);
+  }
+
+  /* ── 3. Restaura tudo ── */
+  document.body.classList.remove('pdf-mode');
+
+  fotoGrids.forEach(g=>{
+    g.style.cssText='';
+    [...g.children].forEach(box=>{ box.style.cssText=''; });
+  });
+
+  snaps.forEach(({el,html,origH,origAR})=>{
+    el.innerHTML=html;
+    el.style.height=origH;
+    el.style.aspectRatio=origAR||'4/3';
+  });
+
+  const ordemIds=[...document.querySelectorAll('.foto-par')].map(el=>parseInt(el.id.replace('pe-','')));
+  ordemIds.map(id=>pares.find(p=>p.id===id)).filter(Boolean).forEach(par=>{
+    ['A','D'].forEach(lado=>{
+      const vp=document.getElementById(`vp-${lado}-${par.id}`);
+      if(vp) initPanZoom(vp,par,lado);
+    });
+  });
+}
+</script>
+</body>
+</html>
