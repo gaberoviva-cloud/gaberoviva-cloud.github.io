@@ -3,217 +3,323 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Status Tradimaq</title>
+  <title>Tradimaq — Sistema</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #ff7a00;
+      --brand-dark: #d96500;
+      --brand-light: #fff0e0;
+      --dark: #1a1a1a;
+      --text: #374151;
+      --muted: #6b7280;
+      --border: rgba(255,255,255,0.15);
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(135deg, #f4a261, #e76f51);
+      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
       min-height: 100vh;
-      margin: 0;
+      background: #1a1a1a;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 20px;
-      padding: 20px 0;
-      box-sizing: border-box;
+      padding: 32px 20px;
+      overflow-x: hidden;
     }
 
-    .menu {
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      padding: 20px 30px;
-      text-align: center;
-      max-width: 250px;
-      width: 90%;
-      animation: fadeIn 0.5s ease-in-out;
+    /* Background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,122,0,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(255,122,0,0.10) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .logo {
-      width: auto;
-      max-width: auto;
-      height: auto;
-      margin-bottom: 20px;
-      animation: bounceIn 1s ease-out;
-    }
-
-    .menu h1 {
-      margin-bottom: 15px;
-      color: #e76f51;
-      font-size: 1.4em;
-    }
-
-    .btn {
-      display: block;
+    .wrapper {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      background: #f4a261;
-      color: #fff;
-      font-weight: bold;
-      border: none;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Logo */
+    .logo-area {
+      text-align: center;
+      animation: fadeDown 0.5s ease both;
+    }
+    .logo-area img {
+      height: 44px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    .logo-fallback {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: white;
+    }
+    .logo-fallback span { color: var(--brand); }
+    .logo-tagline {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+    }
+
+    /* Cards */
+    .card {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      animation: fadeUp 0.5s ease both;
+    }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.2s; }
+    .card:nth-child(4) { animation-delay: 0.3s; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-icon {
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
+      background: rgba(255,122,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .card-subtitle {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+      margin-top: 1px;
+    }
+
+    .card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 9px;
+      color: rgba(255,255,255,0.85);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
       cursor: pointer;
-      font-size: 1em;
-      transition: background 0.3s, transform 0.3s;
-      opacity: 0;
-      animation: buttonSlideIn 0.5s ease-out forwards;
+      text-align: left;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
       touch-action: manipulation;
+      text-decoration: none;
     }
-
     .btn:hover {
-      background: #e76f51;
-      transform: scale(1.05);
+      background: rgba(255,122,0,0.18);
+      border-color: rgba(255,122,0,0.4);
+      color: white;
+    }
+    .btn:active { transform: scale(0.98); }
+
+    .btn .btn-arrow {
+      font-size: 12px;
+      opacity: 0.4;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn:hover .btn-arrow {
+      opacity: 0.9;
+      transform: translateX(3px);
     }
 
-    .btn:active {
-      transform: scale(0.95);
+    /* Grid layout for states */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .btn-grid .btn {
+      justify-content: center;
+      text-align: center;
+    }
+    .btn-grid .btn .btn-arrow { display: none; }
+
+    /* Highlight button (Relatório) */
+    .btn-highlight {
+      background: linear-gradient(135deg, rgba(255,122,0,0.25), rgba(255,122,0,0.12));
+      border-color: rgba(255,122,0,0.45);
+      color: white;
+    }
+    .btn-highlight:hover {
+      background: linear-gradient(135deg, rgba(255,122,0,0.4), rgba(255,122,0,0.22));
+      border-color: rgba(255,122,0,0.7);
     }
 
+    /* Divider in card */
+    .card-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+
+    /* Footer */
     footer {
-      margin-top: 10px;
-      font-size: 0.8em;
-      color: #666;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      margin-top: 4px;
+    }
+    footer a {
+      color: rgba(255,255,255,0.35);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    footer a:hover { color: var(--brand); }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes bounceIn {
-      0% { opacity: 0; transform: scale(0.3); }
-      50% { opacity: 1; transform: scale(1.05); }
-      70% { transform: scale(0.9); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes buttonSlideIn {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .menu:first-of-type .btn:nth-child(1) { animation-delay: 0.1s; }
-    .menu:first-of-type .btn:nth-child(2) { animation-delay: 0.4s; }
-    .menu:first-of-type .btn:nth-child(3) { animation-delay: 0.5s; }
-    .menu:first-of-type .btn:nth-child(4) { animation-delay: 0.7s; }
-    .menu:last-of-type .btn { animation-delay: 0.9s; }
-
-    @media (max-width: 600px) {
-      body {
-        gap: 15px;
-        padding: 15px 0;
-      }
-
-      .menu {
-        max-width: 240px;
-        padding: 18px 25px;
-        border-radius: 8px;
-        animation: fadeInMobile 0.6s ease-in-out;
-      }
-
-      .menu h1 {
-        font-size: 1.3em;
-      }
-
-      .btn {
-        padding: 9px;
-        font-size: 0.95em;
-        transition: background 0.2s, transform 0.2s;
-        animation: buttonSlideInMobile 0.6s ease-out forwards;
-      }
-
-      .btn:hover {
-        background: #e76f51;
-        transform: scale(1.03);
-      }
-
-      .btn:active {
-        transform: scale(0.97);
-      }
-
-      .logo {
-        max-width: 294px;
-        animation: bounceInMobile 1.2s ease-out;
-      }
-
-      @keyframes fadeInMobile {
-        from { opacity: 0; transform: translateY(15px); }
-        to { opacity: 1; transform: translateY(0); }
-      }
-
-      @keyframes bounceInMobile {
-        0% { opacity: 0; transform: scale(0.4); }
-        50% { opacity: 1; transform: scale(1.03); }
-        70% { transform: scale(0.95); }
-        100% { transform: scale(1); }
-      }
-
-      @keyframes buttonSlideInMobile {
-        from { opacity: 0; transform: translateX(-15px); }
-        to { opacity: 1; transform: translateX(0); }
-      }
-
-      .menu:first-of-type .btn:nth-child(1) { animation-delay: 0.05s; }
-      .menu:first-of-type .btn:nth-child(2) { animation-delay: 0.05s; }
-      .menu:first-of-type .btn:nth-child(3) { animation-delay: 0.05s; }
-      .menu:first-of-type .btn:nth-child(4) { animation-delay: 0.05s; }
-      .menu:last-of-type .btn { animation-delay: 0.05s; }
-    }
-
-    @media (min-width: 601px) and (max-width: 900px) {
-      .menu {
-        max-width: 300px;
-        padding: 25px 35px;
-      }
-
-      .logo {
-        max-width: 180px;
-      }
+    /* Mobile tweaks */
+    @media (max-width: 480px) {
+      .wrapper { max-width: 100%; }
+      .btn-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 <body>
-  <img src="LOGO_tradimaq_branca.png" alt="Tradimaq" class="logo">
-  <div class="menu">
-    <h1>Status Diário</h1>
-    <button class="btn" onclick="abrir('/Pages/status_MG.html')">Status MG</button>
-    <button class="btn" onclick="abrir('/Pages/status_SP.html')">Status SP</button>
-    <button class="btn" onclick="abrir('/Pages/status_GO.html')">Status GO</button>
-    <button class="btn" onclick="abrir('/Pages/status_ES.html')">Status ES</button>
-    <button class="btn" onclick="abrir('/Pages/status_PA.html')">Status PA</button>
+
+<div class="wrapper">
+
+  <!-- Logo -->
+  <div class="logo-area">
+    <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq"
+      onerror="this.outerHTML='<div class=\\'logo-fallback\\'>TRADI<span>MAQ</span></div>'">
+    <div class="logo-tagline">Plataformas Elevatórias</div>
   </div>
 
-  <!-- Nova caixa: Gerador de Relatórios -->
-  <div class="menu">
-    <h1>Gerador de Relatórios</h1>
-    <button class="btn" onclick="abrir('/Pages/relatorio_tecnico_tradimaq.html')">Abrir Gerador</button>
+  <!-- Status Diário -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📊</div>
+      <div>
+        <div class="card-title">Status Diário</div>
+        <div class="card-subtitle">Pátio — Plataformas Genie</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="btn-grid">
+        <button class="btn" onclick="abrir('/Pages/status_MG.html')">
+          SP — Taubaté
+        </button>
+        <button class="btn" onclick="abrir('/Pages/status_SP.html')">
+          GO — Goiânia
+        </button>
+        <button class="btn" onclick="abrir('/Pages/status_GO.html')">
+          ES — Cariacica
+        </button>
+        <button class="btn" onclick="abrir('/Pages/status_ES.html')">
+          PA — Parauapebas
+        </button>
+      </div>
+      <div class="card-divider"></div>
+      <button class="btn" onclick="abrir('/Pages/status_PA.html')">
+        <span>MG — Contagem</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
   </div>
 
-  <footer style="color: white; font-weight: bold;">
-  <a href="https://www.linkedin.com/in/gabriel-v-v-roza" 
-     target="_blank" 
-     style="color: inherit; text-decoration: none;">
-     By Gabriel Roza
-  </a>
+  <!-- Controle de Ferramentas -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔧</div>
+      <div>
+        <div class="card-title">Controle de Ferramentas</div>
+        <div class="card-subtitle">Retirada e devolução</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <button class="btn" onclick="abrir('/Pages/controle_ferramentas.html')">
+        <span>Abrir controle</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Relatório Técnico -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📋</div>
+      <div>
+        <div class="card-title">Relatório Técnico</div>
+        <div class="card-subtitle">Laudo de inspeção · Gerador de PDF</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <button class="btn btn-highlight" onclick="abrir('/Pages/relatorio_tecnico_tradimaq.html')">
+        <span>Abrir gerador</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank">By Gabriel Roza</a>
 </footer>
-  
-  <script>
-    function abrir(arquivo) {
-      window.location.href = arquivo;
-      // ou: window.open(arquivo, '_blank');
-    }
-  </script>
+
+<script>
+  function abrir(arquivo) {
+    window.location.href = arquivo;
+  }
+</script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
