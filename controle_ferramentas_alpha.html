@@ -422,6 +422,34 @@
         .col-check { width: 36px; }
         .col-status { width: 110px; }
         .col-action { width: 90px; }
+        .col-qty { width: 90px; }
+
+        input.qty-input {
+            width: 64px;
+            padding: 4px 8px;
+            font-size: 13px;
+            font-family: 'IBM Plex Mono', monospace;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            text-align: center;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        input.qty-input:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(255,122,0,0.1);
+        }
+
+        .btn-filter-selected {
+            background: white;
+            border: 1.5px solid var(--gray-300);
+            color: var(--gray-700);
+        }
+        .btn-filter-selected.active {
+            background: var(--brand-soft);
+            border-color: var(--brand);
+            color: var(--brand-dark);
+        }
     </style>
 </head>
 <body>
@@ -507,6 +535,7 @@
         <button class="btn btn-pdf" onclick="gerarPDF()">⬇ Exportar PDF</button>
         <button class="btn btn-excel" onclick="gerarExcel()">⬇ Exportar Excel</button>
         <button class="btn btn-clear" onclick="limparTudo()">Limpar Seleção</button>
+        <button class="btn btn-filter-selected" id="btnFiltrarSelecionados" onclick="toggleFiltroSelecionados()">👁 Ver Selecionados</button>
         <button class="btn btn-backup-toggle" onclick="toggleBackup()">💾 Backup</button>
     </div>
 
@@ -534,6 +563,7 @@
                     <th class="col-check"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
                     <th class="col-code">Código</th>
                     <th>Descrição</th>
+                    <th class="col-qty">Qtd</th>
                     <th class="col-status">Status</th>
                     <th class="col-action">Ação</th>
                 </tr>
@@ -553,8 +583,9 @@
 
     let ferramentas = [];
     let filtrado = [];
-    let selectedCodes = new Map();
+    let selectedCodes = new Map(); // code -> { status: 0|1, qty: number }
     let bancoBase = [];
+    let apenasSelecioandos = false;
 
     function normalizeStr(str) {
         return str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -648,12 +679,36 @@
         render();
     }
 
+    function toggleFiltroSelecionados() {
+        apenasSelecioandos = !apenasSelecioandos;
+        const btn = document.getElementById('btnFiltrarSelecionados');
+        btn.classList.toggle('active', apenasSelecioandos);
+        btn.textContent = apenasSelecioandos ? '👁 Ver Todos' : '👁 Ver Selecionados';
+        aplicarBusca();
+    }
+
+    function aplicarBusca() {
+        const termo = normalizeStr(document.getElementById('busca').value);
+        let base = ferramentas.filter(f =>
+            normalizeStr(f.codigo).includes(termo) ||
+            normalizeStr(f.descricao).includes(termo)
+        );
+        if (apenasSelecioandos) {
+            base = base.filter(f => selectedCodes.has(f.codigo));
+        }
+        filtrado = base;
+        render();
+    }
+
     function render() {
         let tabela = document.getElementById("tabela");
         tabela.innerHTML = "";
 
         if (filtrado.length === 0) {
-            tabela.innerHTML = `<tr><td colspan="5"><div class="empty-state"><div class="icon">🔍</div><p>Nenhuma ferramenta encontrada.</p></div></td></tr>`;
+            const msg = apenasSelecioandos
+                ? "Nenhuma ferramenta selecionada ainda."
+                : "Nenhuma ferramenta encontrada.";
+            tabela.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">🔍</div><p>${msg}</p></div></td></tr>`;
             atualizarDashboard();
             return;
         }
@@ -661,8 +716,10 @@
         const fragment = document.createDocumentFragment();
         filtrado.forEach((f) => {
             let tr = document.createElement("tr");
-            const isSelected = selectedCodes.has(f.codigo);
-            const status = selectedCodes.get(f.codigo);
+            const entry = selectedCodes.get(f.codigo);
+            const isSelected = !!entry;
+            const status = entry ? entry.status : null;
+            const qty = entry ? entry.qty : 1;
 
             if (isSelected && status === 1) tr.classList.add("row-ok");
 
@@ -678,10 +735,15 @@
                     : `<button class="btn-action entregar" onclick="toggleStatus('${f.codigo}')">Entregar</button>`)
                 : '';
 
+            const qtyHtml = isSelected
+                ? `<input class="qty-input" type="number" min="1" value="${qty}" onchange="updateQty('${f.codigo}', this.value)">`
+                : '<span style="color:var(--gray-300)">—</span>';
+
             tr.innerHTML = `
                 <td><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect(this, '${f.codigo}')"></td>
                 <td style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gray-500)">${f.codigo}</td>
                 <td>${f.descricao}</td>
+                <td>${qtyHtml}</td>
                 <td>${statusHtml}</td>
                 <td>${actionHtml}</td>`;
             fragment.appendChild(tr);
@@ -694,32 +756,45 @@
     }
 
     function toggleSelect(checkbox, code) {
-        if (checkbox.checked) selectedCodes.set(code, 0);
+        if (checkbox.checked) selectedCodes.set(code, { status: 0, qty: 1 });
         else selectedCodes.delete(code);
-        render();
+        if (apenasSelecioandos) aplicarBusca();
+        else render();
+    }
+
+    function updateQty(code, value) {
+        const entry = selectedCodes.get(code);
+        if (entry) {
+            entry.qty = Math.max(1, parseInt(value) || 1);
+            selectedCodes.set(code, entry);
+        }
     }
 
     function toggleStatus(code) {
-        const current = selectedCodes.get(code);
-        selectedCodes.set(code, current === 0 ? 1 : 0);
+        const entry = selectedCodes.get(code);
+        if (entry) {
+            entry.status = entry.status === 0 ? 1 : 0;
+            selectedCodes.set(code, entry);
+        }
         render();
     }
 
     function toggleAll(masterCheckbox) {
         filtrado.forEach(f => {
             if (masterCheckbox.checked) {
-                if (!selectedCodes.has(f.codigo)) selectedCodes.set(f.codigo, 0);
+                if (!selectedCodes.has(f.codigo)) selectedCodes.set(f.codigo, { status: 0, qty: 1 });
             } else {
                 selectedCodes.delete(f.codigo);
             }
         });
-        render();
+        if (apenasSelecioandos) aplicarBusca();
+        else render();
     }
 
     function atualizarDashboard() {
         let ok = 0, pendentes = 0;
-        selectedCodes.forEach(status => {
-            if (status === 1) ok++;
+        selectedCodes.forEach(entry => {
+            if (entry.status === 1) ok++;
             else pendentes++;
         });
         const total = selectedCodes.size;
@@ -742,7 +817,7 @@
 
     function gerarCodigo() {
         let entries = [];
-        selectedCodes.forEach((status, code) => entries.push(`${code}:${status}`));
+        selectedCodes.forEach((entry, code) => entries.push(`${code}:${entry.status}:${entry.qty}`));
         document.getElementById("codigoSave").value = btoa(entries.join("|"));
         showToast("Código de backup gerado!");
     }
@@ -753,8 +828,8 @@
             const partes = texto.split("|");
             selectedCodes.clear();
             partes.forEach(p => {
-                const [code, status] = p.split(":");
-                if (code) selectedCodes.set(code, parseInt(status) || 0);
+                const [code, status, qty] = p.split(":");
+                if (code) selectedCodes.set(code, { status: parseInt(status) || 0, qty: parseInt(qty) || 1 });
             });
             render();
             showToast("Backup carregado!");
@@ -811,19 +886,20 @@
         doc.setTextColor(0);
 
         const dadosTabela = [];
-        selectedCodes.forEach((status, code) => {
+        selectedCodes.forEach((entry, code) => {
             const f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
-            dadosTabela.push([code, f ? f.descricao : "Desconhecida", status === 1 ? "OK" : "PENDENTE"]);
+            dadosTabela.push([code, f ? f.descricao : "Desconhecida", entry.qty, entry.status === 1 ? "OK" : "PENDENTE"]);
         });
 
         doc.autoTable({
             startY: 46,
-            head: [["Código", "Descrição", "Status"]],
+            head: [["Código", "Descrição", "Qtd", "Status"]],
             body: dadosTabela,
             headStyles: { fillColor: [255, 122, 0], fontSize: 9, fontStyle: "bold" },
             bodyStyles: { fontSize: 9 },
+            columnStyles: { 2: { halign: 'center' } },
             didDrawCell: (data) => {
-                if (data.section === 'body' && data.column.index === 2) {
+                if (data.section === 'body' && data.column.index === 3) {
                     if (data.cell.raw === 'PENDENTE') {
                         data.cell.styles.textColor = [180, 0, 0];
                         data.cell.styles.fontStyle = "bold";
@@ -848,9 +924,9 @@
         if (!validarCampos()) return;
         const mecanico = document.getElementById("mecanico").value.trim();
         const lista = [];
-        selectedCodes.forEach((status, code) => {
+        selectedCodes.forEach((entry, code) => {
             const f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
-            lista.push([code, f ? f.descricao : "", status === 1 ? "OK" : "PENDENTE"]);
+            lista.push([code, f ? f.descricao : "", entry.qty, entry.status === 1 ? "OK" : "PENDENTE"]);
         });
 
         const dados = [
@@ -858,25 +934,18 @@
             ["Data:", document.getElementById("data").value],
             ["Responsável:", document.getElementById("responsavel").value],
             [],
-            ["Código", "Descrição", "Status"]
+            ["Código", "Descrição", "Qtd", "Status"]
         ].concat(lista);
 
         const ws = XLSX.utils.aoa_to_sheet(dados);
-        ws['!cols'] = [{ wch: 15 }, { wch: 45 }, { wch: 12 }];
+        ws['!cols'] = [{ wch: 15 }, { wch: 45 }, { wch: 8 }, { wch: 12 }];
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Ferramentas");
         XLSX.writeFile(wb, `controle_${mecanico.replace(/ /g,'_')}.xlsx`);
         showToast("Excel gerado com sucesso!");
     }
 
-    document.getElementById("busca").addEventListener("input", function () {
-        const termo = normalizeStr(this.value);
-        filtrado = ferramentas.filter(f =>
-            normalizeStr(f.codigo).includes(termo) ||
-            normalizeStr(f.descricao).includes(termo)
-        );
-        render();
-    });
+    document.getElementById("busca").addEventListener("input", aplicarBusca);
 
     carregarCSV();
 </script>
