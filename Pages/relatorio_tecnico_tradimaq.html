@@ -184,10 +184,8 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .doc-assinatura{page-break-inside:avoid;break-inside:avoid;margin-bottom:12px}
 .doc-assin-body{border:1px solid var(--g3);border-top:none;padding:22px 14px 10px;border-radius:0 0 3px 3px}
 .doc-assin-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.doc-assin-box{border-top:1.5px solid var(--g9);padding-top:8px;min-height:80px;display:flex;flex-direction:column;justify-content:space-between}
-.doc-assin-sig-area{height:60px;display:flex;align-items:center;justify-content:center}
-.doc-assin-sig-area img{max-height:58px;max-width:100%;object-fit:contain;display:block}
-.doc-assin-lbl{font-size:9px;color:var(--g5);margin-top:6px}
+.doc-assin-box{border-top:1.5px solid var(--g9);padding-top:4px}
+.doc-assin-lbl{font-size:9px;color:var(--g5)}
 .doc-assin-name{font-size:10px;font-weight:600;color:var(--g9);margin-top:2px;min-height:13px}
 
 /* rodapé */
@@ -298,19 +296,6 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
   <div class="f2">
     <div class="field"><label>Responsável 1 (Técnico)</label><input id="f-resp1" placeholder="Nome do técnico" oninput="changed()"></div>
     <div class="field"><label>Responsável 2 (Cliente)</label><input id="f-resp2" placeholder="Nome do cliente" oninput="changed()"></div>
-  </div>
-  <div class="field">
-    <label>Assinatura do Técnico</label>
-    <div class="bulk-zone" id="sig-zone" style="margin-bottom:0"
-      ondragover="event.preventDefault();this.classList.add('over')"
-      ondragleave="this.classList.remove('over')"
-      ondrop="onSigDrop(event)">
-      <input type="file" accept="image/*,application/pdf" onchange="uploadSig(event)">
-      <div id="sig-preview" style="display:none;margin-bottom:6px"><img id="sig-img" style="max-height:50px;max-width:100%;object-fit:contain"></div>
-      <div class="bz-icon">✍️</div>
-      <p>Clique ou arraste sua <strong>assinatura</strong><br>Imagem ou PDF</p>
-    </div>
-    <button onclick="removerSig()" style="margin-top:4px;width:100%;padding:5px;font-size:11px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);background:white;color:var(--red);cursor:pointer;">Remover assinatura</button>
   </div>
 
   <!-- INSTRUÇÃO SUBSTITUINDO O PAINEL ANTIGO -->
@@ -1038,16 +1023,8 @@ function atualizar(){
         <div class="doc-sec-title">Assinaturas</div>
         <div class="doc-assin-body">
           <div class="doc-assin-grid">
-            <div class="doc-assin-box">
-              <div class="doc-assin-sig-area">${window.sigData?`<img src="${window.sigData}">`:'&nbsp;'}</div>
-              <div class="doc-assin-lbl">Responsável / Técnico</div>
-              <div class="doc-assin-name">${resp1}</div>
-            </div>
-            <div class="doc-assin-box">
-              <div class="doc-assin-sig-area">&nbsp;</div>
-              <div class="doc-assin-lbl">Responsável / Cliente</div>
-              <div class="doc-assin-name">${resp2}</div>
-            </div>
+            <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Técnico</div><div class="doc-assin-name">${resp1}</div></div>
+            <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Cliente</div><div class="doc-assin-name">${resp2}</div></div>
           </div>
         </div>
       </div>
