@@ -196,6 +196,15 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .doc-footer-site{font-size:7.5px;color:var(--g5)}
 .doc-footer-logo{height:14px;object-fit:contain;opacity:.4}
 
+/* badges de condição */
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.badge-leve{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.badge-moderado{background:#fef9c3;color:#a16207;border:1px solid #fde047}
+.badge-grave{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+.badge-sem{background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db}
+.doc-info-title-row{display:flex;align-items:center;justify-content:space-between;padding:5px 11px}
+.doc-info-title-row span.tit{font-size:11px;font-weight:600;letter-spacing:.04em;color:white}
+
 /* toast */
 #toast{position:fixed;bottom:14px;right:14px;background:var(--g9);color:white;padding:8px 13px;border-radius:var(--r);font-size:12px;font-weight:500;opacity:0;transform:translateY(5px);transition:all .2s;pointer-events:none;z-index:9999}
 #toast.show{opacity:1;transform:translateY(0)}
@@ -270,6 +279,15 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
   </div>
 
   <div class="s-title">Descrição</div>
+  <div class="field">
+    <label>Status de Condição</label>
+    <select id="f-condicao" onchange="changed()" style="width:100%;padding:7px 9px;font-size:13px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);color:var(--g9);background:white;outline:none;">
+      <option value="">Sem dano</option>
+      <option value="leve">🟢 Dano Leve</option>
+      <option value="moderado">🟡 Dano Moderado</option>
+      <option value="grave">🔴 Dano Grave</option>
+    </select>
+  </div>
   <div class="field"><textarea id="f-descricao" placeholder="Descreva o ocorrido, avarias identificadas..." oninput="changed()"></textarea></div>
 
   <div class="s-title">Assinaturas</div>
@@ -417,7 +435,7 @@ function salvarCache(silencioso=false){
     const dados={
       modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),
       tag:v('f-tag'),cliente:v('f-cliente'),descricao:v('f-descricao'),
-      resp1:v('f-resp1'),resp2:v('f-resp2'),
+      resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),
       pares: pares.map(p=>({
         id:p.id,antesData:p.antesData,depoisData:p.depoisData, caption:p.caption,
         antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
@@ -437,7 +455,7 @@ function carregarCache(){
   try{
     const raw=localStorage.getItem(CACHE_KEY); if(!raw) return;
     const d=JSON.parse(raw);
-    ['modelo','serie','data','local','tag','cliente','descricao','resp1','resp2'].forEach(k=>{
+    ['modelo','serie','data','local','tag','cliente','descricao','resp1','resp2','condicao'].forEach(k=>{
       const el=document.getElementById('f-'+k); if(el&&d[k]!==undefined) el.value=d[k];
     });
     parCounter=d.parCounter||0; galeriaCounter=d.galeriaCounter||0;
@@ -890,6 +908,9 @@ function atualizar(){
   const tag=v('f-tag')||'—',cliente=v('f-cliente')||'—',descricao=v('f-descricao')||'—';
   const resp1=v('f-resp1'),resp2=v('f-resp2');
   const raw=v('f-data'); const dataFmt=raw?raw.split('-').reverse().join('/'):'—';
+  const condicao=v('f-condicao')||'';
+  const badgeMap={leve:'<span class="badge badge-leve">Dano Leve</span>',moderado:'<span class="badge badge-moderado">Dano Moderado</span>',grave:'<span class="badge badge-grave">Dano Grave</span>','':'<span class="badge badge-sem">Sem Dano</span>'};
+  const badgeHtml=badgeMap[condicao]||badgeMap[''];
 
   const ordemIds=[...document.querySelectorAll('.foto-par')].map(el=>parseInt(el.id.replace('pe-','')));
   const paresOrd=ordemIds.map(id=>pares.find(p=>p.id===id)).filter(Boolean);
@@ -927,7 +948,9 @@ function atualizar(){
     <div class="doc-page">
       ${hdr(cliente!=='—'?cliente:'')}
       <div class="doc-info">
-        <div class="doc-info-title">Relatório Técnico</div>
+        <div class="doc-info-title" style="background:var(--g9)">
+          <div class="doc-info-title-row"><span class="tit">Relatório Técnico</span>${badgeHtml}</div>
+        </div>
         <div class="doc-info-grid">
           <div class="doc-info-cell"><span class="doc-info-key">Modelo:</span><span class="doc-info-val">${modelo}</span></div>
           <div class="doc-info-cell"><span class="doc-info-key">Data:</span><span class="doc-info-val">${dataFmt}</span></div>
@@ -966,7 +989,7 @@ function atualizar(){
 function limpar(){
   if(!confirm('Limpar tudo? Isso também apaga o cache salvo.'))return;
   localStorage.removeItem(CACHE_KEY);
-  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2'].forEach(id=>{document.getElementById(id).value='';});
+  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2','f-condicao'].forEach(id=>{document.getElementById(id).value='';});
   document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
   pares=[];parCounter=0;galeria=[];galeriaCounter=0; activePhoto=null;
   closeGlobalTools();
