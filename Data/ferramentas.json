@@ -9590,5 +9590,809 @@
   {
     "codigo": "4.09.W7150K22000",
     "descricao": "KIT CHAVE DE IMPACTO 1/2\" A BATERIA"
+  },
+  {
+    "codigo": "4.09.000026610",
+    "descricao": "Alicate Bico Reto e Longo com Isolamento"
+  },
+  {
+    "codigo": "4.09.000029125",
+    "descricao": "Alicate Bomba D' gua 10"
+  },
+  {
+    "codigo": "4.09.000029487",
+    "descricao": "Alicate de Corte Diagonal 6.1/4''"
+  },
+  {
+    "codigo": "4.09.000029205",
+    "descricao": "Alicate Para An‚is Externos - Pontas Fixas - Pontas Curvas 90ø 3 … 10mm"
+  },
+  {
+    "codigo": "4.09.000029220",
+    "descricao": "Alicate Para An‚is Externos - Pontas Fixas - Pontas Curvas 90ø 10 … 25mm"
+  },
+  {
+    "codigo": "4.09.000029200",
+    "descricao": "Alicate Para An‚is Externos - Pontas Fixas - Pontas Retas 3 … 10mm"
+  },
+  {
+    "codigo": "4.09.000029210",
+    "descricao": "Alicate Para An‚is Externos - Pontas Fixas - Pontas Retas 10 … 25mm"
+  },
+  {
+    "codigo": "4.09.000029240",
+    "descricao": "Alicate Para An‚is Internos - Pontas Fixas - Pontas Curvas 90ø 10 … 25mm"
+  },
+  {
+    "codigo": "4.09.000029230",
+    "descricao": "Alicate Para An‚is Internos - Pontas Fixas - Pontas Retas 10 … 25mm"
+  },
+  {
+    "codigo": "4.09.000029010",
+    "descricao": "Alicate PressÆo 10''"
+  },
+  {
+    "codigo": "4.09.000029400",
+    "descricao": "Alicate Universal 8''"
+  },
+  {
+    "codigo": "4.09.000039001",
+    "descricao": "Arco de Serra para Metais"
+  },
+  {
+    "codigo": "4.09.000017110",
+    "descricao": "Cabo de For‡a Encaixe 3/4''"
+  },
+  {
+    "codigo": "4.09.000006925",
+    "descricao": "Calibrador de Folgas - 20 Lƒminas"
+  },
+  {
+    "codigo": "4.09.000000007",
+    "descricao": "Carrinho de Ferramentas (se for mecƒnico fixo no contrato)"
+  },
+  {
+    "codigo": "4.09.000001002",
+    "descricao": "Caixa Ferramentas 4 Gavetas (se for mecƒnico volante)"
+  },
+  {
+    "codigo": "4.09.000028006",
+    "descricao": "Chave Ajust vel 18''"
+  },
+  {
+    "codigo": "4.09.000028202",
+    "descricao": "Chave Ajust vel 8''"
+  },
+  {
+    "codigo": "4.09.000012061",
+    "descricao": "Chave Allen Hexagonal 1/2''"
+  },
+  {
+    "codigo": "4.09.000012057",
+    "descricao": "Chave Allen Hexagonal 1/4''"
+  },
+  {
+    "codigo": "4.09.000012053",
+    "descricao": "Chave Allen Hexagonal 1/8''"
+  },
+  {
+    "codigo": "4.09.000012055",
+    "descricao": "Chave Allen Hexagonal 3/16''"
+  },
+  {
+    "codigo": "4.09.000012054",
+    "descricao": "Chave Allen Hexagonal 5/32''"
+  },
+  {
+    "codigo": "4.09.000012056",
+    "descricao": "Chave Allen Hexagonal 7/32''"
+  },
+  {
+    "codigo": "4.09.000012058",
+    "descricao": "Chave Allen Hexagonal 5/16''"
+  },
+  {
+    "codigo": "4.09.000012059",
+    "descricao": "Chave Allen Hexagonal 3/8''"
+  },
+  {
+    "codigo": "4.09.000012060",
+    "descricao": "Chave Allen Hexagonal 7/16''"
+  },
+  {
+    "codigo": "4.09.000012062",
+    "descricao": "Chave Allen Hexagonal 9/16''"
+  },
+  {
+    "codigo": "4.09.000012004",
+    "descricao": "Chave Allen Hexagonal 3mm"
+  },
+  {
+    "codigo": "4.09.000012005",
+    "descricao": "Chave Allen Hexagonal 4mm"
+  },
+  {
+    "codigo": "4.09.000012006",
+    "descricao": "Chave Allen Hexagonal 5mm"
+  },
+  {
+    "codigo": "4.09.000012007",
+    "descricao": "Chave Allen Hexagonal 6mm"
+  },
+  {
+    "codigo": "4.09.000012009",
+    "descricao": "Chave Allen Hexagonal 8mm"
+  },
+  {
+    "codigo": "4.09.000012011",
+    "descricao": "Chave Allen Hexagonal 10mm"
+  },
+  {
+    "codigo": "4.09.000012013",
+    "descricao": "Chave Allen Hexagonal 12mm"
+  },
+  {
+    "codigo": "4.09.000012014",
+    "descricao": "Chave Allen Hexagonal 14mm"
+  },
+  {
+    "codigo": "4.09.000012012",
+    "descricao": "Chave Allen Hexagonal 11mm"
+  },
+  {
+    "codigo": "4.09.000012017",
+    "descricao": "Chave Allen Hexagonal 19mm"
+  },
+  {
+    "codigo": "4.09.000012002",
+    "descricao": "Chave Allen Hexagonal 2mm"
+  },
+  {
+    "codigo": "4.09.000012052",
+    "descricao": "Chave Allen Hexagonal 3/32''"
+  },
+  {
+    "codigo": "4.09.000012065",
+    "descricao": "Chave Allen Hexagonal 3/4''"
+  },
+  {
+    "codigo": "4.09.000012008",
+    "descricao": "Chave Allen Hexagonal 7mm"
+  },
+  {
+    "codigo": "4.09.000012010",
+    "descricao": "Chave Allen Hexagonal 9mm"
+  },
+  {
+    "codigo": "4.09.000012209",
+    "descricao": "Chave Allen Hexagonal Longa 8mm"
+  },
+  {
+    "codigo": "4.09.000002501",
+    "descricao": "Chave Combinada 6mm"
+  },
+  {
+    "codigo": "4.09.000002502",
+    "descricao": "Chave Combinada 7mm"
+  },
+  {
+    "codigo": "4.09.000002503",
+    "descricao": "Chave Combinada 8mm"
+  },
+  {
+    "codigo": "4.09.000002504",
+    "descricao": "Chave Combinada 9mm"
+  },
+  {
+    "codigo": "4.09.000002505",
+    "descricao": "Chave Combinada 10mm"
+  },
+  {
+    "codigo": "4.09.000002506",
+    "descricao": "Chave Combinada 11mm"
+  },
+  {
+    "codigo": "4.09.000002507",
+    "descricao": "Chave Combinada 12mm"
+  },
+  {
+    "codigo": "4.09.000002508",
+    "descricao": "Chave Combinada 13mm"
+  },
+  {
+    "codigo": "4.09.000002509",
+    "descricao": "Chave Combinada 14mm"
+  },
+  {
+    "codigo": "4.09.000002510",
+    "descricao": "Chave Combinada 15mm"
+  },
+  {
+    "codigo": "4.09.000002511",
+    "descricao": "Chave Combinada 16mm"
+  },
+  {
+    "codigo": "4.09.000002512",
+    "descricao": "Chave Combinada 17mm"
+  },
+  {
+    "codigo": "4.09.000002513",
+    "descricao": "Chave Combinada 18mm"
+  },
+  {
+    "codigo": "4.09.000002514",
+    "descricao": "Chave Combinada 19mm"
+  },
+  {
+    "codigo": "4.09.000067915",
+    "descricao": "Chave Combinada 20mm"
+  },
+  {
+    "codigo": "4.09.000002516",
+    "descricao": "Chave Combinada 21mm"
+  },
+  {
+    "codigo": "4.09.000002517",
+    "descricao": "Chave Combinada 22mm"
+  },
+  {
+    "codigo": "4.09.000002518",
+    "descricao": "Chave Combinada 23mm"
+  },
+  {
+    "codigo": "4.09.000002519",
+    "descricao": "Chave Combinada 24mm"
+  },
+  {
+    "codigo": "4.09.000002520",
+    "descricao": "Chave Combinada 25mm"
+  },
+  {
+    "codigo": "4.09.000002521",
+    "descricao": "Chave Combinada 26mm"
+  },
+  {
+    "codigo": "4.09.000002522",
+    "descricao": "Chave Combinada 27mm"
+  },
+  {
+    "codigo": "4.09.000002524",
+    "descricao": "Chave Combinada 30mm"
+  },
+  {
+    "codigo": "4.09.000002525",
+    "descricao": "Chave Combinada 32mm"
+  },
+  {
+    "codigo": "4.09.000002551",
+    "descricao": "Chave Combinada 1/4''"
+  },
+  {
+    "codigo": "4.09.000002552",
+    "descricao": "Chave Combinada 5/16''"
+  },
+  {
+    "codigo": "4.09.000002553",
+    "descricao": "Chave Combinada 3/8''"
+  },
+  {
+    "codigo": "4.09.000002554",
+    "descricao": "Chave Combinada 7/16''"
+  },
+  {
+    "codigo": "4.09.000002555",
+    "descricao": "Chave Combinada 1/2''"
+  },
+  {
+    "codigo": "4.09.000002556",
+    "descricao": "Chave Combinada 9/16''"
+  },
+  {
+    "codigo": "4.09.000002557",
+    "descricao": "Chave Combinada 5/8''"
+  },
+  {
+    "codigo": "4.09.000002558",
+    "descricao": "Chave Combinada 11/16''"
+  },
+  {
+    "codigo": "4.09.000002559",
+    "descricao": "Chave Combinada 3/4''"
+  },
+  {
+    "codigo": "4.09.000002561",
+    "descricao": "Chave Combinada 13/16''"
+  },
+  {
+    "codigo": "4.09.000002562",
+    "descricao": "Chave Combinada 7/8''"
+  },
+  {
+    "codigo": "4.09.000002563",
+    "descricao": "Chave Combinada 15/16''"
+  },
+  {
+    "codigo": "4.09.000002564",
+    "descricao": "Chave Combinada 1''"
+  },
+  {
+    "codigo": "4.09.000002565",
+    "descricao": "Chave Combinada 1.1/16"
+  },
+  {
+    "codigo": "4.09.000002566",
+    "descricao": "Chave Combinada 1.1/8''"
+  },
+  {
+    "codigo": "4.09.000002568",
+    "descricao": "Chave Combinada 1.1/4''"
+  },
+  {
+    "codigo": "4.09.000002572",
+    "descricao": "Chave Combinada 1.1/2''"
+  },
+  {
+    "codigo": "4.09.000002569",
+    "descricao": "Chave Combinada 1.5/16''"
+  },
+  {
+    "codigo": "4.09.000002560",
+    "descricao": "Chave Combinada 25/32'' mm"
+  },
+  {
+    "codigo": "4.09.000002526",
+    "descricao": "Chave Combinada 36mm"
+  },
+  {
+    "codigo": "4.09.000026280",
+    "descricao": "Chave de Vela - 5/8 Longo"
+  },
+  {
+    "codigo": "4.09.000026270",
+    "descricao": "Chave de Vela 13/16'' Longo"
+  },
+  {
+    "codigo": "4.09.000003553",
+    "descricao": "Chave Estrela (Estria) 1/2 x 9/16''"
+  },
+  {
+    "codigo": "4.09.000003502",
+    "descricao": "Chave Estrela (Estria) 8 x 9 mm"
+  },
+  {
+    "codigo": "4.09.000003504",
+    "descricao": "Chave Estrela (Estria) 12 x 13 mm"
+  },
+  {
+    "codigo": "4.09.000003505",
+    "descricao": "Chave Estrela (Estria) 14 x 15 mm"
+  },
+  {
+    "codigo": "4.09.000003506",
+    "descricao": "Chave Estrela (Estria) 16 x 17 mm"
+  },
+  {
+    "codigo": "4.09.000036320",
+    "descricao": "Chave Fenda Cruzada Phillips 1/4 x 6''"
+  },
+  {
+    "codigo": "4.09.000036290",
+    "descricao": "Chave Fenda Cruzada Phillips 1/8 x 2.3/8''"
+  },
+  {
+    "codigo": "4.09.000036324",
+    "descricao": "Chave Fenda Cruzada Phillips 160 - 1/4 x 10''"
+  },
+  {
+    "codigo": "4.09.000036308",
+    "descricao": "Chave Fenda Cruzada Phillips 3/16 x 10''"
+  },
+  {
+    "codigo": "4.09.000036310",
+    "descricao": "Chave Fenda Cruzada Phillips 3/16 x 4''"
+  },
+  {
+    "codigo": "4.09.000036330",
+    "descricao": "Chave Fenda Cruzada Phillips 5/16 x 6''"
+  },
+  {
+    "codigo": "4.09.000036410",
+    "descricao": "Chave Fenda Cruzada Phillips Tipo Toco 3/16 X 1.1/2"
+  },
+  {
+    "codigo": "4.09.000036130",
+    "descricao": "Chave Fenda Simples 1/4 x 10''"
+  },
+  {
+    "codigo": "4.09.000036100",
+    "descricao": "Chave Fenda Simples 1/4 x 5''"
+  },
+  {
+    "codigo": "4.09.000036030",
+    "descricao": "Chave Fenda Simples 1/8 x 5''"
+  },
+  {
+    "codigo": "4.09.000036070",
+    "descricao": "Chave Fenda Simples 3/16 x 5"
+  },
+  {
+    "codigo": "4.09.000036250",
+    "descricao": "Chave Fenda Simples Tipo Cotoco"
+  },
+  {
+    "codigo": "4.09.000004562",
+    "descricao": "Chave Fixa (Boca) 1.1/16 x 1.1/4''"
+  },
+  {
+    "codigo": "4.09.000004553",
+    "descricao": "Chave Fixa (Boca) 1/2 x 9/16''"
+  },
+  {
+    "codigo": "4.09.000004551",
+    "descricao": "Chave Fixa (Boca) 1/4 x 5/16''"
+  },
+  {
+    "codigo": "4.09.000004504",
+    "descricao": "Chave Fixa (Boca) 10 x 11 mm"
+  },
+  {
+    "codigo": "4.09.000004505",
+    "descricao": "Chave Fixa (Boca) 12 x 13 mm"
+  },
+  {
+    "codigo": "4.09.000004559",
+    "descricao": "Chave Fixa (Boca) 13/16 x 7/8''"
+  },
+  {
+    "codigo": "4.09.000004507",
+    "descricao": "Chave Fixa (Boca) 14 x 15 mm"
+  },
+  {
+    "codigo": "4.09.000004560",
+    "descricao": "Chave Fixa (Boca) 15/16 x 1''"
+  },
+  {
+    "codigo": "4.09.000004509",
+    "descricao": "Chave Fixa (Boca) 16 x 17 mm"
+  },
+  {
+    "codigo": "4.09.000004511",
+    "descricao": "Chave Fixa (Boca) 18 x 19 mm"
+  },
+  {
+    "codigo": "4.09.000004513",
+    "descricao": "Chave Fixa (Boca) 20 x 22 mm"
+  },
+  {
+    "codigo": "4.09.000004514",
+    "descricao": "Chave Fixa (Boca) 21 x 23 mm"
+  },
+  {
+    "codigo": "4.09.000004515",
+    "descricao": "Chave Fixa (Boca) 24 x 26 mm"
+  },
+  {
+    "codigo": "4.09.000004516",
+    "descricao": "Chave Fixa (Boca) 24 x 27 mm"
+  },
+  {
+    "codigo": "4.09.000004517",
+    "descricao": "Chave Fixa (Boca) 25 x 28 mm"
+  },
+  {
+    "codigo": "4.09.000004518",
+    "descricao": "Chave Fixa (Boca) 27 x 32 mm"
+  },
+  {
+    "codigo": "4.09.000004558",
+    "descricao": "Chave Fixa (Boca) 3/4 x 7/8''"
+  },
+  {
+    "codigo": "4.09.000004552",
+    "descricao": "Chave Fixa (Boca) 3/8 x 7/16''"
+  },
+  {
+    "codigo": "4.09.000004555",
+    "descricao": "Chave Fixa (Boca) 5/8 x 11/16''"
+  },
+  {
+    "codigo": "4.09.000004501",
+    "descricao": "Chave Fixa (Boca) 6 x 7 mm"
+  },
+  {
+    "codigo": "4.09.000004502",
+    "descricao": "Chave Fixa (Boca) 8 x 9 mm"
+  },
+  {
+    "codigo": "4.09.000024603",
+    "descricao": "Chave L Tipo TORX - 9mm"
+  },
+  {
+    "codigo": "4.09.000024604",
+    "descricao": "Chave L Tipo TORX - 10mm"
+  },
+  {
+    "codigo": "4.09.000024605",
+    "descricao": "Chave L Tipo TORX - 15mm"
+  },
+  {
+    "codigo": "4.09.000024606",
+    "descricao": "Chave L Tipo TORX - 20mm"
+  },
+  {
+    "codigo": "4.09.000024607",
+    "descricao": "Chave L Tipo TORX - 25mm"
+  },
+  {
+    "codigo": "4.09.000024608",
+    "descricao": "Chave L Tipo TORX - 27mm"
+  },
+  {
+    "codigo": "4.09.000024609",
+    "descricao": "Chave L Tipo TORX - 30mm"
+  },
+  {
+    "codigo": "4.09.000024610",
+    "descricao": "Chave L Tipo TORX - 40mm"
+  },
+  {
+    "codigo": "4.09.000032295",
+    "descricao": "Chave Saca Filtro de àleo Correia 36 - 1"
+  },
+  {
+    "codigo": "4.09.000032210",
+    "descricao": "Chave Saca Filtros Corrente 4"
+  },
+  {
+    "codigo": "4.09.000006001",
+    "descricao": "Chave (Starter) Meia Lua 11 x 13 mm"
+  },
+  {
+    "codigo": "4.09.000006004",
+    "descricao": "Chave (Starter) Meia Lua 19 x 22 mm"
+  },
+  {
+    "codigo": "4.09.000006052",
+    "descricao": "Chave (Starter) Meia Lua 9/16 x 5/8"
+  },
+  {
+    "codigo": "4.09.000025052",
+    "descricao": "Chave Tipo Biela 1/2 x 1/2'' mm"
+  },
+  {
+    "codigo": "4.09.000025001",
+    "descricao": "Chave Tipo Biela 10 x 10 mm"
+  },
+  {
+    "codigo": "4.09.000025002",
+    "descricao": "Chave Tipo Biela 11 x 11 mm"
+  },
+  {
+    "codigo": "4.09.000025003",
+    "descricao": "Chave Tipo Biela 12 x 12 mm"
+  },
+  {
+    "codigo": "4.09.000025004",
+    "descricao": "Chave Tipo Biela 13 x 13 mm"
+  },
+  {
+    "codigo": "4.09.000025005",
+    "descricao": "Chave Tipo Biela 14 x 14 mm"
+  },
+  {
+    "codigo": "4.09.000025006",
+    "descricao": "Chave Tipo Biela 15 x 15 mm"
+  },
+  {
+    "codigo": "4.09.000025008",
+    "descricao": "Chave Tipo Biela 17 x 17 mm"
+  },
+  {
+    "codigo": "4.09.000025010",
+    "descricao": "Chave Tipo Biela 19 x 19 mm"
+  },
+  {
+    "codigo": "4.09.000025051",
+    "descricao": "Chave Tipo Biela 7/16 x 7/16''"
+  },
+  {
+    "codigo": "4.09.000025053",
+    "descricao": "Chave Tipo Biela 9/16''"
+  },
+  {
+    "codigo": "4.09.000000470",
+    "descricao": "Desandador at‚ 3/8\"\"-150mm"
+  },
+  {
+    "codigo": "4.09.000206340",
+    "descricao": "Esp tula de A‡o Cabo de Madeira - 80 mm"
+  },
+  {
+    "codigo": "4.09.000017120",
+    "descricao": "ExtensÆo Curta 8\"\" Encaixe 3/4"
+  },
+  {
+    "codigo": "4.09.000000439",
+    "descricao": "Jogo Pun‡Æo Num‚rico 1 a 9 - 5mm"
+  },
+  {
+    "codigo": "4.09.000015230",
+    "descricao": "Cabo \"\"T\"\" - enc. 1/2"
+  },
+  {
+    "codigo": "4.09.000019008",
+    "descricao": "Soquete 13mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019009",
+    "descricao": "Soquete 14mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019010",
+    "descricao": "Soquete 15mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019011",
+    "descricao": "Soquete 16mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019012",
+    "descricao": "Soquete 17mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019013",
+    "descricao": "Soquete 18mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019014",
+    "descricao": "Soquete 19mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000017467",
+    "descricao": "Soquete 20mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000015016",
+    "descricao": "Soquete 21mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000021006",
+    "descricao": "Soquete 24mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019022",
+    "descricao": "Soquete 27mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019025",
+    "descricao": "Soquete 30mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000019027",
+    "descricao": "Soquete 32mm enc. 1/2\"\" sextavado"
+  },
+  {
+    "codigo": "4.09.000000319",
+    "descricao": "Lima 3 Quinas"
+  },
+  {
+    "codigo": "4.09.000000424",
+    "descricao": "Lima Chata Murca 8''"
+  },
+  {
+    "codigo": "4.09.000000016",
+    "descricao": "Lima Redonda Bastarda 8"
+  },
+  {
+    "codigo": "4.09.000000014",
+    "descricao": "Lima Rotativa 10 x 20 x 6 mm"
+  },
+  {
+    "codigo": "4.09.0000M3005",
+    "descricao": "Macho Manual de 3,0 - 0,5"
+  },
+  {
+    "codigo": "4.09.0000M4007",
+    "descricao": "Macho Manual de 4,0 - 0,7"
+  },
+  {
+    "codigo": "4.09.0000M5008",
+    "descricao": "Macho Manual de 5,0 - 0,8"
+  },
+  {
+    "codigo": "4.09.00000M601",
+    "descricao": "Macho Manual de 6,0 - 1,0"
+  },
+  {
+    "codigo": "4.09.000M80125",
+    "descricao": "Macho Manual de 8,0 - 1,25"
+  },
+  {
+    "codigo": "4.09.000037030",
+    "descricao": "Martelo Tipo Bola 500g"
+  },
+  {
+    "codigo": "4.09.000000425",
+    "descricao": "Mult¡metro Minipa ET2042"
+  },
+  {
+    "codigo": "4.09.0530109B1",
+    "descricao": "Paqu¡metro 0,05mm / 150mm"
+  },
+  {
+    "codigo": "4.09.000000107",
+    "descricao": "Pendente Luz ExtensÆo Emergˆncia Socorro para Bateria 12V"
+  },
+  {
+    "codigo": "4.09.000038001",
+    "descricao": "Pun‡Æo de Centro n§ 4"
+  },
+  {
+    "codigo": "4.09.000038002",
+    "descricao": "Pun‡Æo de Centro n§ 5"
+  },
+  {
+    "codigo": "4.09.000038210",
+    "descricao": "Saca Pino 2mm x 150mm"
+  },
+  {
+    "codigo": "4.09.000038220",
+    "descricao": "Saca Pino 3mm x 150mm"
+  },
+  {
+    "codigo": "4.09.000038230",
+    "descricao": "Saca Pino 4mm x 150mm"
+  },
+  {
+    "codigo": "4.09.000038240",
+    "descricao": "Saca Pino 5mm x 150mm"
+  },
+  {
+    "codigo": "4.09.000038250",
+    "descricao": "Saca Pino 6mm x 150mm"
+  },
+  {
+    "codigo": "4.09.000038260",
+    "descricao": "Saca Pino 8mm x 150mm"
+  },
+  {
+    "codigo": "4.09.000015156",
+    "descricao": "Soquete Estriado de 5/8'' enc. 1/2"
+  },
+  {
+    "codigo": "4.09.000000699",
+    "descricao": "Soquete 13/16'' enc. 1/2\"\" longo (Retirar Vela de Igni‡Æo)"
+  },
+  {
+    "codigo": "4.09.000017407",
+    "descricao": "Soquete Sextavado de 3/4'' de 30 mm"
+  },
+  {
+    "codigo": "4.09.00L516CME",
+    "descricao": "Trena - Fita de A‡o 5 Metros"
+  },
+  {
+    "codigo": "4.09.000003219",
+    "descricao": "Redu‡Æo Gedore 3/4 X 1/2"
+  },
+  {
+    "codigo": "4.09.000001007",
+    "descricao": "Caixa de Ferramentas Sanfonada com 5 Gavetas"
+  },
+  {
+    "codigo": "4.09.000025050",
+    "descricao": "Chave Biela 3/4 X ó\"\" "
+  },
+  {
+    "codigo": "4.09.000000057",
+    "descricao": "Mult¡metro Digital"
+  },
+  {
+    "codigo": "4.09.00D19TPZ",
+    "descricao": "Jogo Soquete Allen «. 3.16?? ? 5/8??"
+  },
+  {
+    "codigo": "4.09.0L516CME",
+    "descricao": "Trena - Fita de A‡o 5 Metros"
   }
 ]
