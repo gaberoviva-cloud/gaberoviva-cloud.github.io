@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Relatório Técnico - Tradimaq</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <style>
 :root{--brand:#ff7a00;--g9:#1a1a1a;--g7:#374151;--g5:#6b7280;--g3:#d1d5db;--g1:#f3f4f6;--g0:#f9fafb;--green:#16a34a;--red:#dc2626;--r:6px}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -41,15 +41,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .bulk-zone p{font-size:11px;color:var(--g5);line-height:1.4}
 .bulk-zone strong{color:var(--brand)}
 
-/* galeria de fotos carregadas */
-.galeria{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px}
-.gitem{position:relative;border-radius:4px;overflow:hidden;border:2px solid transparent;cursor:grab;aspect-ratio:1;background:var(--g1)}
-.gitem:hover{border-color:var(--brand)}
-.gitem.dragging{opacity:.35;border-color:var(--brand)}
-.gitem img{width:100%;height:100%;object-fit:cover;pointer-events:none;display:block}
-.gitem-num{position:absolute;bottom:2px;left:3px;background:rgba(0,0,0,.55);color:white;font-size:9px;font-weight:600;padding:1px 5px;border-radius:3px}
-.gitem-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.55);border:none;color:white;cursor:pointer;font-size:10px;padding:2px 5px;border-radius:3px;line-height:1.3}
-.gitem-del:hover{background:var(--red)}
+.galeria{display:none}
 
 /* pares */
 .foto-par{background:var(--g0);border:1px solid var(--g3);border-radius:var(--r);padding:10px;margin-bottom:8px}
@@ -62,14 +54,16 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 
 /* drop slots */
 .drop-slots{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
-.dslot{border:1.5px dashed var(--g3);border-radius:var(--r);min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;text-align:center;background:white}
+.dslot{border:1.5px dashed var(--g3);border-radius:var(--r);aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;text-align:center;background:white}
 .dslot:hover,.dslot.over{border-color:var(--brand);background:#fff8f3}
-.dslot.filled{border-style:solid;border-color:var(--g3);padding:0;justify-content:flex-start}
+.dslot.swap-over{border-color:#0ea5e9;background:#e0f2fe;box-shadow:inset 0 0 0 2px #0ea5e9}
+.dslot.filled{border-style:solid;border-color:var(--g3);padding:0;justify-content:flex-start;cursor:grab}
+.dslot.filled.dragging-slot{opacity:.4;border-color:var(--brand)}
 .dslot-lbl{text-transform:uppercase;letter-spacing:.07em;padding:3px 0}
 .dslot-lbl.A{color:var(--green)}
 .dslot-lbl.D{color:var(--red)}
 .dslot-hint{font-size:9px;color:var(--g5);font-weight:400}
-.dslot img{width:100%;flex:1;object-fit:cover;display:block}
+.dslot img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
 .dslot-overlay{position:absolute;bottom:0;left:0;right:0;display:flex;gap:2px;padding:3px;background:rgba(0,0,0,.45);justify-content:center}
 .dslot-act{background:rgba(255,255,255,.15);border:none;color:white;cursor:pointer;font-size:10px;padding:2px 6px;border-radius:3px;transition:background .1s;font-family:inherit;font-weight:600}
 .dslot-act:hover{background:rgba(255,255,255,.35)}
@@ -90,16 +84,68 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .btn-save{background:var(--green)}
 .btn-clear{background:var(--g7);font-size:12px;padding:7px}
 
+/* ─ FLOATING TOOLBAR ─ */
+.floating-toolbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150px);
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 12px 20px;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+  color: white;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.floating-toolbar.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.ft-header {
+  font-size: 11px; font-weight: 600; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; margin-bottom: 2px;
+}
+.ft-row { display: flex; align-items: center; gap: 8px; }
+.ft-btn {
+  background: rgba(255,255,255,0.05); border: 1px solid transparent; color: white;
+  width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;
+}
+.ft-btn:hover { background: rgba(255,255,255,0.15); }
+.ft-btn.active { background: var(--brand); box-shadow: 0 2px 8px rgba(255,122,0,0.4); border-color: rgba(255,255,255,0.2); }
+.ft-div { width: 1px; height: 24px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+.ft-color { width: 32px; height: 32px; padding: 0; border: none; border-radius: 6px; cursor: pointer; background: transparent; }
+.ft-color::-webkit-color-swatch-wrapper { padding: 0; }
+.ft-color::-webkit-color-swatch { border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; }
+.ft-range { width: 80px; accent-color: var(--brand); cursor: pointer; }
+.ft-btn.ft-action { width: auto; padding: 0 12px; font-size: 13px; font-weight: 600; }
+.ft-btn.ft-action.del { background: rgba(220,38,38,0.2); color: #fca5a5; }
+.ft-btn.ft-action.del:hover { background: rgba(220,38,38,0.4); }
+.ft-close { background: transparent; color: #a1a1aa; width: auto; padding: 0 8px; margin-left: auto; font-size: 18px; }
+.ft-close:hover { color: white; background: rgba(255,255,255,0.1); }
+
+@media(max-width:860px){
+  .floating-toolbar { width: 95%; padding: 12px; }
+  .ft-row { flex-wrap: wrap; justify-content: center; gap: 6px; }
+  .ft-div { display: none; }
+}
+
 /* ─ PREVIEW ─ */
-.preview-panel{padding:22px;overflow-y:auto;background:var(--g1)}
+.preview-panel{padding:22px;overflow-y:auto;background:var(--g1);position:relative;z-index:1;}
 .preview-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--g5);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .preview-label::after{content:'';flex:1;height:1px;background:var(--g3)}
 
 /* ═══ DOCUMENTO ═══ */
-#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 2px 16px rgba(0,0,0,.1);font-family:'IBM Plex Sans',Arial,sans-serif;font-size:13px}
+#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 2px 16px rgba(0,0,0,.1);font-family:'IBM Plex Sans',Arial,sans-serif;font-size:13px;transition:transform 0.3s;}
 .doc-page{padding:20px 20px 0}
 
-/* header do doc — logo carregada via img com fallback texto */
 .doc-page-hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:2px solid var(--g1);margin-bottom:12px}
 .doc-logo{height:28px;object-fit:contain;display:block}
 .doc-logo-txt{font-size:19px;font-weight:700;letter-spacing:-.03em}
@@ -109,32 +155,29 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .doc-info{margin-bottom:12px;border:1.5px solid var(--g9);border-radius:4px;overflow:hidden}
 .doc-info-title{background:var(--g9);color:white;padding:5px 11px;font-size:11px;font-weight:600;letter-spacing:.04em}
 .doc-info-grid{display:grid;grid-template-columns:1fr 1fr}
-.doc-info-cell{padding:6px 11px;border-right:1px solid var(--g3);border-bottom:1px solid var(--g3);display:flex;gap:5px;align-items:baseline}
-.doc-info-cell:nth-child(even){border-right:none}
-.doc-info-cell:nth-last-child(-n+2){border-bottom:none}
+.doc-info-cell{padding:6px 11px;display:flex;gap:5px;align-items:baseline}
 .doc-info-key{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g5);white-space:nowrap}
 .doc-info-val{font-size:11px;font-weight:500;color:var(--g9);font-family:'IBM Plex Mono',monospace}
 
-.doc-sec{margin-bottom:12px}
-.doc-sec-title{background:var(--g9);color:white;padding:4px 11px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border-radius:3px 3px 0 0}
-.doc-sec-body{border:1px solid var(--g3);border-top:none;padding:9px 11px;font-size:11px;line-height:1.7;color:var(--g9);min-height:52px;white-space:pre-line;border-radius:0 0 3px 3px}
+.doc-sec{margin-bottom:12px;border:1.5px solid var(--g9);border-radius:4px;overflow:hidden}
+.doc-sec-title{background:var(--g9);color:white;padding:5px 11px;font-size:11px;font-weight:600;letter-spacing:.04em}
+.doc-sec-body{padding:9px 11px;font-size:11px;line-height:1.7;color:var(--g9);min-height:52px;white-space:pre-line}
 
-/* foto par no documento — pan/zoom com imagem em tamanho natural */
+/* foto par no documento */
 .doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;margin-bottom:12px}
 .doc-foto-cols{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-.doc-foto-box{border:1px solid var(--g3);border-radius:4px;overflow:hidden}
+.doc-foto-box{border:1px solid var(--g3);border-radius:4px;overflow:hidden; position:relative;}
 .doc-foto-lbl{padding:4px 9px;font-size:10px;font-weight:700;text-align:center;color:white;letter-spacing:.04em}
 .doc-foto-lbl.A{background:var(--green)}
 .doc-foto-lbl.D{background:var(--red)}
-.doc-foto-viewport{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--g1);position:relative;cursor:grab;transition:height 0.2s ease}
-.doc-foto-viewport.grabbing{cursor:grabbing}
-.doc-foto-viewport img{position:absolute;top:0;left:0;width:auto;height:auto;min-width:100%;min-height:100%;max-width:none;transform-origin:top left;user-select:none;pointer-events:none;display:block}
-.doc-foto-caption{padding:3px 9px 5px;font-size:9px;color:var(--g5);text-align:center;background:var(--g0);border-top:1px solid var(--g1)}
 
-/* controles de pan/zoom (visíveis apenas no preview, ocultos no PDF) */
-.foto-controls{display:flex;gap:4px;padding:4px 6px;background:var(--g0);border-top:1px solid var(--g1);justify-content:center}
-.fctl{background:white;border:1px solid var(--g3);border-radius:3px;cursor:pointer;font-size:11px;padding:2px 7px;color:var(--g7);font-family:inherit;transition:all .1s}
-.fctl:hover{border-color:var(--brand);color:var(--brand)}
+.doc-foto-viewport{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--g1);position:relative;cursor:pointer;transition:all 0.2s ease;}
+.doc-foto-viewport.grabbing{cursor:grabbing}
+/* Focus Effect na foto ativa */
+.doc-foto-viewport.active-vp{box-shadow:0 0 0 4px var(--brand), 0 8px 24px rgba(0,0,0,0.2);transform:scale(1.02);z-index:10;border-radius:4px;}
+
+.doc-foto-viewport img{position:absolute;top:0;left:0;width:auto;height:auto;min-width:10%;min-height:10%;max-width:none;transform-origin:top left;user-select:none;pointer-events:none;display:block}
+.doc-foto-caption{padding:3px 9px 5px;font-size:9px;color:var(--g5);text-align:center;background:var(--g0);border-top:1px solid var(--g1)}
 
 .doc-assinatura{page-break-inside:avoid;break-inside:avoid;margin-bottom:12px}
 .doc-assin-body{border:1px solid var(--g3);border-top:none;padding:22px 14px 10px;border-radius:0 0 3px 3px}
@@ -157,15 +200,47 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 #toast{position:fixed;bottom:14px;right:14px;background:var(--g9);color:white;padding:8px 13px;border-radius:var(--r);font-size:12px;font-weight:500;opacity:0;transform:translateY(5px);transition:all .2s;pointer-events:none;z-index:9999}
 #toast.show{opacity:1;transform:translateY(0)}
 
-/* PDF mode */
-body.pdf-mode .app-header,body.pdf-mode .editor,body.pdf-mode .preview-label,body.pdf-mode .foto-controls{display:none!important}
-body.pdf-mode .app-body{display:block}
-body.pdf-mode .preview-panel{padding:0;background:white}
-body.pdf-mode #documento{box-shadow:none;max-width:100%}
-body.pdf-mode .doc-foto-viewport{overflow:hidden!important}
-body.pdf-mode .doc-foto-viewport img{position:static!important;width:100%!important;height:100%!important;min-width:unset!important;min-height:unset!important;object-fit:cover!important;transform:none!important}
-body.pdf-mode .doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;display:block!important}
-body.pdf-mode .doc-foto-box{page-break-inside:avoid!important;break-inside:avoid!important}
+/* ── Anotações sobre fotos ── */
+.doc-foto-wrapper{position:relative;width:100%}
+.annotation-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;cursor:crosshair;touch-action:none}
+
+/* PDF / Print mode */
+body.pdf-mode .app-header,
+body.pdf-mode .editor,
+body.pdf-mode .preview-label{display:none!important}
+body.pdf-mode .app-body{display:block!important}
+body.pdf-mode .preview-panel{padding:0!important;background:white!important}
+body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
+
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  @page{
+    margin: 12mm 10mm 18mm 10mm; /* aumentei o rodapé para caber o número de página */
+    @bottom-center {
+      content: "Página " counter(page) " de " counter(pages);
+      font-size: 7.5px;
+      color: var(--g5);
+      font-family: 'IBM Plex Sans', sans-serif;
+      margin-bottom: 8px;
+    }
+  }
+  body{background:white!important}
+  #toast,.app-header,.editor,.preview-label,.preview-panel>.preview-label,.floating-toolbar{display:none!important}
+  .app-body{display:block!important}
+  .preview-panel{padding:0!important;background:white!important}
+  #documento{box-shadow:none!important;max-width:100%!important;width:100%!important;transform:none!important}
+  .doc-page{padding:0!important}
+  .doc-foto-viewport.active-vp{box-shadow: none!important; transform: none!important;}
+  
+  /* Flexbox para evitar sumiço do Grid no Chrome */
+  .doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;display:block!important;margin-bottom:8mm!important;}
+  .doc-foto-cols{display:flex!important;gap:6px!important;width:100%!important;flex-wrap:nowrap!important;}
+  .doc-foto-box{flex:1!important;width:50%!important;page-break-inside:avoid!important;break-inside:avoid!important;display:block!important;}
+  
+  .doc-foto-viewport{width:100%!important;overflow:hidden!important;position:relative!important;aspect-ratio:4/3!important;height:auto!important;}
+  .doc-foto-viewport img{position:static!important;width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important;max-width:none!important;min-width:unset!important;min-height:unset!important;display:block!important;}
+  .doc-info,.doc-sec,.doc-assinatura,.doc-footer{page-break-inside:avoid!important;break-inside:avoid!important}
+}
 </style>
 </head>
 <body>
@@ -203,6 +278,12 @@ body.pdf-mode .doc-foto-box{page-break-inside:avoid!important;break-inside:avoid
     <div class="field"><label>Responsável 2</label><input id="f-resp2" placeholder="Cliente" oninput="changed()"></div>
   </div>
 
+  <!-- INSTRUÇÃO SUBSTITUINDO O PAINEL ANTIGO -->
+  <div class="s-title" style="color:var(--brand);margin-bottom:4px;">Ajuste de Imagens</div>
+  <p style="font-size:11px;color:var(--g5);line-height:1.4;margin-bottom:12px;background:var(--g0);padding:10px;border-radius:var(--r);border:1px dashed var(--g3);">
+    Para desenhar, mover ou dar zoom, <strong>clique em qualquer foto</strong> no relatório ao lado. O painel de edição flutuante aparecerá automaticamente.
+  </p>
+
   <div class="s-title">Fotos</div>
 
   <!-- BULK UPLOAD -->
@@ -213,7 +294,7 @@ body.pdf-mode .doc-foto-box{page-break-inside:avoid!important;break-inside:avoid
     <input type="file" accept="image/*" multiple onchange="bulkUpload(event)">
     <div class="bz-icon">📁</div>
     <p>Selecione <strong>todas as fotos de uma vez</strong><br>
-    Elas aparecem numeradas abaixo — arraste para os slots</p>
+    Distribuídas automaticamente nos pares — ou arraste entre slots</p>
   </div>
 
   <div class="galeria" id="galeria"></div>
@@ -223,30 +304,15 @@ body.pdf-mode .doc-foto-box{page-break-inside:avoid!important;break-inside:avoid
 
   <div class="actions">
     <div style="background:var(--g0);border:1px solid var(--g3);border-radius:var(--r);padding:10px;margin-bottom:2px;">
-      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g5);margin-bottom:8px;">Configuração do PDF</div>
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-        <label style="font-size:11px;color:var(--g7);white-space:nowrap;">Escala das fotos</label>
-        <input type="range" id="pdf-scale" min="0.4" max="1.0" step="0.05" value="0.75"
-          style="flex:1;" oninput="document.getElementById('pdf-scale-val').textContent=Math.round(this.value*100)+'%';atualizarEscalaPreview()">
-        <span id="pdf-scale-val" style="font-size:11px;font-weight:600;color:var(--brand);min-width:32px;text-align:right;">75%</span>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
-        <div style="display:flex;gap:6px;align-items:center;">
-          <label style="font-size:11px;color:var(--g7);">Orientação:</label>
-          <label style="font-size:11px;display:flex;align-items:center;gap:3px;cursor:pointer;">
-            <input type="radio" name="pdf-orient" value="portrait" checked> Retrato
-          </label>
-          <label style="font-size:11px;display:flex;align-items:center;gap:3px;cursor:pointer;">
-            <input type="radio" name="pdf-orient" value="landscape"> Paisagem
-          </label>
-        </div>
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g5);margin-bottom:6px;">Configuração do PDF</div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:5px;">
         <label style="font-size:11px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
           <input type="checkbox" id="toggle-labels" checked onchange="atualizar()">
           <span style="color:var(--g7);">Títulos Antes/Depois</span>
         </label>
       </div>
     </div>
-    <button class="btn btn-pdf" onclick="gerarPDF()">⬇ Gerar PDF</button>
+    <button class="btn btn-pdf" onclick="imprimirPDF()">🖨 Imprimir / Salvar PDF</button>
     <button class="btn btn-save" onclick="salvarCache()">💾 Salvar agora</button>
     <button class="btn" style="background:#0ea5e9;font-size:12px;padding:7px;" onclick="limparFotos()">🗑 Limpar só as fotos</button>
     <button class="btn btn-clear" onclick="limpar()">Limpar tudo</button>
@@ -260,12 +326,35 @@ body.pdf-mode .doc-foto-box{page-break-inside:avoid!important;break-inside:avoid
 </div>
 </div>
 
+<!-- BARRA FLUTUANTE DE FERRAMENTAS (NOVO LAYOUT) -->
+<div class="floating-toolbar" id="global-annot-tools">
+  <div class="ft-header" id="active-photo-label">Nenhuma foto selecionada</div>
+  <div class="ft-row">
+    <button class="ft-btn active" data-tool="sel" onclick="setGlobalTool('sel')" title="Mover Foto">☝</button>
+    <button class="ft-btn" data-tool="rect" onclick="setGlobalTool('rect')" title="Retângulo">▭</button>
+    <button class="ft-btn" data-tool="circ" onclick="setGlobalTool('circ')" title="Círculo">◯</button>
+    <button class="ft-btn" data-tool="arr" onclick="setGlobalTool('arr')" title="Seta">↗</button>
+    <button class="ft-btn" data-tool="txt" onclick="setGlobalTool('txt')" title="Texto">T</button>
+    <div class="ft-div"></div>
+    <input type="color" id="global-color" value="#ef4444" onchange="setGlobalColor(this.value)" class="ft-color" title="Cor do Desenho">
+    <input type="range" id="global-size" min="1" max="10" value="3" step="0.5" oninput="setGlobalSize(this.value)" class="ft-range" title="Espessura/Tamanho">
+    <div class="ft-div"></div>
+    <button class="ft-btn" onclick="triggerGlobalZoom(0.1)" title="Zoom In">➕</button>
+    <button class="ft-btn" onclick="triggerGlobalZoom(-0.1)" title="Zoom Out">➖</button>
+    <button class="ft-btn" onclick="triggerGlobalReset()" title="Centralizar Imagem">↺</button>
+    <div class="ft-div"></div>
+    <button class="ft-btn ft-action" onclick="triggerGlobalUndo()" title="Desfazer Último Desenho">⌫</button>
+    <button class="ft-btn ft-action del" onclick="triggerGlobalClear()" title="Apagar Todos os Desenhos">🗑</button>
+    <button class="ft-btn ft-close" onclick="closeGlobalTools()" title="Fechar Edição">✕</button>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
 /* ════════ CONSTANTES ════════ */
 const LOGO_URL = 'https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
-let LOGO = ''; // será preenchido com base64 no init
+let LOGO = LOGO_URL;
 
 const CACHE_KEY = 'tradimaq_relatorio_v1';
 const DESC_TEMPLATE = `Inspeção do equipamento (TAG), realizada no cliente (CLIENTE).
@@ -280,10 +369,14 @@ let draggingGId = null;
 let autoSaveTimer = null;
 let hasUnsaved = false;
 
+let activePhoto = null; 
+let globalTool = 'sel';
+let globalColor = '#ef4444';
+let globalSize = 3;
+
 /* ════════ INIT ════════ */
 document.getElementById('f-data').value = new Date().toISOString().split('T')[0];
 
-// Converte logo para base64 para funcionar no canvas do html2pdf (sem CORS)
 async function initApp() {
   try {
     const resp = await fetch(LOGO_URL);
@@ -292,12 +385,10 @@ async function initApp() {
       const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(blob);
     });
   } catch(e) {
-    // fallback: texto se não conseguir carregar
-    LOGO = '';
+    console.warn("Fallback de logo aplicado.");
   }
   carregarCache();
   if (!pares.length) adicionarPar();
-  // Se descrição ainda vazia (sem cache), coloca template
   if (!v('f-descricao')) document.getElementById('f-descricao').value = DESC_TEMPLATE;
   renderGaleria();
   atualizar();
@@ -312,18 +403,13 @@ function toast(msg, dur=2400){
 
 /* ════════ CACHE ════════ */
 function changed(){
-  hasUnsaved=true;
-  badge('⏳ Não salvo','');
-  clearTimeout(autoSaveTimer);
-  autoSaveTimer=setTimeout(salvarCacheAuto,3000);
+  hasUnsaved=true; badge('⏳ Não salvo','');
+  clearTimeout(autoSaveTimer); autoSaveTimer=setTimeout(salvarCacheAuto,3000);
   atualizar();
 }
-
 function badge(txt,cls){
-  const b=document.getElementById('save-badge');
-  b.textContent=txt;b.className='save-badge'+(cls?' '+cls:'');
+  const b=document.getElementById('save-badge'); b.textContent=txt;b.className='save-badge'+(cls?' '+cls:'');
 }
-
 function salvarCacheAuto(){salvarCache(true);}
 
 function salvarCache(silencioso=false){
@@ -333,64 +419,78 @@ function salvarCache(silencioso=false){
       tag:v('f-tag'),cliente:v('f-cliente'),descricao:v('f-descricao'),
       resp1:v('f-resp1'),resp2:v('f-resp2'),
       pares: pares.map(p=>({
-        id:p.id,antesData:p.antesData,depoisData:p.depoisData,
-        caption:p.caption,
+        id:p.id,antesData:p.antesData,depoisData:p.depoisData, caption:p.caption,
         antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
-        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1
+        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1,
+        annots_A:p.annots_A||[],annots_D:p.annots_D||[]
       })),
       galeria:galeria.map(g=>({id:g.id,data:g.data,name:g.name})),
       parCounter,galeriaCounter
     };
     localStorage.setItem(CACHE_KEY,JSON.stringify(dados));
-    hasUnsaved=false;
-    badge('✓ Salvo','saved');
+    hasUnsaved=false; badge('✓ Salvo','saved');
     if(!silencioso) toast('Salvo com sucesso!');
   }catch(e){toast('Erro ao salvar (armazenamento cheio?)');}
 }
 
 function carregarCache(){
   try{
-    const raw=localStorage.getItem(CACHE_KEY);
-    if(!raw) return;
+    const raw=localStorage.getItem(CACHE_KEY); if(!raw) return;
     const d=JSON.parse(raw);
     ['modelo','serie','data','local','tag','cliente','descricao','resp1','resp2'].forEach(k=>{
-      const el=document.getElementById('f-'+k);
-      if(el&&d[k]!==undefined) el.value=d[k];
+      const el=document.getElementById('f-'+k); if(el&&d[k]!==undefined) el.value=d[k];
     });
-    parCounter=d.parCounter||0;
-    galeriaCounter=d.galeriaCounter||0;
-    galeria=(d.galeria||[]);
-    pares=[];
-    const container=document.getElementById('foto-pares');
-    container.innerHTML='';
+    parCounter=d.parCounter||0; galeriaCounter=d.galeriaCounter||0;
+    galeria=(d.galeria||[]); pares=[];
+    document.getElementById('foto-pares').innerHTML='';
     (d.pares||[]).forEach(p=>{
       pares.push({
-        id:p.id,antesData:p.antesData||null,depoisData:p.depoisData||null,
-        caption:p.caption||'',
+        id:p.id,antesData:p.antesData||null,depoisData:p.depoisData||null, caption:p.caption||'',
         antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
-        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1
+        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1,
+        annots_A:p.annots_A||[],annots_D:p.annots_D||[]
       });
-      criarParDOM(p.id);
-      syncThumbs(p.id);
+      criarParDOM(p.id); syncThumbs(p.id);
     });
-    renumerar();
-    badge('✓ Cache carregado','saved');
+    renumerar(); badge('✓ Cache carregado','saved');
   }catch(e){console.warn('Cache inválido',e);}
 }
-
 function v(id){return document.getElementById(id)?.value||'';}
+
+/* ════════ CANVAS RESIZE ════════ */
+function processImageOrig(dataURL, maxW=1200) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.naturalWidth);
+      const w = Math.round(img.naturalWidth * scale);
+      const h = Math.round(img.naturalHeight * scale);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(c.toDataURL('image/jpeg', 0.88));
+    };
+    img.src = dataURL;
+  });
+}
 
 /* ════════ GALERIA BULK ════════ */
 function bulkUpload(event){
-  const files=[...event.target.files];
-  if(!files.length)return;
-  let n=0;
-  files.forEach(f=>{
-    const r=new FileReader();
-    r.onload=e=>{
-      galeriaCounter++;
-      galeria.push({id:galeriaCounter,data:e.target.result,name:f.name});
-      n++;if(n===files.length){renderGaleria();autoAssign();}
+  const files=[...event.target.files]; if(!files.length)return;
+  let loaded = 0; const results = [];
+  files.forEach((f, idx) => {
+    const r = new FileReader();
+    r.onload = async e => {
+      const resized = await processImageOrig(e.target.result);
+      results[idx] = { data: resized, name: f.name };
+      loaded++;
+      if(loaded === files.length) {
+        const novas = results.map(item => {
+          galeriaCounter++; const g = {id: galeriaCounter, data: item.data, name: item.name};
+          galeria.push(g); return g;
+        });
+        renderGaleria(); autoAssign(novas);
+      }
     };
     r.readAsDataURL(f);
   });
@@ -398,138 +498,108 @@ function bulkUpload(event){
 }
 
 function onBulkDrop(event){
-  event.preventDefault();
-  document.getElementById('bulk-zone').classList.remove('over');
-  const files=[...event.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
-  if(!files.length)return;
-  let n=0;
-  files.forEach(f=>{
-    const r=new FileReader();
-    r.onload=e=>{
-      galeriaCounter++;
-      galeria.push({id:galeriaCounter,data:e.target.result,name:f.name});
-      n++;if(n===files.length){renderGaleria();autoAssign();}
+  event.preventDefault(); document.getElementById('bulk-zone').classList.remove('over');
+  const files=[...event.dataTransfer.files].filter(f=>f.type.startsWith('image/')); if(!files.length)return;
+  let loaded = 0; const results = [];
+  files.forEach((f, idx) => {
+    const r = new FileReader();
+    r.onload = async e => {
+      const resized = await processImageOrig(e.target.result);
+      results[idx] = { data: resized, name: f.name };
+      loaded++;
+      if(loaded === files.length) {
+        const novas = results.map(item => {
+          galeriaCounter++; const g = {id: galeriaCounter, data: item.data, name: item.name};
+          galeria.push(g); return g;
+        });
+        renderGaleria(); autoAssign(novas);
+      }
     };
     r.readAsDataURL(f);
   });
 }
 
-/* distribui automaticamente: foto 1→par1 antes, foto2→par1 depois, foto3→par2 antes... */
-function autoAssign(){
-  let gi=0;
-  pares.forEach(par=>{
-    if(gi<galeria.length&&!par.antesData){par.antesData=galeria[gi].data;gi++;}
-    if(gi<galeria.length&&!par.depoisData){par.depoisData=galeria[gi].data;gi++;}
-  });
-  // se ainda sobram fotos, criar novos pares
-  while(gi<galeria.length){
-    adicionarParSilencioso();
-    const par=pares[pares.length-1];
-    if(gi<galeria.length){par.antesData=galeria[gi].data;gi++;}
-    if(gi<galeria.length){par.depoisData=galeria[gi].data;gi++;}
+function autoAssign(novas){
+  const fila = [...novas]; let fi = 0;
+  for(const par of pares){
+    if(fi>=fila.length) break;
+    if(!par.antesData){par.antesData=fila[fi].data;fi++;}
+    if(fi>=fila.length) break;
+    if(!par.depoisData){par.depoisData=fila[fi].data;fi++;}
   }
-  pares.forEach(p=>{syncThumbs(p.id);});
-  renumerar();
-  atualizar();
-  toast(`${galeria.length} fotos distribuídas automaticamente!`);
+  while(fi<fila.length){
+    adicionarParSilencioso(); const par=pares[pares.length-1];
+    if(fi<fila.length){par.antesData=fila[fi].data;fi++;}
+    if(fi<fila.length){par.depoisData=fila[fi].data;fi++;}
+  }
+  pares.forEach(p=>{syncThumbs(p.id);}); renumerar(); atualizar();
+  toast(`${novas.length} foto${novas.length>1?'s':''} adicionada${novas.length>1?'s':''}!`);
 }
 
 function renderGaleria(){
   const grid=document.getElementById('galeria');
-  grid.innerHTML=galeria.map((g,i)=>`
-    <div class="gitem" id="gi-${g.id}" draggable="true"
-      ondragstart="onGDragStart(event,${g.id})"
-      ondragend="onGDragEnd()">
-      <img src="${g.data}" alt="${g.name}">
-      <span class="gitem-num">${i+1}</span>
-      <button class="gitem-del" onclick="delGaleria(${g.id})">✕</button>
-    </div>`).join('');
+  grid.innerHTML=galeria.map((g,i)=>`<div class="gitem" id="gi-${g.id}" draggable="true" ondragstart="onGDragStart(event,${g.id})" ondragend="onGDragEnd()"><img src="${g.data}" alt="${g.name}"><span class="gitem-num">${i+1}</span><button class="gitem-del" onclick="delGaleria(${g.id})">✕</button></div>`).join('');
 }
-
-function delGaleria(id){
-  galeria=galeria.filter(g=>g.id!==id);
-  renderGaleria();
-}
+function delGaleria(id){ galeria=galeria.filter(g=>g.id!==id); renderGaleria(); }
 
 function onGDragStart(event,id){
-  draggingGId=id;
-  event.dataTransfer.effectAllowed='copy';
+  draggingGId=id; event.dataTransfer.effectAllowed='copy';
   event.dataTransfer.setData('text/plain',String(id));
   setTimeout(()=>document.getElementById('gi-'+id)?.classList.add('dragging'),0);
 }
-function onGDragEnd(){
-  document.querySelectorAll('.gitem').forEach(el=>el.classList.remove('dragging'));
-  document.querySelectorAll('.dslot').forEach(el=>el.classList.remove('over'));
-  draggingGId=null;
-}
+function onGDragEnd(){ document.querySelectorAll('.gitem').forEach(el=>el.classList.remove('dragging')); document.querySelectorAll('.dslot').forEach(el=>el.classList.remove('over')); draggingGId=null; }
+function onSlotOver(event){ event.preventDefault(); if(draggingSlot) { event.currentTarget.classList.add('swap-over'); } else { event.currentTarget.classList.add('over'); } }
+function onSlotLeave(event){ event.currentTarget.classList.remove('over','swap-over'); }
 
-function onSlotOver(event){event.preventDefault();event.currentTarget.classList.add('over');}
-function onSlotLeave(event){event.currentTarget.classList.remove('over');}
 function onSlotDrop(event,parId,lado){
-  event.preventDefault();event.currentTarget.classList.remove('over');
-  const gId=parseInt(event.dataTransfer.getData('text/plain'));
-  const g=galeria.find(x=>x.id===gId);
-  if(!g)return;
-  const par=pares.find(p=>p.id===parId);
-  if(!par)return;
-  if(lado==='A'){par.antesData=g.data;par.antesOX=0;par.antesOY=0;par.antesScale=1;}
-  else{par.depoisData=g.data;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
-  syncThumbs(parId);
-  atualizar();
-  changed();
+  event.preventDefault(); event.currentTarget.classList.remove('over','swap-over');
+  const raw = event.dataTransfer.getData('text/plain');
+
+  if(raw && raw.startsWith('slot:')) {
+    const parts = raw.split(':'); const srcParId = parseInt(parts[1]); const srcLado = parts[2];
+    const srcPar = pares.find(p=>p.id===srcParId); const dstPar = pares.find(p=>p.id===parId);
+    if(!srcPar || !dstPar) return;
+    const srcData = srcLado==='A' ? srcPar.antesData : srcPar.depoisData;
+    const srcOX   = srcLado==='A' ? srcPar.antesOX   : srcPar.depoisOX;
+    const srcOY   = srcLado==='A' ? srcPar.antesOY   : srcPar.depoisOY;
+    const srcSc   = srcLado==='A' ? srcPar.antesScale : srcPar.depoisScale;
+    const dstData = lado==='A'   ? dstPar.antesData  : dstPar.depoisData;
+    const dstOX   = lado==='A'   ? dstPar.antesOX    : dstPar.depoisOX;
+    const dstOY   = lado==='A'   ? dstPar.antesOY    : dstPar.depoisOY;
+    const dstSc   = lado==='A'   ? dstPar.antesScale  : dstPar.depoisScale;
+    const setSlot = (par, l, d, ox, oy, sc) => {
+      if(l==='A'){par.antesData=d;par.antesOX=ox;par.antesOY=oy;par.antesScale=sc;} else{par.depoisData=d;par.depoisOX=ox;par.depoisOY=oy;par.depoisScale=sc;}
+    };
+    setSlot(dstPar, lado, srcData, srcOX, srcOY, srcSc); setSlot(srcPar, srcLado, dstData, dstOX, dstOY, dstSc);
+    syncThumbs(srcParId); syncThumbs(parId); atualizar(); changed(); return;
+  }
+  const gId=parseInt(raw); const g=galeria.find(x=>x.id===gId); if(!g)return;
+  const par=pares.find(p=>p.id===parId); if(!par)return;
+  if(lado==='A'){par.antesData=g.data;par.antesOX=0;par.antesOY=0;par.antesScale=1;} else{par.depoisData=g.data;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+  syncThumbs(parId); atualizar(); changed();
 }
 
 /* ════════ PARES ════════ */
 function adicionarPar(){
-  parCounter++;
-  const id=parCounter;
-  pares.push({id,antesData:null,depoisData:null,caption:'',
-    antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1});
-  criarParDOM(id);
-  renumerar();
-  changed();
+  parCounter++; const id=parCounter;
+  pares.push({id,antesData:null,depoisData:null,caption:'', antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1, annots_A:[],annots_D:[]});
+  criarParDOM(id); renumerar(); changed();
 }
 function adicionarParSilencioso(){
-  parCounter++;
-  const id=parCounter;
-  pares.push({id,antesData:null,depoisData:null,caption:'',
-    antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1});
+  parCounter++; const id=parCounter;
+  pares.push({id,antesData:null,depoisData:null,caption:'', antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1, annots_A:[],annots_D:[]});
   criarParDOM(id);
 }
 
 function criarParDOM(id){
-  const div=document.createElement('div');
-  div.className='foto-par';div.id='pe-'+id;
+  const div=document.createElement('div'); div.className='foto-par';div.id='pe-'+id;
   div.innerHTML=`
-    <div class="par-head">
-      <span class="par-num">Par 1</span>
-      <div class="par-acts">
-        <button class="bti" onclick="moverPar(${id},-1)">↑</button>
-        <button class="bti" onclick="moverPar(${id},1)">↓</button>
-        <button class="bti del" onclick="removerPar(${id})">✕</button>
-      </div>
-    </div>
+    <div class="par-head"><span class="par-num">Par 1</span><div class="par-acts"><button class="bti" onclick="moverPar(${id},-1)">↑</button><button class="bti" onclick="moverPar(${id},1)">↓</button><button class="bti del" onclick="removerPar(${id})">✕</button></div></div>
     <div class="drop-slots">
-      <div class="dslot" id="ds-A-${id}"
-        ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)"
-        ondrop="onSlotDrop(event,${id},'A')"
-        onclick="triggerFileInput(${id},'A')">
-        <span class="dslot-lbl A">Antes</span>
-        <span class="dslot-hint">Arraste ou clique</span>
-      </div>
-      <div class="dslot" id="ds-D-${id}"
-        ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)"
-        ondrop="onSlotDrop(event,${id},'D')"
-        onclick="triggerFileInput(${id},'D')">
-        <span class="dslot-lbl D">Depois</span>
-        <span class="dslot-hint">Arraste ou clique</span>
-      </div>
+      <div class="dslot" id="ds-A-${id}" ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)" ondrop="onSlotDrop(event,${id},'A')" onclick="triggerFileInput(${id},'A')"><span class="dslot-lbl A">Antes</span><span class="dslot-hint">Arraste ou clique</span></div>
+      <div class="dslot" id="ds-D-${id}" ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)" ondrop="onSlotDrop(event,${id},'D')" onclick="triggerFileInput(${id},'D')"><span class="dslot-lbl D">Depois</span><span class="dslot-hint">Arraste ou clique</span></div>
     </div>
-    <div class="par-actions-row">
-      <button class="bti" onclick="trocar(${id})">⇄ Trocar</button>
-      <button class="bti" onclick="rotacionar(${id},'A')">↻ Antes</button>
-      <button class="bti" onclick="rotacionar(${id},'D')">↻ Depois</button>
-    </div>
+    <div class="par-actions-row"><button class="bti" onclick="trocar(${id})">⇄ Trocar</button><button class="bti" onclick="rotacionar(${id},'A')">↻ Antes</button><button class="bti" onclick="rotacionar(${id},'D')">↻ Depois</button></div>
     <input class="caption-input" type="text" placeholder="Legenda opcional..." oninput="setCaption(${id},this.value)">
     <input type="file" accept="image/*" id="fi-A-${id}" style="display:none" onchange="fileInputChange(event,${id},'A')">
     <input type="file" accept="image/*" id="fi-D-${id}" style="display:none" onchange="fileInputChange(event,${id},'D')">
@@ -537,85 +607,75 @@ function criarParDOM(id){
   document.getElementById('foto-pares').appendChild(div);
 }
 
-function triggerFileInput(id,lado){
-  document.getElementById(`fi-${lado}-${id}`).click();
-}
+function triggerFileInput(id,lado){ document.getElementById(`fi-${lado}-${id}`).click(); }
 function fileInputChange(event,id,lado){
   const f=event.target.files[0];if(!f)return;
   const r=new FileReader();
-  r.onload=e=>{
+  r.onload=async e=>{
+    const resized = await processImageOrig(e.target.result);
     const par=pares.find(p=>p.id===id);if(!par)return;
-    if(lado==='A'){par.antesData=e.target.result;par.antesOX=0;par.antesOY=0;par.antesScale=1;}
-    else{par.depoisData=e.target.result;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+    if(lado==='A'){par.antesData=resized;par.antesOX=0;par.antesOY=0;par.antesScale=1;}else{par.depoisData=resized;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
     syncThumbs(id);atualizar();changed();
   };r.readAsDataURL(f);
+  event.target.value='';
 }
 
 function syncThumbs(id){
   const par=pares.find(p=>p.id===id);if(!par)return;
   ['A','D'].forEach(lado=>{
     const slot=document.getElementById(`ds-${lado}-${id}`);if(!slot)return;
-    const data=lado==='A'?par.antesData:par.depoisData;
-    const lbl=lado==='A'?'Antes':'Depois';
+    const data=lado==='A'?par.antesData:par.depoisData; const lbl=lado==='A'?'Antes':'Depois';
     if(data){
-      slot.classList.add('filled');
-      slot.innerHTML=`<img src="${data}" alt="${lbl}">
-        <div class="dslot-overlay">
-          <button class="dslot-act" onclick="event.stopPropagation();rotacionar(${id},'${lado}')">↻</button>
-          <button class="dslot-act" onclick="event.stopPropagation();clearSlot(${id},'${lado}')">✕</button>
-        </div>`;
+      slot.classList.add('filled'); slot.setAttribute('draggable','true');
+      slot.innerHTML=`<img src="${data}" alt="${lbl}"><div class="dslot-overlay"><button class="dslot-act" onclick="event.stopPropagation();rotacionar(${id},'${lado}')">↻</button><button class="dslot-act" onclick="event.stopPropagation();clearSlot(${id},'${lado}')">✕</button></div>`;
     }else{
-      slot.classList.remove('filled');
+      slot.classList.remove('filled'); slot.removeAttribute('draggable');
       slot.innerHTML=`<span class="dslot-lbl ${lado}">${lbl}</span><span class="dslot-hint">Arraste ou clique</span>`;
     }
   });
-  // restaurar event listeners após innerHTML
-  const sA=document.getElementById(`ds-A-${id}`);
-  const sD=document.getElementById(`ds-D-${id}`);
-  if(sA){sA.ondragover=onSlotOver;sA.ondragleave=onSlotLeave;sA.ondrop=e=>onSlotDrop(e,id,'A');sA.onclick=()=>triggerFileInput(id,'A');}
-  if(sD){sD.ondragover=onSlotOver;sD.ondragleave=onSlotLeave;sD.ondrop=e=>onSlotDrop(e,id,'D');sD.onclick=()=>triggerFileInput(id,'D');}
+  const sA=document.getElementById(`ds-A-${id}`); const sD=document.getElementById(`ds-D-${id}`);
+  if(sA){ sA.ondragover=onSlotOver;sA.ondragleave=onSlotLeave; sA.ondrop=e=>onSlotDrop(e,id,'A'); sA.onclick=()=>triggerFileInput(id,'A'); sA.ondragstart=e=>onSlotDragStart(e,id,'A'); sA.ondragend=e=>onSlotDragEnd(e,id,'A'); }
+  if(sD){ sD.ondragover=onSlotOver;sD.ondragleave=onSlotLeave; sD.ondrop=e=>onSlotDrop(e,id,'D'); sD.onclick=()=>triggerFileInput(id,'D'); sD.ondragstart=e=>onSlotDragStart(e,id,'D'); sD.ondragend=e=>onSlotDragEnd(e,id,'D'); }
 }
+
+let draggingSlot = null;
+function onSlotDragStart(event, parId, lado) {
+  const par = pares.find(p=>p.id===parId); if(!par) return;
+  const data = lado==='A' ? par.antesData : par.depoisData; if(!data) { event.preventDefault(); return; }
+  draggingSlot = { parId, lado }; event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('text/plain', `slot:${parId}:${lado}`);
+  setTimeout(()=>event.target.classList.add('dragging-slot'), 0);
+}
+function onSlotDragEnd(event, parId, lado) { event.target.classList.remove('dragging-slot'); document.querySelectorAll('.dslot').forEach(el=>el.classList.remove('swap-over','over')); draggingSlot = null; }
 
 function clearSlot(id,lado){
   const par=pares.find(p=>p.id===id);if(!par)return;
   if(lado==='A'){par.antesData=null;}else{par.depoisData=null;}
   syncThumbs(id);atualizar();changed();
 }
-
 function removerPar(id){
-  pares=pares.filter(p=>p.id!==id);
-  document.getElementById('pe-'+id)?.remove();
+  pares=pares.filter(p=>p.id!==id); document.getElementById('pe-'+id)?.remove();
   renumerar();atualizar();changed();
 }
 function moverPar(id,dir){
-  const idx=pares.findIndex(p=>p.id===id);
-  const dest=idx+dir;
-  if(dest<0||dest>=pares.length)return;
+  const idx=pares.findIndex(p=>p.id===id); const dest=idx+dir; if(dest<0||dest>=pares.length)return;
   [pares[idx],pares[dest]]=[pares[dest],pares[idx]];
-  const c=document.getElementById('foto-pares');
-  const els=[...c.children];
-  if(dir===-1)c.insertBefore(els[idx],els[dest]);
-  else c.insertBefore(els[dest],els[idx]);
+  const c=document.getElementById('foto-pares'); const els=[...c.children];
+  if(dir===-1)c.insertBefore(els[idx],els[dest]); else c.insertBefore(els[dest],els[idx]);
   renumerar();atualizar();changed();
 }
-function renumerar(){
-  document.querySelectorAll('.par-num').forEach((el,i)=>el.textContent=`Par ${i+1}`);
-}
+function renumerar(){ document.querySelectorAll('.par-num').forEach((el,i)=>el.textContent=`Par ${i+1}`); }
 
 function rotacionar(id,lado){
-  const par=pares.find(p=>p.id===id);
-  const src=lado==='A'?par.antesData:par.depoisData;
-  if(!src)return;
+  const par=pares.find(p=>p.id===id); const src=lado==='A'?par.antesData:par.depoisData; if(!src)return;
   const img=new Image();
-  img.onload=()=>{
-    const c=document.createElement('canvas');
-    c.width=img.height;c.height=img.width;
-    const ctx=c.getContext('2d');
-    ctx.translate(c.width/2,c.height/2);ctx.rotate(Math.PI/2);
+  img.onload=async ()=>{
+    const c=document.createElement('canvas'); c.width=img.height;c.height=img.width;
+    const ctx=c.getContext('2d'); ctx.translate(c.width/2,c.height/2);ctx.rotate(Math.PI/2);
     ctx.drawImage(img,-img.width/2,-img.height/2);
-    const novo=c.toDataURL('image/jpeg',.92);
-    if(lado==='A'){par.antesData=novo;par.antesOX=0;par.antesOY=0;par.antesScale=1;}
-    else{par.depoisData=novo;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+    const rotated=c.toDataURL('image/jpeg',.92);
+    const novo = await processImageOrig(rotated);
+    if(lado==='A'){par.antesData=novo;par.antesOX=0;par.antesOY=0;par.antesScale=1;} else{par.depoisData=novo;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
     syncThumbs(id);atualizar();changed();
   };img.src=src;
 }
@@ -624,33 +684,124 @@ function trocar(id){
   [par.antesData,par.depoisData]=[par.depoisData,par.antesData];
   syncThumbs(id);atualizar();changed();
 }
-function setCaption(id,val){
-  const par=pares.find(p=>p.id===id);
-  if(par){par.caption=val;atualizar();changed();}
+function setCaption(id,val){ const par=pares.find(p=>p.id===id); if(par){par.caption=val;atualizar();changed();} }
+
+/* ════════ GLOBAL ANNOTATION TOOLS (NOVO) ════════ */
+function setGlobalFocus(lado, id) {
+  // Impede foco em box sem imagem
+  const par = pares.find(p=>p.id===id);
+  const temDado = lado === 'A' ? par?.antesData : par?.depoisData;
+  if(!temDado) return;
+
+  activePhoto = { lado, id };
+  const tools = document.getElementById('global-annot-tools');
+  tools.classList.add('active');
+  
+  const pIndex = pares.findIndex(p=>p.id===id) + 1;
+  const desc = lado === 'A' ? 'Antes' : 'Depois';
+  document.getElementById('active-photo-label').textContent = `Editando Par ${pIndex}: ${desc}`;
+  
+  // Highlight no preview
+  document.querySelectorAll('.doc-foto-viewport').forEach(v => v.classList.remove('active-vp'));
+  const vp = document.getElementById(`vp-${lado}-${id}`);
+  if(vp) {
+    vp.classList.add('active-vp');
+    // Faz um leve scroll se estiver muito longe
+    vp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Sincroniza estado da ferramenta com a foto
+  const s = getAnnotState(lado, id);
+  s.color = globalColor;
+  
+  document.querySelectorAll('.ft-btn[data-tool]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === globalTool);
+  });
+  setAnnotTool(lado, id, globalTool);
+}
+
+function closeGlobalTools() {
+  activePhoto = null;
+  document.getElementById('global-annot-tools').classList.remove('active');
+  document.querySelectorAll('.doc-foto-viewport').forEach(v => v.classList.remove('active-vp'));
+}
+
+function setGlobalTool(tool) {
+  globalTool = tool;
+  document.querySelectorAll('.ft-btn[data-tool]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === globalTool);
+  });
+  if (activePhoto) {
+    setAnnotTool(activePhoto.lado, activePhoto.id, tool);
+  }
+}
+
+function setGlobalColor(hex) {
+  globalColor = hex;
+  if (activePhoto) {
+    const s = getAnnotState(activePhoto.lado, activePhoto.id);
+    s.color = hex;
+    if (s.selected >= 0 && s.annots[s.selected]) {
+      s.annots[s.selected].color = hex;
+      saveAnnotsToPar(activePhoto.lado, activePhoto.id);
+      redrawAnnots(activePhoto.lado, activePhoto.id);
+      changed();
+    }
+  }
+}
+
+function setGlobalSize(val) {
+  globalSize = parseFloat(val);
+  if (activePhoto) {
+    const s = getAnnotState(activePhoto.lado, activePhoto.id);
+    if (s.selected >= 0 && s.annots[s.selected]) {
+      s.annots[s.selected].size = globalSize;
+      saveAnnotsToPar(activePhoto.lado, activePhoto.id);
+      redrawAnnots(activePhoto.lado, activePhoto.id);
+      changed();
+    }
+  }
+}
+
+function triggerGlobalUndo() {
+  if (activePhoto) undoAnnot(activePhoto.lado, activePhoto.id);
+}
+function triggerGlobalClear() {
+  if (activePhoto) clearAnnots(activePhoto.lado, activePhoto.id);
+}
+function triggerGlobalZoom(delta) {
+  if (activePhoto) {
+    const par = pares.find(p=>p.id===activePhoto.id);
+    if(par) zoomFoto(par, activePhoto.lado, delta);
+  }
+}
+function triggerGlobalReset() {
+  if (activePhoto) {
+    const par = pares.find(p=>p.id===activePhoto.id);
+    if(par) resetFoto(par, activePhoto.lado);
+  }
 }
 
 /* ════════ PAN / ZOOM no preview ════════ */
 function calcInitialOffset(vp, par, lado) {
-  // Centraliza a imagem no viewport na primeira vez (ox/oy === 0 e scale === 1)
-  const img = vp.querySelector('img');
-  if (!img) return;
+  const img = vp.querySelector('img'); if (!img) return;
   const sc = lado==='A' ? (par.antesScale||1) : (par.depoisScale||1);
   const ox = lado==='A' ? par.antesOX : par.depoisOX;
   const oy = lado==='A' ? par.antesOY : par.depoisOY;
-  // Só centraliza se ainda não foi movido (ox e oy são 0)
+  
   if (ox === 0 && oy === 0) {
-    const vW = vp.offsetWidth;
-    const vH = vp.offsetHeight;
+    const vW = vp.offsetWidth; const vH = vp.offsetHeight;
     const iW = img.naturalWidth  || img.offsetWidth;
     const iH = img.naturalHeight || img.offsetHeight;
     if (!iW || !iH) return;
-    // Escala para cobrir o viewport (como object-fit:cover)
-    const coverScale = Math.max(vW / iW, vH / iH);
-    const finalSc = coverScale * sc;
+    
+    const containScale = Math.min(vW / iW, vH / iH);
+    const finalSc = containScale * sc;
     const centX = (vW - iW * finalSc) / 2;
     const centY = (vH - iH * finalSc) / 2;
-    if (lado==='A') { par.antesOX = centX; par.antesOY = centY; par.antesScale = coverScale; }
-    else { par.depoisOX = centX; par.depoisOY = centY; par.depoisScale = coverScale; }
+    
+    if (lado==='A') { par.antesOX = centX; par.antesOY = centY; par.antesScale = containScale; }
+    else { par.depoisOX = centX; par.depoisOY = centY; par.depoisScale = containScale; }
     applyImgTransform(img, centX, centY, finalSc);
   } else {
     applyImgTransform(img, ox, oy, sc);
@@ -664,96 +815,53 @@ function applyImgTransform(img, ox, oy, sc) {
 
 function initPanZoom(viewportEl, par, lado) {
   let dragging=false, startX, startY, startOX, startOY;
-
-  const getState = () => lado==='A'
-    ? {ox:par.antesOX, oy:par.antesOY, sc:par.antesScale||1}
-    : {ox:par.depoisOX, oy:par.depoisOY, sc:par.depoisScale||1};
-
+  const getState = () => lado==='A' ? {ox:par.antesOX, oy:par.antesOY, sc:par.antesScale||1} : {ox:par.depoisOX, oy:par.depoisOY, sc:par.depoisScale||1};
   const setState = (ox, oy) => {
-    if(lado==='A'){par.antesOX=ox;par.antesOY=oy;}
-    else{par.depoisOX=ox;par.depoisOY=oy;}
+    if(lado==='A'){par.antesOX=ox;par.antesOY=oy;} else{par.depoisOX=ox;par.depoisOY=oy;}
     const img = viewportEl.querySelector('img');
     const {sc} = getState();
     if(img) applyImgTransform(img, ox, oy, sc);
   };
 
-  // Aguarda imagem carregar para centralizar
   const img = viewportEl.querySelector('img');
-  if (img) {
-    if (img.complete) { calcInitialOffset(viewportEl, par, lado); }
-    else { img.onload = () => calcInitialOffset(viewportEl, par, lado); }
-  }
+  if (img) { if (img.complete) { calcInitialOffset(viewportEl, par, lado); } else { img.onload = () => calcInitialOffset(viewportEl, par, lado); } }
+
+  const activate = () => { if(!activePhoto || activePhoto.lado!==lado || activePhoto.id!==par.id) setGlobalFocus(lado, par.id); };
 
   viewportEl.addEventListener('mousedown', e => {
+    activate();
     dragging=true; viewportEl.classList.add('grabbing');
     const {ox,oy} = getState();
     startX=e.clientX; startY=e.clientY; startOX=ox; startOY=oy;
     e.preventDefault();
   });
-  window.addEventListener('mousemove', e => {
-    if(!dragging) return;
-    setState(startOX+(e.clientX-startX), startOY+(e.clientY-startY));
-  });
-  window.addEventListener('mouseup', () => {
-    if(dragging){ dragging=false; viewportEl.classList.remove('grabbing'); changed(); }
-  });
+  window.addEventListener('mousemove', e => { if(!dragging) return; setState(startOX+(e.clientX-startX), startOY+(e.clientY-startY)); });
+  window.addEventListener('mouseup', () => { if(dragging){ dragging=false; viewportEl.classList.remove('grabbing'); changed(); } });
+  
   viewportEl.addEventListener('touchstart', e => {
-    dragging=true;
-    const {ox,oy} = getState();
+    activate();
+    dragging=true; const {ox,oy} = getState();
     startX=e.touches[0].clientX; startY=e.touches[0].clientY; startOX=ox; startOY=oy;
     e.preventDefault();
   },{passive:false});
-  viewportEl.addEventListener('touchmove', e => {
-    if(!dragging) return;
-    setState(startOX+(e.touches[0].clientX-startX), startOY+(e.touches[0].clientY-startY));
-    e.preventDefault();
-  },{passive:false});
+  viewportEl.addEventListener('touchmove', e => { if(!dragging) return; setState(startOX+(e.touches[0].clientX-startX), startOY+(e.touches[0].clientY-startY)); e.preventDefault(); },{passive:false});
   viewportEl.addEventListener('touchend', () => { dragging=false; changed(); });
-}
-
-/* ════════ ESCALA DOS VIEWPORTS NO PREVIEW ════════ */
-function atualizarEscalaPreview() {
-  const scale = parseFloat(document.getElementById('pdf-scale').value) || 0.75;
-  // Mapeia 0.4→35% e 1.0→75% da largura do viewport de forma proporcional
-  // O aspect-ratio permanece 4:3; mudamos apenas a variável CSS usada pelos viewports
-  document.querySelectorAll('.doc-foto-viewport').forEach(vp => {
-    // height relativo ao pai: scale 1.0 = 100% de 4:3, scale 0.4 = 40% de 4:3
-    // Usamos padding-bottom trick via variável inline
-    vp.style.setProperty('--vp-scale', scale);
-  });
-  // Força o CSS a usar a variável — atualizamos a propriedade aspect-ratio dinamicamente
-  // Estratégia: manipular a largura do wrapper .doc-foto-box proporcionalmente
-  // Para não quebrar o layout de 2 colunas, preferimos ajustar a altura do viewport
-  document.querySelectorAll('.doc-foto-viewport').forEach(vp => {
-    const baseH = vp.offsetWidth * (3 / 4); // altura base em 4:3
-    vp.style.height = Math.round(baseH * scale) + 'px';
-    vp.style.aspectRatio = 'unset';
-  });
 }
 
 function zoomFoto(par, lado, delta) {
   const oldSc = lado==='A' ? (par.antesScale||1) : (par.depoisScale||1);
-  const newSc = Math.max(.3, Math.min(4, oldSc + delta));
-  // Ajusta offset para manter o centro visual fixo durante zoom
+  const newSc = Math.max(.05, Math.min(8, oldSc + delta * oldSc)); 
   const vp = document.getElementById(`vp-${lado}-${par.id}`);
-  const vW = vp ? vp.offsetWidth  : 330;
-  const vH = vp ? vp.offsetHeight : 185;
-  const ox = lado==='A' ? par.antesOX : par.depoisOX;
-  const oy = lado==='A' ? par.antesOY : par.depoisOY;
-  // Ponto de pivot = centro do viewport
-  const px = vW / 2;
-  const py = vH / 2;
+  const vW = vp ? vp.offsetWidth  : 330; const vH = vp ? vp.offsetHeight : 185;
+  const ox = lado==='A' ? par.antesOX : par.depoisOX; const oy = lado==='A' ? par.antesOY : par.depoisOY;
+  const px = vW / 2; const py = vH / 2;
   const ratio = newSc / oldSc;
-  const newOx = px - ratio * (px - ox);
-  const newOy = py - ratio * (py - oy);
-  if(lado==='A'){par.antesScale=newSc;par.antesOX=newOx;par.antesOY=newOy;}
-  else{par.depoisScale=newSc;par.depoisOX=newOx;par.depoisOY=newOy;}
+  const newOx = px - ratio * (px - ox); const newOy = py - ratio * (py - oy);
+  if(lado==='A'){par.antesScale=newSc;par.antesOX=newOx;par.antesOY=newOy;} else{par.depoisScale=newSc;par.depoisOX=newOx;par.depoisOY=newOy;}
   atualizar(); changed();
 }
 function resetFoto(par, lado) {
-  // Força recentralização zerando offsets — calcInitialOffset vai recentrar no próximo render
-  if(lado==='A'){par.antesOX=0;par.antesOY=0;par.antesScale=1;}
-  else{par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+  if(lado==='A'){par.antesOX=0;par.antesOY=0;par.antesScale=1;} else{par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
   atualizar(); changed();
 }
 
@@ -768,29 +876,20 @@ function rodape(){
       <div class="doc-footer-col"><strong>Filial Taubaté</strong>Rua Cmte. José Renato C. de Moura, 1000<br>Parque Aeroporto<br>Taubaté/SP — CEP 12051-150<br>Tel.: 0800 007 8004</div>
       <div class="doc-footer-col"><strong>Filial Cariacica</strong>Rod. Gov. Mário Covas, 10.600<br>Galpão 72/75 — Serra do Anil<br>Cariacica/ES — CEP 29147-030<br>Tel.: (27) 99915-7103</div>
     </div>
-    <div class="doc-footer-brand">
-      <span class="doc-footer-site">www.tradimaq.com.br</span>
-      ${logoFooter}
-    </div>
+    <div class="doc-footer-brand"><span class="doc-footer-site">www.tradimaq.com.br</span>${logoFooter}</div>
   </div>`;
 }
 
 function hdr(clienteExtra){
-  const logoHtml = LOGO
-    ? `<img class="doc-logo" src="${LOGO}" alt="Tradimaq">`
-    : `<div class="doc-logo-txt">TRADI<span>MAQ</span></div>`;
-  return`<div class="doc-page-hdr">
-    ${logoHtml}
-    <div class="doc-hdr-right">www.tradimaq.com.br${clienteExtra?'<br>'+clienteExtra:''}</div>
-  </div>`;
+  const logoHtml = LOGO ? `<img class="doc-logo" src="${LOGO}" alt="Tradimaq">` : `<div class="doc-logo-txt">TRADI<span>MAQ</span></div>`;
+  return`<div class="doc-page-hdr">${logoHtml}<div class="doc-hdr-right">www.tradimaq.com.br${clienteExtra?'<br>'+clienteExtra:''}</div></div>`;
 }
 
 function atualizar(){
   const modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',local=v('f-local')||'—';
   const tag=v('f-tag')||'—',cliente=v('f-cliente')||'—',descricao=v('f-descricao')||'—';
   const resp1=v('f-resp1'),resp2=v('f-resp2');
-  const raw=v('f-data');
-  const dataFmt=raw?raw.split('-').reverse().join('/'):'—';
+  const raw=v('f-data'); const dataFmt=raw?raw.split('-').reverse().join('/'):'—';
 
   const ordemIds=[...document.querySelectorAll('.foto-par')].map(el=>parseInt(el.id.replace('pe-','')));
   const paresOrd=ordemIds.map(id=>pares.find(p=>p.id===id)).filter(Boolean);
@@ -802,30 +901,26 @@ function atualizar(){
     const sc_d=par.depoisScale||1, ox_d=par.depoisOX||0, oy_d=par.depoisOY||0;
     const lblA = showLabels ? `<div class="doc-foto-lbl A">Antes</div>` : '';
     const lblD = showLabels ? `<div class="doc-foto-lbl D">Depois</div>` : '';
-    const vA=par.antesData
-      ?`<div class="doc-foto-viewport" id="vp-A-${par.id}"><img src="${par.antesData}" style="transform:translate(${ox_a}px,${oy_a}px) scale(${sc_a});transform-origin:0 0"></div>
-        <div class="foto-controls">
-          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'A',.15)">＋</button>
-          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'A',-.15)">－</button>
-          <button class="fctl" onclick="resetFoto(pares.find(p=>p.id==${par.id}),'A')">↺</button>
-        </div>`
-      :`<div class="doc-foto-viewport" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--g5)">Sem imagem</div>`;
-    const vD=par.depoisData
-      ?`<div class="doc-foto-viewport" id="vp-D-${par.id}"><img src="${par.depoisData}" style="transform:translate(${ox_d}px,${oy_d}px) scale(${sc_d});transform-origin:0 0"></div>
-        <div class="foto-controls">
-          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'D',.15)">＋</button>
-          <button class="fctl" onclick="zoomFoto(pares.find(p=>p.id==${par.id}),'D',-.15)">－</button>
-          <button class="fctl" onclick="resetFoto(pares.find(p=>p.id==${par.id}),'D')">↺</button>
-        </div>`
-      :`<div class="doc-foto-viewport" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--g5)">Sem imagem</div>`;
+
+    const makeVP = (lado, data, ox, oy, sc) => {
+      // Impede setGlobalFocus em divs vazias
+      if(!data) return `<div class="doc-foto-viewport" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--g5)">Sem imagem</div>`;
+      const pid = par.id;
+      const annots = (par[`annots_${lado}`]||[]).map(a=>JSON.stringify(a)).join('||');
+      const isActive = (activePhoto && activePhoto.lado === lado && activePhoto.id === pid) ? 'active-vp' : '';
+      return `
+        <div class="doc-foto-wrapper" onclick="setGlobalFocus('${lado}', ${pid})">
+          <div class="doc-foto-viewport ${isActive}" id="vp-${lado}-${pid}">
+            <img src="${data}" style="transform:translate(${ox}px,${oy}px) scale(${sc});transform-origin:0 0">
+            <canvas class="annotation-canvas" id="ac-${lado}-${pid}" data-par="${pid}" data-lado="${lado}" data-annots="${encodeURIComponent(annots)}"></canvas>
+          </div>
+        </div>`;
+    };
+
+    const vA = makeVP('A', par.antesData, ox_a, oy_a, sc_a);
+    const vD = makeVP('D', par.depoisData, ox_d, oy_d, sc_d);
     const cap=par.caption?`Figura ${i+1} — ${par.caption}`:`Figura ${i+1}`;
-    return`<div class="doc-foto-par">
-      <div class="doc-foto-cols">
-        <div class="doc-foto-box">${lblA}${vA}</div>
-        <div class="doc-foto-box">${lblD}${vD}</div>
-      </div>
-      <div class="doc-foto-caption">${cap}</div>
-    </div>`;
+    return`<div class="doc-foto-par"><div class="doc-foto-cols"><div class="doc-foto-box">${lblA}${vA}</div><div class="doc-foto-box">${lblD}${vD}</div></div><div class="doc-foto-caption">${cap}</div></div>`;
   }).join('');
 
   document.getElementById('documento').innerHTML=`
@@ -842,8 +937,8 @@ function atualizar(){
           <div class="doc-info-cell"><span class="doc-info-key">Cliente:</span><span class="doc-info-val">${cliente}</span></div>
         </div>
       </div>
-      <div class="doc-sec">
-        <div class="doc-sec-title">Descrição</div>
+           <div class="doc-info" style="margin-bottom:12px">
+        <div class="doc-info-title">Descrição</div>
         <div class="doc-sec-body">${descricao}</div>
       </div>
       ${fotosHtml?`<div class="doc-sec-title" style="margin-bottom:10px;">Fotos</div>${fotosHtml}`:''}
@@ -859,16 +954,12 @@ function atualizar(){
       ${rodape()}
     </div>`;
 
-  // Inicia pan/zoom em cada viewport
   paresOrd.forEach(par=>{
     ['A','D'].forEach(lado=>{
-      const vp=document.getElementById(`vp-${lado}-${par.id}`);
-      if(vp) initPanZoom(vp,par,lado);
+      const vp=document.getElementById(`vp-${lado}-${par.id}`); if(vp) initPanZoom(vp,par,lado);
+      const ac=document.getElementById(`ac-${lado}-${par.id}`); if(ac) initAnnotCanvas(ac, par, lado);
     });
   });
-
-  // Aplica a escala visual atual do slider na pré-visualização
-  atualizarEscalaPreview();
 }
 
 /* ════════ LIMPAR ════════ */
@@ -877,147 +968,283 @@ function limpar(){
   localStorage.removeItem(CACHE_KEY);
   ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2'].forEach(id=>{document.getElementById(id).value='';});
   document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
-  pares=[];parCounter=0;galeria=[];galeriaCounter=0;
+  pares=[];parCounter=0;galeria=[];galeriaCounter=0; activePhoto=null;
+  closeGlobalTools();
   document.getElementById('foto-pares').innerHTML='';
-  renderGaleria();adicionarPar();atualizar();
-  badge('Sem alterações','');
+  renderGaleria();adicionarPar();atualizar(); badge('Sem alterações','');
 }
 
-/* ════════ LIMPAR FOTOS ════════ */
 function limparFotos(){
   if(!confirm('Limpar todas as fotos? Os dados do relatório serão mantidos.'))return;
   pares.forEach(par=>{
     par.antesData=null; par.depoisData=null;
     par.antesOX=0; par.antesOY=0; par.antesScale=1;
     par.depoisOX=0; par.depoisOY=0; par.depoisScale=1;
+    par.annots_A=[]; par.annots_D=[];
+    ['A','D'].forEach(l=>{ const k=annotKey(l,par.id); if(annotState[k]) annotState[k].annots=[]; });
     syncThumbs(par.id);
   });
-  galeria=[]; galeriaCounter=0;
-  renderGaleria();
-  atualizar();
-  changed();
-  toast('Fotos limpas!');
+  galeria=[]; galeriaCounter=0; activePhoto=null;
+  closeGlobalTools();
+  renderGaleria(); atualizar(); changed(); toast('Fotos limpas!');
 }
-async function gerarPDF(){
-  salvarCache(true);
-  const serie  = v('f-serie')||'SEM-SERIE';
-  const cliente= v('f-cliente')||'SEM-CLIENTE';
-  const raw    = v('f-data')||new Date().toISOString().split('T')[0];
-  const slug   = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]/g,'_').replace(/_+/g,'_').replace(/^_|_$/g,'');
-  const nome   = `Relatorio_${slug(serie)}_${slug(cliente)}_${raw.replace(/-/g,'')}.pdf`;
 
-  const scale   = parseFloat(document.getElementById('pdf-scale').value) || 0.75;
-  const orient  = document.querySelector('input[name="pdf-orient"]:checked')?.value || 'portrait';
+/* ════════ MOTOR DE ANOTAÇÕES ════════ */
+const annotState = {};
+function annotKey(lado, parId){ return `${lado}-${parId}`; }
 
-  /* ── 1. Converte viewports em imagens estáticas (bake) ── */
-  const viewports=[...document.querySelectorAll('.doc-foto-viewport')];
-  const snaps=[];
+function updatePointerEventsFor(lado, parId){
+  const canvas = document.getElementById(`ac-${lado}-${parId}`); if(!canvas) return;
+  const s = getAnnotState(lado, parId);
+  canvas.style.pointerEvents = (s.tool==='sel' && s.annots.length===0) ? 'none' : 'auto';
+  canvas.style.cursor = s.tool==='sel' ? 'default' : 'crosshair';
+}
 
-  for(const vp of viewports){
-    const img=vp.querySelector('img');
-    if(!img||!img.src) continue;
+function getAnnotState(lado, parId){
+  const k = annotKey(lado, parId);
+  if(!annotState[k]) annotState[k] = { tool: globalTool, color: globalColor, annots:[], selected:-1, dragging:false, dragOff:{x:0,y:0} };
+  return annotState[k];
+}
 
-    // Altura real do viewport (aspect-ratio 4:3 baseado na largura atual)
-    const VW=vp.offsetWidth||320;
-    const VH=vp.offsetHeight||Math.round(VW*3/4);
+function setAnnotTool(lado, parId, tool){
+  const s = getAnnotState(lado, parId); s.tool = tool; s.selected = -1;
+  updatePointerEventsFor(lado, parId); redrawAnnots(lado, parId);
+}
 
-    const vpId=vp.id||'';
-    const parts=vpId.split('-');
-    const lado=parts[1], parId=parseInt(parts[2]);
-    const par=pares.find(p=>p.id===parId);
-    let ox=0,oy=0,sc=1;
-    if(par){
-      ox = lado==='A'?(par.antesOX||0):(par.depoisOX||0);
-      oy = lado==='A'?(par.antesOY||0):(par.depoisOY||0);
-      sc = lado==='A'?(par.antesScale||1):(par.depoisScale||1);
+function undoAnnot(lado, parId){
+  const s = getAnnotState(lado, parId);
+  if(s.annots.length){ s.annots.pop(); s.selected=-1; saveAnnotsToPar(lado,parId); redrawAnnots(lado,parId); updatePointerEventsFor(lado,parId); changed(); }
+}
+function clearAnnots(lado, parId){
+  const s = getAnnotState(lado, parId);
+  s.annots=[]; s.selected=-1; saveAnnotsToPar(lado,parId); redrawAnnots(lado,parId); updatePointerEventsFor(lado,parId); changed();
+}
+function saveAnnotsToPar(lado, parId){
+  const par = pares.find(p=>p.id===parId); if(!par) return;
+  par[`annots_${lado}`] = getAnnotState(lado,parId).annots.map(a=>({...a}));
+}
+
+function initAnnotCanvas(canvas, par, lado){
+  const k = annotKey(lado, par.id);
+  if(!annotState[k]){ annotState[k] = { tool: globalTool, color: globalColor, annots: (par[`annots_${lado}`]||[]).map(a=>({...a})), selected:-1, dragging:false, dragOff:{x:0,y:0} }; }
+  else { annotState[k].annots = (par[`annots_${lado}`]||[]).map(a=>({...a})); }
+
+  const resizeCanvas = () => { const vp = canvas.parentElement; canvas.width = vp.offsetWidth; canvas.height = vp.offsetHeight; redrawAnnots(lado, par.id); };
+  resizeCanvas(); new ResizeObserver(resizeCanvas).observe(canvas.parentElement);
+
+  const getPos = (e) => { const r = canvas.getBoundingClientRect(); const cl = e.touches ? e.touches[0] : e; return { x: (cl.clientX - r.left) * (canvas.width/r.width), y: (cl.clientY - r.top) * (canvas.height/r.height) }; };
+
+  const hitTest = (annot, x, y, W, H) => {
+    const ax=annot.x1*W, ay=annot.y1*H, bx=annot.x2*W, by=annot.y2*H;
+    if(annot.type==='rect'||annot.type==='circ'){ const minX=Math.min(ax,bx)-8, maxX=Math.max(ax,bx)+8; const minY=Math.min(ay,by)-8, maxY=Math.max(ay,by)+8; return x>=minX&&x<=maxX&&y>=minY&&y<=maxY; }
+    if(annot.type==='arr'){
+      const dx=bx-ax, dy=by-ay, len=Math.sqrt(dx*dx+dy*dy)||1; const t=((x-ax)*dx+(y-ay)*dy)/(len*len); const tc=Math.max(0,Math.min(1,t)); const px=ax+tc*dx-x, py=ay+tc*dy-y; return Math.sqrt(px*px+py*py)<12;
     }
-
-    const DPR=2;
-    const canvas=document.createElement('canvas');
-    canvas.width=VW*DPR; canvas.height=VH*DPR;
-    const ctx=canvas.getContext('2d');
-    ctx.scale(DPR,DPR);
-
-    await new Promise(res=>{
-      const src=new Image();
-      src.onload=()=>{
-        const iW=src.naturalWidth, iH=src.naturalHeight;
-        ctx.fillStyle='#f3f4f6';
-        ctx.fillRect(0,0,VW,VH);
-        const isDefault=(sc===1&&ox===0&&oy===0);
-        if(isDefault){
-          const coverSc=Math.max(VW/iW,VH/iH);
-          const dW=iW*coverSc, dH=iH*coverSc;
-          ctx.drawImage(src,(VW-dW)/2,(VH-dH)/2,dW,dH);
-        } else {
-          const sx=-ox/sc, sy=-oy/sc, sw=VW/sc, sh=VH/sc;
-          const csx=Math.max(0,sx), csy=Math.max(0,sy);
-          const csw=Math.min(sw,iW-csx), csh=Math.min(sh,iH-csy);
-          ctx.drawImage(src,csx,csy,csw,csh,(csx-sx)*sc,(csy-sy)*sc,csw*sc,csh*sc);
-        }
-        res();
-      };
-      src.onerror=res;
-      src.src=img.src;
-    });
-
-    snaps.push({el:vp,html:vp.innerHTML,origH:vp.style.height,origAR:vp.style.aspectRatio});
-
-    // Substitui por imagem estática com altura fixa em px (necessário para html2canvas)
-    const fixedH = Math.round(VW * 3/4 * scale);
-    vp.style.aspectRatio='unset';
-    vp.style.height=fixedH+'px';
-    vp.innerHTML=`<img src="${canvas.toDataURL('image/jpeg',.95)}"
-      style="width:100%;height:100%;object-fit:fill;display:block;">`;
-  }
-
-  /* ── 2. Garante que os grids de foto ficam lado a lado no PDF ── */
-  document.body.classList.add('pdf-mode');
-
-  // Força grid a ser table-like para html2canvas respeitar 2 colunas
-  const fotoGrids=[...document.querySelectorAll('.doc-foto-cols')];
-  fotoGrids.forEach(g=>{
-    g.style.cssText='display:table;width:100%;border-spacing:7px;border-collapse:separate;table-layout:fixed;';
-    [...g.children].forEach(box=>{
-      box.style.cssText='display:table-cell;width:50%;vertical-align:top;';
-    });
-  });
-
-  const opt={
-    margin:[0.3,0.3,0.3,0.3],
-    filename:nome,
-    image:{type:'jpeg',quality:.97},
-    html2canvas:{scale:2,useCORS:true,allowTaint:true,scrollY:0,logging:false,imageTimeout:25000},
-    jsPDF:{unit:'in',format:'a4',orientation:orient},
-    pagebreak:{mode:['css','avoid-all'],avoid:['.doc-foto-par','.doc-assinatura','.doc-info','.doc-footer']}
+    if(annot.type==='txt'){ return Math.abs(x-ax)<80&&Math.abs(y-ay)<20; }
+    return false;
   };
 
-  try{
-    await html2pdf().from(document.getElementById('documento')).set(opt).save();
-    toast('PDF gerado!');
-  }catch(err){
-    toast('Erro ao gerar PDF.');console.error(err);
+  let drawing=false, startX=0, startY=0, currentAnnot=null;
+
+  const onDown = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    if(!activePhoto || activePhoto.lado!==lado || activePhoto.id!==par.id) setGlobalFocus(lado, par.id);
+    const {x,y} = getPos(e); const s = getAnnotState(lado, par.id); const W = canvas.width, H = canvas.height;
+
+    if(s.tool==='sel'){
+      let found=-1; for(let i=s.annots.length-1;i>=0;i--){ if(hitTest(s.annots[i],x,y,W,H)){found=i;break;} }
+      s.selected=found;
+      if(found>=0){ s.dragging=true; const a=s.annots[found]; s.dragOff={x:x-a.x1*W, y:y-a.y1*H, x2:a.x2*W-a.x1*W, y2:a.y2*H-a.y1*H}; }
+      redrawAnnots(lado, par.id); return;
+    }
+
+    if(s.tool==='txt'){
+      const label = prompt('Texto da anotação:',''); if(!label) return;
+      s.annots.push({type:'txt',x1:x/W,y1:y/H,x2:(x+100)/W,y2:(y+20)/H,color:globalColor,text:label, size:globalSize});
+      s.selected=s.annots.length-1; saveAnnotsToPar(lado,par.id); redrawAnnots(lado,par.id); changed(); return;
+    }
+    drawing=true; startX=x; startY=y; currentAnnot={type:s.tool,x1:x/W,y1:y/H,x2:x/W,y2:y/H,color:globalColor, size:globalSize};
+  };
+
+  const onMove = (e) => {
+    e.preventDefault(); const {x,y} = getPos(e); const s = getAnnotState(lado, par.id); const W = canvas.width, H = canvas.height;
+    if(s.tool==='sel'&&s.dragging&&s.selected>=0){
+      const a=s.annots[s.selected]; const newX1=(x-s.dragOff.x)/W, newY1=(y-s.dragOff.y)/H;
+      a.x1=newX1; a.y1=newY1; a.x2=newX1+s.dragOff.x2/W; a.y2=newY1+s.dragOff.y2/H; redrawAnnots(lado,par.id); return;
+    }
+    if(!drawing||!currentAnnot) return;
+    currentAnnot.x2=x/W; currentAnnot.y2=y/H; redrawAnnots(lado,par.id,currentAnnot);
+  };
+
+  const onUp = (e) => {
+    const s = getAnnotState(lado, par.id);
+    if(s.tool==='sel'&&s.dragging){ s.dragging=false; saveAnnotsToPar(lado,par.id); changed(); return; }
+    if(!drawing||!currentAnnot) return;
+    drawing=false; const W=canvas.width,H=canvas.height; const dx=Math.abs(currentAnnot.x2-currentAnnot.x1)*W; const dy=Math.abs(currentAnnot.y2-currentAnnot.y1)*H;
+    if(dx>4||dy>4){ s.annots.push({...currentAnnot}); s.selected=s.annots.length-1; saveAnnotsToPar(lado,par.id); changed(); }
+    currentAnnot=null; redrawAnnots(lado,par.id); updatePointerEventsFor(lado,par.id);
+  };
+
+  canvas.addEventListener('mousedown',onDown); canvas.addEventListener('mousemove',onMove); canvas.addEventListener('mouseup',onUp);
+  canvas.addEventListener('touchstart',onDown,{passive:false}); canvas.addEventListener('touchmove',onMove,{passive:false}); canvas.addEventListener('touchend',onUp);
+  updatePointerEventsFor(lado,par.id); redrawAnnots(lado, par.id);
+}
+
+function drawAnnot(ctx, annot, W, H, selected=false){
+  const x1=annot.x1*W, y1=annot.y1*H, x2=annot.x2*W, y2=annot.y2*H;
+  const size = annot.size || 2.5;
+  ctx.save(); ctx.strokeStyle=annot.color; ctx.fillStyle=annot.color;
+  ctx.lineWidth=selected ? size + 1.5 : size;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  if(selected){ ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=6; }
+
+  if(annot.type==='rect'){ ctx.strokeRect(Math.min(x1,x2),Math.min(y1,y2),Math.abs(x2-x1),Math.abs(y2-y1)); } 
+  else if(annot.type==='circ'){ const rx=Math.abs(x2-x1)/2, ry=Math.abs(y2-y1)/2; ctx.beginPath(); ctx.ellipse((x1+x2)/2,(y1+y2)/2,rx,ry,0,0,Math.PI*2); ctx.stroke(); } 
+  else if(annot.type==='arr'){
+    const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1; const ux=dx/len, uy=dy/len;
+    const hw=size*2+5, hl=size*3+9;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2,y2); ctx.lineTo(x2-ux*hl+uy*hw, y2-uy*hl-ux*hw); ctx.lineTo(x2-ux*hl-uy*hw, y2-uy*hl+ux*hw); ctx.closePath(); ctx.fill();
+  } 
+  else if(annot.type==='txt'){
+    ctx.font=`bold ${size * 4 + 8}px IBM Plex Sans,sans-serif`;
+    ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=3;
+    ctx.fillText(annot.text, x1, y1 + (size * 4));
+  }
+  ctx.restore();
+}
+
+function redrawAnnots(lado, parId, preview=null){
+  const canvas = document.getElementById(`ac-${lado}-${parId}`); if(!canvas) return;
+  const W=canvas.width, H=canvas.height; const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,W,H);
+  const s=getAnnotState(lado,parId); s.annots.forEach((a,i)=>drawAnnot(ctx,a,W,H,i===s.selected));
+  if(preview) drawAnnot(ctx,preview,W,H,false);
+}
+
+/* ════════ IMPRIMIR / SALVAR PDF (CORRIGIDO) ════════ */
+async function imprimirPDF(){
+  closeGlobalTools(); // Fecha o modo de edição
+  salvarCache(true);
+
+  const viewports = [...document.querySelectorAll('.doc-foto-viewport')];
+  const snaps = [];
+  
+  console.log("[PDF] Total de viewports encontrados:", viewports.length);
+
+  for(const vp of viewports){
+    const img = vp.querySelector('img');
+    if(!img || !img.src) continue;
+
+    const VW = vp.offsetWidth || 340;
+    const VH = vp.offsetHeight || Math.round(VW * 3/4);
+    
+    const vpId = vp.id || '';
+    const parts = vpId.split('-');
+    const lado = parts[1];           // 'A' ou 'D'
+    const parId = parseInt(parts[2]);
+    const par = pares.find(p => p.id === parId);
+
+    let ox = 0, oy = 0, sc = 1;
+    if(par){
+      ox = lado === 'A' ? (par.antesOX || 0) : (par.depoisOX || 0);
+      oy = lado === 'A' ? (par.antesOY || 0) : (par.depoisOY || 0);
+      sc = lado === 'A' ? (par.antesScale || 1) : (par.depoisScale || 1);
+    }
+
+    const DPR = 2;
+    const canvas = document.createElement('canvas');
+    canvas.width = VW * DPR;
+    canvas.height = VH * DPR;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(DPR, DPR);
+
+    await new Promise(res => {
+      const src = new Image();
+      src.crossOrigin = "anonymous";
+      let resolved = false;
+
+      const handleLoad = () => {
+        if(resolved) return;
+        resolved = true;
+        try {
+          const iW = src.naturalWidth;
+          const iH = src.naturalHeight;
+          if(iW === 0 || iH === 0) { res(); return; }
+
+          // Fundo do viewport (mesmo cinza do preview)
+          ctx.fillStyle = '#f3f4f6';
+          ctx.fillRect(0, 0, VW, VH);
+
+          ctx.save();
+          ctx.translate(ox, oy);
+          ctx.scale(sc, sc);
+          ctx.drawImage(src, 0, 0);
+          ctx.restore();
+        } catch(err) {
+          console.error("Erro ao renderizar imagem no canvas", err);
+        } finally {
+          res();
+        }
+      };
+
+      src.onload = handleLoad;
+      src.onerror = () => { if(!resolved){ resolved=true; res(); } };
+      src.src = img.src;
+
+      // Fallback para imagens já em cache (data URLs)
+      setTimeout(() => {
+        if(!resolved && src.complete && src.naturalWidth > 0) handleLoad();
+      }, 0);
+    });
+
+    // Desenha as anotações por cima (já no canvas escalado)
+    if(par){
+      const annots = par[`annots_${lado}`] || [];
+      annots.forEach(a => drawAnnot(ctx, a, VW, VH, false));
+    }
+
+    // Guarda estado original para restaurar depois do print
+    snaps.push({
+      el: vp,
+      origHTML: vp.innerHTML,
+      origStyle: vp.getAttribute('style') || ''
+    });
+
+    const bakedSrc = canvas.toDataURL('image/jpeg', 0.95);
+    vp.removeAttribute('style');
+    vp.innerHTML = `<img src="${bakedSrc}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
   }
 
-  /* ── 3. Restaura tudo ── */
-  document.body.classList.remove('pdf-mode');
-
-  fotoGrids.forEach(g=>{
-    g.style.cssText='';
-    [...g.children].forEach(box=>{ box.style.cssText=''; });
+  // === CORREÇÃO CRÍTICA ===
+  // Garante que a ÚLTIMA imagem do par seja realmente renderizada antes do print
+  await new Promise(resolve => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve);   // double raf = paint garantido
+    });
   });
 
-  snaps.forEach(({el,html,origH,origAR})=>{
-    el.innerHTML=html;
-    el.style.height=origH;
-    el.style.aspectRatio=origAR||'4/3';
+  // Print
+  const toastEl = document.getElementById('toast');
+  const toastWas = toastEl.className;
+  toastEl.className = '';
+  window.print();
+  toastEl.className = toastWas;
+
+  // Restaura tudo (pan/zoom + canvases de anotação)
+  snaps.forEach(({ el, origHTML, origStyle }) => {
+    el.innerHTML = origHTML;
+    if(origStyle) el.setAttribute('style', origStyle);
+    else el.removeAttribute('style');
   });
 
-  const ordemIds=[...document.querySelectorAll('.foto-par')].map(el=>parseInt(el.id.replace('pe-','')));
-  ordemIds.map(id=>pares.find(p=>p.id===id)).filter(Boolean).forEach(par=>{
-    ['A','D'].forEach(lado=>{
-      const vp=document.getElementById(`vp-${lado}-${par.id}`);
-      if(vp) initPanZoom(vp,par,lado);
+  // Re-inicializa pan/zoom e canvases de anotação
+  const ordemIds = [...document.querySelectorAll('.foto-par')].map(el => parseInt(el.id.replace('pe-','')));
+  ordemIds.map(id => pares.find(p => p.id===id)).filter(Boolean).forEach(par => {
+    ['A','D'].forEach(lado => {
+      const vp = document.getElementById(`vp-${lado}-${par.id}`);
+      if(vp) initPanZoom(vp, par, lado);
+      const ac = document.getElementById(`ac-${lado}-${par.id}`);
+      if(ac) initAnnotCanvas(ac, par, lado);
     });
   });
 }
