@@ -155,7 +155,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .doc-info{margin-bottom:12px;border:1.5px solid var(--g9);border-radius:4px;overflow:hidden}
 .doc-info-title{background:var(--g9);color:white;padding:5px 11px;font-size:11px;font-weight:600;letter-spacing:.04em}
 .doc-info-grid{display:grid;grid-template-columns:1fr 1fr}
-.doc-info-cell{padding:6px 11px;display:flex;gap:5px;align-items:baseline}
+.doc-info-cell{padding:6px 11px;display:flex;gap:5px;align-items:baseline;border-right:1px solid var(--g3);border-bottom:1px solid var(--g3)}
+.doc-info-cell:nth-child(even){border-right:none}
+.doc-info-cell:nth-last-child(-n+2){border-bottom:none}
 .doc-info-key{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g5);white-space:nowrap}
 .doc-info-val{font-size:11px;font-weight:500;color:var(--g9);font-family:'IBM Plex Mono',monospace}
 
@@ -182,8 +184,10 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .doc-assinatura{page-break-inside:avoid;break-inside:avoid;margin-bottom:12px}
 .doc-assin-body{border:1px solid var(--g3);border-top:none;padding:22px 14px 10px;border-radius:0 0 3px 3px}
 .doc-assin-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.doc-assin-box{border-top:1.5px solid var(--g9);padding-top:4px}
-.doc-assin-lbl{font-size:9px;color:var(--g5)}
+.doc-assin-box{border-top:1.5px solid var(--g9);padding-top:8px;min-height:80px;display:flex;flex-direction:column;justify-content:space-between}
+.doc-assin-sig-area{height:60px;display:flex;align-items:center;justify-content:center}
+.doc-assin-sig-area img{max-height:58px;max-width:100%;object-fit:contain;display:block}
+.doc-assin-lbl{font-size:9px;color:var(--g5);margin-top:6px}
 .doc-assin-name{font-size:10px;font-weight:600;color:var(--g9);margin-top:2px;min-height:13px}
 
 /* rodapé */
@@ -202,7 +206,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 .badge-moderado{background:#fef9c3;color:#a16207;border:1px solid #fde047}
 .badge-grave{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
 .badge-sem{background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db}
-.doc-info-title-row{display:flex;align-items:center;justify-content:space-between;padding:5px 11px}
+.doc-info-title-row{display:flex;align-items:center;justify-content:space-between}
 .doc-info-title-row span.tit{font-size:11px;font-weight:600;letter-spacing:.04em;color:white}
 
 /* toast */
@@ -292,8 +296,21 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
 
   <div class="s-title">Assinaturas</div>
   <div class="f2">
-    <div class="field"><label>Responsável 1</label><input id="f-resp1" placeholder="Técnico" oninput="changed()"></div>
-    <div class="field"><label>Responsável 2</label><input id="f-resp2" placeholder="Cliente" oninput="changed()"></div>
+    <div class="field"><label>Responsável 1 (Técnico)</label><input id="f-resp1" placeholder="Nome do técnico" oninput="changed()"></div>
+    <div class="field"><label>Responsável 2 (Cliente)</label><input id="f-resp2" placeholder="Nome do cliente" oninput="changed()"></div>
+  </div>
+  <div class="field">
+    <label>Assinatura do Técnico</label>
+    <div class="bulk-zone" id="sig-zone" style="margin-bottom:0"
+      ondragover="event.preventDefault();this.classList.add('over')"
+      ondragleave="this.classList.remove('over')"
+      ondrop="onSigDrop(event)">
+      <input type="file" accept="image/*,application/pdf" onchange="uploadSig(event)">
+      <div id="sig-preview" style="display:none;margin-bottom:6px"><img id="sig-img" style="max-height:50px;max-width:100%;object-fit:contain"></div>
+      <div class="bz-icon">✍️</div>
+      <p>Clique ou arraste sua <strong>assinatura</strong><br>Imagem ou PDF</p>
+    </div>
+    <button onclick="removerSig()" style="margin-top:4px;width:100%;padding:5px;font-size:11px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);background:white;color:var(--red);cursor:pointer;">Remover assinatura</button>
   </div>
 
   <!-- INSTRUÇÃO SUBSTITUINDO O PAINEL ANTIGO -->
@@ -413,6 +430,56 @@ async function initApp() {
 }
 initApp();
 
+/* ════════ ASSINATURA DO TÉCNICO ════════ */
+window.sigData = null;
+
+function setSigPreview(data){
+  window.sigData = data;
+  const prev = document.getElementById('sig-preview');
+  const img = document.getElementById('sig-img');
+  if(data){ prev.style.display='block'; img.src=data; } 
+  else { prev.style.display='none'; img.src=''; }
+  atualizar(); changed();
+}
+
+async function uploadSig(e){
+  const file = e.target.files[0]; if(!file) return;
+  if(file.type === 'application/pdf'){
+    toast('Convertendo PDF de assinatura...');
+    // Renderiza primeira página do PDF via canvas usando pdf.js CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    script.onload = async () => {
+      const pdfjsLib = window['pdfjs-dist/build/pdf'];
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const ab = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({data: ab}).promise;
+      const page = await pdf.getPage(1);
+      const vp = page.getViewport({scale: 2});
+      const canvas = document.createElement('canvas');
+      canvas.width = vp.width; canvas.height = vp.height;
+      await page.render({canvasContext: canvas.getContext('2d'), viewport: vp}).promise;
+      setSigPreview(canvas.toDataURL('image/png'));
+      toast('Assinatura carregada!');
+    };
+    document.head.appendChild(script);
+  } else {
+    const r = new FileReader();
+    r.onload = e => { setSigPreview(e.target.result); toast('Assinatura carregada!'); };
+    r.readAsDataURL(file);
+  }
+}
+
+function onSigDrop(e){
+  e.preventDefault();
+  document.getElementById('sig-zone').classList.remove('over');
+  const file = e.dataTransfer.files[0]; if(!file) return;
+  const fakeEvent = {target:{files:[file]}};
+  uploadSig(fakeEvent);
+}
+
+function removerSig(){ setSigPreview(null); toast('Assinatura removida.'); }
+
 /* ════════ TOAST ════════ */
 function toast(msg, dur=2400){
   const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
@@ -436,6 +503,7 @@ function salvarCache(silencioso=false){
       modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),
       tag:v('f-tag'),cliente:v('f-cliente'),descricao:v('f-descricao'),
       resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),
+      sigData: window.sigData||null,
       pares: pares.map(p=>({
         id:p.id,antesData:p.antesData,depoisData:p.depoisData, caption:p.caption,
         antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
@@ -471,6 +539,7 @@ function carregarCache(){
       criarParDOM(p.id); syncThumbs(p.id);
     });
     renumerar(); badge('✓ Cache carregado','saved');
+    if(d.sigData) setSigPreview(d.sigData);
   }catch(e){console.warn('Cache inválido',e);}
 }
 function v(id){return document.getElementById(id)?.value||'';}
@@ -969,8 +1038,16 @@ function atualizar(){
         <div class="doc-sec-title">Assinaturas</div>
         <div class="doc-assin-body">
           <div class="doc-assin-grid">
-            <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Técnico</div><div class="doc-assin-name">${resp1}</div></div>
-            <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Cliente</div><div class="doc-assin-name">${resp2}</div></div>
+            <div class="doc-assin-box">
+              <div class="doc-assin-sig-area">${window.sigData?`<img src="${window.sigData}">`:'&nbsp;'}</div>
+              <div class="doc-assin-lbl">Responsável / Técnico</div>
+              <div class="doc-assin-name">${resp1}</div>
+            </div>
+            <div class="doc-assin-box">
+              <div class="doc-assin-sig-area">&nbsp;</div>
+              <div class="doc-assin-lbl">Responsável / Cliente</div>
+              <div class="doc-assin-name">${resp2}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -989,7 +1066,8 @@ function atualizar(){
 function limpar(){
   if(!confirm('Limpar tudo? Isso também apaga o cache salvo.'))return;
   localStorage.removeItem(CACHE_KEY);
-  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2','f-condicao'].forEach(id=>{document.getElementById(id).value='';});
+  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2','f-condicao'].forEach(id=>{document.getElementById(id).value='';
+  removerSig();});
   document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
   pares=[];parCounter=0;galeria=[];galeriaCounter=0; activePhoto=null;
   closeGlobalTools();
