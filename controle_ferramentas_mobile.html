@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#ff7a00">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ferramentas">
+    <link rel="manifest" id="pwa-manifest">
+    <title>Controle de Ferramentas - Tradimaq</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        :root {
+            --brand: #ff7a00;
+            --brand-dark: #d96500;
+            --brand-soft: #fff3e8;
+            --gray-900: #1a1a1a;
+            --gray-700: #374151;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --green: #16a34a;
+            --green-soft: #dcfce7;
+            --red: #dc2626;
+            --red-soft: #fee2e2;
+            --blue: #2563eb;
+            --radius: 8px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --bottom-bar: 64px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            font-size: 14px;
+            line-height: 1.5;
+            padding-bottom: var(--bottom-bar);
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            border-bottom: 3px solid var(--brand);
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 52px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        header .logo-area { display: flex; align-items: center; gap: 10px; }
+        header img { height: 24px; }
+        header .title { font-size: 11px; font-weight: 600; color: var(--gray-500); letter-spacing: 0.08em; text-transform: uppercase; }
+        .header-right { display: flex; align-items: center; gap: 8px; }
+        #loadingIndicator { display: none; align-items: center; gap: 6px; font-size: 12px; color: var(--brand); }
+        #offlineBadge { display: none; font-size: 10px; font-weight: 600; background: var(--gray-700); color: white; padding: 2px 8px; border-radius: 99px; }
+        .spinner { width: 14px; height: 14px; border: 2px solid var(--brand-soft); border-top-color: var(--brand); border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 12px 12px 0; }
+
+        /* DASHBOARD */
+        .dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+        @media (max-width: 480px) { .dashboard { grid-template-columns: repeat(2, 1fr); } }
+        .card { background: white; border-radius: var(--radius); padding: 10px 12px; box-shadow: var(--shadow); border-top: 3px solid var(--gray-300); }
+        .card.brand { border-top-color: var(--brand); }
+        .card.green { border-top-color: var(--green); }
+        .card.red   { border-top-color: var(--red); }
+        .card.blue  { border-top-color: var(--blue); }
+        .card-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-500); margin-bottom: 2px; }
+        .card-value { font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 500; line-height: 1; }
+        .card.green .card-value { color: var(--green); }
+        .card.red   .card-value { color: var(--red); }
+
+        /* PROGRESS */
+        .progress-section { background: white; border-radius: var(--radius); padding: 10px 14px; margin-bottom: 8px; box-shadow: var(--shadow); display: none; }
+        .progress-section.visible { display: block; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-500); margin-bottom: 5px; }
+        .progress-bar { height: 6px; background: var(--gray-100); border-radius: 99px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.4s ease; }
+
+        /* PANEL */
+        .panel { background: white; border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); margin-bottom: 8px; }
+        .panel-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-500); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-100); }
+        .fields-grid { display: grid; gap: 8px; grid-template-columns: 1fr 1fr 1fr; }
+        @media (max-width: 600px) { .fields-grid { grid-template-columns: 1fr; } }
+        .field label { display: block; font-size: 11px; font-weight: 600; color: var(--gray-700); margin-bottom: 3px; }
+        .field input {
+            width: 100%; padding: 10px; font-size: 16px;
+            font-family: inherit; border: 1px solid var(--gray-300);
+            border-radius: var(--radius); color: var(--gray-900);
+            background: white; outline: none; transition: border-color 0.15s;
+        }
+        .field input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(255,122,0,0.1); }
+
+        /* PRESETS */
+        .preset-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .preset-label { font-size: 11px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; }
+        .btn-preset { padding: 8px 16px; font-size: 13px; font-family: inherit; font-weight: 500; border: 1px solid var(--gray-300); background: white; border-radius: var(--radius); cursor: pointer; color: var(--gray-700); transition: all 0.15s; min-height: 44px; }
+        .btn-preset:active { opacity: 0.8; }
+        .btn-preset.active { background: var(--brand); border-color: var(--brand); color: white; }
+
+        /* SEARCH */
+        .search-wrap { position: relative; margin-bottom: 8px; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-500); font-size: 14px; pointer-events: none; }
+        #busca { width: 100%; padding: 12px 12px 12px 36px; font-size: 16px; font-family: inherit; border: 1.5px solid var(--brand); border-radius: var(--radius); outline: none; background: white; }
+        #busca:focus { box-shadow: 0 0 0 3px rgba(255,122,0,0.12); }
+
+        /* BACKUP */
+        .backup-section { background: var(--gray-50); border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px; display: none; }
+        .backup-section.open { display: block; }
+        .backup-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+        .backup-row input { flex: 1; min-width: 160px; padding: 9px 10px; font-size: 13px; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray-300); border-radius: var(--radius); background: white; outline: none; }
+        .backup-row input:focus { border-color: var(--brand); }
+        .btn-sm { padding: 9px 14px; font-size: 12px; font-family: inherit; font-weight: 600; border: 1px solid var(--gray-300); background: white; border-radius: var(--radius); cursor: pointer; color: var(--gray-700); transition: all 0.15s; white-space: nowrap; min-height: 44px; }
+        .btn-sm.primary { background: var(--brand); border-color: var(--brand); color: white; }
+
+        /* TABLE */
+        .table-wrap { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: var(--gray-700); }
+        th { padding: 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: white; text-align: left; background: var(--gray-700); }
+        td { padding: 11px 10px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--gray-50); }
+        tr.row-ok td { background: #f0fdf4 !important; }
+
+        /* Mobile: esconde colunas secundárias */
+        @media (max-width: 540px) {
+            .col-code, .td-code { display: none; }
+            .col-qty,  .td-qty  { display: none; }
+            td { padding: 13px 10px; }
+        }
+
+        .col-check  { width: 40px; }
+        .col-code   { width: 120px; }
+        .col-qty    { width: 80px; }
+        .col-status { width: 100px; }
+        .col-action { width: 90px; }
+
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 99px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+        .badge-ok       { background: var(--green-soft); color: #15803d; }
+        .badge-pendente { background: var(--red-soft);   color: #b91c1c; }
+
+        .btn-action { padding: 7px 12px; font-size: 12px; font-weight: 600; font-family: inherit; border: 1px solid var(--gray-300); border-radius: var(--radius); cursor: pointer; background: white; color: var(--gray-700); min-height: 36px; white-space: nowrap; transition: all 0.15s; }
+        .btn-action.entregar { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+        .btn-action.estornar { border-color: var(--gray-400); color: var(--gray-500); }
+
+        input[type="checkbox"] { accent-color: var(--brand); width: 20px; height: 20px; cursor: pointer; }
+        input.qty-input { width: 58px; padding: 5px 6px; font-size: 14px; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray-300); border-radius: var(--radius); text-align: center; outline: none; }
+        input.qty-input:focus { border-color: var(--brand); }
+
+        .empty-state { text-align: center; padding: 40px; color: var(--gray-500); }
+        .empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+
+        /* BOTTOM BAR */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--gray-300); padding: 8px 12px; display: flex; gap: 6px; z-index: 200; box-shadow: 0 -2px 12px rgba(0,0,0,0.08); }
+        .btn-bar { flex: 1; height: 46px; font-size: 13px; font-family: inherit; font-weight: 600; border: none; border-radius: var(--radius); cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; transition: opacity 0.15s; }
+        .btn-bar:active { opacity: 0.8; }
+        .btn-bar.pdf   { background: #dc2626; }
+        .btn-bar.excel { background: #16a34a; }
+        .btn-bar.more  { background: var(--gray-700); flex: 0 0 46px; font-size: 20px; }
+
+        /* SHEET */
+        .sheet-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 300; }
+        .sheet-backdrop.open { display: flex; align-items: flex-end; }
+        .sheet { width: 100%; background: white; border-radius: 16px 16px 0 0; padding: 16px 12px 40px; transform: translateY(0); }
+        .sheet-handle { width: 36px; height: 4px; background: var(--gray-300); border-radius: 99px; margin: 0 auto 16px; }
+        .sheet-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-500); margin-bottom: 12px; }
+        .sheet-btn { width: 100%; padding: 14px 16px; font-size: 14px; font-family: inherit; font-weight: 500; border: none; background: var(--gray-50); border-radius: var(--radius); cursor: pointer; color: var(--gray-900); display: flex; align-items: center; gap: 12px; margin-bottom: 6px; text-align: left; }
+        .sheet-btn:active { background: var(--gray-100); }
+        .sheet-btn .icon { font-size: 18px; width: 24px; text-align: center; }
+        .sheet-btn.danger { color: var(--red); }
+
+        /* TOAST */
+        #toast { position: fixed; bottom: calc(var(--bottom-bar) + 12px); left: 50%; transform: translateX(-50%) translateY(8px); background: var(--gray-900); color: white; padding: 10px 18px; border-radius: 99px; font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; max-width: 90vw; }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-area">
+        <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq">
+        <span class="title">Ferramentas</span>
+    </div>
+    <div class="header-right">
+        <span id="offlineBadge">OFFLINE</span>
+        <div id="loadingIndicator"><div class="spinner"></div><span>Carregando...</span></div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="dashboard">
+        <div class="card brand"><div class="card-label">Total</div><div class="card-value" id="totalFerramentas">0</div></div>
+        <div class="card blue"><div class="card-label">Selecionadas</div><div class="card-value" id="totalSelecionado">0</div></div>
+        <div class="card green"><div class="card-label">Devolvidas</div><div class="card-value" id="totalOK">0</div></div>
+        <div class="card red"><div class="card-label">Pendentes</div><div class="card-value" id="totalPendentes">0</div></div>
+    </div>
+
+    <div class="progress-section" id="progressSection">
+        <div class="progress-label"><span>Progresso de devolução</span><span id="progressText">0 / 0</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Dados da operação</div>
+        <div class="fields-grid">
+            <div class="field"><label>Data</label><input type="date" id="data"></div>
+            <div class="field"><label>Mecânico / Técnico</label><input id="mecanico" placeholder="Nome completo..." autocomplete="name"></div>
+            <div class="field"><label>Responsável</label><input id="responsavel" placeholder="Quem acompanha..."></div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title">Lista de ferramentas</div>
+        <div class="preset-row">
+            <span class="preset-label">Preset:</span>
+            <button class="btn-preset active" id="preset-geral" onclick="limparPreset(this)">Lista Geral</button>
+            <button class="btn-preset" id="preset-campo" onclick="aplicarPreset('campo', this)">Técnico Campo</button>
+            <button class="btn-preset" id="preset-ajudante" onclick="aplicarPreset('ajudante', this)">Técnico Ajudante</button>
+        </div>
+    </div>
+
+    <div class="backup-section" id="backupSection">
+        <div class="backup-row">
+            <input id="codigoSave" placeholder="Código de backup...">
+            <button class="btn-sm primary" onclick="gerarCodigo()">Gerar</button>
+            <button class="btn-sm" onclick="carregarCodigo()">Carregar</button>
+            <button class="btn-sm" onclick="copiarCodigo()">Copiar</button>
+        </div>
+    </div>
+
+    <div class="search-wrap">
+        <span class="search-icon">🔎</span>
+        <input id="busca" placeholder="Buscar por código ou descrição..." autocomplete="off" autocorrect="off" spellcheck="false">
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+                    <th class="col-code">Código</th>
+                    <th>Descrição</th>
+                    <th class="col-qty">Qtd</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-action">Ação</th>
+                </tr>
+            </thead>
+            <tbody id="tabela">
+                <tr><td colspan="6"><div class="empty-state"><div class="icon">⏳</div><p>Carregando banco de dados...</p></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="bottom-bar">
+    <button class="btn-bar pdf"   onclick="gerarPDF()">⬇ PDF</button>
+    <button class="btn-bar excel" onclick="gerarExcel()">⬇ Excel</button>
+    <button class="btn-bar more"  onclick="abrirSheet()">⋯</button>
+</div>
+
+<div class="sheet-backdrop" id="sheetBackdrop" onclick="fecharSheet()">
+    <div class="sheet" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Mais opções</div>
+        <button class="sheet-btn" onclick="toggleFiltroSelecionados(); fecharSheet()">
+            <span class="icon">👁</span><span id="btnFiltrarLabel">Ver Selecionados</span>
+        </button>
+        <button class="sheet-btn" onclick="toggleBackup(); fecharSheet()">
+            <span class="icon">💾</span> Backup / Restaurar
+        </button>
+        <button class="sheet-btn danger" onclick="limparTudo(); fecharSheet()">
+            <span class="icon">🗑</span> Limpar Seleção
+        </button>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+    document.getElementById("data").value = new Date().toISOString().split("T")[0];
+
+    let ferramentas = [], filtrado = [], bancoBase = [];
+    let selectedCodes = new Map();
+    let apenasSelecioandos = false;
+
+    const PRESETS = {
+        ajudante: new Set(["4.09.000026610","4.09.000029125","4.09.000029487","4.09.000029205","4.09.000029220","4.09.000029200","4.09.000029210","4.09.000029240","4.09.000029230","4.09.000029010","4.09.000029400","4.09.000001007","4.09.000002553","4.09.000002562","4.09.000002563","4.09.000002564","4.09.000002566","4.09.000002572","4.09.000003553","4.09.000003502","4.09.000003504","4.09.000003505","4.09.000003506","4.09.000036320","4.09.000036310","4.09.000036330","4.09.000036410","4.09.000036130","4.09.000036100","4.09.000036030","4.09.000036070","4.09.000036250","4.09.000004551","4.09.000004505","4.09.000004559","4.09.000004509","4.09.000004552","4.09.000025053","4.09.000025051","4.09.000025050","4.09.000006052","4.09.00000006051","4.09.000000057","4.09.00986450778","4.09.00D19TPZ","4.09.000206340","4.09.000000439","4.09.00000050145","4.09.000037030","4.09.000038210","4.09.000038220","4.09.000038230","4.09.000038240","4.09.000038250","4.09.000038260","4.09.00000038104","4.09.0L516CME"]),
+        campo: new Set(["4.09.000026610","4.09.000029125","4.09.000029487","4.09.000029205","4.09.000029220","4.09.000029200","4.09.000029210","4.09.000029240","4.09.000029230","4.09.000029010","4.09.000029400","4.09.000039001","4.09.000017110","4.09.000006925","4.09.000000007","4.09.000001002","4.09.000028006","4.09.000028202","4.09.000012061","4.09.000012057","4.09.000012053","4.09.000012055","4.09.000012054","4.09.000012056","4.09.000012058","4.09.000012059","4.09.000012060","4.09.000012062","4.09.000012004","4.09.000012005","4.09.000012006","4.09.000012007","4.09.000012009","4.09.000012011","4.09.000012013","4.09.000012014","4.09.000012012","4.09.00000012016","4.09.000012017","4.09.000012002","4.09.000012052","4.09.000012065","4.09.000012008","4.09.000012010","4.09.000012209","4.09.000002501","4.09.000002502","4.09.000002503","4.09.000002504","4.09.000002505","4.09.000002506","4.09.000002507","4.09.000002508","4.09.000002509","4.09.000002510","4.09.000002511","4.09.000002512","4.09.000002513","4.09.000002514","4.09.000067915","4.09.000002516","4.09.000002517","4.09.000002518","4.09.000002519","4.09.000002520","4.09.000002521","4.09.000002522","4.09.00000000496","4.09.00000002539","4.09.000002524","4.09.000002525","4.09.000002551","4.09.000002552","4.09.000002553","4.09.000002554","4.09.000002555","4.09.000002556","4.09.000002557","4.09.000002558","4.09.000002559","4.09.000002561","4.09.000002562","4.09.000002563","4.09.000002564","4.09.000002565","4.09.000002566","4.09.000002568","4.09.000002572","4.09.000002569","4.09.000002560","4.09.000002526","4.09.000026280","4.09.000026270","4.09.000003553","4.09.000003502","4.09.000003504","4.09.000003505","4.09.000003506","4.09.000036320","4.09.000036290","4.09.000036324","4.09.000036308","4.09.000036310","4.09.000036330","4.09.000036410","4.09.000036130","4.09.000036100","4.09.000036030","4.09.000036070","4.09.000036250","4.09.000004562","4.09.000004553","4.09.000004551","4.09.000004504","4.09.000004505","4.09.000004559","4.09.000004507","4.09.000004560","4.09.000004509","4.09.000004511","4.09.000004513","4.09.000004514","4.09.000004515","4.09.000004516","4.09.000004517","4.09.000004518","4.09.000004558","4.09.000004552","4.09.000004555","4.09.000004501","4.09.000004502","4.09.000024603","4.09.000024604","4.09.000024605","4.09.000024606","4.09.000024607","4.09.000024608","4.09.000024609","4.09.000024610","4.09.000032295","4.09.000032210","4.09.000006001","4.09.00000006003","4.09.000006004","4.09.00000006051","4.09.000006052","4.09.000025052","4.09.000025001","4.09.000025002","4.09.000025003","4.09.000025004","4.09.000025005","4.09.000025006","4.09.000025008","4.09.000025010","4.09.000025051","4.09.000025053","4.09.000000470","4.09.000206340","4.09.000017120","4.09.000000439","4.09.000015230","4.09.00000015240","4.09.00000015250","4.09.00000015300","4.09.00000015270","4.09.00000015005","4.09.00000015006","4.09.00000015007","4.09.000019008","4.09.000019009","4.09.000019010","4.09.000019011","4.09.000019012","4.09.000019013","4.09.000019014","4.09.000017467","4.09.000015016","4.09.00000015017","4.09.00000015018","4.09.000021006","4.09.00000015020","4.09.000019022","4.09.00000015022","4.09.000019025","4.09.000019027","4.09.00000001938","4.09.00000019716","4.09.00000001912","4.09.00000019916","4.09.00000191932","4.09.00000001958","4.09.00000191116","4.09.00000001934","4.09.00000192532","4.09.00000191316","4.09.00000001978","4.09.00000192932","4.09.00000191516","4.09.00000000191","4.09.00000015067","4.09.00000015068","4.09.00000015069","4.09.00000015070","4.09.00000013200","4.09.00000013220","4.09.00000013250","4.09.00000013270","4.09.00000013230","4.09.00000013001","4.09.00000013002","4.09.00000013003","4.09.00000013004","4.09.00000013005","4.09.00000013006","4.09.00000013007","4.09.00000013008","4.09.00000013009","4.09.00000013010","4.09.00000013011","4.09.00000100000","4.09.000000319","4.09.000000424","4.09.00000031996","4.09.000000016","4.09.000000014","4.09.0000M3005","4.09.0000M4007","4.09.0000M5008","4.09.00000M601","4.09.000M80125","4.09.00000015220","4.09.00000050145","4.09.000037030","4.09.000000425","4.09.0530109B1","4.09.000000107","4.09.000038001","4.09.000038002","4.09.000038210","4.09.000038220","4.09.000038230","4.09.000038240","4.09.000038250","4.09.000038260","4.09.00000015755","4.09.000015156","4.09.000000699","4.09.00000017458","4.09.00000017402","4.09.00000017009","4.09.000017407","4.09.00000017418","4.09.00000038104","4.09.0L516CME","4.09.00000000343","4.09.00000000344","4.09.00000000345","4.09.00000000346","4.09.00000000347","4.09.00000000348","4.09.00000000349","4.09.00000000350","4.09.00000000351","4.09.00000079452","4.09.00000079453","4.09.00000012500","4.09.000003219"])
+    };
+
+    function normalizeStr(str) { return str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+    function showLoading(show) { document.getElementById("loadingIndicator").style.display = show ? "flex" : "none"; }
+    function showToast(msg, dur = 2500) {
+        const t = document.getElementById("toast");
+        t.textContent = msg; t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), dur);
+    }
+
+    // Sheet
+    function abrirSheet()  { document.getElementById("sheetBackdrop").classList.add("open"); }
+    function fecharSheet() { document.getElementById("sheetBackdrop").classList.remove("open"); }
+    function toggleBackup(){ document.getElementById("backupSection").classList.toggle("open"); }
+
+    // Carregar JSON com cache offline
+    const CACHE_KEY = 'tradimaq_ferramentas_v1';
+
+    async function carregarCSV() {
+        showLoading(true);
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            try {
+                const data = JSON.parse(cached);
+                ferramentas = data; bancoBase = [...data]; filtrado = [...data];
+                render(); showLoading(false);
+                fetchJSON().catch(() => document.getElementById("offlineBadge").style.display = "inline");
+                return;
+            } catch(e) {}
+        }
+        try {
+            const data = await fetchJSON();
+            ferramentas = data; bancoBase = [...data]; filtrado = [...data];
+            render();
+        } catch(e) {
+            document.getElementById("tabela").innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">⚠️</div><p>Sem conexão e sem cache. Conecte-se uma vez para ativar o modo offline.</p></div></td></tr>`;
+            document.getElementById("offlineBadge").style.display = "inline";
+        } finally { showLoading(false); }
+    }
+
+    async function fetchJSON() {
+        const r = await fetch('https://gaberoviva-cloud.github.io/Data/ferramentas.json');
+        if (!r.ok) throw new Error();
+        const data = await r.json();
+        const lista = data.map(i => ({ codigo: String(i.codigo).trim(), descricao: String(i.descricao).trim() }));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(lista));
+        return lista;
+    }
+
+    // Presets
+    function aplicarPreset(nome, btnEl) {
+        setActivePreset(btnEl);
+        const codigos = PRESETS[nome];
+        ferramentas = bancoBase.filter(f => codigos.has(f.codigo));
+        filtrado = [...ferramentas];
+        document.getElementById("busca").value = "";
+        render();
+        showToast(`Preset "${btnEl.textContent}" — ${ferramentas.length} ferramentas`);
+    }
+    function setActivePreset(btn) { document.querySelectorAll(".btn-preset").forEach(b => b.classList.remove("active")); if (btn) btn.classList.add("active"); }
+    function limparPreset(btnEl) {
+        ferramentas = [...bancoBase]; filtrado = [...bancoBase];
+        document.getElementById("busca").value = "";
+        setActivePreset(btnEl || document.getElementById("preset-geral"));
+        render();
+    }
+
+    // Filtros
+    function toggleFiltroSelecionados() {
+        apenasSelecioandos = !apenasSelecioandos;
+        document.getElementById("btnFiltrarLabel").textContent = apenasSelecioandos ? "Ver Todos" : "Ver Selecionados";
+        aplicarBusca();
+    }
+    function aplicarBusca() {
+        const termo = normalizeStr(document.getElementById('busca').value);
+        let base = ferramentas.filter(f => normalizeStr(f.codigo).includes(termo) || normalizeStr(f.descricao).includes(termo));
+        if (apenasSelecioandos) base = base.filter(f => selectedCodes.has(f.codigo));
+        filtrado = base; render();
+    }
+
+    // Render
+    function render() {
+        const tabela = document.getElementById("tabela");
+        tabela.innerHTML = "";
+        if (filtrado.length === 0) {
+            const msg = apenasSelecioandos ? "Nenhuma ferramenta selecionada ainda." : "Nenhuma ferramenta encontrada.";
+            tabela.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">🔍</div><p>${msg}</p></div></td></tr>`;
+            atualizarDashboard(); return;
+        }
+        const fragment = document.createDocumentFragment();
+        filtrado.forEach(f => {
+            const tr = document.createElement("tr");
+            const entry = selectedCodes.get(f.codigo);
+            const isSelected = !!entry;
+            const status = entry ? entry.status : null;
+            const qty = entry ? entry.qty : 1;
+            if (isSelected && status === 1) tr.classList.add("row-ok");
+            const statusHtml = isSelected ? (status === 1 ? '<span class="badge badge-ok">✔ OK</span>' : '<span class="badge badge-pendente">✘ Pendente</span>') : '<span style="color:var(--gray-300)">—</span>';
+            const actionHtml = isSelected ? (status === 1 ? `<button class="btn-action estornar" onclick="toggleStatus('${f.codigo}')">Estornar</button>` : `<button class="btn-action entregar" onclick="toggleStatus('${f.codigo}')">Entregar</button>`) : '';
+            const qtyHtml = isSelected ? `<input class="qty-input" type="number" min="1" value="${qty}" onchange="updateQty('${f.codigo}', this.value)">` : '<span style="color:var(--gray-300)">—</span>';
+            tr.innerHTML = `
+                <td><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect(this, '${f.codigo}')"></td>
+                <td class="td-code" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray-500)">${f.codigo}</td>
+                <td style="font-size:13px">${f.descricao}</td>
+                <td class="td-qty">${qtyHtml}</td>
+                <td>${statusHtml}</td>
+                <td>${actionHtml}</td>`;
+            fragment.appendChild(tr);
+        });
+        tabela.appendChild(fragment);
+        atualizarDashboard();
+        const allChecked = filtrado.length > 0 && filtrado.every(f => selectedCodes.has(f.codigo));
+        const sa = document.getElementById("selectAll");
+        if (sa) sa.checked = allChecked;
+    }
+
+    function toggleSelect(checkbox, code) {
+        if (checkbox.checked) selectedCodes.set(code, { status: 0, qty: 1 });
+        else selectedCodes.delete(code);
+        if (apenasSelecioandos) aplicarBusca(); else render();
+    }
+    function updateQty(code, value) {
+        const e = selectedCodes.get(code);
+        if (e) { e.qty = Math.max(1, parseInt(value) || 1); selectedCodes.set(code, e); }
+    }
+    function toggleStatus(code) {
+        const e = selectedCodes.get(code);
+        if (e) { e.status = e.status === 0 ? 1 : 0; selectedCodes.set(code, e); }
+        render();
+    }
+    function toggleAll(cb) {
+        const checked = cb.checked;
+        const sa = document.getElementById("selectAll");
+        if (sa) sa.checked = checked;
+        filtrado.forEach(f => {
+            if (checked) { if (!selectedCodes.has(f.codigo)) selectedCodes.set(f.codigo, { status: 0, qty: 1 }); }
+            else selectedCodes.delete(f.codigo);
+        });
+        if (apenasSelecioandos) aplicarBusca(); else render();
+    }
+
+    function atualizarDashboard() {
+        let ok = 0, pendentes = 0;
+        selectedCodes.forEach(e => { if (e.status === 1) ok++; else pendentes++; });
+        const total = selectedCodes.size;
+        document.getElementById("totalFerramentas").textContent = ferramentas.length;
+        document.getElementById("totalSelecionado").textContent = total;
+        document.getElementById("totalOK").textContent = ok;
+        document.getElementById("totalPendentes").textContent = pendentes;
+        const ps = document.getElementById("progressSection");
+        if (total > 0) {
+            ps.classList.add("visible");
+            const pct = Math.round((ok / total) * 100);
+            document.getElementById("progressFill").style.width = pct + "%";
+            document.getElementById("progressText").textContent = `${ok} de ${total} devolvidas (${pct}%)`;
+        } else ps.classList.remove("visible");
+    }
+
+    // Backup
+    function gerarCodigo() {
+        let entries = [];
+        selectedCodes.forEach((e, code) => entries.push(`${code}:${e.status}:${e.qty}`));
+        document.getElementById("codigoSave").value = btoa(unescape(encodeURIComponent(entries.join("|"))));
+        showToast("Código de backup gerado!");
+    }
+    function carregarCodigo() {
+        try {
+            const texto = decodeURIComponent(escape(atob(document.getElementById("codigoSave").value.trim())));
+            selectedCodes.clear();
+            texto.split("|").forEach(p => { const [code, status, qty] = p.split(":"); if (code) selectedCodes.set(code, { status: parseInt(status)||0, qty: parseInt(qty)||1 }); });
+            render(); showToast("Backup carregado!");
+        } catch { showToast("Código inválido."); }
+    }
+    function copiarCodigo() {
+        const input = document.getElementById("codigoSave");
+        if (!input.value) { showToast("Gere um código primeiro."); return; }
+        navigator.clipboard.writeText(input.value).then(() => showToast("Código copiado!"));
+    }
+    function limparTudo() { if (confirm("Limpar toda a seleção atual?")) { selectedCodes.clear(); render(); } }
+
+    // Exportar
+    function validarCampos() {
+        const m = document.getElementById("mecanico").value.trim();
+        if (!m) { showToast("⚠️ Informe o mecânico."); document.getElementById("mecanico").focus(); return false; }
+        if (selectedCodes.size === 0) { showToast("⚠️ Nenhuma ferramenta selecionada."); return false; }
+        return true;
+    }
+
+    function gerarPDF() {
+        if (!validarCampos()) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        const dataDoc = document.getElementById("data").value;
+        const mecanico = document.getElementById("mecanico").value.trim();
+        const responsavel = document.getElementById("responsavel").value.trim() || "---";
+        doc.setFontSize(16); doc.setFont("helvetica","bold");
+        doc.text("RELATÓRIO DE MOVIMENTAÇÃO DE FERRAMENTAS", 14, 20);
+        doc.setFontSize(9); doc.setFont("helvetica","normal"); doc.setTextColor(100);
+        doc.text(`Mecânico: ${mecanico.toUpperCase()}`, 14, 30);
+        doc.text(`Data: ${dataDoc.split('-').reverse().join('/')}`, 14, 35);
+        doc.text(`Responsável: ${responsavel}`, 14, 40);
+        doc.setTextColor(0);
+        const dadosTabela = [];
+        selectedCodes.forEach((entry, code) => {
+            const f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
+            dadosTabela.push([code, f ? f.descricao : "Desconhecida", entry.qty, entry.status === 1 ? "OK" : "PENDENTE"]);
+        });
+        doc.autoTable({ startY: 46, head: [["Código","Descrição","Qtd","Status"]], body: dadosTabela,
+            headStyles: { fillColor: [255,122,0], fontSize: 9, fontStyle: "bold" },
+            bodyStyles: { fontSize: 9 }, columnStyles: { 2: { halign: 'center' } },
+            didDrawCell: (data) => {
+                if (data.section === 'body' && data.column.index === 3) {
+                    data.cell.styles.textColor = data.cell.raw === 'PENDENTE' ? [180,0,0] : [22,163,74];
+                    data.cell.styles.fontStyle = "bold";
+                }
+            }
+        });
+        const finalY = doc.lastAutoTable.finalY + 30;
+        doc.line(14, finalY, 90, finalY);
+        doc.setFontSize(8); doc.text("Assinatura do Mecânico", 14, finalY + 5);
+        doc.save(`Controle_${mecanico.replace(/ /g,'_')}.pdf`);
+        showToast("PDF gerado!");
+    }
+
+    function gerarExcel() {
+        if (!validarCampos()) return;
+        const mecanico = document.getElementById("mecanico").value.trim();
+        const lista = [];
+        selectedCodes.forEach((entry, code) => {
+            const f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
+            lista.push([code, f ? f.descricao : "", entry.qty, entry.status === 1 ? "OK" : "PENDENTE"]);
+        });
+        const dados = [["Mecânico:", mecanico],["Data:", document.getElementById("data").value],["Responsável:", document.getElementById("responsavel").value],[],["Código","Descrição","Qtd","Status"]].concat(lista);
+        const ws = XLSX.utils.aoa_to_sheet(dados);
+        ws['!cols'] = [{wch:15},{wch:45},{wch:8},{wch:12}];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Ferramentas");
+        XLSX.writeFile(wb, `controle_${mecanico.replace(/ /g,'_')}.xlsx`);
+        showToast("Excel gerado!");
+    }
+
+    document.getElementById("busca").addEventListener("input", aplicarBusca);
+
+    // PWA Manifest inline
+    const manifest = { name:"Controle de Ferramentas — Tradimaq", short_name:"Ferramentas", start_url:"./", display:"standalone", background_color:"#f3f4f6", theme_color:"#ff7a00", icons:[{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"192x192",type:"image/png"},{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"512x512",type:"image/png"}] };
+    document.getElementById('pwa-manifest').href = URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
+
+    // Service Worker para PWA offline
+    if ('serviceWorker' in navigator) {
+        const swCode = `
+const CACHE='tradimaq-v1';
+const ASSETS=['./',
+'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js',
+'https://gaberoviva-cloud.github.io/Data/ferramentas.json'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>{})));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(r=>{const cl=r.clone();caches.open(CACHE).then(c=>c.put(e.request,cl));return r;}).catch(()=>caches.match(e.request)));});`;
+        const swUrl = URL.createObjectURL(new Blob([swCode],{type:'application/javascript'}));
+        navigator.serviceWorker.register(swUrl).catch(()=>{});
+    }
+
+    carregarCSV();
+</script>
+</body>
+</html>
