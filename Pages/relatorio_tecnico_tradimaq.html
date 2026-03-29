@@ -13,8 +13,9 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
 
 /* ─ APP SHELL ─ */
 .app-header{background:white;border-bottom:3px solid var(--brand);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.08)}
-.app-header .logo{font-size:17px;font-weight:600;letter-spacing:-.03em}
-.app-header .logo span{color:var(--brand)}
+.app-header .logo-area{display:flex;align-items:center;gap:10px}
+.app-header .logo-area img{height:24px}
+.app-header .logo-title{font-size:11px;font-weight:600;color:var(--g5);letter-spacing:.08em;text-transform:uppercase}
 .app-header .right{display:flex;align-items:center;gap:10px}
 .save-badge{font-size:10px;color:var(--g5);background:var(--g1);border:1px solid var(--g3);padding:3px 8px;border-radius:99px}
 .save-badge.saved{color:var(--green);border-color:var(--green);background:#f0fdf4}
@@ -257,7 +258,10 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
 <body>
 
 <div class="app-header">
-  <div class="logo">TRADI<span>MAQ</span></div>
+  <div class="logo-area">
+    <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq">
+    <span class="logo-title">Relatório Técnico</span>
+  </div>
   <div class="right">
     <span class="save-badge" id="save-badge">Sem alterações</span>
   </div>
