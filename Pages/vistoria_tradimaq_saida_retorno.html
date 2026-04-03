@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vistoria — Tradimaq</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#ff6b00;--brand-dim:rgba(255,107,0,.13);--brand-glow:rgba(255,107,0,.25);--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--r:6px;--r2:10px;--r3:14px;}
+body{--bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;--bg4:#eceef1;--line:rgba(0,0,0,.08);--line2:rgba(0,0,0,.14);--txt:#111827;--txt2:#4b5563;--txt3:#9ca3af;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-size:14px;}
+
+/* ═══ HEADER ═══ */
+.hdr{background:var(--bg2);border-bottom:1px solid var(--line);padding:0 12px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:600;gap:6px;}
+.hdr-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1;}
+.hdr-logo{height:20px;}
+.hdr-div{width:1px;height:18px;background:var(--line2);flex-shrink:0;}
+.hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt2);white-space:nowrap;}
+.hdr-right{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.status-pill{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 7px;border-radius:99px;background:var(--bg4);border:1px solid var(--line2);color:var(--txt3);white-space:nowrap;}
+.status-pill.saved{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green);}
+.status-pill.dirty{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);color:var(--yellow);}
+
+/* ═══ LAYOUT ═══ */
+.main-wrap{display:flex;flex-direction:column;}
+.form-panel{background:var(--bg2);padding-bottom:80px;}
+.preview-panel{background:var(--bg);padding:14px;display:none;}
+.preview-panel.show{display:block;}
+@media(min-width:860px){
+  .main-wrap{flex-direction:row;height:calc(100vh - 52px);}
+  .form-panel{width:400px;flex-shrink:0;overflow-y:auto;height:100%;border-right:1px solid var(--line);}
+  .preview-panel{display:block !important;flex:1;overflow-y:auto;height:100%;padding:24px;}
+}
+
+/* ═══ SECTIONS ═══ */
+.sb-sec{border-bottom:1px solid var(--line);padding:14px 13px;}
+.sb-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:11px;display:flex;align-items:center;gap:6px;}
+.sb-label::before{content:'';width:3px;height:11px;background:var(--brand);border-radius:99px;display:block;}
+
+.field{margin-bottom:9px;}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--txt3);margin-bottom:3px;}
+.field input,.field textarea,.field select{width:100%;padding:10px 11px;font-size:15px;font-family:'Barlow',sans-serif;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);color:var(--txt);outline:none;transition:border-color .15s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-dim);}
+.field textarea{resize:vertical;min-height:72px;line-height:1.6;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* Remessa toggle */
+.remessa-row{display:flex;gap:6px;}
+.remessa-btn{flex:1;padding:11px 6px;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;text-align:center;transition:all .15s;}
+.remessa-btn.active{border-color:var(--brand);background:var(--brand-dim);color:var(--brand);}
+
+/* Condition */
+.cond-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:2px;}
+.cond-btn{flex:1;min-width:60px;padding:9px 4px;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2);font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;text-align:center;transition:all .15s;}
+.cond-btn.active-sem{border-color:var(--txt2);background:var(--bg4);color:var(--txt);}
+.cond-btn.active-leve{border-color:var(--green);background:rgba(34,197,94,.1);color:var(--green);}
+.cond-btn.active-moderado{border-color:var(--yellow);background:rgba(245,158,11,.1);color:var(--yellow);}
+.cond-btn.active-grave{border-color:var(--red);background:rgba(239,68,68,.1);color:var(--red);}
+
+/* Counter bar */
+.foto-bar{background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);padding:11px 13px;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between;}
+.foto-bar-num{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;color:var(--brand);line-height:1;}
+.foto-bar-sub{font-size:10px;color:var(--txt3);margin-top:2px;}
+.foto-bar-pct{font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--txt3);text-align:right;}
+.foto-bar-meta{font-size:9px;color:var(--txt3);}
+.progress-track{height:5px;background:var(--bg4);border-radius:99px;margin-top:9px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--brand),#ffb347);border-radius:99px;transition:width .4s;}
+
+/* ═══ TÓPICOS ═══ */
+.topico{border-bottom:1px solid var(--line);}
+.topico-hdr{display:flex;align-items:center;gap:9px;padding:12px 13px;cursor:pointer;background:var(--bg2);user-select:none;}
+.topico-hdr:active{background:var(--bg3);}
+.tp-icon{font-size:18px;width:24px;text-align:center;flex-shrink:0;}
+.tp-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;flex:1;color:var(--txt);}
+.tp-badge{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--bg4);border:1px solid var(--line2);padding:2px 7px;border-radius:99px;color:var(--txt3);white-space:nowrap;}
+.tp-badge.done{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green);}
+.tp-chevron{font-size:10px;color:var(--txt3);transition:transform .2s;flex-shrink:0;}
+.topico.open .tp-chevron{transform:rotate(180deg);}
+.topico-body{display:none;background:var(--bg);}
+.topico.open .topico-body{display:block;}
+
+/* Item dentro do tópico */
+.foto-item{padding:11px 13px;border-bottom:1px solid var(--line);}
+.foto-item:last-child{border-bottom:none;}
+.fi-top{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px;}
+.fi-cb{width:20px;height:20px;border:2px solid var(--line2);border-radius:5px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;background:var(--bg4);cursor:pointer;}
+.fi-cb.checked{background:var(--green);border-color:var(--green);}
+.fi-cb.checked::after{content:'✓';color:white;font-size:11px;font-weight:800;}
+.fi-desc{flex:1;font-size:13px;color:var(--txt2);line-height:1.4;}
+.fi-desc.done{color:var(--txt3);text-decoration:line-through;}
+.fi-critical{display:block;font-size:9px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+
+/* Foto thumbnails */
+.fi-fotos{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px;}
+.fi-thumb{width:90px;height:67px;border-radius:var(--r);overflow:hidden;position:relative;border:1px solid var(--line2);flex-shrink:0;background:var(--bg4);cursor:pointer;}
+.fi-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.fi-thumb-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.65);border:none;color:white;border-radius:3px;font-size:10px;padding:2px 5px;cursor:pointer;line-height:1;}
+.fi-thumb-add{width:90px;height:67px;border-radius:var(--r);border:1.5px dashed var(--line2);background:var(--bg4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--txt3);transition:all .15s;font-size:11px;gap:2px;}
+.fi-thumb-add:active{border-color:var(--brand);background:var(--brand-dim);}
+.fi-thumb-add-icon{font-size:18px;line-height:1;}
+
+/* Camera/upload buttons */
+.fi-btns{display:flex;gap:6px;}
+.fi-btn{flex:1;padding:10px 6px;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;}
+.fi-btn:active{opacity:.8;transform:scale(.97);}
+.fi-btn.primary{background:var(--brand);color:white;border-color:var(--brand);}
+
+/* Tópico nota */
+.tp-nota{width:100%;padding:9px 11px;font-size:13px;font-family:'Barlow',sans-serif;background:var(--bg3);border:none;border-top:1px solid var(--line);color:var(--txt);outline:none;resize:none;}
+.tp-nota::placeholder{color:var(--txt3);}
+.tp-nota:focus{border-top-color:var(--brand);}
+
+/* Sig zone */
+.sig-zone{border:2px dashed var(--line2);border-radius:var(--r2);padding:16px;text-align:center;cursor:pointer;position:relative;background:var(--bg3);transition:all .15s;margin-bottom:8px;}
+.sig-zone:active{border-color:var(--brand);background:var(--brand-dim);}
+.sig-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.sig-zone p{font-size:12px;color:var(--txt2);line-height:1.5;}
+.sig-preview-box{display:none;background:var(--bg3);border-radius:var(--r);padding:8px;margin-bottom:8px;flex-direction:row;align-items:center;gap:8px;border:1px solid var(--line2);}
+.sig-preview-box img{max-height:44px;max-width:120px;object-fit:contain;}
+
+/* Action buttons */
+.act-btns{display:flex;flex-direction:column;gap:7px;}
+.btn-act{width:100%;padding:13px;font-size:14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:var(--r);cursor:pointer;color:white;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-act:active{opacity:.82;transform:scale(.98);}
+.btn-pdf{background:var(--brand);}
+.btn-zip{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);color:var(--blue);}
+.btn-save{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);}
+.btn-sec{background:var(--bg4);color:var(--txt2);font-size:12px;padding:10px;border:1px solid var(--line2);}
+.btn-danger{background:rgba(239,68,68,.08);color:var(--red);font-size:12px;padding:10px;border:1px solid rgba(239,68,68,.2);}
+
+/* ═══ CÂMERA — CSS ISOLADO, SEM HERANÇA DE .modal ═══ */
+#cam-modal{
+  display:none;
+  position:fixed;inset:0;
+  background:#000;
+  z-index:900;
+  overflow:hidden;
+}
+#cam-modal.active{display:block;}
+#cam-inner{
+  position:absolute;inset:0;
+  background:#000;
+}
+#cam-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:contain;
+  background:#000;
+  display:block;
+  z-index:5;
+}
+/* Overlay de recorte */
+#cam-crop-overlay{
+  position:absolute;inset:0;z-index:8;pointer-events:none;overflow:hidden;
+}
+#cam-crop-overlay .crop-shadow{position:absolute;background:rgba(0,0,0,.55);}
+#cam-crop-overlay .crop-corner{
+  position:absolute;width:20px;height:20px;
+  border-color:rgba(255,255,255,.9);border-style:solid;
+}
+#cam-crop-overlay .crop-corner.tl{border-width:2.5px 0 0 2.5px;}
+#cam-crop-overlay .crop-corner.tr{border-width:2.5px 2.5px 0 0;}
+#cam-crop-overlay .crop-corner.bl{border-width:0 0 2.5px 2.5px;}
+#cam-crop-overlay .crop-corner.br{border-width:0 2.5px 2.5px 0;}
+/* Topo */
+#cam-topbar{
+  position:absolute;top:0;left:0;right:0;z-index:20;
+  padding:max(12px,env(safe-area-inset-top)) 16px 28px;
+  background:linear-gradient(to bottom,rgba(0,0,0,.75),transparent);
+  display:flex;align-items:flex-start;justify-content:space-between;
+}
+#cam-modal-title{
+  color:white;font-family:'Barlow Condensed',sans-serif;
+  font-size:14px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  text-shadow:0 1px 4px rgba(0,0,0,.6);padding-top:4px;flex:1;padding-right:12px;
+}
+#cam-close-btn{
+  background:rgba(0,0,0,.4);border:none;color:rgba(255,255,255,.9);
+  font-size:22px;width:40px;height:40px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  flex-shrink:0;
+}
+#cam-close-btn:active{background:rgba(255,255,255,.2);}
+/* Hint rotação */
+#cam-rotate-hint{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:15;pointer-events:none;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.15);border-radius:12px;
+  padding:10px 18px;display:flex;align-items:center;gap:8px;
+  white-space:nowrap;transition:opacity .3s;
+}
+#cam-rotate-hint .rh-icon{font-size:22px;animation:spin 1.5s ease-in-out infinite alternate;}
+#cam-rotate-hint .rh-txt{
+  color:white;font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;line-height:1.3;
+}
+#cam-rotate-hint .rh-sub{display:block;font-size:10px;font-weight:400;opacity:.65;}
+@media(orientation:landscape){#cam-rotate-hint{opacity:0;}}
+/* Controles inferiores */
+#cam-controls{
+  position:absolute;bottom:0;left:0;right:0;z-index:20;
+  padding:40px 24px max(20px,env(safe-area-inset-bottom));
+  display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(to top,rgba(0,0,0,.7),transparent);
+}
+#cam-cancel-btn{
+  background:none;border:none;color:rgba(255,255,255,.9);
+  font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;
+  padding:10px;width:90px;text-align:left;cursor:pointer;flex-shrink:0;
+}
+#cam-cancel-btn:active{color:white;}
+#cam-shutter-btn{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(255,255,255,.95);border:none;
+  box-shadow:0 0 0 5px rgba(255,255,255,.3),0 0 0 9px rgba(255,255,255,.12);
+  flex-shrink:0;cursor:pointer;
+  transition:transform .12s,box-shadow .12s;
+  position:relative;
+}
+#cam-shutter-btn::after{
+  content:'';position:absolute;inset:7px;border-radius:50%;
+  background:white;border:2px solid rgba(0,0,0,.08);
+}
+#cam-shutter-btn:active{
+  transform:scale(.88);
+  box-shadow:0 0 0 3px rgba(255,255,255,.2),0 0 0 5px rgba(255,255,255,.08);
+}
+
+/* ═══ MODALS ═══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;display:none;align-items:flex-end;justify-content:center;padding:0;}
+@media(min-width:500px){.modal-overlay{align-items:center;padding:16px;}}
+.modal-overlay.active{display:flex;}
+.modal{background:var(--bg2);border-radius:var(--r3) var(--r3) 0 0;padding:20px;width:100%;max-width:520px;border:1px solid var(--line2);}
+@media(min-width:500px){.modal{border-radius:var(--r3);}}
+.modal-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--txt);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+.modal-close{background:none;border:none;color:var(--txt3);font-size:22px;cursor:pointer;line-height:1;padding:0 4px;}
+/* #cam-video definido no bloco CAMERA FULLSCREEN acima */
+.modal-btns{display:flex;gap:8px;}
+.mbtn{flex:1;padding:12px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.04em;border:none;border-radius:var(--r);cursor:pointer;transition:all .15s;}
+.mbtn:active{opacity:.8;transform:scale(.97);}
+.mbtn-capture{background:var(--brand);color:white;}
+.mbtn-cancel{background:var(--bg4);color:var(--txt2);border:1px solid var(--line2);}
+
+/* ═══ PREVIEW LABEL ═══ */
+.preview-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.preview-label::after{content:'';flex:1;height:1px;background:var(--line2);}
+
+/* ═══ DOCUMENT (PRINT) ═══ */
+#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 4px 40px rgba(0,0,0,.3);font-family:'Barlow',Arial,sans-serif;font-size:13px;color:#1a1a1a;}
+.doc-masthead{background:#0d0f12;padding:14px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.doc-mast-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.doc-logo-img{height:18px;filter:brightness(0) invert(1) opacity(.85);}
+.doc-mast-div{width:1px;height:18px;background:rgba(255,255,255,.15);}
+.doc-type-txt{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+.doc-remessa-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--brand);background:rgba(255,107,0,.15);border:1px solid rgba(255,107,0,.3);padding:3px 9px;border-radius:99px;white-space:nowrap;}
+.doc-mast-right{text-align:right;flex-shrink:0;}
+.doc-report-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--brand);font-weight:600;}
+.doc-date-loc{font-size:9px;color:rgba(255,255,255,.35);margin-top:2px;}
+.doc-bar{height:3px;background:linear-gradient(90deg,var(--brand),#ffb347 60%,transparent);}
+.doc-body{padding:14px 18px 0;}
+.doc-info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e5e7eb;border:1px solid #e5e7eb;border-radius:5px;overflow:hidden;margin-bottom:13px;}
+.doc-info-cell{background:#f9fafb;padding:6px 10px;}
+.doc-info-key{font-size:7.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#9ca3af;margin-bottom:1px;}
+.doc-info-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#111827;word-break:break-word;}
+.doc-sec{margin-bottom:12px;}
+.doc-sec-title{background:#111827;color:white;padding:5px 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;border-radius:4px 4px 0 0;display:flex;align-items:center;gap:6px;}
+.doc-sec-title::before{content:'';width:3px;height:11px;background:var(--brand);border-radius:2px;flex-shrink:0;}
+.doc-sec-body{border:1px solid #e5e7eb;border-top:none;padding:9px 12px;font-size:11px;line-height:1.7;color:#374151;border-radius:0 0 4px 4px;}
+.doc-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+.doc-badge.sem{background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db;}
+.doc-badge.leve{background:#dcfce7;color:#15803d;border:1px solid #86efac;}
+.doc-badge.moderado{background:#fef9c3;color:#a16207;border:1px solid #fde047;}
+.doc-badge.grave{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;}
+.doc-topico{page-break-inside:avoid;break-inside:avoid;margin-bottom:13px;}
+.doc-tp-title{background:#f3f4f6;border:1px solid #e5e7eb;border-bottom:none;padding:5px 11px;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#374151;border-radius:4px 4px 0 0;display:flex;align-items:center;gap:6px;}
+.doc-foto-grid{border:1px solid #e5e7eb;border-radius:0 0 4px 4px;overflow:hidden;padding:7px;background:white;display:grid;gap:5px;}
+.doc-foto-grid.c1{grid-template-columns:1fr;}
+.doc-foto-grid.c2{grid-template-columns:1fr 1fr;}
+.doc-foto-grid.c3{grid-template-columns:1fr 1fr 1fr;}
+.doc-foto-grid.c4{grid-template-columns:repeat(4,1fr);}
+.doc-foto-grid.cN{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+.doc-foto-item{border-radius:3px;overflow:hidden;border:1px solid #e5e7eb;}
+.doc-foto-item-lbl{background:#374151;color:white;padding:2px 7px;font-family:'Barlow Condensed',sans-serif;font-size:8.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-foto-img-wrap{aspect-ratio:4/3;overflow:hidden;background:#f3f4f6;position:relative;}
+.doc-foto-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.doc-tp-nota{border:1px solid #e5e7eb;border-top:none;padding:5px 11px;font-size:10px;color:#6b7280;font-style:italic;border-radius:0 0 4px 4px;}
+.doc-sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;border:1px solid #e5e7eb;border-radius:4px;padding:20px 16px 14px;}
+.doc-sig-box{display:flex;flex-direction:column;}
+.doc-sig-space{min-height:52px;}
+.doc-sig-line{border-top:1.5px solid #111827;padding-top:5px;}
+.doc-sig-box img{max-height:40px;max-width:110px;object-fit:contain;display:block;}
+.doc-sig-lbl{font-size:8.5px;color:#9ca3af;margin-top:2px;}
+.doc-sig-name{font-size:11px;font-weight:600;color:#111827;margin-top:1px;min-height:13px;}
+.doc-footer{padding:11px 18px 18px;border-top:2px solid #f3f4f6;margin-top:13px;}
+.doc-footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:7px;}
+.doc-footer-col{font-size:7.5px;color:#9ca3af;line-height:1.55;}
+.doc-footer-col strong{display:block;color:#6b7280;font-size:7.5px;margin-bottom:1px;}
+.doc-footer-brand{display:flex;align-items:center;justify-content:space-between;padding-top:6px;border-top:1px solid #f3f4f6;}
+.doc-footer-site{font-size:7.5px;color:#9ca3af;}
+.doc-footer-logo{height:12px;object-fit:contain;opacity:.3;}
+
+/* ═══ MOBILE BOTTOM BAR ═══ */
+.mobile-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--line2);padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));display:flex;gap:7px;z-index:500;}
+@media(min-width:860px){.mobile-bar{display:none;}}
+.mbar-btn{flex:1;padding:11px 4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2);cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1;}
+.mbar-btn .mbar-icon{font-size:18px;}
+.mbar-btn.primary{background:var(--brand);color:white;border-color:var(--brand);}
+.mbar-btn:active{opacity:.8;}
+
+/* Toast */
+#toast{position:fixed;bottom:68px;right:12px;background:#111827;color:#e8ecf0;padding:9px 14px;border-radius:var(--r2);font-size:12px;font-weight:600;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none;z-index:9999;border:1px solid rgba(255,255,255,.1);max-width:calc(100vw - 24px);}
+#toast.show{opacity:1;transform:translateY(0);}
+@media(min-width:860px){#toast{bottom:16px;}}
+
+/* Print */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
+  @page{
+    size:A4 portrait;
+    margin:10mm 10mm 18mm;
+    @bottom-center{
+      content:"Página " counter(page) " de " counter(pages);
+      font-family:'Barlow',sans-serif;
+      font-size:8px;
+      color:#9ca3af;
+    }
+  }
+
+  /* Ocultar tudo que não é o documento */
+  #toast,.hdr,.form-panel,.mobile-bar,.modal-overlay,#cam-modal,.preview-label{display:none!important;}
+
+  html,body{height:auto!important;overflow:visible!important;background:white!important;}
+  .main-wrap{display:block!important;height:auto!important;}
+  .preview-panel{display:block!important;padding:0!important;background:white!important;height:auto!important;overflow:visible!important;min-height:unset!important;}
+  #documento{box-shadow:none!important;max-width:100%!important;width:100%!important;height:auto!important;min-height:unset!important;}
+
+  /* Cabeçalho escuro impresso corretamente */
+  .doc-masthead{background:#0d0f12!important;-webkit-print-color-adjust:exact!important;}
+  .doc-bar{background:linear-gradient(90deg,#ff6b00,#ffb347 60%,transparent)!important;}
+
+  /* Evitar corte de tópicos inteiros — cada tópico tenta não quebrar */
+  .doc-topico{
+    page-break-inside:avoid!important;
+    break-inside:avoid!important;
+    display:block!important;
+  }
+
+  /* Grade de fotos: nunca quebrar dentro de uma grid */
+  .doc-foto-grid{
+    page-break-inside:avoid!important;
+    break-inside:avoid!important;
+    display:grid!important;
+  }
+
+  /* Cada foto individualmente nunca quebra */
+  .doc-foto-item{
+    page-break-inside:avoid!important;
+    break-inside:avoid!important;
+    display:block!important;
+    overflow:hidden!important;
+  }
+
+  /* A imagem em si nunca pode ser cortada */
+  .doc-foto-img-wrap{
+    page-break-inside:avoid!important;
+    break-inside:avoid!important;
+    overflow:hidden!important;
+  }
+  .doc-foto-img-wrap img{
+    page-break-inside:avoid!important;
+    break-inside:avoid!important;
+    max-width:100%!important;
+    height:auto!important;
+    display:block!important;
+  }
+
+  /* Seções de texto e rodapé */
+  .doc-sec{page-break-inside:avoid!important;break-inside:avoid!important;}
+  .doc-info-grid{page-break-inside:avoid!important;break-inside:avoid!important;}
+  .doc-sig-grid{page-break-inside:avoid!important;break-inside:avoid!important;}
+  .doc-footer{page-break-inside:avoid!important;break-inside:avoid!important;}
+
+  /* Correção crítica para iOS/Safari: aspect-ratio não funciona em print.
+     Usar padding-bottom trick para manter proporção 4:3 sem cortar */
+  .doc-foto-img-wrap{
+    aspect-ratio:unset!important;
+    position:relative!important;
+    width:100%!important;
+    padding-bottom:75%!important; /* 75% = 3/4 = proporção 4:3 */
+    height:0!important;
+    overflow:hidden!important;
+    background:#f3f4f6!important;
+  }
+  .doc-foto-img-wrap img{
+    position:absolute!important;
+    top:0!important;left:0!important;
+    width:100%!important;height:100%!important;
+    object-fit:cover!important;
+    display:block!important;
+  }
+
+  /* Garante que grids com muitas fotos não sejam comprimidas */
+  .doc-foto-grid.cN{grid-template-columns:repeat(3,1fr)!important;}
+  .doc-foto-grid.c4{grid-template-columns:repeat(2,1fr)!important;}
+
+  /* Forçar quebra de página ANTES de novos tópicos quando necessário */
+  .doc-topico + .doc-topico{page-break-before:auto;}
+}
+</style>
+</head>
+<body id="root">
+
+<!-- Camera Modal (fullscreen) -->
+<div id="cam-modal">
+  <div id="cam-inner">
+    <div id="cam-topbar">
+      <span id="cam-modal-title">📸 Tirar Foto</span>
+      <button id="cam-close-btn" onclick="fecharCam()">✕</button>
+    </div>
+    <video id="cam-video" autoplay playsinline muted></video>
+    <canvas id="cam-canvas" style="display:none;"></canvas>
+    <div id="cam-crop-overlay">
+      <div class="crop-shadow" id="cs-top"></div>
+      <div class="crop-shadow" id="cs-bottom"></div>
+      <div class="crop-shadow" id="cs-left"></div>
+      <div class="crop-shadow" id="cs-right"></div>
+      <div class="crop-corner tl" id="cc-tl"></div>
+      <div class="crop-corner tr" id="cc-tr"></div>
+      <div class="crop-corner bl" id="cc-bl"></div>
+      <div class="crop-corner br" id="cc-br"></div>
+    </div>
+    <div id="cam-rotate-hint">
+      <span class="rh-icon">📱</span>
+      <span class="rh-txt">Gire para landscape<span class="rh-sub">Fotos em 4:3 horizontal</span></span>
+    </div>
+    <div id="cam-controls">
+      <button id="cam-cancel-btn" onclick="fecharCam()">Cancelar</button>
+      <button id="cam-shutter-btn" onclick="capturar()"></button>
+      <div style="width:90px;flex-shrink:0;"></div>
+    </div>
+  </div>
+</div>
+<style>
+@keyframes spin{0%{transform:rotate(-15deg)}100%{transform:rotate(15deg)}}
+</style>
+
+<!-- Photo viewer -->
+<div class="modal-overlay" id="viewer-modal" onclick="this.classList.remove('active')">
+  <div style="max-width:100%;max-height:100%;display:flex;align-items:center;justify-content:center;" onclick="event.stopPropagation()">
+    <img id="viewer-img" style="max-width:calc(100vw - 32px);max-height:90vh;border-radius:8px;display:block;">
+    <button onclick="document.getElementById('viewer-modal').classList.remove('active')" style="position:fixed;top:16px;right:16px;background:rgba(0,0,0,.7);color:white;border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app-shell">
+
+<div class="hdr">
+  <div class="hdr-left">
+    <img class="hdr-logo" id="hdr-logo" src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq">
+    <div class="hdr-div"></div>
+    <span class="hdr-title">Vistoria</span>
+  </div>
+  <div class="hdr-right">
+    <span class="status-pill" id="status-pill">—</span>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+<!-- ═══ FORM PANEL ═══ -->
+<div class="form-panel" id="form-panel">
+
+  <!-- Remessa -->
+  <div class="sb-sec">
+    <div class="sb-label">Tipo de Remessa</div>
+    <div class="remessa-row">
+      <button class="remessa-btn active" data-val="saida" onclick="setRemessa(this,'saida')">🚚 Saída</button>
+      <button class="remessa-btn" data-val="retorno" onclick="setRemessa(this,'retorno')">🔄 Retorno</button>
+    </div>
+    <input type="hidden" id="f-remessa" value="saida">
+  </div>
+
+  <!-- Identificação -->
+  <div class="sb-sec">
+    <div class="sb-label">Identificação</div>
+    <div class="f2">
+      <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: Z-34/22 DC" oninput="changed()"></div>
+      <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: Z3413-9493" oninput="changed()"></div>
+    </div>
+    <div class="f2">
+      <div class="field"><label>Data</label><input type="date" id="f-data" oninput="changed()"></div>
+      <div class="field"><label>Local</label><input id="f-local" placeholder="Ex: TRADIMAQ SP" oninput="changed()"></div>
+    </div>
+    <div class="f2">
+      <div class="field"><label>TAG / Frota</label><input id="f-tag" placeholder="Ex: TPE-1605" oninput="changed()"></div>
+      <div class="field"><label>Cliente</label><input id="f-cliente" placeholder="Nome do cliente" oninput="changed()"></div>
+    </div>
+    <div class="field"><label>Horímetro (horas)</label><input id="f-horimetro" type="number" min="0" step="0.1" placeholder="Ex: 1842.5" oninput="changed()"></div>
+  </div>
+
+  <!-- Condição -->
+  <div class="sb-sec">
+    <div class="sb-label">Condição</div>
+    <div class="cond-row" style="margin-bottom:10px;">
+      <button class="cond-btn active-sem" data-val="" onclick="setCond(this,'')">Sem dano</button>
+      <button class="cond-btn" data-val="leve" onclick="setCond(this,'leve')">🟢 Leve</button>
+      <button class="cond-btn" data-val="moderado" onclick="setCond(this,'moderado')">🟡 Moderado</button>
+      <button class="cond-btn" data-val="grave" onclick="setCond(this,'grave')">🔴 Grave</button>
+    </div>
+    <input type="hidden" id="f-condicao" value="">
+    <div class="field"><label>Observações gerais</label><textarea id="f-descricao" rows="3" oninput="changed()" placeholder="Descreva o estado geral, avarias identificadas..."></textarea></div>
+  </div>
+
+  <!-- Responsáveis e Assinatura (sem popup) -->
+  <div class="sb-sec">
+    <div class="sb-label">Responsáveis e Assinatura</div>
+    <div class="f2">
+      <div class="field"><label>Técnico Tradimaq</label><input id="f-resp1" placeholder="Nome" oninput="changed()"></div>
+      <div class="field"><label>Responsável Cliente</label><input id="f-resp2" placeholder="Nome" oninput="changed()"></div>
+    </div>
+  </div>
+
+  <!-- Registro Fotográfico -->
+  <div class="sb-sec">
+    <div class="sb-label">Registro Fotográfico</div>
+    <div class="foto-bar">
+      <div>
+        <div class="foto-bar-num" id="foto-total">0</div>
+        <div class="foto-bar-sub">fotos registradas</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="foto-bar-pct" id="checklist-pct">0%</div>
+        <div class="foto-bar-meta">do roteiro</div>
+      </div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Tópicos -->
+  <div id="topicos-root"></div>
+
+  <!-- Ações -->
+  <div class="sb-sec">
+    <div class="sb-label">Ações</div>
+    <div class="act-btns">
+      <button class="btn-act btn-pdf" onclick="gerarPDF()">🖨 Gerar PDF</button>
+      <button class="btn-act btn-zip" onclick="exportarZIP()">📦 Exportar fotos ZIP</button>
+      <button class="btn-act btn-save" onclick="salvarCache()">💾 Salvar agora</button>
+      <button class="btn-act btn-sec" onclick="limparFotos()">🗑 Limpar fotos</button>
+      <button class="btn-act btn-danger" onclick="limpar()">Limpar tudo</button>
+    </div>
+  </div>
+
+</div><!-- /form-panel -->
+
+<!-- ═══ PREVIEW PANEL ═══ -->
+<div class="preview-panel" id="preview-panel">
+  <div class="preview-label">Pré-visualização do Documento</div>
+  <div id="documento"></div>
+</div>
+
+</div><!-- /main-wrap -->
+</div><!-- /app-shell -->
+
+<!-- Mobile bar -->
+<div class="mobile-bar">
+  <button class="mbar-btn" onclick="salvarCache()"><span class="mbar-icon">💾</span>Salvar</button>
+  <button class="mbar-btn" onclick="toggleMobilePreview()" id="mbar-preview-btn"><span class="mbar-icon">👁</span>Preview</button>
+  <button class="mbar-btn primary" onclick="gerarPDF()"><span class="mbar-icon">🖨</span>PDF</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ══════════ CONSTANTES ══════════ */
+const LOGO_URL='https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
+let LOGO=LOGO_URL;
+const CACHE_KEY='tradimaq_v4';
+
+/* ══════════ TÓPICOS ══════════ */
+const TOPICOS=[
+  {id:'ident',icon:'🪪',nome:'1. Identificação',itens:[
+    {d:'Plaqueta do número de série'},{d:'Horímetro ligado'},{d:'Vista geral com TAG/frota'}
+  ]},
+  {id:'vista',icon:'🔍',nome:'2. Vista Geral',itens:[
+    {d:'Lado direito completo',c:true},{d:'Lado esquerdo completo',c:true},{d:'Frente',c:true},{d:'Traseira',c:true}
+  ]},
+  {id:'pneus',icon:'🛞',nome:'3. Rodagem — Pneus',itens:[
+    {d:'Traseiro direito — lateral'},{d:'Traseiro direito — banda de rodagem'},
+    {d:'Traseiro esquerdo — lateral'},{d:'Traseiro esquerdo — banda de rodagem'},
+    {d:'Frontal direito — lateral'},{d:'Frontal direito — banda de rodagem'},
+    {d:'Frontal esquerdo — lateral'},{d:'Frontal esquerdo — banda de rodagem'}
+  ]},
+  {id:'cesto',icon:'🧺',nome:'4. Cesto / Plataforma',itens:[
+    {d:'Vista interna — piso'},{d:'Frente do cesto'},{d:'Lateral esquerda'},{d:'Lateral direita'},{d:'Traseira do cesto'},{d:'Painel do cesto'},{d:'Joystick'}
+  ]},
+  {id:'solo',icon:'🎮',nome:'5. Painel de Solo',itens:[
+    {d:'Painel completo'},{d:'Chave seletora (solo/cesto)'}
+  ]},
+  {id:'seg',icon:'🛡️',nome:'6. Segurança',critico:true,itens:[
+    {d:'Extintor instalado',c:true},{d:'Lacre do extintor (close)',c:true},{d:'Manômetro (close)',c:true}
+  ]},
+  {id:'hidro',icon:'🔧',nome:'7. Sistema Hidráulico',itens:[
+    {d:'Compartimento hidráulico'},{d:'Nível do óleo hidráulico'}
+  ]},
+  {id:'motor',icon:'⚡',nome:'8. Energia / Motor',itens:[
+    {d:'Motor ou baterias (visão geral)'},{d:'Nível de combustível ou carga'}
+  ]},
+  {id:'struct',icon:'🏗️',nome:'9. Estrutura',itens:[
+    {d:'Tesoura ou lança (vista geral)'},{d:'Deck — estado do piso'}
+  ]},
+  {id:'avaria',icon:'⚠️',nome:'10. Avarias',itens:[
+    {d:'Dano — foto aberta (localização)'},{d:'Dano — close (detalhe)'}
+  ]}
+];
+
+/* Estado */
+let estado={};
+TOPICOS.forEach(t=>{estado[t.id]={checked:Array(t.itens.length).fill(false),fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:''};});
+let autoSaveTimer=null,hasUnsaved=false;
+let camStream=null,camTp=null,camIdx=null;
+let previewShown=false;
+
+/* ══════════ MOBILE PREVIEW ══════════ */
+function toggleMobilePreview(){
+  previewShown=!previewShown;
+  const fp=document.getElementById('form-panel'),pp=document.getElementById('preview-panel'),btn=document.getElementById('mbar-preview-btn');
+  if(previewShown){fp.style.display='none';pp.classList.add('show');btn.textContent='✏️ Editar';atualizar();}
+  else{fp.style.display='';pp.classList.remove('show');btn.textContent='👁 Preview';}
+}
+
+/* ══════════ TOAST / BADGE ══════════ */
+function toast(msg,dur=2400){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
+function badge(txt,cls){const b=document.getElementById('status-pill');b.textContent=txt;b.className='status-pill'+(cls?' '+cls:'');}
+function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true),3000);atualizarContador();}
+function v(id){return document.getElementById(id)?.value||'';}
+
+/* ══════════ INIT ══════════ */
+document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
+async function initApp(){
+  try{const r=await fetch(LOGO_URL);const b=await r.blob();LOGO=await new Promise(res=>{const rd=new FileReader();rd.onload=e=>res(e.target.result);rd.readAsDataURL(b);});}catch(e){}
+  renderTopicos();
+  carregarCache();
+  if(!v('f-descricao'))document.getElementById('f-descricao').value='Equipamento sem avarias visuais aparentes no momento da entrega.';
+  atualizarContador();badge('—','');
+}
+initApp();
+
+/* ══════════ CACHE ══════════ */
+function salvarCache(silent=false){
+  const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa'),estado};
+  try{
+    localStorage.setItem(CACHE_KEY,JSON.stringify(d));
+    hasUnsaved=false;badge('✓','saved');if(!silent)toast('Salvo!');
+  }catch(e){
+    // localStorage cheio — tenta salvar só os campos (sem fotos)
+    try{
+      const semFotos={...d,estado:{}};
+      TOPICOS.forEach(t=>{semFotos.estado[t.id]={checked:estado[t.id].checked,fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:estado[t.id].nota};});
+      localStorage.setItem(CACHE_KEY,JSON.stringify(semFotos));
+      badge('⚠','dirty');if(!silent)toast('⚠ Armazenamento cheio — campos salvos, fotos não.');
+    }catch(e2){badge('⚠','dirty');if(!silent)toast('Erro ao salvar');}
+  }
+}
+function carregarCache(){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY);if(!raw)return;
+    const d=JSON.parse(raw);
+    ['modelo','serie','data','local','tag','cliente','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&d[k]!==undefined)el.value=d[k];});
+    if(d.condicao!==undefined){document.getElementById('f-condicao').value=d.condicao;const b=document.querySelector(`.cond-btn[data-val="${d.condicao}"]`);if(b)setCond(b,d.condicao);}
+    if(d.remessa){const b=document.querySelector(`.remessa-btn[data-val="${d.remessa}"]`);if(b)setRemessa(b,d.remessa);}
+    if(d.estado){
+      TOPICOS.forEach(t=>{
+        if(d.estado[t.id]){const s=d.estado[t.id];estado[t.id].checked=s.checked||Array(t.itens.length).fill(false);estado[t.id].fotos=(s.fotos||[]).map(f=>Array.isArray(f)?f:[]);estado[t.id].nota=s.nota||'';}
+      });
+      renderTopicos();
+    }
+    badge('✓','saved');
+  }catch(e){console.warn(e);}
+}
+function limpar(){
+  if(!confirm('Limpar tudo e recomeçar?'))return;
+  try{localStorage.removeItem(CACHE_KEY);}catch(e){}
+  TOPICOS.forEach(t=>{estado[t.id]={checked:Array(t.itens.length).fill(false),fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:''};});
+  ['modelo','serie','data','local','tag','cliente','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value='';});
+  document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
+  document.getElementById('f-condicao').value='';
+  document.querySelectorAll('.cond-btn').forEach(b=>{b.className='cond-btn';});
+  document.querySelector('.cond-btn[data-val=""]').classList.add('active-sem');
+  document.getElementById('f-remessa').value='saida';
+  document.querySelectorAll('.remessa-btn').forEach(b=>b.classList.toggle('active',b.dataset.val==='saida'));
+  document.getElementById('f-descricao').value='Equipamento sem avarias visuais aparentes no momento da entrega.';
+  renderTopicos();
+  atualizarContador();
+  badge('--','');
+  window.scrollTo({top:0,behavior:'smooth'});
+  toast('Pronto para nova vistoria!',3000);
+}
+function limparFotos(){
+  if(!confirm('Remover todas as fotos?'))return;
+  // Zera fotos e checks de todos os tópicos
+  TOPICOS.forEach(t=>{
+    estado[t.id].fotos=Array(t.itens.length).fill(null).map(()=>[]);
+    estado[t.id].checked=Array(t.itens.length).fill(false);
+  });
+  renderTopicos();
+  atualizarContador();
+  // Salva direto sem esperar debounce, ignorando localStorage cheio
+  try{
+    const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa'),estado};
+    localStorage.setItem(CACHE_KEY,JSON.stringify(d));
+    hasUnsaved=false;badge('✓','saved');
+  }catch(e){badge('✓','saved');}
+  toast('Fotos removidas!');
+}
+
+/* ══════════ IMAGE PROCESSING (força 4:3 horizontal) ══════════ */
+function processImg(dataURL){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      const R=4/3,ir=img.naturalWidth/img.naturalHeight;
+      let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
+      if(ir>R){sw=Math.round(sh*R);sx=Math.round((img.naturalWidth-sw)/2);}
+      else if(ir<R){sh=Math.round(sw/R);sy=Math.round((img.naturalHeight-sh)/2);}
+      const W=Math.min(sw,1280),H=Math.round(W/R);
+      const c=document.createElement('canvas');c.width=W;c.height=H;
+      c.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,W,H);
+      res(c.toDataURL('image/jpeg',.88));
+    };img.src=dataURL;
+  });
+}
+function readFile(f){return new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(f);});}
+
+/* ══════════ RENDER TÓPICOS ══════════ */
+function renderTopicos(){
+  const root=document.getElementById('topicos-root');root.innerHTML='';
+  TOPICOS.forEach(t=>{
+    const s=estado[t.id];const total=t.itens.length;const done=s.checked.filter(Boolean).length;
+    const el=document.createElement('div');el.className='topico';el.id='tp-'+t.id;
+    let itensHTML='';
+    t.itens.forEach((item,idx)=>{
+      const fotos=s.fotos[idx]||[];const checked=!!s.checked[idx];
+      let thumbs=fotos.map((f,fi)=>`<div class="fi-thumb" onclick="verFoto('${t.id}',${idx},${fi})"><img src="${f}"><button class="fi-thumb-del" onclick="event.stopPropagation();delFoto('${t.id}',${idx},${fi})">✕</button></div>`).join('');
+      thumbs+=`<div class="fi-thumb-add" onclick="triggerUp('${t.id}',${idx})"><div class="fi-thumb-add-icon">📁</div><div style="font-size:10px;">Upload</div></div>`;
+      itensHTML+=`<div class="foto-item" id="fi-${t.id}-${idx}">
+        <div class="fi-top">
+          <div class="fi-cb ${checked?'checked':''}" onclick="toggleCheck('${t.id}',${idx})"></div>
+          <div class="fi-desc ${checked?'done':''}">${item.d}${item.c?'<span class="fi-critical">⚖ Prova jurídica</span>':''}</div>
+        </div>
+        <div class="fi-fotos" id="fotos-${t.id}-${idx}">${thumbs}</div>
+        <div class="fi-btns">
+          <button class="fi-btn primary" onclick="abrirCam('${t.id}',${idx})">📸 Câmera</button>
+          <button class="fi-btn" onclick="triggerUp('${t.id}',${idx})">📁 Upload</button>
+        </div>
+        <input type="file" accept="image/*" id="up-${t.id}-${idx}" style="display:none;" multiple onchange="onUp(event,'${t.id}',${idx})">
+      </div>`;
+    });
+    el.innerHTML=`
+      <div class="topico-hdr" onclick="toggleTp('${t.id}')">
+        <span class="tp-icon">${t.icon}</span>
+        <span class="tp-name">${t.nome}</span>
+        <span class="tp-badge ${done===total?'done':''}" id="tpb-${t.id}">${done}/${total}</span>
+        <span class="tp-chevron">▼</span>
+      </div>
+      <div class="topico-body">
+        ${itensHTML}
+        <textarea class="tp-nota" rows="2" placeholder="Obs. sobre este bloco..." oninput="setNota('${t.id}',this.value)">${s.nota||''}</textarea>
+      </div>`;
+    root.appendChild(el);
+  });
+}
+
+function toggleTp(id){document.getElementById('tp-'+id).classList.toggle('open');}
+
+function toggleCheck(tpId,idx){
+  estado[tpId].checked[idx]=!estado[tpId].checked[idx];
+  const cb=document.querySelector(`#fi-${tpId}-${idx} .fi-cb`);
+  const desc=document.querySelector(`#fi-${tpId}-${idx} .fi-desc`);
+  if(cb)cb.classList.toggle('checked',estado[tpId].checked[idx]);
+  if(desc)desc.classList.toggle('done',estado[tpId].checked[idx]);
+  const total=TOPICOS.find(t=>t.id===tpId).itens.length;
+  const done=estado[tpId].checked.filter(Boolean).length;
+  const b=document.getElementById('tpb-'+tpId);
+  if(b){b.textContent=`${done}/${total}`;b.classList.toggle('done',done===total);}
+  atualizarContador();changed();
+}
+
+function setNota(tpId,val){estado[tpId].nota=val;changed();}
+
+/* ══════════ UPLOAD ══════════ */
+function triggerUp(tpId,idx){document.getElementById(`up-${tpId}-${idx}`)?.click();}
+async function onUp(event,tpId,idx){
+  for(const f of [...event.target.files]){
+    const data=await readFile(f);const resized=await processImg(data);
+    estado[tpId].fotos[idx].push(resized);estado[tpId].checked[idx]=true;
+  }
+  renderItemFotos(tpId,idx);atualizarContador();changed();event.target.value='';
+}
+function delFoto(tpId,idx,fi){
+  estado[tpId].fotos[idx].splice(fi,1);
+  renderItemFotos(tpId,idx);atualizarContador();changed();
+}
+function renderItemFotos(tpId,idx){
+  const fotos=estado[tpId].fotos[idx]||[];
+  const container=document.getElementById(`fotos-${tpId}-${idx}`);if(!container)return;
+  let html=fotos.map((f,fi)=>`<div class="fi-thumb" onclick="verFoto('${tpId}',${idx},${fi})"><img src="${f}"><button class="fi-thumb-del" onclick="event.stopPropagation();delFoto('${tpId}',${idx},${fi})">✕</button></div>`).join('');
+  html+=`<div class="fi-thumb-add" onclick="triggerUp('${tpId}',${idx})"><div class="fi-thumb-add-icon">📁</div><div style="font-size:10px;">Upload</div></div>`;
+  container.innerHTML=html;
+  const total=TOPICOS.find(t=>t.id===tpId).itens.length;
+  const done=estado[tpId].checked.filter(Boolean).length;
+  const b=document.getElementById('tpb-'+tpId);if(b){b.textContent=`${done}/${total}`;b.classList.toggle('done',done===total);}
+  const cb=document.querySelector(`#fi-${tpId}-${idx} .fi-cb`);if(cb)cb.classList.toggle('checked',!!estado[tpId].checked[idx]);
+  const desc=document.querySelector(`#fi-${tpId}-${idx} .fi-desc`);if(desc)desc.classList.toggle('done',!!estado[tpId].checked[idx]);
+}
+function verFoto(tpId,idx,fi){
+  document.getElementById('viewer-img').src=estado[tpId].fotos[idx][fi];
+  document.getElementById('viewer-modal').classList.add('active');
+}
+
+/* ══════════ CÂMERA ══════════ */
+function onCamResize(){ setTimeout(atualizarOverlay,200); }
+function onOrientChange(){
+  // Dispara várias vezes para pegar quando o browser terminar de reposicionar
+  setTimeout(atualizarOverlay,150);
+  setTimeout(atualizarOverlay,350);
+  setTimeout(atualizarOverlay,600);
+}
+async function abrirCam(tpId,idx){
+  camTp=tpId;camIdx=idx;
+  const t=TOPICOS.find(t=>t.id===tpId);
+  document.getElementById('cam-modal-title').textContent='📸 '+t.itens[idx].d;
+  document.getElementById('cam-modal').classList.add('active');
+
+  // Travar landscape — silencioso, não bloqueia abertura
+  try{ screen.orientation.lock('landscape'); }catch(e){}
+
+  // Iniciar câmera
+  try{
+    camStream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:'environment',width:{ideal:1920},height:{ideal:1440}},
+      audio:false
+    });
+    const vEl=document.getElementById('cam-video');
+    vEl.srcObject=camStream;
+    vEl.onloadedmetadata=()=>{ setTimeout(atualizarOverlay,200); };
+    window.addEventListener('resize',onCamResize);
+    screen.orientation.addEventListener('change',onOrientChange);
+  }catch(e){
+    console.warn("Erro câmera:",e);
+    fecharCam();
+    toast('Câmera indisponível — use Upload');
+    triggerUp(tpId,idx);
+  }
+}
+/* Calcula rect 4:3 dentro do frame real da câmera */
+function calcCrop43(vw, vh){
+  const R = 4/3;
+  const vr = vw/vh;
+  let sx=0,sy=0,sw=vw,sh=vh;
+  if(vr > R){ sw=Math.round(vh*R); sx=Math.round((vw-sw)/2); }
+  else if(vr < R){ sh=Math.round(vw/R); sy=Math.round((vh-sh)/2); }
+  return {sx,sy,sw,sh};
+}
+
+/* Atualiza o overlay de recorte no viewfinder */
+function atualizarOverlay(){
+  const vid=document.getElementById('cam-video');
+  const overlay=document.getElementById('cam-crop-overlay');
+  if(!overlay||!vid.videoWidth) return;
+  // Se o elemento ainda não tem dimensões reais, tenta de novo
+  if(!vid.clientWidth||!vid.clientHeight){ setTimeout(atualizarOverlay,200); return; }
+
+  const vw=vid.videoWidth, vh=vid.videoHeight;
+  const cw=vid.clientWidth, ch=vid.clientHeight;
+
+  // Rect do vídeo renderizado dentro do elemento (object-fit:contain)
+  const videoAR=vw/vh, boxAR=cw/ch;
+  let rw,rh,rx,ry;
+  if(videoAR>boxAR){ rw=cw; rh=Math.round(cw/videoAR); rx=0; ry=Math.round((ch-rh)/2); }
+  else { rh=ch; rw=Math.round(ch*videoAR); rx=Math.round((cw-rw)/2); ry=0; }
+
+  // Área 4:3 dentro do rect renderizado
+  const {sx,sy,sw,sh}=calcCrop43(vw,vh);
+  const scaleX=rw/vw, scaleY=rh/vh;
+  const cx=rx+sx*scaleX, cy=ry+sy*scaleY;
+  const cw43=sw*scaleX, ch43=sh*scaleY;
+
+  // Posiciona as sombras fora do recorte
+  const s=id=>document.getElementById(id);
+  s("cs-top").style.cssText    = "left:0;right:0;top:0;height:"+cy+"px";
+  s("cs-bottom").style.cssText = "left:0;right:0;bottom:0;height:"+(ch-cy-ch43)+"px";
+  s("cs-left").style.cssText   = "top:"+cy+"px;left:0;width:"+cx+"px;height:"+ch43+"px";
+  s("cs-right").style.cssText  = "top:"+cy+"px;right:0;width:"+(cw-cx-cw43)+"px;height:"+ch43+"px";
+
+  // Posiciona os cantos
+  const corner=(el,t,l)=>{el.style.top=t+"px";el.style.left=l+"px";};
+  corner(s("cc-tl"),cy,cx);
+  corner(s("cc-tr"),cy,cx+cw43-20);
+  corner(s("cc-bl"),cy+ch43-20,cx);
+  corner(s("cc-br"),cy+ch43-20,cx+cw43-20);
+
+  overlay.style.opacity="1";
+}
+
+async function capturar(){
+  const vid=document.getElementById('cam-video');
+  if(!vid.srcObject){fecharCam();return;}
+  // Captura o frame completo
+  const vw=vid.videoWidth||1280, vh=vid.videoHeight||960;
+  const c=document.getElementById('cam-canvas');
+  // Corta exatamente a região 4:3 do sensor
+  const {sx,sy,sw,sh}=calcCrop43(vw,vh);
+  const outW=Math.min(sw,1280), outH=Math.round(outW/(4/3));
+  c.width=outW; c.height=outH;
+  c.getContext('2d').drawImage(vid,sx,sy,sw,sh,0,0,outW,outH);
+  const dataURL=c.toDataURL('image/jpeg',.92);
+  fecharCam();
+  estado[camTp].fotos[camIdx].push(dataURL);estado[camTp].checked[camIdx]=true;
+  renderItemFotos(camTp,camIdx);atualizarContador();changed();toast('Foto capturada! ✓');
+}
+function fecharCam(){
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
+  document.getElementById('cam-modal').classList.remove('active');
+  const vEl=document.getElementById('cam-video');
+  vEl.srcObject=null;
+  vEl.onloadedmetadata=null;
+  window.removeEventListener('resize',onCamResize);
+  try{screen.orientation.removeEventListener('change',onOrientChange);}catch(e){}
+  try{screen.orientation.unlock();}catch(e){}
+}
+
+/* ══════════ REMESSA / CONDIÇÃO ══════════ */
+function setRemessa(btn,val){document.getElementById('f-remessa').value=val;document.querySelectorAll('.remessa-btn').forEach(b=>b.classList.toggle('active',b.dataset.val===val));changed();}
+function setCond(btn,val){document.getElementById('f-condicao').value=val;document.querySelectorAll('.cond-btn').forEach(b=>{b.className='cond-btn';if(b.dataset.val===val)b.classList.add(val===''?'active-sem':`active-${val}`);});changed();}
+
+/* ══════════ CONTADOR ══════════ */
+function atualizarContador(){
+  let total=0,totalIt=0,doneIt=0;
+  TOPICOS.forEach(t=>{const s=estado[t.id];s.fotos.forEach(f=>total+=f.length);totalIt+=t.itens.length;doneIt+=s.checked.filter(Boolean).length;});
+  document.getElementById('foto-total').textContent=total;
+  const pct=Math.round((doneIt/totalIt)*100);document.getElementById('checklist-pct').textContent=pct+'%';
+  document.getElementById('progress-fill').style.width=Math.min(100,(total/25)*100)+'%';
+}
+
+/* ══════════ GERAR DOCUMENTO ══════════ */
+function fmtDate(d){if(!d)return'—';const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}
+function condClass(v){return{leve:'leve',moderado:'moderado',grave:'grave'}[v]||'sem';}
+function condLabel(v){return{leve:'🟢 Dano Leve',moderado:'🟡 Dano Moderado',grave:'🔴 Dano Grave'}[v]||'Sem avaria aparente';}
+
+function atualizar(){
+  const modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',data=v('f-data');
+  const local=v('f-local')||'—',tag=v('f-tag')||'—',cliente=v('f-cliente')||'—';
+  const horimetro=v('f-horimetro')||'—';
+  const desc=v('f-descricao')||'—',resp1=v('f-resp1')||'—',resp2=v('f-resp2')||'—';
+  const cond=v('f-condicao'),remessa=v('f-remessa')||'saida';
+  const remLabel=remessa==='retorno'?'RETORNO':'SAÍDA';
+  const reportId=`VE-${(tag||serie).replace(/[^a-z0-9]/gi,'').toUpperCase()||'XXXX'}-${new Date().getFullYear()}`;
+
+  // Tópicos com fotos
+  let topicosHTML='';
+  TOPICOS.forEach(t=>{
+    const s=estado[t.id];let gridItems='';let nFotos=0;
+    t.itens.forEach((item,idx)=>{
+      (s.fotos[idx]||[]).forEach(f=>{
+        gridItems+=`<div class="doc-foto-item"><div class="doc-foto-item-lbl">${item.d}</div><div class="doc-foto-img-wrap"><img src="${f}" alt="${item.d}"></div></div>`;
+        nFotos++;
+      });
+    });
+    if(!nFotos&&!s.nota)return;
+    const cls=nFotos<=1?'c1':nFotos===2?'c2':nFotos===3?'c3':nFotos===4?'c4':'cN';
+    topicosHTML+=`<div class="doc-topico">
+      <div class="doc-tp-title"><span>${t.icon}</span>${t.nome}</div>
+      ${nFotos?`<div class="doc-foto-grid ${cls}">${gridItems}</div>`:''}
+      ${s.nota?`<div class="doc-tp-nota">${s.nota}</div>`:''}
+    </div>`;
+  });
+  if(!topicosHTML)topicosHTML=`<div style="text-align:center;padding:26px;color:#9ca3af;font-size:12px;border:1px dashed #e5e7eb;border-radius:5px;margin-bottom:13px;">Nenhuma foto registrada ainda</div>`;
+
+
+  document.getElementById('documento').innerHTML=`
+  <div class="doc-masthead">
+    <div class="doc-mast-left">
+      <img class="doc-logo-img" src="${LOGO}" alt="Tradimaq">
+      <div class="doc-mast-div"></div>
+      <div>
+        <div class="doc-type-txt">Relatório de Vistoria</div>
+        <div class="doc-remessa-tag">${remLabel}</div>
+      </div>
+    </div>
+    <div class="doc-mast-right">
+      <div class="doc-report-id">${reportId}</div>
+      <div class="doc-date-loc">${fmtDate(data)} · ${local}</div>
+    </div>
+  </div>
+  <div class="doc-bar"></div>
+  <div class="doc-body">
+    <div class="doc-info-grid">
+      <div class="doc-info-cell"><div class="doc-info-key">Modelo</div><div class="doc-info-val">${modelo}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Nº de Série</div><div class="doc-info-val">${serie}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">TAG / Frota</div><div class="doc-info-val">${tag}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Data</div><div class="doc-info-val">${fmtDate(data)}</div></div>
+      <div class="doc-info-cell" style="grid-column:span 2;"><div class="doc-info-key">Cliente</div><div class="doc-info-val">${cliente}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Horímetro</div><div class="doc-info-val">${horimetro !== '—' ? horimetro+' h' : '—'}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Local</div><div class="doc-info-val">${local}</div></div>
+    </div>
+    <div class="doc-sec">
+      <div class="doc-sec-title">Avaliação de Condição</div>
+      <div class="doc-sec-body"><span class="doc-badge ${condClass(cond)}">${condLabel(cond)}</span><br><br>${desc}</div>
+    </div>
+    ${topicosHTML}
+    <div class="doc-sec" style="margin-bottom:14px;">
+      <div class="doc-sec-title">Assinaturas</div>
+      <div class="doc-sig-grid">
+        <div class="doc-sig-box"><div class="doc-sig-space"></div><div class="doc-sig-line"><div class="doc-sig-lbl">Responsável Técnico — Tradimaq</div><div class="doc-sig-name">${resp1}</div></div></div>
+        <div class="doc-sig-box"><div class="doc-sig-space"></div><div class="doc-sig-line"><div class="doc-sig-lbl">Responsável — ${cliente||'Cliente'}</div><div class="doc-sig-name">${resp2}</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="doc-footer">
+    <div class="doc-footer-grid">
+      <div class="doc-footer-col"><strong>Tradimaq Equipamentos</strong>Plataformas elevatórias e equipamentos de acesso</div>
+      <div class="doc-footer-col"><strong>Validade</strong>Registra o estado visual na ${remLabel.toLowerCase()}. Avarias não registradas não serão aceitas no retorno.</div>
+      <div class="doc-footer-col"><strong>Relatório</strong>${reportId}<br>Tipo: ${remLabel}<br>${fmtDate(data)}</div>
+      <div class="doc-footer-col"><strong>Contato</strong>www.tradimaq.com.br</div>
+    </div>
+    <div class="doc-footer-brand">
+      <div class="doc-footer-site">www.tradimaq.com.br</div>
+      <img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">
+    </div>
+  </div>`;
+}
+
+/* ══════════ PDF (IMPRESSÃO) ══════════ */
+async function gerarPDF(){
+  salvarCache(true);
+  atualizar();
+
+  // Garante que o preview está visível (mobile e desktop)
+  const fp=document.getElementById('form-panel');
+  const pp=document.getElementById('preview-panel');
+  const eraMobile=window.innerWidth<860;
+
+  if(eraMobile){
+    fp.style.display='none';
+    pp.classList.add('show');
+  }
+
+  // Aguarda dois frames para o DOM renderizar
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+  // Aguarda todas as imagens do documento carregarem completamente
+  const imgs=[...document.querySelectorAll('#documento img')];
+  await Promise.all(imgs.map(img=>{
+    if(img.complete && img.naturalWidth>0) return Promise.resolve();
+    return new Promise(res=>{
+      img.onload=res;
+      img.onerror=res;
+      // fallback: timeout de 3s por imagem
+      setTimeout(res,3000);
+    });
+  }));
+
+  // Mais um frame para o layout estabilizar após carregamento
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+  // Monta nome do arquivo: Remessa - Cliente - Data
+  const rLabel = v('f-remessa')==='retorno' ? 'Retorno' : 'Saida';
+  const cNome  = (v('f-cliente')||'Cliente').replace(/[^\w\s]/g,'').trim();
+  const dStr   = v('f-data') ? v('f-data').split('-').reverse().join('-') : fmtDate(v('f-data'));
+  document.title = `${rLabel} - ${cNome} - ${dStr}`;
+
+  window.print();
+
+  // Restaura título original
+  document.title = 'Vistoria — Tradimaq';
+
+  // Restaura estado mobile
+  if(eraMobile&&!previewShown){
+    fp.style.display='';
+    pp.classList.remove('show');
+  }
+}
+
+// Atualiza preview em desktop
+let previewTimer=null;
+document.addEventListener('input',()=>{
+  if(window.innerWidth>=860){clearTimeout(previewTimer);previewTimer=setTimeout(atualizar,300);}
+});
+if(window.innerWidth>=860)setTimeout(atualizar,500);
+
+/* ══════════ EXPORTAR ZIP ══════════ */
+async function exportarZIP(){
+  // Conta fotos
+  let totalFotos=0;
+  TOPICOS.forEach(t=>estado[t.id].fotos.forEach(f=>totalFotos+=f.length));
+  if(!totalFotos){toast('Nenhuma foto para exportar');return;}
+
+  toast('Gerando ZIP...',4000);
+
+  // Carrega JSZip dinamicamente
+  if(!window.JSZip){
+    await new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      s.onload=res;s.onerror=rej;
+      document.head.appendChild(s);
+    });
+  }
+
+  const zip=new JSZip();
+
+  // Nome base do arquivo
+  const rLabel=v('f-remessa')==='retorno'?'Retorno':'Saida';
+  const cliente=(v('f-cliente')||'Cliente').replace(/[^\w\s]/g,'').trim();
+  const modelo=(v('f-modelo')||'').replace(/[^\w\s-]/g,'').trim();
+  const data=v('f-data')?v('f-data').split('-').reverse().join('-'):'sem-data';
+  const base=`${rLabel} - ${cliente}${modelo?' - '+modelo:''} - ${data}`;
+
+  // Pasta raiz com info
+  const infoLines=[
+    `Relatório: ${base}`,
+    `Cliente: ${v('f-cliente')||'—'}`,
+    `Modelo: ${v('f-modelo')||'—'}`,
+    `Série: ${v('f-serie')||'—'}`,
+    `TAG: ${v('f-tag')||'—'}`,
+    `Data: ${data}`,
+    `Horímetro: ${v('f-horimetro')||'—'} h`,
+    `Local: ${v('f-local')||'—'}`,
+    ``,
+    `Total de fotos: ${totalFotos}`,
+  ];
+  zip.file('INFO.txt', infoLines.join('\n'));
+
+  // Adiciona fotos organizadas por tópico
+  TOPICOS.forEach(t=>{
+    const s=estado[t.id];
+    let fotoCount=0;
+    s.fotos.forEach((fotos,idx)=>{
+      fotos.forEach((dataURL,fi)=>{
+        fotoCount++;
+        // Converte base64 para blob
+        const b64=dataURL.split(',')[1];
+        const nomePasta=t.nome.replace(/[^\w\s]/g,'').trim();
+        const nomeItem=t.itens[idx].d.replace(/[^\w\s]/g,'').trim().substring(0,40);
+        const nomeFoto=`${String(fotoCount).padStart(2,'0')} - ${nomeItem}.jpg`;
+        zip.folder(nomePasta).file(nomeFoto, b64, {base64:true});
+      });
+    });
+  });
+
+  // Gera e baixa
+  const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:6}});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`${base}.zip`;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1000);
+  toast(`ZIP gerado — ${totalFotos} foto${totalFotos!==1?'s':''} ✓`);
+}
+</script>
+</body>
+</html>
