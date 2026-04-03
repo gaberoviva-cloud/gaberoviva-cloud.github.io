@@ -15,7 +15,7 @@
       --dark: #1a1a1a;
       --text: #374151;
       --muted: #6b7280;
-      --border: rgba(255,255,255,0.15);
+      --border: rgba(255,255,255,0.12);
     }
 
     body {
@@ -26,11 +26,10 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 32px 20px;
+      padding: 28px 20px;
       overflow-x: hidden;
     }
 
-    /* Background pattern */
     body::before {
       content: '';
       position: fixed;
@@ -46,37 +45,38 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 420px;
+      max-width: 400px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 10px;
     }
 
     /* Logo */
     .logo-area {
       text-align: center;
+      margin-bottom: 4px;
       animation: fadeDown 0.5s ease both;
     }
     .logo-area img {
-      height: 44px;
+      height: 38px;
       width: auto;
       object-fit: contain;
       display: block;
-      margin: 0 auto 10px;
+      margin: 0 auto 8px;
     }
     .logo-fallback {
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 700;
       letter-spacing: -0.04em;
       color: white;
     }
     .logo-fallback span { color: var(--brand); }
     .logo-tagline {
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.4);
       font-weight: 500;
     }
 
@@ -85,36 +85,37 @@
       width: 100%;
       background: rgba(255,255,255,0.05);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 12px;
       overflow: hidden;
       backdrop-filter: blur(12px);
       animation: fadeUp 0.5s ease both;
     }
-    .card:nth-child(2) { animation-delay: 0.1s; }
-    .card:nth-child(3) { animation-delay: 0.2s; }
-    .card:nth-child(4) { animation-delay: 0.3s; }
-    .card:nth-child(5) { animation-delay: 0.4s; }
+    .card:nth-child(2) { animation-delay: 0.05s; }
+    .card:nth-child(3) { animation-delay: 0.10s; }
+    .card:nth-child(4) { animation-delay: 0.15s; }
+    .card:nth-child(5) { animation-delay: 0.20s; }
+    .card:nth-child(6) { animation-delay: 0.25s; }
 
     .card-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 14px 18px 12px;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--border);
     }
     .card-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: rgba(255,122,0,0.2);
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: rgba(255,122,0,0.18);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      font-size: 13px;
       flex-shrink: 0;
     }
     .card-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
       color: white;
       text-transform: uppercase;
@@ -122,12 +123,12 @@
     }
     .card-subtitle {
       font-size: 10px;
-      color: rgba(255,255,255,0.4);
+      color: rgba(255,255,255,0.38);
       margin-top: 1px;
     }
 
     .card-body {
-      padding: 12px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -139,11 +140,11 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 11px 14px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 9px;
-      color: rgba(255,255,255,0.85);
+      padding: 10px 13px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.82);
       font-size: 13px;
       font-weight: 500;
       font-family: inherit;
@@ -154,23 +155,22 @@
       text-decoration: none;
     }
     .btn:hover {
-      background: rgba(255,122,0,0.18);
-      border-color: rgba(255,122,0,0.4);
+      background: rgba(255,122,0,0.16);
+      border-color: rgba(255,122,0,0.38);
       color: white;
     }
     .btn:active { transform: scale(0.98); }
 
     .btn .btn-arrow {
       font-size: 12px;
-      opacity: 0.4;
+      opacity: 0.35;
       transition: opacity 0.15s, transform 0.15s;
     }
     .btn:hover .btn-arrow {
-      opacity: 0.9;
+      opacity: 0.85;
       transform: translateX(3px);
     }
 
-    /* Grid layout for states */
     .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -182,43 +182,38 @@
     }
     .btn-grid .btn .btn-arrow { display: none; }
 
-    /* Divider in card */
     .card-divider {
       height: 1px;
       background: var(--border);
       margin: 2px 0;
     }
 
-    /* Footer */
     footer {
       position: relative;
       z-index: 1;
       text-align: center;
       font-size: 11px;
-      color: rgba(255,255,255,0.25);
-      margin-top: 4px;
+      color: rgba(255,255,255,0.22);
+      margin-top: 6px;
     }
     footer a {
-      color: rgba(255,255,255,0.35);
+      color: rgba(255,255,255,0.32);
       text-decoration: none;
       transition: color 0.15s;
     }
     footer a:hover { color: var(--brand); }
 
-    /* Animations */
     @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-12px); }
+      from { opacity: 0; transform: translateY(-10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
+      from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* Mobile tweaks */
     @media (max-width: 480px) {
       .wrapper { max-width: 100%; }
-      .btn-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -226,7 +221,6 @@
 
 <div class="wrapper">
 
-  <!-- Logo -->
   <div class="logo-area">
     <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq"
       onerror="this.outerHTML='<div class=\\'logo-fallback\\'>TRADI<span>MAQ</span></div>'">
@@ -244,18 +238,10 @@
     </div>
     <div class="card-body">
       <div class="btn-grid">
-        <button class="btn" onclick="abrir('/Pages/status_SP.html')">
-          SP — Taubaté
-        </button>
-        <button class="btn" onclick="abrir('/Pages/status_GO.html')">
-          GO — Goiânia
-        </button>
-        <button class="btn" onclick="abrir('/Pages/status_ES.html')">
-          ES — Cariacica
-        </button>
-        <button class="btn" onclick="abrir('/Pages/status_PA.html')">
-          PA — Parauapebas
-        </button>
+        <button class="btn" onclick="abrir('/Pages/status_SP.html')">SP — Taubaté</button>
+        <button class="btn" onclick="abrir('/Pages/status_GO.html')">GO — Goiânia</button>
+        <button class="btn" onclick="abrir('/Pages/status_ES.html')">ES — Cariacica</button>
+        <button class="btn" onclick="abrir('/Pages/status_PA.html')">PA — Parauapebas</button>
       </div>
       <div class="card-divider"></div>
       <button class="btn" onclick="abrir('/Pages/status_MG.html')">
@@ -265,13 +251,13 @@
     </div>
   </div>
 
-  <!-- Vistoria de Saída e Retorno -->
+  <!-- Vistoria -->
   <div class="card">
     <div class="card-header">
       <div class="card-icon">🚜</div>
       <div>
         <div class="card-title">Vistoria de Saída e Retorno</div>
-        <div class="card-subtitle">Checklist · Plataformas Elevatórias · Gerador de PDF</div>
+        <div class="card-subtitle">Checklist · PDF</div>
       </div>
     </div>
     <div class="card-body">
@@ -292,16 +278,10 @@
       </div>
     </div>
     <div class="card-body">
-      <button class="btn" onclick="abrir('/controle_ferramentas_alpha.html')">
-        <span>Abrir controle</span>
-        <span class="btn-arrow">→</span>
-      </button>
-      <div class="card-divider"></div>
-      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.3);padding:2px 2px 0">Versão Mobile</div>
-      <button class="btn" onclick="abrir('/controle_ferramentas_mobile.html')">
-        <span>Abrir versão mobile</span>
-        <span class="btn-arrow">→</span>
-      </button>
+      <div class="btn-grid">
+        <button class="btn" onclick="abrir('/controle_ferramentas_alpha.html')">Desktop</button>
+        <button class="btn" onclick="abrir('/controle_ferramentas_mobile.html')">Mobile</button>
+      </div>
     </div>
   </div>
 
@@ -311,7 +291,7 @@
       <div class="card-icon">📋</div>
       <div>
         <div class="card-title">Relatório Técnico</div>
-        <div class="card-subtitle">Laudo de inspeção · Gerador de PDF</div>
+        <div class="card-subtitle">Laudo de inspeção · PDF</div>
       </div>
     </div>
     <div class="card-body">
@@ -322,7 +302,7 @@
     </div>
   </div>
 
-  <!-- Comparador Terex — Catálogo vs Cadastro -->
+  <!-- Comparador Terex -->
   <div class="card">
     <div class="card-header">
       <div class="card-icon">🔄</div>
