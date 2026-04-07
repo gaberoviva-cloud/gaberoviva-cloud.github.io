@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Vistoria — Tradimaq</title>
+<title>Vistoria Tradimaq</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{--brand:#ff6b00;--brand-dim:rgba(255,107,0,.13);--brand-glow:rgba(255,107,0,.25);--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--r:6px;--r2:10px;--r3:14px;}
@@ -691,7 +691,15 @@ function toggleMobilePreview(){
 /* ══════════ TOAST / BADGE ══════════ */
 function toast(msg,dur=2400){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 function badge(txt,cls){const b=document.getElementById('status-pill');b.textContent=txt;b.className='status-pill'+(cls?' '+cls:'');}
-function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();}
+function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();atualizarTitulo();}
+function atualizarTitulo(){
+  const equip=(v('f-tag')||v('f-serie')||'').trim();
+  const cliente=(v('f-cliente')||'').trim();
+  const partes=['Vistoria Tradimaq'];
+  if(equip)partes.push(`(${equip})`);
+  if(cliente)partes.push(`(${cliente})`);
+  document.title=partes.join(' ');
+}
 function v(id){return document.getElementById(id)?.value||'';}
 
 /* ══════════ INIT ══════════ */
@@ -701,7 +709,7 @@ async function initApp(){
   renderTopicos();
   await carregarCache();
   if(!v('f-descricao'))document.getElementById('f-descricao').value='Equipamento sem avarias visuais aparentes no momento da entrega.';
-  atualizarContador();badge('—','');
+  atualizarContador();atualizarTitulo();badge('—','');
 }
 initApp();
 
@@ -718,26 +726,24 @@ async function salvarCache(silent=false){
 }
 async function carregarCache(){
   try{
-    const raw=localStorage.getItem(CACHE_KEY);
-    if(raw){
-      const d=JSON.parse(raw);
-      ['modelo','serie','data','local','tag','cliente','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&d[k]!==undefined)el.value=d[k];});
-      if(d.condicao!==undefined){document.getElementById('f-condicao').value=d.condicao;const b=document.querySelector(`.cond-btn[data-val="${d.condicao}"]`);if(b)setCond(b,d.condicao);}
-      if(d.remessa){const b=document.querySelector(`.remessa-btn[data-val="${d.remessa}"]`);if(b)setRemessa(b,d.remessa);}
-      if(d.estado){
-        TOPICOS.forEach(t=>{
-          if(d.estado[t.id]){const s=d.estado[t.id];estado[t.id].checked=s.checked||Array(t.itens.length).fill(false);estado[t.id].fotos=Array(t.itens.length).fill(null).map(()=>[]);estado[t.id].nota=s.nota||'';}
-        });
-      }
+    const raw=localStorage.getItem(CACHE_KEY);if(!raw)return;
+    const d=JSON.parse(raw);
+    ['modelo','serie','data','local','tag','cliente','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&d[k]!==undefined)el.value=d[k];});
+    if(d.condicao!==undefined){document.getElementById('f-condicao').value=d.condicao;const b=document.querySelector(`.cond-btn[data-val="${d.condicao}"]`);if(b)setCond(b,d.condicao);}
+    if(d.remessa){const b=document.querySelector(`.remessa-btn[data-val="${d.remessa}"]`);if(b)setRemessa(b,d.remessa);}
+    if(d.estado){
+      TOPICOS.forEach(t=>{
+        if(d.estado[t.id]){const s=d.estado[t.id];estado[t.id].checked=s.checked||Array(t.itens.length).fill(false);estado[t.id].fotos=Array(t.itens.length).fill(null).map(()=>[]);estado[t.id].nota=s.nota||'';}
+      });
     }
-    // Carrega fotos do IndexedDB — independente do localStorage
+    // Carrega fotos do IndexedDB (independente do localStorage)
     const fotosIDB=await idbCarregarFotos();
     if(fotosIDB){
       TOPICOS.forEach(t=>{
         if(fotosIDB[t.id]){estado[t.id].fotos=(fotosIDB[t.id]||[]).map(f=>Array.isArray(f)?f:[]);}
       });
     }
-    if(raw||fotosIDB) renderTopicos();
+    renderTopicos();
     badge('✓','saved');
   }catch(e){console.warn(e);}
 }
@@ -1100,16 +1106,8 @@ function atualizar(){
 
 /* ══════════ PDF (IMPRESSÃO) ══════════ */
 async function gerarPDF(){
-  await salvarCache(true);
+  salvarCache(true);
   atualizar();
-
-  // Feedback visual no botão
-  const btnPDF = document.querySelector('.btn-pdf');
-  const mbarPDF = document.querySelector('.mbar-btn.primary');
-  const textoOrigBtn = btnPDF?.innerHTML;
-  const textoOrigMbar = mbarPDF?.innerHTML;
-  if(btnPDF){ btnPDF.disabled=true; btnPDF.innerHTML='⏳ Preparando...'; }
-  if(mbarPDF){ mbarPDF.disabled=true; mbarPDF.innerHTML='<span class="mbar-icon">⏳</span>PDF'; }
 
   // Garante que o preview está visível (mobile e desktop)
   const fp=document.getElementById('form-panel');
@@ -1139,20 +1137,12 @@ async function gerarPDF(){
   // Mais um frame para o layout estabilizar após carregamento
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
-  // Monta nome do arquivo: Vistoria Tradimaq NºEquip NomeCliente Data
-  const equipId = (v('f-tag')||v('f-serie')||'Equip').replace(/[^\w\s\-]/g,'').trim();
-  const cNome   = (v('f-cliente')||'Cliente').replace(/[^\w\sÀ-ú]/g,'').trim();
-  const dStr    = v('f-data') ? v('f-data').split('-').reverse().join('.') : new Date().toLocaleDateString('pt-BR').replace(/\//g,'.');
-  document.title = `Vistoria Tradimaq ${equipId} ${cNome} ${dStr}`;
+  // Monta nome do arquivo
+  atualizarTitulo();
 
   window.print();
 
-  // Restaura botões
-  if(btnPDF){ btnPDF.disabled=false; btnPDF.innerHTML=textoOrigBtn; }
-  if(mbarPDF){ mbarPDF.disabled=false; mbarPDF.innerHTML=textoOrigMbar; }
-
-  // Restaura título original
-  document.title = 'Vistoria — Tradimaq';
+  // Mantém o título atualizado (não restaura mais para genérico)
 
   // Restaura estado mobile
   if(eraMobile&&!previewShown){
@@ -1189,11 +1179,12 @@ async function exportarZIP(){
 
   const zip=new JSZip();
 
-  // Nome base do arquivo (mesmo padrão do PDF)
-  const equipIdZ = (v('f-tag')||v('f-serie')||'Equip').replace(/[^\w\s\-]/g,'').trim();
-  const clienteZ = (v('f-cliente')||'Cliente').replace(/[^\w\sÀ-ú]/g,'').trim();
-  const dataZ    = v('f-data') ? v('f-data').split('-').reverse().join('.') : new Date().toLocaleDateString('pt-BR').replace(/\//g,'.');
-  const base=`Vistoria Tradimaq ${equipIdZ} ${clienteZ} ${dataZ}`;
+  // Nome base do arquivo
+  const rLabel=v('f-remessa')==='retorno'?'Retorno':'Saida';
+  const cliente=(v('f-cliente')||'Cliente').replace(/[^\w\s]/g,'').trim();
+  const modelo=(v('f-modelo')||'').replace(/[^\w\s-]/g,'').trim();
+  const data=v('f-data')?v('f-data').split('-').reverse().join('-'):'sem-data';
+  const base=`${rLabel} - ${cliente}${modelo?' - '+modelo:''} - ${data}`;
 
   // Pasta raiz com info
   const infoLines=[
@@ -1202,7 +1193,7 @@ async function exportarZIP(){
     `Modelo: ${v('f-modelo')||'—'}`,
     `Série: ${v('f-serie')||'—'}`,
     `TAG: ${v('f-tag')||'—'}`,
-    `Data: ${dataZ}`,
+    `Data: ${data}`,
     `Horímetro: ${v('f-horimetro')||'—'} h`,
     `Local: ${v('f-local')||'—'}`,
     ``,
