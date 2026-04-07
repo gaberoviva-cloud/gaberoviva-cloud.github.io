@@ -553,7 +553,6 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
       <button class="btn-act btn-pdf" onclick="gerarPDF()">🖨 Gerar PDF</button>
       <button class="btn-act btn-zip" onclick="exportarZIP()">📦 Exportar fotos ZIP</button>
       <button class="btn-act btn-save" onclick="salvarCache()">💾 Salvar agora</button>
-      <button class="btn-act btn-sec" onclick="limparFotos()">🗑 Limpar fotos</button>
       <button class="btn-act btn-danger" onclick="limpar()">Limpar tudo</button>
     </div>
   </div>
@@ -583,35 +582,88 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 const LOGO_URL='https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
 let LOGO=LOGO_URL;
 const CACHE_KEY='tradimaq_v4';
+const IDB_NAME='tradimaq_fotos';
+const IDB_STORE='fotos';
+const IDB_VERSION=1;
+
+/* ══════════ INDEXEDDB — FOTOS ══════════ */
+let _idb=null;
+function abrirIDB(){
+  if(_idb) return Promise.resolve(_idb);
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(IDB_NAME,IDB_VERSION);
+    req.onupgradeneeded=e=>{
+      const db=e.target.result;
+      if(!db.objectStoreNames.contains(IDB_STORE))
+        db.createObjectStore(IDB_STORE,{keyPath:'id'});
+    };
+    req.onsuccess=e=>{_idb=e.target.result;res(_idb);};
+    req.onerror=e=>rej(e.target.error);
+  });
+}
+async function idbSalvarFotos(estadoObj){
+  try{
+    const db=await abrirIDB();
+    const fotos={};
+    TOPICOS.forEach(t=>{fotos[t.id]=estadoObj[t.id].fotos;});
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readwrite');
+      const store=tx.objectStore(IDB_STORE);
+      store.put({id:'fotos_cache',fotos});
+      tx.oncomplete=()=>res();
+      tx.onerror=e=>rej(e.target.error);
+    });
+  }catch(e){console.warn('IDB salvar fotos:',e);}
+}
+async function idbCarregarFotos(){
+  try{
+    const db=await abrirIDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readonly');
+      const req=tx.objectStore(IDB_STORE).get('fotos_cache');
+      req.onsuccess=e=>res(e.target.result?.fotos||null);
+      req.onerror=e=>rej(e.target.error);
+    });
+  }catch(e){console.warn('IDB carregar fotos:',e);return null;}
+}
+async function idbLimparFotos(){
+  try{
+    const db=await abrirIDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readwrite');
+      tx.objectStore(IDB_STORE).delete('fotos_cache');
+      tx.oncomplete=()=>res();
+      tx.onerror=e=>rej(e.target.error);
+    });
+  }catch(e){console.warn('IDB limpar:',e);}
+}
 
 /* ══════════ TÓPICOS ══════════ */
 const TOPICOS=[
   {id:'ident',icon:'🪪',nome:'1. Identificação',itens:[
-    {d:'Plaqueta do número de série'},{d:'Horímetro'},{d:'Chave de partida'},{d:'Vista geral com TAG/frota'}
+    {d:'Plaqueta do número de série',c:true},{d:'Horímetro',c:true},{d:'Chave de partida',c:true},{d:'Vista geral com TAG/frota',c:true}
   ]},
   {id:'vista',icon:'🔍',nome:'2. Vista Geral',itens:[
     {d:'Lado direito completo',c:true},{d:'Lado esquerdo completo',c:true},{d:'Frente',c:true},{d:'Traseira',c:true}
   ]},
-  {id:'pneus',icon:'🛞',nome:'3. Rodagem — Pneus',itens:[
-    {d:'Traseiro direito — lateral'},{d:'Traseiro direito — banda de rodagem'},
-    {d:'Traseiro esquerdo — lateral'},{d:'Traseiro esquerdo — banda de rodagem'},
-    {d:'Frontal direito — lateral'},{d:'Frontal direito — banda de rodagem'},
-    {d:'Frontal esquerdo — lateral'},{d:'Frontal esquerdo — banda de rodagem'}
+  {id:'pneus',icon:'🛞',nome:'3. Pneus',itens:[
+    {d:'Traseiros',c:true},
+    {d:'Frontais',c:true},
   ]},
-  {id:'cesto',icon:'🧺',nome:'4. Cesto / Plataforma',itens:[
-    {d:'Vista interna — piso'},{d:'Frente do cesto'},{d:'Lateral esquerda'},{d:'Lateral direita'},{d:'Traseira do cesto'},{d:'Painel do cesto'},{d:'Joystick'}
+  {id:'cesto',icon:'🧺',nome:'4. Cesto / Deck',itens:[
+    {d:'Vista interna — piso'},{d:'Lateral esquerda'},{d:'Lateral direita'},{d:'Traseira do cesto esquerda'},{d:'Traseira do cesto direita'}, {d:'Manual',c:true}
   ]},
-  {id:'solo',icon:'🎮',nome:'5. Painel de Solo',itens:[
-    {d:'Painel completo'},{d:'Chave seletora (solo/cesto)'}
+  {id:'solo',icon:'🎮',nome:'5. Adesivos de Painel',itens:[
+    {d:'Painel de Solo',c:true}, {d:'Painel do Cesto',c:true}
   ]},
   {id:'seg',icon:'🛡️',nome:'6. Segurança',critico:true,itens:[
     {d:'Extintor instalado',c:true},{d:'Lacre do extintor (close)',c:true},{d:'Manômetro (close)',c:true}
   ]},
   {id:'hidro',icon:'🔧',nome:'7. Sistema Hidráulico',itens:[
-    {d:'Compartimento hidráulico'},{d:'Nível do óleo hidráulico'}
+    {d:'Tanque hidráulico'}, {d:'Bloco Manifold'}
   ]},
   {id:'motor',icon:'⚡',nome:'8. Energia / Motor',itens:[
-    {d:'Motor ou baterias (visão geral)'},{d:'Nível de combustível ou carga'}
+    {d:'Motor'},{d:'Baterias'},{d:'Nível de combustível ou carga'}
   ]},
   {id:'struct',icon:'🏗️',nome:'9. Estrutura',itens:[
     {d:'Tesoura ou lança (vista geral)'},{d:'Deck — estado do piso'}
@@ -639,7 +691,7 @@ function toggleMobilePreview(){
 /* ══════════ TOAST / BADGE ══════════ */
 function toast(msg,dur=2400){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 function badge(txt,cls){const b=document.getElementById('status-pill');b.textContent=txt;b.className='status-pill'+(cls?' '+cls:'');}
-function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true),3000);atualizarContador();}
+function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();}
 function v(id){return document.getElementById(id)?.value||'';}
 
 /* ══════════ INIT ══════════ */
@@ -647,47 +699,52 @@ document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
 async function initApp(){
   try{const r=await fetch(LOGO_URL);const b=await r.blob();LOGO=await new Promise(res=>{const rd=new FileReader();rd.onload=e=>res(e.target.result);rd.readAsDataURL(b);});}catch(e){}
   renderTopicos();
-  carregarCache();
+  await carregarCache();
   if(!v('f-descricao'))document.getElementById('f-descricao').value='Equipamento sem avarias visuais aparentes no momento da entrega.';
   atualizarContador();badge('—','');
 }
 initApp();
 
 /* ══════════ CACHE ══════════ */
-function salvarCache(silent=false){
-  const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa'),estado};
-  try{
-    localStorage.setItem(CACHE_KEY,JSON.stringify(d));
-    hasUnsaved=false;badge('✓','saved');if(!silent)toast('Salvo!');
-  }catch(e){
-    // localStorage cheio — tenta salvar só os campos (sem fotos)
-    try{
-      const semFotos={...d,estado:{}};
-      TOPICOS.forEach(t=>{semFotos.estado[t.id]={checked:estado[t.id].checked,fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:estado[t.id].nota};});
-      localStorage.setItem(CACHE_KEY,JSON.stringify(semFotos));
-      badge('⚠','dirty');if(!silent)toast('⚠ Armazenamento cheio — campos salvos, fotos não.');
-    }catch(e2){badge('⚠','dirty');if(!silent)toast('Erro ao salvar');}
-  }
+async function salvarCache(silent=false){
+  // 1. Salva campos e estado (sem fotos) no localStorage
+  const estadoSemFotos={};
+  TOPICOS.forEach(t=>{estadoSemFotos[t.id]={checked:estado[t.id].checked,fotos:[],nota:estado[t.id].nota};});
+  const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa'),estado:estadoSemFotos};
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify(d));}catch(e){console.warn('localStorage:',e);}
+  // 2. Salva fotos no IndexedDB
+  try{await idbSalvarFotos(estado);}catch(e){console.warn('IDB:',e);}
+  hasUnsaved=false;badge('✓','saved');if(!silent)toast('Salvo!');
 }
-function carregarCache(){
+async function carregarCache(){
   try{
-    const raw=localStorage.getItem(CACHE_KEY);if(!raw)return;
-    const d=JSON.parse(raw);
-    ['modelo','serie','data','local','tag','cliente','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&d[k]!==undefined)el.value=d[k];});
-    if(d.condicao!==undefined){document.getElementById('f-condicao').value=d.condicao;const b=document.querySelector(`.cond-btn[data-val="${d.condicao}"]`);if(b)setCond(b,d.condicao);}
-    if(d.remessa){const b=document.querySelector(`.remessa-btn[data-val="${d.remessa}"]`);if(b)setRemessa(b,d.remessa);}
-    if(d.estado){
-      TOPICOS.forEach(t=>{
-        if(d.estado[t.id]){const s=d.estado[t.id];estado[t.id].checked=s.checked||Array(t.itens.length).fill(false);estado[t.id].fotos=(s.fotos||[]).map(f=>Array.isArray(f)?f:[]);estado[t.id].nota=s.nota||'';}
-      });
-      renderTopicos();
+    const raw=localStorage.getItem(CACHE_KEY);
+    if(raw){
+      const d=JSON.parse(raw);
+      ['modelo','serie','data','local','tag','cliente','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&d[k]!==undefined)el.value=d[k];});
+      if(d.condicao!==undefined){document.getElementById('f-condicao').value=d.condicao;const b=document.querySelector(`.cond-btn[data-val="${d.condicao}"]`);if(b)setCond(b,d.condicao);}
+      if(d.remessa){const b=document.querySelector(`.remessa-btn[data-val="${d.remessa}"]`);if(b)setRemessa(b,d.remessa);}
+      if(d.estado){
+        TOPICOS.forEach(t=>{
+          if(d.estado[t.id]){const s=d.estado[t.id];estado[t.id].checked=s.checked||Array(t.itens.length).fill(false);estado[t.id].fotos=Array(t.itens.length).fill(null).map(()=>[]);estado[t.id].nota=s.nota||'';}
+        });
+      }
     }
+    // Carrega fotos do IndexedDB — independente do localStorage
+    const fotosIDB=await idbCarregarFotos();
+    if(fotosIDB){
+      TOPICOS.forEach(t=>{
+        if(fotosIDB[t.id]){estado[t.id].fotos=(fotosIDB[t.id]||[]).map(f=>Array.isArray(f)?f:[]);}
+      });
+    }
+    if(raw||fotosIDB) renderTopicos();
     badge('✓','saved');
   }catch(e){console.warn(e);}
 }
 function limpar(){
   if(!confirm('Limpar tudo e recomeçar?'))return;
   try{localStorage.removeItem(CACHE_KEY);}catch(e){}
+  idbLimparFotos().catch(()=>{});
   TOPICOS.forEach(t=>{estado[t.id]={checked:Array(t.itens.length).fill(false),fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:''};});
   ['modelo','serie','data','local','tag','cliente','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value='';});
   document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
@@ -712,12 +769,15 @@ function limparFotos(){
   });
   renderTopicos();
   atualizarContador();
-  // Salva direto sem esperar debounce, ignorando localStorage cheio
+  // Salva direto sem esperar debounce
+  const estadoSemFotos={};
+  TOPICOS.forEach(t=>{estadoSemFotos[t.id]={checked:estado[t.id].checked,fotos:[],nota:estado[t.id].nota};});
   try{
-    const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa'),estado};
+    const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa'),estado:estadoSemFotos};
     localStorage.setItem(CACHE_KEY,JSON.stringify(d));
-    hasUnsaved=false;badge('✓','saved');
-  }catch(e){badge('✓','saved');}
+  }catch(e){}
+  idbLimparFotos().catch(()=>{});
+  hasUnsaved=false;badge('✓','saved');
   toast('Fotos removidas!');
 }
 
@@ -753,7 +813,7 @@ function renderTopicos(){
       itensHTML+=`<div class="foto-item" id="fi-${t.id}-${idx}">
         <div class="fi-top">
           <div class="fi-cb ${checked?'checked':''}" onclick="toggleCheck('${t.id}',${idx})"></div>
-          <div class="fi-desc ${checked?'done':''}">${item.d}${item.c?'<span class="fi-critical">⚖ Prova jurídica</span>':''}</div>
+          <div class="fi-desc ${checked?'done':''}">${item.d}${item.c?'<span class="fi-critical">⚠︎ Obrigatório</span>':''}</div>
         </div>
         <div class="fi-fotos" id="fotos-${t.id}-${idx}">${thumbs}</div>
         <div class="fi-btns">
@@ -1040,8 +1100,16 @@ function atualizar(){
 
 /* ══════════ PDF (IMPRESSÃO) ══════════ */
 async function gerarPDF(){
-  salvarCache(true);
+  await salvarCache(true);
   atualizar();
+
+  // Feedback visual no botão
+  const btnPDF = document.querySelector('.btn-pdf');
+  const mbarPDF = document.querySelector('.mbar-btn.primary');
+  const textoOrigBtn = btnPDF?.innerHTML;
+  const textoOrigMbar = mbarPDF?.innerHTML;
+  if(btnPDF){ btnPDF.disabled=true; btnPDF.innerHTML='⏳ Preparando...'; }
+  if(mbarPDF){ mbarPDF.disabled=true; mbarPDF.innerHTML='<span class="mbar-icon">⏳</span>PDF'; }
 
   // Garante que o preview está visível (mobile e desktop)
   const fp=document.getElementById('form-panel');
@@ -1071,13 +1139,17 @@ async function gerarPDF(){
   // Mais um frame para o layout estabilizar após carregamento
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
-  // Monta nome do arquivo: Remessa - Cliente - Data
-  const rLabel = v('f-remessa')==='retorno' ? 'Retorno' : 'Saida';
-  const cNome  = (v('f-cliente')||'Cliente').replace(/[^\w\s]/g,'').trim();
-  const dStr   = v('f-data') ? v('f-data').split('-').reverse().join('-') : fmtDate(v('f-data'));
-  document.title = `${rLabel} - ${cNome} - ${dStr}`;
+  // Monta nome do arquivo: Vistoria Tradimaq NºEquip NomeCliente Data
+  const equipId = (v('f-tag')||v('f-serie')||'Equip').replace(/[^\w\s\-]/g,'').trim();
+  const cNome   = (v('f-cliente')||'Cliente').replace(/[^\w\sÀ-ú]/g,'').trim();
+  const dStr    = v('f-data') ? v('f-data').split('-').reverse().join('.') : new Date().toLocaleDateString('pt-BR').replace(/\//g,'.');
+  document.title = `Vistoria Tradimaq ${equipId} ${cNome} ${dStr}`;
 
   window.print();
+
+  // Restaura botões
+  if(btnPDF){ btnPDF.disabled=false; btnPDF.innerHTML=textoOrigBtn; }
+  if(mbarPDF){ mbarPDF.disabled=false; mbarPDF.innerHTML=textoOrigMbar; }
 
   // Restaura título original
   document.title = 'Vistoria — Tradimaq';
@@ -1117,12 +1189,11 @@ async function exportarZIP(){
 
   const zip=new JSZip();
 
-  // Nome base do arquivo
-  const rLabel=v('f-remessa')==='retorno'?'Retorno':'Saida';
-  const cliente=(v('f-cliente')||'Cliente').replace(/[^\w\s]/g,'').trim();
-  const modelo=(v('f-modelo')||'').replace(/[^\w\s-]/g,'').trim();
-  const data=v('f-data')?v('f-data').split('-').reverse().join('-'):'sem-data';
-  const base=`${rLabel} - ${cliente}${modelo?' - '+modelo:''} - ${data}`;
+  // Nome base do arquivo (mesmo padrão do PDF)
+  const equipIdZ = (v('f-tag')||v('f-serie')||'Equip').replace(/[^\w\s\-]/g,'').trim();
+  const clienteZ = (v('f-cliente')||'Cliente').replace(/[^\w\sÀ-ú]/g,'').trim();
+  const dataZ    = v('f-data') ? v('f-data').split('-').reverse().join('.') : new Date().toLocaleDateString('pt-BR').replace(/\//g,'.');
+  const base=`Vistoria Tradimaq ${equipIdZ} ${clienteZ} ${dataZ}`;
 
   // Pasta raiz com info
   const infoLines=[
@@ -1131,7 +1202,7 @@ async function exportarZIP(){
     `Modelo: ${v('f-modelo')||'—'}`,
     `Série: ${v('f-serie')||'—'}`,
     `TAG: ${v('f-tag')||'—'}`,
-    `Data: ${data}`,
+    `Data: ${dataZ}`,
     `Horímetro: ${v('f-horimetro')||'—'} h`,
     `Local: ${v('f-local')||'—'}`,
     ``,
