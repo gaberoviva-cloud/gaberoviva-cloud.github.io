@@ -970,6 +970,11 @@ function atualizar(){
   const badgeMap={leve:'<span class="badge badge-leve">Dano Leve</span>',moderado:'<span class="badge badge-moderado">Dano Moderado</span>',grave:'<span class="badge badge-grave">Dano Grave</span>','':'<span class="badge badge-sem">Sem Dano</span>'};
   const badgeHtml=badgeMap[condicao]||badgeMap[''];
 
+  // Atualiza o título da página (usado como nome do arquivo no "Salvar como PDF")
+  const tagTit=v('f-tag'), clienteTit=v('f-cliente'), dataTit=v('f-data');
+  const partsTit=[tagTit,clienteTit,dataTit?dataTit.split('-').reverse().join('-'):''].filter(Boolean);
+  document.title = partsTit.length ? 'RELATORIO - ' + partsTit.join(' - ') : 'RELATORIO - Tradimaq';
+
   const ordemIds=[...document.querySelectorAll('.foto-par')].map(el=>parseInt(el.id.replace('pe-','')));
   const paresOrd=ordemIds.map(id=>pares.find(p=>p.id===id)).filter(Boolean);
 
