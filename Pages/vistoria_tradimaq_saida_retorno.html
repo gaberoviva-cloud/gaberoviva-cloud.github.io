@@ -91,6 +91,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .fi-desc{flex:1;font-size:13px;color:var(--txt2);line-height:1.4;}
 .fi-desc.done{color:var(--txt3);text-decoration:line-through;}
 .fi-critical{display:block;font-size:9px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
+.tp-retorno-hint{font-family:'Barlow',sans-serif;font-size:10px;font-weight:400;font-style:italic;color:var(--txt3);letter-spacing:0;text-transform:none;margin-left:auto;white-space:nowrap;}
 
 /* Foto thumbnails */
 .fi-fotos{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:9px;}
@@ -833,6 +834,7 @@ function renderTopicos(){
       <div class="topico-hdr" onclick="toggleTp('${t.id}')">
         <span class="tp-icon">${t.icon}</span>
         <span class="tp-name">${t.nome}</span>
+        ${t.id==='avaria'?'<span class="tp-retorno-hint">Use apenas em vistorias de retorno</span>':''}
         <span class="tp-badge ${done===total?'done':''}" id="tpb-${t.id}">${done}/${total}</span>
         <span class="tp-chevron">▼</span>
       </div>
@@ -864,15 +866,21 @@ function setNota(tpId,val){estado[tpId].nota=val;changed();}
 /* ══════════ UPLOAD ══════════ */
 function triggerUp(tpId,idx){document.getElementById(`up-${tpId}-${idx}`)?.click();}
 async function onUp(event,tpId,idx){
-  for(const f of [...event.target.files]){
-    const data=await readFile(f);const resized=await processImg(data);
-    estado[tpId].fotos[idx].push(resized);estado[tpId].checked[idx]=true;
-  }
-  renderItemFotos(tpId,idx);atualizarContador();changed();event.target.value='';
+  const files=[...event.target.files];
+  event.target.value='';
+  if(!files.length)return;
+  const n=files.length;
+  toast(n>1?`Processando ${n} fotos... ⏳`:'⏳ Processando...',4000);
+  const resizeds=await Promise.all(files.map(async f=>{const data=await readFile(f);return processImg(data);}));
+  resizeds.forEach(r=>{estado[tpId].fotos[idx].push(r);});
+  estado[tpId].checked[idx]=true;
+  renderItemFotos(tpId,idx);atualizarContador();
+  await salvarCache(true);
+  toast(n>1?`${n} fotos salvas! ✓`:'✓ Foto salva!');
 }
 function delFoto(tpId,idx,fi){
   estado[tpId].fotos[idx].splice(fi,1);
-  renderItemFotos(tpId,idx);atualizarContador();changed();
+  renderItemFotos(tpId,idx);atualizarContador();salvarCache(true);
 }
 function renderItemFotos(tpId,idx){
   const fotos=estado[tpId].fotos[idx]||[];
@@ -990,7 +998,8 @@ async function capturar(){
   const dataURL=c.toDataURL('image/jpeg',.92);
   fecharCam();
   estado[camTp].fotos[camIdx].push(dataURL);estado[camTp].checked[camIdx]=true;
-  renderItemFotos(camTp,camIdx);atualizarContador();changed();toast('Foto capturada! ✓');
+  renderItemFotos(camTp,camIdx);atualizarContador();
+  toast('Salvando...⏳',1500);salvarCache(true).then(()=>toast('Foto salva! ✓'));
 }
 function fecharCam(){
   if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
@@ -1106,7 +1115,7 @@ function atualizar(){
 
 /* ══════════ PDF (IMPRESSÃO) ══════════ */
 async function gerarPDF(){
-  salvarCache(true);
+  await salvarCache(true);
   atualizar();
 
   // Garante que o preview está visível (mobile e desktop)
