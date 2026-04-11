@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>GerOS · Ordens de Serviço</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --accent:    #f59e0b;
+      --accent2:   #d97706;
+      --accent-glow: rgba(245,158,11,.18);
+      --red:       #ef4444;
+      --green:     #22c55e;
+      --blue:      #3b82f6;
+      --radius:    16px;
+      --radius-sm: 10px;
+      --radius-xs: 6px;
+    }
+    [data-theme="dark"] {
+      --bg:        #0a0e14;
+      --bg2:       #0d1219;
+      --surface:   #111720;
+      --surface2:  #161e2b;
+      --surface3:  #1c2535;
+      --border:    #1e2a3a;
+      --border2:   #26374f;
+      --text:      #e2e8f0;
+      --text2:     #7c8fa3;
+      --text3:     #4a5a6e;
+    }
+    [data-theme="light"] {
+      --bg:        #f0f4f8;
+      --bg2:       #e8eef5;
+      --surface:   #ffffff;
+      --surface2:  #f5f8fc;
+      --surface3:  #edf2f7;
+      --border:    #dce5ef;
+      --border2:   #c5d3e0;
+      --text:      #0f1f2e;
+      --text2:     #4e6070;
+      --text3:     #8fa0b0;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      min-height: 100vh;
+      line-height: 1.55;
+      transition: background .25s, color .25s;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      position: sticky;
+      top: 0;
+      z-index: 300;
+      box-shadow: 0 1px 20px rgba(0,0,0,.25);
+    }
+    .topbar-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .logo-mark {
+      width: 30px; height: 30px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: #0a0e14;
+      font-size: .85rem;
+    }
+    .topbar-divider { color: var(--border2); font-size: .9rem; }
+    .topbar-sub { color: var(--text2); font-size: .78rem; display: none; letter-spacing: .3px; }
+    @media (min-width: 600px) { .topbar-sub { display: inline; } }
+    .topbar-sep { flex: 1; }
+    .os-num-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid rgba(245,158,11,.3);
+      padding: 4px 12px;
+      border-radius: 30px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 160px;
+    }
+    .theme-btn {
+      width: 34px; height: 34px;
+      border-radius: 9px;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--text2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .15s;
+    }
+    .theme-btn:hover { background: var(--surface3); color: var(--accent); }
+
+    /* ── LAYOUT ── */
+    .wrapper { max-width: 1300px; margin: 0 auto; padding: 1.4rem 1rem 4rem; }
+
+    .page-header { margin-bottom: 1.4rem; }
+    .page-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+    .page-sub { color: var(--text2); font-size: .8rem; margin-top: 2px; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; align-items: start; }
+    @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .2s;
+    }
+    .card-head {
+      padding: .85rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+      background: var(--surface2);
+    }
+    .card-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: var(--accent-glow);
+      border: 1px solid rgba(245,158,11,.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+      font-size: .8rem;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      flex: 1;
+    }
+    .card-body { padding: 1.1rem; }
+
+    /* ── FORM ── */
+    .form-group { margin-bottom: .85rem; }
+    .form-label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: .68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--text2);
+      margin-bottom: 5px;
+    }
+    .form-label i { color: var(--accent); font-size: .62rem; }
+    .form-label .req { color: var(--accent); }
+
+    input, select, textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1.5px solid var(--border2);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      padding: 9px 13px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      -webkit-appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    input[readonly] {
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border-color: rgba(245,158,11,.2);
+      cursor: default;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+    select { cursor: pointer; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+    @media (max-width: 480px) { .row-2 { grid-template-columns: 1fr; } }
+
+    /* Telefone com botão integrado */
+    .input-with-btn { position: relative; }
+    .input-with-btn input { padding-right: 44px; }
+    .input-inline-btn {
+      position: absolute;
+      right: 8px; top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text3);
+      cursor: pointer;
+      font-size: .9rem;
+      padding: 4px;
+      transition: color .15s;
+    }
+    .input-inline-btn:hover { color: var(--accent); }
+
+    /* ── BOTÕES ── */
+    .btn-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+      padding-top: .8rem;
+      border-top: 1px solid var(--border);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: .82rem;
+      border: none;
+      cursor: pointer;
+      transition: all .15s;
+      background: transparent;
+      letter-spacing: .2px;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #0a0e14;
+      box-shadow: 0 2px 12px rgba(245,158,11,.3);
+    }
+    .btn-primary:hover { background: var(--accent2); box-shadow: 0 4px 18px rgba(245,158,11,.4); transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-ghost { border: 1.5px solid var(--border2); color: var(--text2); background: var(--surface2); }
+    .btn-ghost:hover { border-color: var(--border2); background: var(--surface3); color: var(--text); }
+    .btn-danger { color: var(--red); border: 1.5px solid rgba(239,68,68,.25); background: rgba(239,68,68,.05); }
+    .btn-danger:hover { background: rgba(239,68,68,.12); }
+    .btn-green { color: var(--green); border: 1.5px solid rgba(34,197,94,.25); background: rgba(34,197,94,.05); }
+    .btn-green:hover { background: rgba(34,197,94,.12); }
+    .btn-blue { color: var(--blue); border: 1.5px solid rgba(59,130,246,.25); background: rgba(59,130,246,.05); }
+    .btn-blue:hover { background: rgba(59,130,246,.12); }
+    .btn-sm { padding: 5px 11px; font-size: .72rem; border-radius: var(--radius-xs); }
+    .btn-lg { padding: 12px 22px; font-size: .9rem; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none !important; }
+
+    /* ── PREVIEW DA OS ── */
+    .os-preview-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.12);
+      font-family: 'DM Sans', sans-serif;
+      color: #111;
+    }
+    .os-preview-header {
+      background: linear-gradient(135deg, #0d1b2a 0%, #0a1520 100%);
+      padding: 1rem 1.3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-bottom: 3px solid #f59e0b;
+    }
+    .os-preview-header h3 {
+      color: #fff;
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .os-preview-number {
+      font-family: 'DM Mono', monospace;
+      background: rgba(245,158,11,.18);
+      padding: 4px 14px;
+      border-radius: 30px;
+      font-size: .68rem;
+      color: #f59e0b;
+      font-weight: 500;
+      border: 1px solid rgba(245,158,11,.3);
+    }
+    .os-preview-body { padding: .9rem 1.3rem; }
+    .os-preview-row {
+      display: flex;
+      padding: 7px 0;
+      border-bottom: 1px solid #f0f4f8;
+      gap: 12px;
+    }
+    .os-preview-row:last-child { border-bottom: none; }
+    .os-preview-label {
+      width: 100px;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #6b7e8f;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      letter-spacing: .4px;
+      padding-top: 2px;
+      flex-shrink: 0;
+    }
+    .os-preview-label i { color: #f59e0b; width: 14px; margin-top: 1px; }
+    .os-preview-value {
+      flex: 1;
+      font-size: .88rem;
+      color: #1a2c38;
+      word-break: break-word;
+    }
+    .os-preview-value strong { font-weight: 700; color: #0b2338; }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 12px;
+      border-radius: 40px;
+      font-size: .68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .s-pendente  { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+    .s-andamento { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+    .s-concluido { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
+    .s-pendente .status-dot  { background: #ea580c; }
+    .s-andamento .status-dot { background: #2563eb; }
+    .s-concluido .status-dot { background: #16a34a; }
+
+    .os-preview-footer {
+      padding: .5rem 1.3rem .7rem;
+      font-size: .65rem;
+      color: #aab8c4;
+      text-align: right;
+      border-top: 1px solid #f0f4f8;
+    }
+
+    .os-preview-actions {
+      padding: .8rem 1.2rem;
+      border-top: 1px solid #edf2f7;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: #f8fbff;
+    }
+
+    /* ── HISTÓRICO ── */
+    .history-search-row {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: .8rem;
+      align-items: center;
+    }
+    .history-search-row input { flex: 1; }
+
+    .history-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: .55rem;
+      max-height: 320px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+    .hist-item {
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 11px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color .15s, background .15s;
+    }
+    .hist-item:hover { border-color: var(--accent); background: var(--surface3); }
+    .hist-os-num {
+      font-family: 'DM Mono', monospace;
+      font-size: .6rem;
+      color: var(--accent);
+      margin-bottom: 3px;
+    }
+    .hist-client {
+      font-weight: 600;
+      font-size: .84rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 28px;
+    }
+    .hist-tecnico {
+      font-size: .72rem;
+      color: var(--text2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .hist-meta {
+      font-size: .68rem;
+      color: var(--text3);
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 5px;
+    }
+    .hist-item-actions {
+      position: absolute;
+      top: 7px; right: 7px;
+      opacity: 0;
+      transition: opacity .12s;
+      display: flex;
+      gap: 3px;
+    }
+    .hist-item:hover .hist-item-actions { opacity: 1; }
+    .hist-del-btn {
+      width: 22px; height: 22px;
+      background: none;
+      border: none;
+      color: var(--red);
+      cursor: pointer;
+      border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem;
+      transition: background .12s;
+    }
+    .hist-del-btn:hover { background: rgba(239,68,68,.12); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--border2);
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    .modal-head {
+      padding: 1rem 1.1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: var(--surface2);
+    }
+    .modal-title { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; letter-spacing: .5px; text-transform: uppercase; flex: 1; }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 1.1rem;
+      width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 6px;
+      transition: all .12s;
+    }
+    .modal-close:hover { background: var(--surface3); color: var(--text); }
+    .modal-body { padding: 1.1rem; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 1.8rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: var(--surface3);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      padding: 9px 20px;
+      border-radius: 40px;
+      font-size: .8rem;
+      font-weight: 500;
+      transition: transform .22s cubic-bezier(.34,1.56,.64,1);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      box-shadow: 0 4px 20px rgba(0,0,0,.35);
+      max-width: 90vw;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      padding: 2.5rem 1rem;
+      text-align: center;
+      color: var(--text3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .6rem;
+    }
+    .empty-state i { font-size: 2rem; opacity: .4; }
+    .empty-state p { font-size: .85rem; }
+
+    /* ── LOADING SPINNER ── */
+    .loading-spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(0,0,0,.2);
+      border-radius: 50%;
+      border-top-color: #0a0e14;
+      animation: spin .6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── ANIMATIONS ── */
+    .anim-in { animation: fadeSlide .22s ease; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      font-size: .7rem;
+      color: var(--text3);
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── SECTION DIVIDER ── */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1.2rem 0;
+    }
+
+    /* ── COUNTER BADGE ── */
+    .count-badge {
+      background: var(--surface3);
+      border: 1px solid var(--border2);
+      color: var(--text2);
+      font-size: .62rem;
+      font-family: 'DM Mono', monospace;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .5rem;
+      margin-bottom: 1rem;
+    }
+    .stat-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: .6rem .8rem;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--accent);
+    }
+    .stat-label { font-size: .62rem; color: var(--text3); margin-top: 1px; text-transform: uppercase; letter-spacing: .4px; }
+
+    /* ── TECNICO AUTOCOMPLETE ── */
+    .autocomplete-wrap { position: relative; }
+    .autocomplete-list {
+      position: absolute;
+      top: 100%;
+      left: 0; right: 0;
+      background: var(--surface);
+      border: 1.5px solid var(--accent);
+      border-top: none;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      z-index: 100;
+      max-height: 140px;
+      overflow-y: auto;
+      box-shadow: 0 6px 20px rgba(0,0,0,.3);
+    }
+    .autocomplete-item {
+      padding: 8px 13px;
+      font-size: .85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .autocomplete-item:hover { background: var(--surface2); color: var(--accent); }
+    .autocomplete-item i { font-size: .7rem; color: var(--accent); }
+
+    /* ── RESPONSIVE TOUCH ── */
+    @media (max-width: 600px) {
+      .btn { padding: 10px 14px; font-size: .85rem; }
+      .btn-sm { padding: 7px 11px; font-size: .75rem; }
+      input, select, textarea { font-size: 16px; } /* prevent iOS zoom */
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-mark"><i class="fas fa-wrench"></i></div>
+    GerOS
+  </div>
+  <span class="topbar-divider">·</span>
+  <span class="topbar-sub">Ordens de Serviço</span>
+  <div class="topbar-sep"></div>
+  <div class="os-num-badge" id="topbarOsNum">—</div>
+  <button class="theme-btn" id="themeToggleBtn" title="Alternar tema">
+    <i class="fas fa-moon" id="themeIcon"></i>
+  </button>
+</nav>
+
+<div class="wrapper">
+  <div class="page-header">
+    <div class="page-title">Ordem de Serviço</div>
+    <div class="page-sub">Preencha os dados, gere a OS e compartilhe ou salve como PDF.</div>
+  </div>
+
+  <div class="grid">
+    <!-- ── FORMULÁRIO ── -->
+    <div class="card">
+      <div class="card-head">
+        <div class="card-icon"><i class="fas fa-pen-to-square"></i></div>
+        <div class="card-title">Dados da OS</div>
+      </div>
+      <div class="card-body">
+        <form id="osForm" autocomplete="off">
+          <!-- Número OS -->
+          <div class="form-group">
+            <div class="form-label"><i class="fas fa-hashtag"></i> Número OS
+              <button type="button" class="btn btn-sm btn-ghost" style="margin-left:auto;padding:2px 8px;font-size:.6rem;" onclick="refreshOSNumber()" title="Regenerar número">
+                <i class="fas fa-rotate"></i> Gerar novo
+              </button>
+            </div>
+            <input type="text" id="osNumber" readonly>
+          </div>
+
+          <!-- Cliente -->
+          <div class="form-group">
+            <div class="form-label"><i class="fas fa-user"></i> Cliente <span class="req">*</span></div>
+            <input type="text" id="cliente" placeholder="Nome ou Razão Social" autocomplete="off">
+          </div>
+
+          <!-- Telefone + Data -->
+          <div class="row-2">
+            <div class="form-group">
+              <div class="form-label"><i class="fas fa-phone-alt"></i> Telefone</div>
+              <div class="input-with-btn">
+                <input type="tel" id="telefone" placeholder="(00) 00000-0000" autocomplete="tel">
+                <button type="button" class="input-inline-btn" onclick="ligarParaCliente()" title="Ligar">
+                  <i class="fas fa-phone"></i>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="form-label"><i class="fas fa-calendar-day"></i> Data abertura</div>
+              <input type="date" id="dataAbertura">
+            </div>
+          </div>
+
+          <!-- Técnico com autocomplete -->
+          <div class="form-group">
+            <div class="form-label"><i class="fas fa-hard-hat"></i> Técnico responsável</div>
+            <div class="autocomplete-wrap">
+              <input type="text" id="tecnico" placeholder="Nome do técnico" autocomplete="off" oninput="onTecnicoInput()">
+              <div class="autocomplete-list" id="tecnicoList" style="display:none;"></div>
+            </div>
+          </div>
+
+          <!-- Descrição -->
+          <div class="form-group">
+            <div class="form-label"><i class="fas fa-wrench"></i> Descrição do serviço <span class="req">*</span></div>
+            <textarea rows="3" id="descricao" placeholder="Detalhe o serviço prestado..."></textarea>
+          </div>
+
+          <!-- Peças -->
+          <div class="form-group">
+            <div class="form-label"><i class="fas fa-cogs"></i> Peças utilizadas</div>
+            <textarea rows="2" id="pecas" placeholder="Ex: filtro de óleo, pastilha de freio..."></textarea>
+          </div>
+
+          <!-- Valor + Status -->
+          <div class="row-2">
+            <div class="form-group">
+              <div class="form-label"><i class="fas fa-coins"></i> Valor (R$)</div>
+              <input type="number" step="0.01" min="0" id="valor" placeholder="0,00" inputmode="decimal">
+            </div>
+            <div class="form-group">
+              <div class="form-label"><i class="fas fa-circle-dot"></i> Status</div>
+              <select id="status">
+                <option value="Pendente">⏳ Pendente</option>
+                <option value="Em andamento">🔧 Em andamento</option>
+                <option value="Concluído">✅ Concluído</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Observações -->
+          <div class="form-group">
+            <div class="form-label"><i class="fas fa-note-sticky"></i> Observações</div>
+            <textarea rows="2" id="obs" placeholder="Garantia, prazo de entrega, observações..."></textarea>
+          </div>
+
+          <!-- Botões -->
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary btn-lg" id="gerarOsBtn">
+              <i class="fas fa-file-signature"></i> Gerar OS
+            </button>
+            <button type="button" class="btn btn-ghost" id="novaOsBtn">
+              <i class="fas fa-plus"></i> Nova OS
+            </button>
+            <button type="button" class="btn btn-ghost" id="limparFormBtn">
+              <i class="fas fa-eraser"></i> Limpar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ── PREVIEW ── -->
+    <div class="card" id="resultCard">
+      <div class="card-head">
+        <div class="card-icon"><i class="fas fa-stamp"></i></div>
+        <div class="card-title">Prévia da OS</div>
+      </div>
+      <div id="osPreviewContainer">
+        <div class="empty-state">
+          <i class="fas fa-file-circle-plus"></i>
+          <p>Preencha e clique em <strong>Gerar OS</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HISTÓRICO ── -->
+  <div class="card" style="margin-top: 1.2rem;">
+    <div class="card-head">
+      <div class="card-icon"><i class="fas fa-clock-rotate-left"></i></div>
+      <div class="card-title">Histórico</div>
+      <span class="count-badge" id="histCount">0 OS</span>
+      <div style="flex:1;"></div>
+      <button class="btn btn-green btn-sm" onclick="exportarExcel()"><i class="fas fa-file-csv"></i> CSV</button>
+      <button class="btn btn-danger btn-sm" onclick="clearHistory()"><i class="fas fa-trash"></i></button>
+    </div>
+    <div class="card-body">
+      <!-- Stats -->
+      <div class="stats-row" id="statsRow" style="display:none;">
+        <div class="stat-box"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Total</div></div>
+        <div class="stat-box"><div class="stat-num" id="statPendentes">0</div><div class="stat-label">Pendentes</div></div>
+        <div class="stat-box"><div class="stat-num" id="statConcluidas">0</div><div class="stat-label">Concluídas</div></div>
+      </div>
+      <!-- Busca -->
+      <div class="history-search-row">
+        <input type="text" id="histSearch" placeholder="🔍 Buscar por cliente, OS ou técnico..." style="font-size:.82rem;">
+      </div>
+      <div id="historyList" class="history-grid"></div>
+    </div>
+  </div>
+
+  <footer>
+    <i class="fas fa-mobile-screen-button"></i> Otimizado para celular &amp; PC
+    &nbsp;·&nbsp; GerOS v2
+    &nbsp;·&nbsp; Dados salvos localmente
+  </footer>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle" id="toastIcon"></i>
+  <span id="toastMsg"></span>
+</div>
+
+<!-- MODAL EDITAR -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="card-icon"><i class="fas fa-pen-to-square"></i></div>
+      <div class="modal-title">Editar OS</div>
+      <button class="modal-close" onclick="closeModal()"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="modal-body" id="editModalBody"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  UTILITÁRIOS
+// ══════════════════════════════════════════
+let toastTimer;
+function showToast(msg, isError = false) {
+  clearTimeout(toastTimer);
+  const toast = document.getElementById('toast');
+  const icon = document.getElementById('toastIcon');
+  icon.className = isError ? 'fas fa-triangle-exclamation' : 'fas fa-check-circle';
+  icon.style.color = isError ? '#ef4444' : '#22c55e';
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+const esc = s => s ? s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])) : '';
+const fmtCurrency = v => { let n = parseFloat(v); return (v && !isNaN(n) && n > 0) ? new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(n) : '— não informado —'; };
+const fmtDate = d => { if(!d) return '—'; let p = d.split('-'); return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d; };
+const statusClass = s => s === 'Em andamento' ? 's-andamento' : s === 'Concluído' ? 's-concluido' : 's-pendente';
+
+// ══════════════════════════════════════════
+//  TEMA
+// ══════════════════════════════════════════
+function applyTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeIcon').className = t === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+  try { localStorage.setItem('geros-theme', t); } catch(e){}
+}
+document.getElementById('themeToggleBtn').addEventListener('click', () => {
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+});
+try { let s = localStorage.getItem('geros-theme'); if(s) applyTheme(s); } catch(e){}
+
+// ══════════════════════════════════════════
+//  NÚMERO OS
+// ══════════════════════════════════════════
+let currentOSNumber = '';
+function gerarNumeroOS() {
+  let d = new Date();
+  return `OS-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}-${Date.now().toString().slice(-4)}`;
+}
+function refreshOSNumber() {
+  currentOSNumber = gerarNumeroOS();
+  document.getElementById('osNumber').value = currentOSNumber;
+  document.getElementById('topbarOsNum').textContent = currentOSNumber;
+  return currentOSNumber;
+}
+function setDefaultDate() {
+  let el = document.getElementById('dataAbertura');
+  if (!el.value) el.value = new Date().toISOString().split('T')[0];
+}
+
+// ══════════════════════════════════════════
+//  AUTOCOMPLETE TÉCNICO
+// ══════════════════════════════════════════
+function getTecnicos() {
+  try { return JSON.parse(localStorage.getItem('geros-tecnicos') || '[]'); } catch(e){ return []; }
+}
+function saveTecnico(nome) {
+  if (!nome) return;
+  let lista = getTecnicos();
+  if (!lista.includes(nome)) { lista.push(nome); try { localStorage.setItem('geros-tecnicos', JSON.stringify(lista.slice(-20))); } catch(e){} }
+}
+function onTecnicoInput() {
+  let val = document.getElementById('tecnico').value.trim().toLowerCase();
+  let lista = getTecnicos().filter(t => t.toLowerCase().includes(val) && val.length > 0);
+  let el = document.getElementById('tecnicoList');
+  if (!lista.length) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = lista.map(t => `<div class="autocomplete-item" onclick="selecionarTecnico('${esc(t)}')"><i class="fas fa-hard-hat"></i> ${esc(t)}</div>`).join('');
+}
+function selecionarTecnico(nome) {
+  document.getElementById('tecnico').value = nome;
+  document.getElementById('tecnicoList').style.display = 'none';
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.autocomplete-wrap')) document.getElementById('tecnicoList').style.display = 'none';
+});
+
+// ══════════════════════════════════════════
+//  LIGAR PARA CLIENTE
+// ══════════════════════════════════════════
+function ligarParaCliente() {
+  let tel = document.getElementById('telefone').value.replace(/\D/g,'');
+  if (tel) window.location.href = `tel:${tel}`;
+  else showToast('Informe o telefone primeiro.', true);
+}
+
+// ══════════════════════════════════════════
+//  MÁSCARA DE TELEFONE
+// ══════════════════════════════════════════
+document.getElementById('telefone').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  if (v.length > 10) this.value = v.replace(/(\d{2})(\d{5})(\d{4})/,'($1) $2-$3');
+  else if (v.length > 6) this.value = v.replace(/(\d{2})(\d{4})(\d+)/,'($1) $2-$3');
+  else if (v.length > 2) this.value = v.replace(/(\d{2})(\d+)/,'($1) $2');
+});
+
+// ══════════════════════════════════════════
+//  COLETA DADOS
+// ══════════════════════════════════════════
+function coletarDados() {
+  let cliente = document.getElementById('cliente').value.trim();
+  let descricao = document.getElementById('descricao').value.trim();
+  if (!cliente) { showToast('⚠️ Informe o nome do cliente.', true); document.getElementById('cliente').focus(); return null; }
+  if (!descricao) { showToast('⚠️ A descrição do serviço é obrigatória.', true); document.getElementById('descricao').focus(); return null; }
+  return {
+    numeroOS: document.getElementById('osNumber').value || refreshOSNumber(),
+    cliente,
+    telefone: document.getElementById('telefone').value.trim(),
+    tecnico: document.getElementById('tecnico').value.trim(),
+    dataAbertura: document.getElementById('dataAbertura').value || new Date().toISOString().split('T')[0],
+    descricao,
+    pecas: document.getElementById('pecas').value.trim(),
+    valor: document.getElementById('valor').value,
+    status: document.getElementById('status').value,
+    obs: document.getElementById('obs').value.trim(),
+  };
+}
+
+// ══════════════════════════════════════════
+//  DISPLAY OS (PREVIEW)
+// ══════════════════════════════════════════
+function displayOS(data) {
+  let sc = statusClass(data.status);
+  let rows = [
+    { icon: 'fa-user', label: 'Cliente', value: `<strong>${esc(data.cliente)}</strong>` },
+    data.telefone && { icon: 'fa-phone-alt', label: 'Telefone', value: `<a href="tel:${esc(data.telefone)}" style="color:inherit;text-decoration:none;">${esc(data.telefone)}</a>` },
+    data.tecnico && { icon: 'fa-hard-hat', label: 'Técnico', value: esc(data.tecnico) },
+    { icon: 'fa-calendar', label: 'Abertura', value: fmtDate(data.dataAbertura) },
+    { icon: 'fa-wrench', label: 'Serviço', value: esc(data.descricao) },
+    data.pecas && { icon: 'fa-cogs', label: 'Peças', value: esc(data.pecas) },
+    { icon: 'fa-coins', label: 'Valor', value: `<strong style="color:#c05e00;">${fmtCurrency(data.valor)}</strong>` },
+    { icon: 'fa-circle-dot', label: 'Status', value: `<span class="status-pill ${sc}"><span class="status-dot"></span> ${esc(data.status)}</span>` },
+    data.obs && { icon: 'fa-note-sticky', label: 'Obs.', value: `<em>${esc(data.obs)}</em>` },
+  ].filter(Boolean);
+
+  const nowStr = new Date().toLocaleString('pt-BR');
+
+  const html = `
+    <div id="osToPdf" class="os-preview-card anim-in">
+      <div class="os-preview-header">
+        <h3><i class="fas fa-stamp"></i> Ordem de Serviço</h3>
+        <span class="os-preview-number">${esc(data.numeroOS)}</span>
+      </div>
+      <div class="os-preview-body">
+        ${rows.map(row => `
+          <div class="os-preview-row">
+            <div class="os-preview-label"><i class="fas ${row.icon}"></i> ${row.label}</div>
+            <div class="os-preview-value">${row.value}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="os-preview-footer">Emitido em ${nowStr} · GerOS</div>
+      <div class="os-preview-actions">
+        <button class="btn btn-primary btn-sm" id="pdfGenBtn"><i class="fas fa-file-pdf"></i> PDF</button>
+        <button class="btn btn-ghost btn-sm" id="printOsBtn"><i class="fas fa-print"></i> Imprimir</button>
+        <button class="btn btn-blue btn-sm" id="copyOsBtn"><i class="fas fa-copy"></i> Copiar</button>
+        <button class="btn btn-green btn-sm" id="waOsBtn"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('osPreviewContainer').innerHTML = html;
+  document.getElementById('pdfGenBtn')?.addEventListener('click', () => gerarPDF(data));
+  document.getElementById('printOsBtn')?.addEventListener('click', () => imprimirOS(data));
+  document.getElementById('copyOsBtn')?.addEventListener('click', () => copiarOSTexto(data));
+  document.getElementById('waOsBtn')?.addEventListener('click', () => compartilharWhatsApp(data));
+}
+
+// ══════════════════════════════════════════
+//  GERAR PDF
+// ══════════════════════════════════════════
+async function gerarPDF(dados) {
+  const elemento = document.getElementById('osToPdf');
+  if (!elemento) { showToast('Nenhuma OS para exportar.', true); return; }
+  const btn = document.getElementById('pdfGenBtn');
+  const originalHtml = btn.innerHTML;
+  try {
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+    showToast('Processando PDF...');
+
+    const clone = elemento.cloneNode(true);
+    clone.querySelector('.os-preview-actions')?.remove();
+    clone.style.cssText = 'width:600px;position:absolute;top:-9999px;left:-9999px;background:#fff;color:#111;';
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, {
+      scale: 1.5,
+      backgroundColor: '#ffffff',
+      logging: false,
+      useCORS: false,
+      imageTimeout: 0,
+      allowTaint: false
+    });
+    document.body.removeChild(clone);
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.82);
+    const { jsPDF } = window.jspdf;
+    const imgWidth = 180;
+    const pageHeight = 277;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let pdf = new jsPDF('p', 'mm', 'a4');
+    pdf.addImage(imgData, 'JPEG', 15, 15, imgWidth, imgHeight, undefined, 'FAST');
+
+    let heightLeft = imgHeight - (pageHeight - 30);
+    let position = -(pageHeight - 30);
+    while (heightLeft > 0) {
+      position -= pageHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', 15, position, imgWidth, imgHeight, undefined, 'FAST');
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save(`OS_${dados.numeroOS}.pdf`);
+    showToast('PDF salvo com sucesso!');
+  } catch (err) {
+    console.error(err);
+    showToast('Erro ao gerar PDF. Use "Imprimir".', true);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHtml;
+  }
+}
+
+// ══════════════════════════════════════════
+//  IMPRIMIR
+// ══════════════════════════════════════════
+function imprimirOS(d) {
+  let win = window.open('', '_blank');
+  if (!win) { showToast('Permita pop-ups para imprimir.', true); return; }
+  let rows = [
+    ['Cliente', `<strong>${esc(d.cliente)}</strong>`],
+    d.telefone ? ['Telefone', esc(d.telefone)] : null,
+    d.tecnico ? ['Técnico', esc(d.tecnico)] : null,
+    ['Data', fmtDate(d.dataAbertura)],
+    ['Serviço', esc(d.descricao)],
+    d.pecas ? ['Peças', esc(d.pecas)] : null,
+    ['Valor', fmtCurrency(d.valor)],
+    ['Status', esc(d.status)],
+    d.obs ? ['Observações', esc(d.obs)] : null,
+  ].filter(Boolean);
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>OS ${d.numeroOS}</title><style>*{box-sizing:border-box}body{font-family:Arial,sans-serif;padding:1.5rem;color:#111;}.box{max-width:700px;margin:auto;border:2px solid #0d1b2a;border-radius:12px;overflow:hidden;}.hdr{background:#0d1b2a;color:white;padding:1rem 1.2rem;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #f59e0b;}.hdr h2{font-size:1rem;letter-spacing:1px;text-transform:uppercase;}.num{font-family:monospace;color:#f59e0b;font-size:.75rem;}.bdy{padding:.8rem 1.2rem;}.row{display:flex;padding:6px 0;border-bottom:1px solid #eef2f6;}.lbl{width:110px;font-size:.7rem;font-weight:700;text-transform:uppercase;color:#6b7e8f;flex-shrink:0;}.val{flex:1;font-size:.88rem;}.ftr{padding:.5rem 1.2rem;font-size:.65rem;color:#aab8c4;text-align:right;border-top:1px solid #eef2f6;}@media print{body{padding:0;}.box{border-radius:0;border-width:1px;}}</style></head><body><div class="box"><div class="hdr"><h2>⚙ Ordem de Serviço</h2><span class="num">${d.numeroOS}</span></div><div class="bdy">${rows.map(r=>`<div class="row"><div class="lbl">${r[0]}</div><div class="val">${r[1]}</div></div>`).join('')}</div><div class="ftr">Emitido em ${new Date().toLocaleString('pt-BR')} · GerOS</div></div><script>window.print();window.onafterprint=()=>window.close();<\/script></body></html>`);
+  win.document.close();
+}
+
+// ══════════════════════════════════════════
+//  COPIAR TEXTO
+// ══════════════════════════════════════════
+function copiarOSTexto(d) {
+  let t = `📋 ORDEM DE SERVIÇO · ${d.numeroOS}\n${'─'.repeat(34)}\n` +
+    `Cliente: ${d.cliente}\n` +
+    (d.telefone ? `Telefone: ${d.telefone}\n` : '') +
+    (d.tecnico ? `Técnico: ${d.tecnico}\n` : '') +
+    `Data: ${fmtDate(d.dataAbertura)}\nServiço: ${d.descricao}\n` +
+    (d.pecas ? `Peças: ${d.pecas}\n` : '') +
+    `Valor: ${fmtCurrency(d.valor)}\nStatus: ${d.status}` +
+    (d.obs ? `\nObs.: ${d.obs}` : '') +
+    `\n${'─'.repeat(34)}`;
+  navigator.clipboard.writeText(t)
+    .then(() => showToast('Copiado para a área de transferência!'))
+    .catch(() => showToast('Erro ao copiar.', true));
+}
+
+// ══════════════════════════════════════════
+//  WHATSAPP
+// ══════════════════════════════════════════
+function compartilharWhatsApp(d) {
+  let tel = d.telefone ? d.telefone.replace(/\D/g,'') : '';
+  let t = `📋 *ORDEM DE SERVIÇO · ${d.numeroOS}*\n` +
+    `*Cliente:* ${d.cliente}\n` +
+    (d.telefone ? `*Telefone:* ${d.telefone}\n` : '') +
+    (d.tecnico ? `*Técnico:* ${d.tecnico}\n` : '') +
+    `*Abertura:* ${fmtDate(d.dataAbertura)}\n*Serviço:* ${d.descricao}\n` +
+    (d.pecas ? `*Peças:* ${d.pecas}\n` : '') +
+    `*Valor:* ${fmtCurrency(d.valor)}\n*Status:* ${d.status}` +
+    (d.obs ? `\n*Obs.:* ${d.obs}` : '');
+  let url = tel.length >= 10
+    ? `https://wa.me/55${tel}?text=${encodeURIComponent(t)}`
+    : `https://wa.me/?text=${encodeURIComponent(t)}`;
+  window.open(url, '_blank');
+}
+
+// ══════════════════════════════════════════
+//  HISTÓRICO
+// ══════════════════════════════════════════
+let osHistory = [], editingIndex = null;
+
+function loadHistory() {
+  try { osHistory = JSON.parse(localStorage.getItem('geros-os-history') || '[]'); } catch(e){ osHistory = []; }
+  renderHistory();
+}
+function saveHistory() {
+  try { localStorage.setItem('geros-os-history', JSON.stringify(osHistory)); } catch(e){}
+}
+function addToHistory(dados) {
+  osHistory.unshift({...dados, timestamp: new Date().toISOString()});
+  if (osHistory.length > 100) osHistory.pop();
+  saveHistory();
+  renderHistory();
+}
+function renderHistory(query = document.getElementById('histSearch')?.value || '') {
+  let filtered = query
+    ? osHistory.filter(d => `${d.cliente} ${d.numeroOS} ${d.status} ${d.tecnico}`.toLowerCase().includes(query.toLowerCase()))
+    : osHistory;
+
+  // Stats
+  let statsRow = document.getElementById('statsRow');
+  let pendentes = osHistory.filter(d => d.status === 'Pendente').length;
+  let concluidas = osHistory.filter(d => d.status === 'Concluído').length;
+  document.getElementById('statTotal').textContent = osHistory.length;
+  document.getElementById('statPendentes').textContent = pendentes;
+  document.getElementById('statConcluidas').textContent = concluidas;
+  statsRow.style.display = osHistory.length ? 'grid' : 'none';
+  document.getElementById('histCount').textContent = `${osHistory.length} OS`;
+
+  let container = document.getElementById('historyList');
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-magnifying-glass"></i><p>${osHistory.length ? 'Nenhum resultado encontrado.' : 'Nenhuma OS salva ainda.'}</p></div>`;
+    return;
+  }
+  container.innerHTML = filtered.map((item) => {
+    let realIdx = osHistory.findIndex(o => o.timestamp === item.timestamp);
+    let sc = statusClass(item.status);
+    return `
+      <div class="hist-item" onclick="loadFromHistory(${realIdx})">
+        <div class="hist-item-actions">
+          <button class="hist-del-btn" onclick="event.stopPropagation();openEdit(${realIdx})" title="Editar"><i class="fas fa-pen"></i></button>
+          <button class="hist-del-btn" onclick="event.stopPropagation();deleteFromHistory(${realIdx})" title="Excluir"><i class="fas fa-trash"></i></button>
+        </div>
+        <div class="hist-os-num">${esc(item.numeroOS)}</div>
+        <div class="hist-client">${esc(item.cliente)}</div>
+        ${item.tecnico ? `<div class="hist-tecnico"><i class="fas fa-hard-hat" style="font-size:.6rem;margin-right:4px;color:var(--accent);"></i>${esc(item.tecnico)}</div>` : ''}
+        <div class="hist-meta">
+          ${fmtDate(item.dataAbertura)}
+          &nbsp;·&nbsp;
+          <span class="status-pill ${sc}" style="padding:1px 7px;font-size:.6rem;">
+            <span class="status-dot"></span> ${esc(item.status)}
+          </span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function loadFromHistory(idx) {
+  let d = osHistory[idx];
+  if (d) {
+    displayOS(d);
+    document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
+    showToast(`OS ${d.numeroOS} carregada`);
+  }
+}
+function deleteFromHistory(idx) {
+  if (confirm(`Excluir a OS "${osHistory[idx]?.numeroOS}"?`)) {
+    osHistory.splice(idx, 1);
+    saveHistory();
+    renderHistory();
+    showToast('OS excluída.');
+  }
+}
+async function clearHistory() {
+  if (confirm('Limpar todo o histórico? Essa ação não pode ser desfeita.')) {
+    osHistory = [];
+    saveHistory();
+    renderHistory();
+    showToast('Histórico limpo.');
+  }
+}
+function exportarExcel() {
+  if (!osHistory.length) { showToast('Histórico vazio.', true); return; }
+  let header = ['Número OS','Cliente','Telefone','Técnico','Data','Serviço','Peças','Valor','Status','Obs'];
+  let rows = osHistory.map(d => [
+    d.numeroOS, d.cliente, d.telefone||'', d.tecnico||'',
+    fmtDate(d.dataAbertura), d.descricao, d.pecas||'',
+    d.valor ? parseFloat(d.valor).toFixed(2).replace('.',',') : '',
+    d.status, d.obs||''
+  ]);
+  let csv = '\uFEFF' + [header, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\r\n');
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8;'}));
+  a.download = `os_${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  showToast('CSV exportado!');
+}
+
+// ══════════════════════════════════════════
+//  EDIÇÃO
+// ══════════════════════════════════════════
+function openEdit(idx) {
+  editingIndex = idx;
+  let d = osHistory[idx];
+  if (!d) return;
+  document.getElementById('editModalBody').innerHTML = `
+    <div class="form-group"><label class="form-label"><i class="fas fa-user"></i> Cliente</label><input type="text" id="edit_cliente" value="${esc(d.cliente)}"></div>
+    <div class="row-2">
+      <div class="form-group"><label class="form-label"><i class="fas fa-phone-alt"></i> Telefone</label><input type="text" id="edit_telefone" value="${esc(d.telefone||'')}"></div>
+      <div class="form-group"><label class="form-label"><i class="fas fa-calendar"></i> Data</label><input type="date" id="edit_dataAbertura" value="${d.dataAbertura||''}"></div>
+    </div>
+    <div class="form-group"><label class="form-label"><i class="fas fa-hard-hat"></i> Técnico</label><input type="text" id="edit_tecnico" value="${esc(d.tecnico||'')}"></div>
+    <div class="form-group"><label class="form-label"><i class="fas fa-wrench"></i> Serviço</label><textarea id="edit_descricao" rows="3">${esc(d.descricao)}</textarea></div>
+    <div class="form-group"><label class="form-label"><i class="fas fa-cogs"></i> Peças</label><textarea id="edit_pecas" rows="2">${esc(d.pecas||'')}</textarea></div>
+    <div class="row-2">
+      <div class="form-group"><label class="form-label"><i class="fas fa-coins"></i> Valor</label><input type="number" step="0.01" id="edit_valor" value="${d.valor||''}"></div>
+      <div class="form-group"><label class="form-label"><i class="fas fa-circle-dot"></i> Status</label>
+        <select id="edit_status">
+          <option ${d.status==='Pendente'?'selected':''}>Pendente</option>
+          <option ${d.status==='Em andamento'?'selected':''}>Em andamento</option>
+          <option ${d.status==='Concluído'?'selected':''}>Concluído</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label"><i class="fas fa-note-sticky"></i> Obs.</label><textarea id="edit_obs" rows="2">${esc(d.obs||'')}</textarea></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveEdit()"><i class="fas fa-floppy-disk"></i> Salvar</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+    </div>
+  `;
+  document.getElementById('editModal').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('editModal').classList.remove('open');
+  editingIndex = null;
+}
+function saveEdit() {
+  if (editingIndex === null) return;
+  osHistory[editingIndex] = {
+    ...osHistory[editingIndex],
+    cliente: document.getElementById('edit_cliente').value.trim(),
+    telefone: document.getElementById('edit_telefone').value.trim(),
+    tecnico: document.getElementById('edit_tecnico').value.trim(),
+    dataAbertura: document.getElementById('edit_dataAbertura').value,
+    descricao: document.getElementById('edit_descricao').value.trim(),
+    pecas: document.getElementById('edit_pecas').value.trim(),
+    valor: document.getElementById('edit_valor').value,
+    status: document.getElementById('edit_status').value,
+    obs: document.getElementById('edit_obs').value.trim(),
+  };
+  saveHistory();
+  renderHistory();
+  closeModal();
+  showToast('OS atualizada!');
+}
+
+// ══════════════════════════════════════════
+//  GERAR OS PRINCIPAL
+// ══════════════════════════════════════════
+let isGenerating = false;
+async function gerarOS() {
+  if (isGenerating) return;
+  const btn = document.getElementById('gerarOsBtn');
+  const originalHtml = btn.innerHTML;
+  isGenerating = true;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+  try {
+    let dados = coletarDados();
+    if (!dados) return;
+    saveTecnico(dados.tecnico);
+    displayOS(dados);
+    addToHistory(dados);
+    showToast('✅ OS gerada e salva!');
+    document.getElementById('resultCard').scrollIntoView({behavior:'smooth', block:'nearest'});
+  } catch (err) {
+    showToast('Erro inesperado. Tente novamente.', true);
+  } finally {
+    isGenerating = false;
+    btn.disabled = false;
+    btn.innerHTML = originalHtml;
+  }
+}
+
+function resetForm(keepNum = false) {
+  if (!keepNum) refreshOSNumber();
+  ['cliente','telefone','tecnico','descricao','pecas','obs'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('valor').value = '';
+  document.getElementById('status').value = 'Pendente';
+  setDefaultDate();
+  document.getElementById('osPreviewContainer').innerHTML = `
+    <div class="empty-state">
+      <i class="fas fa-file-circle-plus"></i>
+      <p>Preencha e clique em <strong>Gerar OS</strong>.</p>
+    </div>`;
+  document.getElementById('cliente').focus();
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  refreshOSNumber();
+  setDefaultDate();
+  loadHistory();
+
+  document.getElementById('gerarOsBtn').addEventListener('click', gerarOS);
+  document.getElementById('novaOsBtn').addEventListener('click', () => resetForm(false));
+  document.getElementById('limparFormBtn').addEventListener('click', () => { resetForm(true); showToast('Formulário limpo.'); });
+  document.getElementById('histSearch').addEventListener('input', () => renderHistory());
+
+  // Enter para gerar (exceto textarea)
+  document.querySelectorAll('#osForm input, #osForm select').forEach(el => {
+    el.addEventListener('keypress', e => {
+      if (e.key === 'Enter') { e.preventDefault(); gerarOS(); }
+    });
+  });
+
+  // Fechar modal com ESC
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+});
+</script>
+</body>
+</html>
