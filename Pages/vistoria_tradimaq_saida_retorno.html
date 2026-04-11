@@ -66,6 +66,9 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .foto-bar-pct{font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--txt3);text-align:right;}
 .foto-bar-meta{font-size:9px;color:var(--txt3);}
 .progress-track{height:5px;background:var(--bg4);border-radius:99px;margin-top:9px;overflow:hidden;}
+.foto-dica{display:flex;align-items:center;gap:7px;margin-top:9px;padding:7px 10px;background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.18);border-radius:var(--r);font-size:11px;color:var(--txt2);line-height:1.4;}
+.foto-dica-icon{font-size:14px;flex-shrink:0;}
+.foto-dica strong{color:var(--brand);font-weight:700;}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--brand),#ffb347);border-radius:99px;transition:width .4s;}
 
 /* ═══ TÓPICOS ═══ */
@@ -542,6 +545,10 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
       </div>
     </div>
     <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="foto-dica">
+      <span class="foto-dica-icon">📐</span>
+      <span>Fotografe com o celular <strong>deitado</strong> — formato <strong>4×3 paisagem</strong></span>
+    </div>
   </div>
 
   <!-- Tópicos -->
