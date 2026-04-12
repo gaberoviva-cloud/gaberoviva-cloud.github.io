@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Status Diário - Genie PA</title>
 
-  <!-- Favicon SVG inline (ícone da aba do navegador) -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%23d4834a'/><text x='32' y='46' font-size='36' text-anchor='middle' font-family='sans-serif'>🏗️</text></svg>" />
+  <!-- Favicon da empresa -->
+  <link rel="icon" type="image/png" href="https://gaberoviva-cloud.github.io/Data/5202113.png" />
+  <link rel="apple-touch-icon" href="https://gaberoviva-cloud.github.io/Data/5202113.png" />
 
   <!-- PWA -->
   <meta name="theme-color" content="#d4834a" />
@@ -537,7 +538,19 @@
       <h1>TRADIMAQ PA</h1>
       <div class="subtitle">Status Diário — Plataformas Genie</div>
     </div>
-    <div class="save-indicator" id="saveIndicator">💾 Cache ativo</div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+      <div class="save-indicator" id="saveIndicator">💾 Cache ativo</div>
+      <div id="kpi-paradas" style="
+        font-size:12px; font-weight:700;
+        background:rgba(255,255,255,0.18);
+        padding:5px 12px; border-radius:99px;
+        color:white; white-space:nowrap;
+        letter-spacing:0.01em;
+        display:flex; align-items:center; gap:5px;">
+        <span id="kpi-icon">⚪</span>
+        <span id="kpi-text">— paradas</span>
+      </div>
+    </div>
   </div>
 
   <!-- Dashboard -->
@@ -904,6 +917,19 @@ function updateDashboard() {
     else counts.alugada++;
   });
   for(let k in counts) document.getElementById('cnt-'+k).textContent = counts[k];
+
+  // KPI meta: máx 10% de máquinas paradas (corretiva + preventiva + checklist)
+  const total   = Object.values(counts).reduce((a,b)=>a+b, 0);
+  const paradas = counts.corretiva + counts.preventiva + counts.checklist;
+  const pct     = total > 0 ? Math.round(paradas / total * 100) : 0;
+  const META    = 10;
+  const ok      = pct <= META;
+  document.getElementById('kpi-text').textContent = `${paradas}/${total} paradas (${pct}%) — meta ≤${META}%`;
+  document.getElementById('kpi-icon').textContent  = ok ? '✅' : '🔴';
+  document.getElementById('kpi-paradas').style.background = ok
+    ? 'rgba(45,122,63,0.55)'
+    : 'rgba(198,40,40,0.60)';
+
   return counts;
 }
 
@@ -1036,11 +1062,11 @@ function gerarPDF(){
 
 loadFromCache();
 </script>
+
 <script>
 // ── PWA: Manifest dinâmico ──
 (function() {
-  const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="32" fill="#d4834a"/><text x="96" y="140" font-size="110" text-anchor="middle" font-family="sans-serif">🏗️</text></svg>`;
-  const iconUrl = 'data:image/svg+xml,' + encodeURIComponent(iconSvg);
+  const iconUrl = 'https://gaberoviva-cloud.github.io/Data/5202113.png';
   const manifest = {
     name: 'Status Diário – Genie PA',
     short_name: 'Genie PA',
@@ -1050,35 +1076,36 @@ loadFromCache();
     background_color: '#f3f4f6',
     theme_color: '#d4834a',
     icons: [
-      { src: iconUrl, sizes: '192x192', type: 'image/svg+xml' },
-      { src: iconUrl, sizes: '512x512', type: 'image/svg+xml' }
+      { src: iconUrl, sizes: '192x192', type: 'image/png' },
+      { src: iconUrl, sizes: '512x512', type: 'image/png' }
     ]
   };
   const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
   document.getElementById('pwa-manifest').href = URL.createObjectURL(blob);
 })();
 
-// ── PWA: Service Worker (cache offline) ──
+// ── PWA: Service Worker — cache offline ──
 if ('serviceWorker' in navigator) {
   const swCode = `
-    const CACHE = 'genie-pa-v1';
+    const CACHE = 'genie-pa-v2';
     const ASSETS = [self.location.pathname];
     self.addEventListener('install', e => {
       e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
     });
     self.addEventListener('activate', e => {
-      e.waitUntil(caches.keys().then(keys =>
-        Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-      ).then(() => self.clients.claim()));
+      e.waitUntil(
+        caches.keys()
+          .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+          .then(() => self.clients.claim())
+      );
     });
     self.addEventListener('fetch', e => {
       e.respondWith(caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => cached)));
     });
   `;
   const swBlob = new Blob([swCode], { type: 'application/javascript' });
-  const swUrl  = URL.createObjectURL(swBlob);
-  navigator.serviceWorker.register(swUrl, { scope: './' })
-    .then(() => console.log('✅ PWA: Service Worker registrado — app funciona offline'))
+  navigator.serviceWorker.register(URL.createObjectURL(swBlob), { scope: './' })
+    .then(() => console.log('✅ PWA ativo — app instalável e offline'))
     .catch(e  => console.warn('SW não registrado:', e));
 }
 </script>
