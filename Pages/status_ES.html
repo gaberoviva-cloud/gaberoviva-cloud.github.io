@@ -12,6 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
+
   <style>
     :root {
       --brand: #f4a261;
@@ -20,6 +21,7 @@
       --gray-700: #374151;
       --gray-500: #6b7280;
       --gray-300: #d1d5db;
+      --gray-200: #e5e7eb;
       --gray-100: #f3f4f6;
       --gray-50:  #f9fafb;
       --c-disponivel:  #c3e6cb;
@@ -38,6 +40,7 @@
       background: var(--gray-100);
       color: var(--gray-900);
       font-size: 13px;
+      padding-bottom: 90px; /* espaço para botões flutuantes */
     }
 
     /* ── HEADER ── */
@@ -161,7 +164,7 @@
     .pill.p-checklist.active   { background: #555;    border-color: #555; }
     .pill.p-alugada.active     { background: var(--gray-500); border-color: var(--gray-500); }
 
-    /* ── LEGEND (inclui carga) ── */
+    /* ── LEGEND ── */
     .legend {
       display: flex; flex-wrap: wrap; gap: 8px 16px;
       padding: 8px 14px;
@@ -209,15 +212,12 @@
       z-index: 11;
     }
 
-    /* sticky first 2 cols (modelo, tag) */
     th:nth-child(1), td:nth-child(1) { min-width: 80px; width: 80px; }
     th:nth-child(2), td:nth-child(2) { min-width: 90px; width: 90px; }
     th:nth-child(1) { left: 0; z-index: 12; }
     td:nth-child(1) { position: sticky; left: 0; z-index: 10; }
     th:nth-child(2) { left: 80px; z-index: 12; }
     td:nth-child(2) { position: sticky; left: 80px; z-index: 10; }
-
-    /* Carga/Combust col (3) e Horímetro col (4) */
     th:nth-child(3), td:nth-child(3) { min-width: 100px; width: 100px; }
     th:nth-child(4), td:nth-child(4) { min-width: 80px; width: 80px; }
 
@@ -247,8 +247,8 @@
       border-color: var(--brand);
     }
 
-    /* Carga cell style */
-    .carga-cell {
+    /* Carga/Comb cell style */
+    .energia-cell {
       cursor: pointer;
       font-family: 'IBM Plex Mono', monospace;
       font-size: 12px;
@@ -256,9 +256,8 @@
       transition: background 0.1s;
       text-align: center;
     }
-    .carga-cell:hover {
-      background: rgba(244,162,97,0.2);
-    }
+    .energia-cell:hover { background: rgba(244,162,97,0.2); }
+
     .carga-badge {
       display: inline-flex;
       align-items: center;
@@ -273,6 +272,11 @@
     .carga-badge.baixa      { background: #fff3cd; color: #7d4e00; }
     .carga-badge.carregando { background: #bbdefb; color: #0d47a1; }
     .carga-badge.sem        { background: #e0e0e0; color: #555; }
+    .comb-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 6px; border-radius: 20px; background: var(--gray-100); font-size: 11px; pointer-events: none; }
+    .comb-badge.cheio    { background: #c3e6cb; color: #1a5c2a; }
+    .comb-badge.meio     { background: #fff3cd; color: #7d4e00; }
+    .comb-badge.baixo    { background: #f5c6cb; color: #8b1a1a; }
+    .comb-badge.sem      { background: #e0e0e0; color: #555; }
 
     /* status radio */
     .status-radio {
@@ -300,7 +304,7 @@
       font-family: inherit;
       line-height: 1.5;
       resize: vertical;
-      min-height: 90px;
+      min-height: 70px;
       outline: none;
     }
     .obs:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(244,162,97,0.15); }
@@ -313,7 +317,7 @@
       word-wrap: break-word;
       border: 1px solid var(--gray-300);
       padding: 8px;
-      min-height: 90px;
+      min-height: 70px;
       border-radius: var(--radius);
     }
 
@@ -337,39 +341,90 @@
       text-align: center;
     }
 
-    /* ── ACTIONS ── */
-    .actions-bar {
+    /* ── FLOATING ACTION BUTTONS ── */
+    .fab-container {
+      position: fixed;
+      bottom: 20px;
+      right: 16px;
       display: flex;
-      gap: 8px;
-      padding: 12px 14px;
-      background: var(--gray-50);
-      border-top: 1px solid var(--gray-300);
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      z-index: 9990;
     }
-    .btn {
-      flex: 1;
-      min-width: 120px;
-      padding: 11px 16px;
-      font-size: 13px;
-      font-family: inherit;
-      font-weight: 600;
+
+    .fab-main {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
       border: none;
-      border-radius: var(--radius);
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
       color: white;
-      letter-spacing: 0.01em;
-      transition: opacity 0.15s, transform 0.1s, box-shadow 0.15s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
     }
-    .btn:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.16); }
-    .btn:active { transform: translateY(0); box-shadow: none; }
-    .btn-excel { background: #16a34a; }
-    .btn-pdf   { background: #2563eb; }
-    .btn-clear { background: var(--gray-700); }
+    .fab-main:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(0,0,0,0.28); }
+    .fab-main:active { transform: scale(0.95); }
+
+    .fab-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.35s ease, opacity 0.25s ease;
+    }
+    .fab-group.open {
+      max-height: 300px;
+      opacity: 1;
+    }
+
+    .fab-action {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .fab-action-label {
+      background: var(--gray-900);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .fab-action-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+      transition: all 0.15s;
+      color: white;
+    }
+    .fab-action-btn:hover { transform: scale(1.08); }
+    .fab-action-btn.excel-btn { background: #16a34a; }
+    .fab-action-btn.pdf-btn   { background: #2563eb; }
+    .fab-action-btn.clear-btn { background: #6b7280; }
+    .fab-action-btn.whats-btn { background: #25D366; }
+    .fab-toggle-btn { background: var(--brand-dark); }
 
     /* ── TOAST ── */
     #toast {
-      position: fixed; bottom: 20px; right: 20px;
+      position: fixed; bottom: 90px; right: 20px;
       background: var(--gray-900); color: white;
       padding: 10px 16px;
       border-radius: 8px;
@@ -380,7 +435,7 @@
     }
     #toast.show { opacity: 1; transform: translateY(0); }
 
-    /* ── MODAL (popup carga) ── */
+    /* ── MODAL (popup energia) ── */
     .modal {
       display: none;
       position: fixed;
@@ -425,15 +480,8 @@
       justify-content: center;
       gap: 8px;
     }
-    .modal-buttons button:hover {
-      background: var(--gray-200);
-      border-color: var(--brand);
-    }
-    .modal-buttons button.selected {
-      background: var(--brand);
-      border-color: var(--brand-dark);
-      color: white;
-    }
+    .modal-buttons button:hover { background: var(--gray-200); border-color: var(--brand); }
+    .modal-buttons button.selected { background: var(--brand); border-color: var(--brand-dark); color: white; }
     .modal-close {
       background: var(--gray-700);
       color: white;
@@ -445,236 +493,9 @@
     }
     .modal-close:hover { background: var(--gray-900); }
 
-    /* ── CARGA ELÉTRICA PANEL (mantido, mas agora também inclui Z-34/Z-45DC) ── */
-    .carga-panel {
-      background: white;
-      border-top: 2px solid var(--gray-300);
-      border-bottom: 1px solid var(--gray-300);
-    }
-    .carga-panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px 8px;
-      cursor: pointer;
-      user-select: none;
-      gap: 8px;
-    }
-    .carga-panel-title {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--gray-700);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .carga-panel-title .bolt { font-size: 14px; }
-    .carga-alerta {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 99px;
-      white-space: nowrap;
-    }
-    .carga-alerta.ok     { background: #c3e6cb; color: #1a5c2a; }
-    .carga-alerta.warn   { background: #fff3cd; color: #7d4e00; }
-    .carga-alerta.danger { background: #f5c6cb; color: #8b1a1a; }
-    .carga-toggle-icon { font-size: 12px; color: var(--gray-500); transition: transform 0.2s; }
-    .carga-toggle-icon.open { transform: rotate(180deg); }
-
-    .carga-body { padding: 0 14px 12px; }
-    .carga-summary {
-      display: flex;
-      gap: 0;
-      border: 1px solid var(--gray-300);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .carga-stat {
-      flex: 1;
-      text-align: center;
-      padding: 8px 6px;
-      border-right: 1px solid var(--gray-300);
-    }
-    .carga-stat:last-child { border-right: none; }
-    .carga-stat .cs-val {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 20px;
-      font-weight: 500;
-      line-height: 1.2;
-    }
-    .carga-stat .cs-lbl {
-      font-size: 9px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--gray-500);
-      margin-top: 2px;
-    }
-    .cs-pronta .cs-val  { color: #2d7a3f; }
-    .cs-baixa  .cs-val  { color: #d97706; }
-    .cs-carregando .cs-val { color: #1565c0; }
-    .cs-sem    .cs-val  { color: var(--gray-500); }
-
-    .carga-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 6px;
-    }
-    .carga-card {
-      border: 1px solid var(--gray-300);
-      border-radius: var(--radius);
-      padding: 7px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .carga-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .carga-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 4px;
-    }
-    .carga-tag {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 10px;
-      font-weight: 500;
-      color: var(--gray-700);
-    }
-    .carga-modelo-badge {
-      font-size: 9px;
-      font-weight: 600;
-      background: var(--gray-100);
-      color: var(--gray-500);
-      padding: 1px 5px;
-      border-radius: 3px;
-      text-transform: uppercase;
-    }
-    .carga-bar-wrap {
-      background: var(--gray-100);
-      border-radius: 3px;
-      height: 6px;
-      overflow: hidden;
-    }
-    .carga-bar {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.3s;
-    }
-    .carga-bar.pronta     { background: #2d7a3f; }
-    .carga-bar.baixa      { background: #d97706; }
-    .carga-bar.carregando { background: #1565c0; }
-    .carga-bar.sem        { background: var(--gray-300); width: 0 !important; }
-
-    .carga-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .carga-select {
-      font-size: 10px;
-      font-family: inherit;
-      border: 1px solid var(--gray-300);
-      border-radius: 3px;
-      padding: 2px 4px;
-      background: white;
-      cursor: pointer;
-    }
-    .carga-select:focus { border-color: var(--brand); }
-
-    /* PDF: hide carga panel controls */
-    body.pdf-generating .carga-panel { display: none; }
-    body.pdf-generating .comb-panel  { display: none; }
-
-    /* ── COMBUSTÍVEL PANEL ── */
-    .comb-panel {
-      background: white;
-      border-top: 2px solid var(--gray-300);
-      border-bottom: 1px solid var(--gray-300);
-    }
-    .comb-panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 14px 8px;
-      cursor: pointer;
-      user-select: none;
-      gap: 8px;
-    }
-    .comb-panel-title {
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--gray-700);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .comb-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 2px 6px;
-      border-radius: 20px;
-      background: var(--gray-100);
-      font-size: 11px;
-      pointer-events: none;
-    }
-    .comb-badge.cheio    { background: #c3e6cb; color: #1a5c2a; }
-    .comb-badge.meio     { background: #fff3cd; color: #7d4e00; }
-    .comb-badge.baixo    { background: #f5c6cb; color: #8b1a1a; }
-    .comb-badge.sem      { background: #e0e0e0; color: #555; }
-    .comb-alerta         { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
-    .comb-alerta.ok      { background: #c3e6cb; color: #1a5c2a; }
-    .comb-alerta.warn    { background: #fff3cd; color: #7d4e00; }
-    .comb-alerta.danger  { background: #f5c6cb; color: #8b1a1a; }
-    .comb-toggle-icon    { font-size: 12px; color: var(--gray-500); transition: transform 0.2s; }
-    .comb-toggle-icon.open { transform: rotate(180deg); }
-
-    .comb-body { padding: 0 14px 12px; }
-    .comb-summary {
-      display: flex;
-      gap: 0;
-      border: 1px solid var(--gray-300);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .comb-stat { flex: 1; text-align: center; padding: 8px 6px; border-right: 1px solid var(--gray-300); }
-    .comb-stat:last-child { border-right: none; }
-    .comb-stat .cs-val { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 500; line-height: 1.2; }
-    .comb-stat .cs-lbl { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-500); margin-top: 2px; }
-    .cc-cheio .cs-val  { color: #2d7a3f; }
-    .cc-meio  .cs-val  { color: #d97706; }
-    .cc-baixo .cs-val  { color: #c62828; }
-    .cc-sem   .cs-val  { color: var(--gray-500); }
-
-    .comb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 6px; }
-    .comb-card { border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 7px 8px; display: flex; flex-direction: column; gap: 4px; }
-    .comb-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .comb-card-top { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
-    .comb-bar-wrap { background: var(--gray-100); border-radius: 3px; height: 6px; overflow: hidden; }
-    .comb-bar { height: 100%; border-radius: 3px; transition: width 0.3s; }
-    .comb-bar.cheio { background: #2d7a3f; }
-    .comb-bar.meio  { background: #d97706; }
-    .comb-bar.baixo { background: #c62828; }
-    .comb-bar.sem   { background: var(--gray-300); width: 0 !important; }
-    .comb-bottom { display: flex; align-items: center; justify-content: space-between; }
-    .comb-select { font-size: 10px; font-family: inherit; border: 1px solid var(--gray-300); border-radius: 3px; padding: 2px 4px; background: white; cursor: pointer; }
-    .comb-select:focus { border-color: var(--brand); }
-
-    /* comb cell in table */
-    .comb-cell { cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; transition: background 0.1s; text-align: center; }
-    .comb-cell:hover { background: rgba(244,162,97,0.2); }
-
     /* ── PDF MODE ── */
     body.pdf-generating .toolbar,
-    body.pdf-generating .actions-bar,
+    body.pdf-generating .fab-container,
     body.pdf-generating .filter-pills { display: none !important; }
     body.pdf-generating .obs { display: none !important; }
     body.pdf-generating .obs-print { display: block !important; }
@@ -683,9 +504,12 @@
     body.pdf-generating th,
     body.pdf-generating td:nth-child(1),
     body.pdf-generating td:nth-child(2) { position: static !important; }
+    body.pdf-generating .qr-backup-section { display: none !important; }
+
+
 
     @media print {
-      .toolbar, .actions-bar { display: none; }
+      .toolbar, .fab-container { display: none; }
       .table-container { max-height: none; overflow: visible; }
       thead { display: table-header-group; }
       tr { page-break-inside: avoid; break-inside: avoid; }
@@ -743,7 +567,7 @@
     </div>
     <div style="width: 100%;">
       <div class="obs-label" style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--gray-500);margin-bottom:6px;">Observações</div>
-      <textarea class="obs" id="observacoes" placeholder="Digite aqui..." style="min-height:70px;"></textarea>
+      <textarea class="obs" id="observacoes" placeholder="Digite aqui..."></textarea>
       <div class="obs-print" id="observacoes-print"></div>
     </div>
   </div>
@@ -764,75 +588,33 @@
     </div>
   </div>
 
-  <!-- Legend (inclui carga) -->
+  <!-- Legend -->
   <div class="legend">
     <div class="legend-item"><span class="legend-dot" style="background:var(--c-disponivel)"></span>Disponível</div>
     <div class="legend-item"><span class="legend-dot" style="background:var(--c-preventiva)"></span>Preventiva</div>
     <div class="legend-item"><span class="legend-dot" style="background:var(--c-corretiva)"></span>Corretiva</div>
     <div class="legend-item"><span class="legend-dot" style="background:var(--c-checklist)"></span>Checklist</div>
     <div class="legend-item"><span class="legend-dot" style="background:#eee; border:1px solid #ccc;"></span>Alugada</div>
-    <!-- Legenda carga -->
     <div class="legend-item"><span style="font-size:12px;">🔋</span> Pronta</div>
     <div class="legend-item"><span style="font-size:12px;">⚠️</span> Carga baixa</div>
     <div class="legend-item"><span style="font-size:12px;">🔌</span> Carregando</div>
-    <div class="legend-item"><span style="font-size:12px;">⚪</span> Sem info</div>
-    <!-- Legenda combustível -->
-    <div class="legend-item"><span style="font-size:12px;">⛽</span> Cheio</div>
-    <div class="legend-item"><span style="font-size:12px;">🟡</span> Meio</div>
-    <div class="legend-item"><span style="font-size:12px;">🔴</span> Combustível baixo</div>
+    <div class="legend-item"><span style="font-size:12px;">⛽</span> Cheio / 🟡 Meio / 🔴 Baixo</div>
   </div>
 
-  <!-- ⚡ Painel de Carga Elétrica (resumo) -->
-  <div class="carga-panel" id="carga-panel">
-    <div class="carga-panel-header" onclick="toggleCargaPanel()">
-      <div class="carga-panel-title">
-        <span class="bolt">⚡</span> Carga — Equipamentos Elétricos
-        <span style="font-size:10px;font-weight:400;color:var(--gray-500);text-transform:none;">(GS · Z-34 · Z-45 DC)</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="carga-alerta ok" id="carga-alerta-badge">— Aguardando</span>
-        <span class="carga-toggle-icon open" id="carga-toggle-icon">▼</span>
-      </div>
-    </div>
-    <div class="carga-body" id="carga-body">
-      <div class="carga-summary">
-        <div class="carga-stat cs-pronta"><div class="cs-val" id="cs-cnt-pronta">0</div><div class="cs-lbl">🔋 Pronta</div></div>
-        <div class="carga-stat cs-baixa"><div class="cs-val" id="cs-cnt-baixa">0</div><div class="cs-lbl">⚠ Baixa</div></div>
-        <div class="carga-stat cs-carregando"><div class="cs-val" id="cs-cnt-carregando">0</div><div class="cs-lbl">🔌 Carregando</div></div>
-        <div class="carga-stat cs-sem"><div class="cs-val" id="cs-cnt-sem">0</div><div class="cs-lbl">— Sem info</div></div>
-      </div>
-      <div class="carga-grid" id="carga-grid"></div>
-    </div>
-  </div>
-
-  <!-- ⛽ Painel de Combustível -->
-  <div class="comb-panel" id="comb-panel">
-    <div class="comb-panel-header" onclick="toggleCombPanel()">
-      <div class="comb-panel-title">
-        <span style="font-size:14px;">⛽</span> Combustível — Equipamentos a Combustão
-        <span style="font-size:10px;font-weight:400;color:var(--gray-500);text-transform:none;">(Z-45 RT · Z-60 · Z-62 · Z-80 · S-80J)</span>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="comb-alerta warn" id="comb-alerta-badge">— Aguardando</span>
-        <span class="comb-toggle-icon open" id="comb-toggle-icon">▼</span>
-      </div>
-    </div>
-    <div class="comb-body" id="comb-body">
-      <div class="comb-summary">
-        <div class="comb-stat cc-cheio"><div class="cs-val" id="cc-cnt-cheio">0</div><div class="cs-lbl">⛽ Cheio</div></div>
-        <div class="comb-stat cc-meio"><div class="cs-val" id="cc-cnt-meio">0</div><div class="cs-lbl">🟡 Meio</div></div>
-        <div class="comb-stat cc-baixo"><div class="cs-val" id="cc-cnt-baixo">0</div><div class="cs-lbl">🔴 Baixo</div></div>
-        <div class="comb-stat cc-sem"><div class="cs-val" id="cc-cnt-sem">0</div><div class="cs-lbl">— Sem info</div></div>
-      </div>
-      <div class="comb-grid" id="comb-grid"></div>
-    </div>
-  </div>
-
-  <!-- Table (nova coluna Carga) -->
+  <!-- Table -->
   <div class="table-container">
     <table id="equipamentos-table">
       <thead>
-        <tr><th>Modelo</th><th>TAG</th><th>Carga / Combust.</th><th>Horímetro</th><th>Disponível</th><th>Preventiva</th><th>Corretiva</th><th>Checklist</th></tr>
+        <tr>
+          <th>Modelo</th>
+          <th>TAG</th>
+          <th>Carga / Combust.</th>
+          <th>Horímetro</th>
+          <th>Disponível</th>
+          <th>Preventiva</th>
+          <th>Corretiva</th>
+          <th>Checklist</th>
+        </tr>
       </thead>
       <tbody></tbody>
     </table>
@@ -843,17 +625,14 @@
   <div class="chart-section" style="border-top:1px solid var(--gray-300);"><div class="chart-title">Disponíveis por modelo</div><div class="chart-container"><canvas id="modeloChart"></canvas></div></div>
   <div class="chart-section" style="border-top:1px solid var(--gray-300);"><div class="chart-title">Corretivas por modelo</div><div class="chart-container"><canvas id="corretivaChart"></canvas></div></div>
 
+
+
   <div class="page-footer">
     <strong>Total: 52 equipamentos</strong> &nbsp;·&nbsp;
     <span style="font-size:10px;">T:\Plataformas_MG\Manutenção\Documentos Gerais Plataformas</span>
   </div>
 
-  <div class="actions-bar">
-    <button class="btn btn-excel" onclick="gerarExcel()">⬇ Exportar Excel</button>
-    <button class="btn btn-pdf"   onclick="gerarPDF()">⬇ Exportar PDF</button>
-    <button class="btn btn-clear" onclick="limparTudo()">Limpar Tudo</button>
-  </div>
-</div>
+</div><!-- /main-container -->
 
 <!-- Modal popup para carga -->
 <div id="cargaModal" class="modal">
@@ -883,10 +662,35 @@
   </div>
 </div>
 
+<!-- FAB - Floating Action Buttons -->
+<div class="fab-container" id="fab-container">
+  <div class="fab-group" id="fab-group">
+    <div class="fab-action">
+      <span class="fab-action-label">Exportar Excel</span>
+      <button class="fab-action-btn excel-btn" onclick="gerarExcel()" title="Excel">📊</button>
+    </div>
+    <div class="fab-action">
+      <span class="fab-action-label">Exportar PDF</span>
+      <button class="fab-action-btn pdf-btn" onclick="gerarPDF()" title="PDF">📄</button>
+    </div>
+    <div class="fab-action">
+      <span class="fab-action-label">Enviar WhatsApp</span>
+      <button class="fab-action-btn whats-btn" onclick="enviarWhatsApp()" title="WhatsApp">💬</button>
+    </div>
+    <div class="fab-action">
+      <span class="fab-action-label">Limpar Tudo</span>
+      <button class="fab-action-btn clear-btn" onclick="limparTudo()" title="Limpar">🗑️</button>
+    </div>
+  </div>
+  <button class="fab-main fab-toggle-btn" id="fab-toggle" onclick="toggleFab()" title="Ações">
+    ⚡
+  </button>
+</div>
+
 <div id="toast"></div>
 
 <script>
-/* ── DATA (mesmo do original) ── */
+/* ── DATA ── */
 const equipamentos = [
       { modelo: "GS-1930", tag: "TPE-1533" },
       { modelo: "GS-1930", tag: "TPE-1534" },
@@ -962,21 +766,32 @@ let searchTerm = '';
 let myStatusChart = null, myModeloChart = null, myCorretivaChart = null;
 let currentCargaTag = null;
 let currentCombTag = null;
+let fabOpen = false;
+let qrInstance = null;
 
 function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
 function markSaved() { const now=new Date(); document.getElementById('saveIndicator').textContent=`💾 Salvo às ${now.toTimeString().slice(0,5)}`; }
 
-// Build table with carga column
+// FAB Toggle
+function toggleFab() {
+  fabOpen = !fabOpen;
+  document.getElementById('fab-group').classList.toggle('open', fabOpen);
+  document.getElementById('fab-toggle').textContent = fabOpen ? '✕' : '⚡';
+}
+
+// Build table
 const tbody = document.querySelector('#equipamentos-table tbody');
 const fragment = document.createDocumentFragment();
 equipamentos.forEach(eq => {
   const tr = document.createElement('tr');
   tr.dataset.modelo = eq.modelo.toLowerCase();
   tr.dataset.tag = eq.tag.toLowerCase();
+  const isEletrico = ELETRICOS.includes(eq.modelo);
+  const isCombustao = COMBUSTIVEIS.includes(eq.modelo);
   tr.innerHTML = `
     <td>${eq.modelo}</td>
     <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">${eq.tag}</td>
-    <td class="energia-cell" data-tag="${eq.tag}" data-tipo="${ELETRICOS.includes(eq.modelo)?'eletrico':COMBUSTIVEIS.includes(eq.modelo)?'combustao':''}" style="${(ELETRICOS.includes(eq.modelo)||COMBUSTIVEIS.includes(eq.modelo))?'cursor:pointer;':'color:#ccc;font-size:11px;'}">—</td>
+    <td class="energia-cell" data-tag="${eq.tag}" data-tipo="${isEletrico?'eletrico':isCombustao?'combustao':''}" style="${(isEletrico||isCombustao)?'cursor:pointer;':'color:#ccc;font-size:11px;'}">—</td>
     <td><input type="text" class="horimetro-input" data-tag="${eq.tag}" placeholder="—" inputmode="numeric"></td>
     <td><input type="checkbox" class="status-radio" data-status="disponivel" data-tag="${eq.tag}"></td>
     <td><input type="checkbox" class="status-radio" data-status="preventiva" data-tag="${eq.tag}"></td>
@@ -987,7 +802,7 @@ equipamentos.forEach(eq => {
 });
 tbody.appendChild(fragment);
 
-// Refresh energia cell (carga elétrica ou combustível)
+// Refresh energia cell
 function refreshCargaCell(tag) {
   const cell = document.querySelector(`.energia-cell[data-tag="${tag}"]`);
   if (!cell) return;
@@ -1012,38 +827,21 @@ function openCargaModal(tag) {
   currentCargaTag = tag;
   const modal = document.getElementById('cargaModal');
   const saved = localStorage.getItem('carga_' + tag) || 'sem';
-  const btns = document.querySelectorAll('#modalCargaButtons button');
-  btns.forEach(btn => {
+  document.querySelectorAll('#modalCargaButtons button').forEach(btn => {
     btn.classList.remove('selected');
     if(btn.dataset.val === saved) btn.classList.add('selected');
   });
   modal.style.display = 'flex';
 }
-
 function closeCargaModal() { document.getElementById('cargaModal').style.display = 'none'; }
-
 function setCargaFromModal(val) {
   if(!currentCargaTag) return;
   localStorage.setItem('carga_' + currentCargaTag, val);
   refreshCargaCell(currentCargaTag);
-  updateCargaSummary();
-  buildCargaGrid();
   markSaved();
   closeCargaModal();
 }
 
-// Event delegation para células de energia
-document.querySelector('#equipamentos-table tbody').addEventListener('click', function(e) {
-  const cell = e.target.closest('td.energia-cell');
-  if (!cell) return;
-  e.stopPropagation();
-  const tag = cell.dataset.tag;
-  const tipo = cell.dataset.tipo;
-  if (tipo === 'eletrico') openCargaModal(tag);
-  else if (tipo === 'combustao') openCombModal(tag);
-});
-
-// Combustível modal
 function openCombModal(tag) {
   currentCombTag = tag;
   const modal = document.getElementById('combModal');
@@ -1059,25 +857,36 @@ function setCombFromModal(val) {
   if(!currentCombTag) return;
   localStorage.setItem('comb_' + currentCombTag, val);
   refreshCombCell(currentCombTag);
-  updateCombSummary();
-  buildCombGrid();
   markSaved();
   closeCombModal();
 }
-document.querySelectorAll('#modalCombButtons button').forEach(btn => {
-  btn.addEventListener('click', () => setCombFromModal(btn.dataset.val));
+
+// Event delegation para células de energia
+document.querySelector('#equipamentos-table tbody').addEventListener('click', function(e) {
+  const cell = e.target.closest('td.energia-cell');
+  if (!cell) return;
+  e.stopPropagation();
+  const tag = cell.dataset.tag;
+  const tipo = cell.dataset.tipo;
+  if (tipo === 'eletrico') openCargaModal(tag);
+  else if (tipo === 'combustao') openCombModal(tag);
 });
 
-// Modal listeners carga
 document.querySelectorAll('#modalCargaButtons button').forEach(btn => {
   btn.addEventListener('click', () => setCargaFromModal(btn.dataset.val));
+});
+document.querySelectorAll('#modalCombButtons button').forEach(btn => {
+  btn.addEventListener('click', () => setCombFromModal(btn.dataset.val));
 });
 window.onclick = (e) => {
   if(e.target === document.getElementById('cargaModal')) closeCargaModal();
   if(e.target === document.getElementById('combModal')) closeCombModal();
+  if(e.target === document.getElementById('fab-container') || (!e.target.closest('.fab-container') && fabOpen)) {
+    // not closing fab on outside click intentionally - keep open for ease of use
+  }
 };
 
-// Existing status logic
+// Status logic
 document.querySelectorAll('.status-radio').forEach(cb => {
   cb.addEventListener('change', function() {
     const tag = this.dataset.tag;
@@ -1115,6 +924,7 @@ function updateDashboard() {
   for(let k in counts) document.getElementById('cnt-'+k).textContent = counts[k];
   return counts;
 }
+
 function updateChart() {
   const c=updateDashboard(); const d=[c.disponivel,c.preventiva,c.corretiva,c.checklist,c.alugada];
   if(myStatusChart) { myStatusChart.data.datasets[0].data=d; myStatusChart.update('none'); return; }
@@ -1135,66 +945,12 @@ function updateCorretivaChart() {
   const ctx=document.getElementById('corretivaChart').getContext('2d');
   myCorretivaChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Corretivas',data,backgroundColor:'#f5c6cb',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw} em corretiva`}},datalabels:{anchor:'end',align:'end',offset:2,font:{size:12,weight:'600'},formatter:v=>v>0?v:''}},scales:{y:{beginAtZero:true,grace:'15%',ticks:{stepSize:1}},x:{ticks:{font:{size:11}}}}},plugins:[ChartDataLabels]});
 }
-function buildCombGrid() {
-  const grid=document.getElementById('comb-grid'); grid.innerHTML='';
-  equipamentos.filter(eq=>COMBUSTIVEIS.includes(eq.modelo)).forEach(eq=>{
-    const saved=localStorage.getItem('comb_'+eq.tag)||'sem', estado=COMB_ESTADOS[saved];
-    const card=document.createElement('div'); card.className='comb-card'; card.innerHTML=`
-      <div class="comb-card-top"><span class="carga-tag">${eq.tag}</span><span class="carga-modelo-badge">${eq.modelo}</span></div>
-      <div class="comb-bar-wrap"><div class="comb-bar ${estado.cls}" style="width:${estado.pct}%"></div></div>
-      <div class="comb-bottom"><select class="comb-select" data-tag="${eq.tag}" onchange="setCombFromSelect(this)">
-        <option value="cheio" ${saved==='cheio'?'selected':''}>⛽ Cheio</option>
-        <option value="meio" ${saved==='meio'?'selected':''}>🟡 Meio</option>
-        <option value="baixo" ${saved==='baixo'?'selected':''}>🔴 Baixo</option>
-        <option value="sem" ${saved==='sem'?'selected':''}>⚪ Sem info</option>
-      </select></div>`;
-    grid.appendChild(card);
-  });
-}
-function setCombFromSelect(sel){ const tag=sel.dataset.tag, val=sel.value; localStorage.setItem('comb_'+tag,val); refreshCombCell(tag); updateCombSummary(); buildCombGrid(); markSaved(); }
-function updateCombSummary() {
-  const counts={cheio:0,meio:0,baixo:0,sem:0};
-  equipamentos.filter(eq=>COMBUSTIVEIS.includes(eq.modelo)).forEach(eq=>{ const v=localStorage.getItem('comb_'+eq.tag)||'sem'; counts[v]++; });
-  document.getElementById('cc-cnt-cheio').textContent=counts.cheio;
-  document.getElementById('cc-cnt-meio').textContent=counts.meio;
-  document.getElementById('cc-cnt-baixo').textContent=counts.baixo;
-  document.getElementById('cc-cnt-sem').textContent=counts.sem;
-  const badge=document.getElementById('comb-alerta-badge'), informadas=counts.cheio+counts.meio+counts.baixo;
-  if(informadas===0){ badge.className='comb-alerta warn'; badge.textContent='⚠ Sem informação de combustível'; }
-  else if(counts.baixo>0 && counts.cheio===0 && counts.meio===0){ badge.className='comb-alerta danger'; badge.textContent=`🚨 ${counts.baixo} com combustível baixo!`; }
-  else if(counts.baixo>0){ badge.className='comb-alerta warn'; badge.textContent=`⚠ ${counts.baixo} com combustível baixo`; }
-  else { badge.className='comb-alerta ok'; badge.textContent=`✔ ${counts.cheio} cheio${counts.cheio!==1?'s':''}, ${counts.meio} meio`; }
-}
-function toggleCombPanel(){ const body=document.getElementById('comb-body'), icon=document.getElementById('comb-toggle-icon'); const isOpen=body.style.display!=='none'; body.style.display=isOpen?'none':''; icon.classList.toggle('open',!isOpen); }
 
-function buildCargaGrid() {
-  const grid=document.getElementById('carga-grid'); grid.innerHTML='';
-  equipamentos.filter(eq=>ELETRICOS.includes(eq.modelo)).forEach(eq=>{
-    const saved=localStorage.getItem('carga_'+eq.tag)||'sem', estado=CARGA_ESTADOS[saved];
-    const card=document.createElement('div'); card.className='carga-card'; card.innerHTML=`
-      <div class="carga-card-top"><span class="carga-tag">${eq.tag}</span><span class="carga-modelo-badge">${eq.modelo}</span></div>
-      <div class="carga-bar-wrap"><div class="carga-bar ${estado.cls}" style="width:${estado.pct}%"></div></div>
-      <div class="carga-bottom"><select class="carga-select" data-tag="${eq.tag}" onchange="setCargaFromSelect(this)"><option value="pronta" ${saved==='pronta'?'selected':''}>🔋 Pronta</option><option value="baixa" ${saved==='baixa'?'selected':''}>⚠ Baixa</option><option value="carregando" ${saved==='carregando'?'selected':''}>🔌 Carregando</option><option value="sem" ${saved==='sem'?'selected':''}>⚪ Sem info</option></select><span>${estado.icon}</span></div>`;
-    grid.appendChild(card);
-  });
-}
-function setCargaFromSelect(sel){ const tag=sel.dataset.tag, val=sel.value; localStorage.setItem('carga_'+tag,val); refreshCargaCell(tag); updateCargaSummary(); buildCargaGrid(); markSaved(); }
-function updateCargaSummary() {
-  const counts={pronta:0,baixa:0,carregando:0,sem:0};
-  equipamentos.filter(eq=>ELETRICOS.includes(eq.modelo)).forEach(eq=>{ const v=localStorage.getItem('carga_'+eq.tag)||'sem'; counts[v]++; });
-  document.getElementById('cs-cnt-pronta').textContent=counts.pronta; document.getElementById('cs-cnt-baixa').textContent=counts.baixa; document.getElementById('cs-cnt-carregando').textContent=counts.carregando; document.getElementById('cs-cnt-sem').textContent=counts.sem;
-  const badge=document.getElementById('carga-alerta-badge'), total=counts.pronta+counts.baixa+counts.carregando+counts.sem, informadas=total-counts.sem;
-  if(informadas===0){ badge.className='carga-alerta warn'; badge.textContent='⚠ Sem informação de carga'; }
-  else if(counts.baixa>0 && counts.pronta===0){ badge.className='carga-alerta danger'; badge.textContent=`🚨 ${counts.baixa} com carga baixa — não sair!`; }
-  else if(counts.baixa>0){ badge.className='carga-alerta warn'; badge.textContent=`⚠ ${counts.baixa} com carga baixa`; }
-  else if(counts.pronta>0 && counts.baixa===0){ badge.className='carga-alerta ok'; badge.textContent=`✔ ${counts.pronta} pronta${counts.pronta>1?'s':''} p/ sair`; }
-  else { badge.className='carga-alerta warn'; badge.textContent='🔌 Aguardando carga'; }
-}
-function toggleCargaPanel(){ const body=document.getElementById('carga-body'), icon=document.getElementById('carga-toggle-icon'); const isOpen=body.style.display!=='none'; body.style.display=isOpen?'none':''; icon.classList.toggle('open',!isOpen); }
 function applyVisibility() { const term=searchTerm.toLowerCase(); document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{ const matchSearch=!term||tr.dataset.modelo.includes(term)||tr.dataset.tag.includes(term); const matchFilter=activeFilter==='all'||tr.classList.contains(activeFilter); tr.classList.toggle('hidden-row',!(matchSearch&&matchFilter)); }); }
 function setFilter(f,btn){ activeFilter=f; document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active')); btn.classList.add('active'); applyVisibility(); }
 document.getElementById('busca').addEventListener('input',function(){ searchTerm=this.value; applyVisibility(); });
 document.querySelector('.pill[data-filter="all"]').classList.add('active');
+
 function loadFromCache() {
   mantenedorInput.value=localStorage.getItem('status_mantenedor')||'';
   let savedData=localStorage.getItem('status_data'); if(!savedData){ savedData=new Date().toISOString().split('T')[0]; localStorage.setItem('status_data',savedData); } dataInput.value=savedData;
@@ -1208,10 +964,53 @@ function loadFromCache() {
     refreshCargaCell(tag);
     refreshCombCell(tag);
   });
-  updateChart(); updateModeloChart(); updateCorretivaChart(); buildCargaGrid(); updateCargaSummary(); buildCombGrid(); updateCombSummary();
+  updateChart(); updateModeloChart(); updateCorretivaChart();
 }
+
 function limparTudo(){ if(confirm('Limpar TODOS os dados salvos?')){ localStorage.clear(); location.reload(); } }
-function gerarExcel() { // similar ao original, agora com coluna Carga
+
+// ── GERAR RESUMO TEXTO ──
+function gerarResumoTexto() {
+  const mantenedor = mantenedorInput.value || '—';
+  const data = dataInput.value || new Date().toISOString().split('T')[0];
+  const obs = obsInput.value || '';
+  const counts = { disponivel:0, preventiva:0, corretiva:0, checklist:0, alugada:0 };
+  const corretivas = [], preventivas = [], checklist = [];
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
+    const tag = tr.cells[1].textContent;
+    const modelo = tr.cells[0].textContent;
+    if(tr.classList.contains('disponivel')) counts.disponivel++;
+    else if(tr.classList.contains('preventiva')){ counts.preventiva++; preventivas.push(`${modelo} ${tag}`); }
+    else if(tr.classList.contains('corretiva')){ counts.corretiva++; corretivas.push(`${modelo} ${tag}`); }
+    else if(tr.classList.contains('checklist')){ counts.checklist++; checklist.push(`${modelo} ${tag}`); }
+    else counts.alugada++;
+  });
+  const total = counts.disponivel + counts.preventiva + counts.corretiva + counts.checklist + counts.alugada;
+  let txt = `*TRADIMAQ SP — Status Diário*\n`;
+  txt += `📅 Data: ${data}\n`;
+  txt += `👷 Mantenedor: ${mantenedor}\n\n`;
+  txt += `*Resumo (${total} equipamentos):*\n`;
+  txt += `✅ Disponível: ${counts.disponivel}\n`;
+  txt += `🔧 Preventiva: ${counts.preventiva}\n`;
+  txt += `🔴 Corretiva: ${counts.corretiva}\n`;
+  txt += `📋 Checklist: ${counts.checklist}\n`;
+  txt += `🏗️ Alugada: ${counts.alugada}\n`;
+  if(corretivas.length){ txt += `\n*Em corretiva:*\n`; corretivas.forEach(c => txt += `• ${c}\n`); }
+  if(preventivas.length){ txt += `\n*Em preventiva:*\n`; preventivas.forEach(p => txt += `• ${p}\n`); }
+  if(checklist.length){ txt += `\n*Checklist pendente:*\n`; checklist.forEach(c => txt += `• ${c}\n`); }
+  if(obs){ txt += `\n*Observações:*\n${obs}\n`; }
+  return txt;
+}
+
+// ── WHATSAPP ──
+function enviarWhatsApp() {
+  const txt = gerarResumoTexto();
+  const encoded = encodeURIComponent(txt);
+  window.open(`https://wa.me/?text=${encoded}`, '_blank');
+}
+
+// ── EXCEL ──
+function gerarExcel() {
   const wb = XLSX.utils.book_new();
   let ws_data = [["TRADIMAQ - STATUS DIÁRIO - PLATAFORMAS GENIE"],[`Mantenedor: ${mantenedorInput.value||''}`],[`Data: ${dataInput.value||''}`],[`Observações: ${obsInput.value||''}`],[],["MODELO","TAG","CARGA / COMBUST.","HORÍMETRO","DISPONÍVEL","PREVENTIVA","CORRETIVA","CHECKLIST"]];
   document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{
@@ -1235,12 +1034,24 @@ function gerarExcel() { // similar ao original, agora com coluna Carga
   XLSX.writeFile(wb,`Status_Diario_Genie_${new Date().toISOString().split('T')[0].replace(/-/g,'')}.xlsx`);
   showToast("Excel gerado!");
 }
+
+// ── PDF ──
 function gerarPDF(){
-  obsPrint.textContent=obsInput.value; window.scrollTo(0,0);
-  const opt={ margin:[0.4,0.4,0.4,0.4], filename:`Status_Diario_Genie_${(dataInput.value||new Date().toISOString().split('T')[0]).replace(/-/g,'')}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,scrollY:0}, jsPDF:{unit:'in',format:'a4',orientation:'portrait'} };
+  obsPrint.textContent = obsInput.value;
+  window.scrollTo(0,0);
+  const opt = {
+    margin: [0.4,0.4,0.4,0.4],
+    filename: `Status_Diario_Genie_${(dataInput.value||new Date().toISOString().split('T')[0]).replace(/-/g,'')}.pdf`,
+    image: { type:'jpeg', quality:0.97 },
+    html2canvas: { scale:2, scrollY:0 },
+    jsPDF: { unit:'in', format:'a4', orientation:'portrait' }
+  };
   document.body.classList.add('pdf-generating');
-  html2pdf().from(document.getElementById('main-container')).set(opt).save().then(()=>{ document.body.classList.remove('pdf-generating'); showToast("PDF gerado!"); }).catch(()=>{ document.body.classList.remove('pdf-generating'); showToast("Erro PDF"); });
+  html2pdf().from(document.getElementById('main-container')).set(opt).save()
+    .then(()=>{ document.body.classList.remove('pdf-generating'); showToast("PDF gerado!"); })
+    .catch(()=>{ document.body.classList.remove('pdf-generating'); showToast("Erro ao gerar PDF"); });
 }
+
 loadFromCache();
 </script>
 </body>
