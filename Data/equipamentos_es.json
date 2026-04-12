@@ -1,4 +1,4 @@
-const equipamentos = [
+[
       
       { modelo: "GS-1930", tag: "TPE-1533" },
       { modelo: "GS-1930", tag: "TPE-1534" },
@@ -58,5 +58,5 @@ const equipamentos = [
       { modelo: "Z-62", tag: "TPE-3711" },
       { modelo: "Z-62", tag: "TPE-3712" },
   
-      { modelo: "Z-80", tag: "TPE-3706" },
+      { modelo: "Z-80", tag: "TPE-3706" }
 ]
