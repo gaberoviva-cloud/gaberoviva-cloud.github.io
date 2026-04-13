@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tradimaq — Sistema</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" id="pwa-manifest">
+  <meta name="theme-color" content="#ff7a00">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tradimaq">
+  <link rel="apple-touch-icon" href="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #ff7a00;
+      --brand-dark: #d96500;
+      --brand-light: #fff0e0;
+      --dark: #1a1a1a;
+      --text: #374151;
+      --muted: #6b7280;
+      --border: rgba(255,255,255,0.12);
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,122,0,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(255,122,0,0.10) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Logo */
+    .logo-area {
+      text-align: center;
+      margin-bottom: 4px;
+      animation: fadeDown 0.5s ease both;
+    }
+    .logo-area img {
+      height: 38px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 8px;
+    }
+    .logo-fallback {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: white;
+    }
+    .logo-fallback span { color: var(--brand); }
+    .logo-tagline {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      font-weight: 500;
+    }
+
+    /* Cards */
+    .card {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      animation: fadeUp 0.5s ease both;
+    }
+    .card:nth-child(2) { animation-delay: 0.05s; }
+    .card:nth-child(3) { animation-delay: 0.10s; }
+    .card:nth-child(4) { animation-delay: 0.15s; }
+    .card:nth-child(5) { animation-delay: 0.20s; }
+    .card:nth-child(6) { animation-delay: 0.25s; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: rgba(255,122,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .card-subtitle {
+      font-size: 10px;
+      color: rgba(255,255,255,0.38);
+      margin-top: 1px;
+    }
+
+    .card-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 13px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.82);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      touch-action: manipulation;
+      text-decoration: none;
+    }
+    .btn:hover {
+      background: rgba(255,122,0,0.16);
+      border-color: rgba(255,122,0,0.38);
+      color: white;
+    }
+    .btn:active { transform: scale(0.98); }
+
+    .btn .btn-arrow {
+      font-size: 12px;
+      opacity: 0.35;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn:hover .btn-arrow {
+      opacity: 0.85;
+      transform: translateX(3px);
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .btn-grid .btn {
+      justify-content: center;
+      text-align: center;
+    }
+    .btn-grid .btn .btn-arrow { display: none; }
+
+    .card-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.22);
+      margin-top: 6px;
+    }
+    footer a {
+      color: rgba(255,255,255,0.32);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    footer a:hover { color: var(--brand); }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 480px) {
+      .wrapper { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <div class="logo-area">
+    <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq"
+      onerror="this.outerHTML='<div class=\\'logo-fallback\\'>TRADI<span>MAQ</span></div>'">
+    <div class="logo-tagline">Plataformas Elevatórias</div>
+  </div>
+
+  <!-- Status do Pátio -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📊</div>
+      <div>
+        <div class="card-title">Status do Pátio</div>
+        <div class="card-subtitle">Plataformas Genie</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/status_geral.html')">
+        <span>Abrir status</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Vistoria Visual -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🚜</div>
+      <div>
+        <div class="card-title">Vistoria Visual</div>
+        <div class="card-subtitle">Saída e Retorno · PDF</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/vistoria_tradimaq_saida_retorno.html')">
+        <span>Abrir vistoria</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank">By Gabriel Roza</a>
+</footer>
+
+<script>
+  function abrir(arquivo) {
+    window.location.href = arquivo;
+  }
+</script>
+
+<script>
+// ── PWA Manifest dinâmico ──
+(function(){
+  const icon = 'https://gaberoviva-cloud.github.io/Data/5202113.png';
+  const m = {
+    name: 'Tradimaq — Sistema',
+    short_name: 'Tradimaq',
+    start_url: './',
+    display: 'standalone',
+    background_color: '#1a1a1a',
+    theme_color: '#ff7a00',
+    icons: [
+      { src: icon, sizes: '192x192', type: 'image/png' },
+      { src: icon, sizes: '512x512', type: 'image/png' }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(m)], { type: 'application/manifest+json' });
+  document.getElementById('pwa-manifest').href = URL.createObjectURL(blob);
+})();
+
+// ── Service Worker ──
+if ('serviceWorker' in navigator) {
+  const sw = `
+    const C = 'tradimaq-v1';
+    self.addEventListener('install', e => e.waitUntil(
+      caches.open(C).then(c => c.addAll([self.location.pathname])).then(() => self.skipWaiting())
+    ));
+    self.addEventListener('activate', e => e.waitUntil(
+      caches.keys().then(ks => Promise.all(ks.filter(k => k !== C).map(k => caches.delete(k))))
+        .then(() => self.clients.claim())
+    ));
+    self.addEventListener('fetch', e => e.respondWith(
+      caches.match(e.request).then(r => r || fetch(e.request).catch(() => r))
+    ));
+  `;
+  navigator.serviceWorker
+    .register(URL.createObjectURL(new Blob([sw], { type: 'application/javascript' })), { scope: './' })
+    .catch(e => console.warn('SW:', e));
+}
+</script>
+
+</body>
+</html>
