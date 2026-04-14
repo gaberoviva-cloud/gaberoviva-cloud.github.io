@@ -482,6 +482,50 @@
       #app-screen { max-width: 100%; }
     }
 
+    /* ── MODAL SAIR ── */
+    #modal-sair {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 99998; padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    #modal-sair.show { opacity: 1; pointer-events: all; }
+    .sair-box {
+      background: #242424;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 24px 20px 18px;
+      width: 100%; max-width: 300px;
+      text-align: center;
+      animation: fadeUp 0.2s ease both;
+    }
+    .sair-box .sair-icon { font-size: 36px; margin-bottom: 10px; }
+    .sair-box h3 {
+      font-size: 15px; font-weight: 700; color: white; margin-bottom: 6px;
+    }
+    .sair-box p {
+      font-size: 12px; color: rgba(255,255,255,0.4); margin-bottom: 18px; line-height: 1.5;
+    }
+    .sair-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .btn-sair-cancel {
+      padding: 11px; background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 9px;
+      color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      transition: background 0.15s; touch-action: manipulation;
+    }
+    .btn-sair-cancel:active { background: rgba(255,255,255,0.12); }
+    .btn-sair-confirm {
+      padding: 11px; background: #ff4d4d;
+      border: none; border-radius: 9px;
+      color: white; font-size: 13px; font-weight: 700;
+      font-family: inherit; cursor: pointer;
+      transition: background 0.15s; touch-action: manipulation;
+    }
+    .btn-sair-confirm:active { background: #e03c3c; }
+
     /* ── LOADING SCREEN ── */
     #loading-screen {
       position: fixed;
@@ -625,6 +669,19 @@
   <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank">By Gabriel Roza</a>
 </footer>
 
+<!-- Modal Confirmar Saída -->
+<div id="modal-sair">
+  <div class="sair-box">
+    <div class="sair-icon">🚪</div>
+    <h3>Sair da conta?</h3>
+    <p>Você precisará fazer login novamente para acessar o sistema.</p>
+    <div class="sair-btn-row">
+      <button class="btn-sair-cancel" onclick="document.getElementById('modal-sair').classList.remove('show')">Cancelar</button>
+      <button class="btn-sair-confirm" onclick="confirmarSaida()">Sair</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal Quiz Offline -->
 <div id="modal-quiz">
   <div class="quiz-box">
@@ -747,7 +804,11 @@ function mostrarApp(nome) {
 }
 
 function sair() {
-  if (!confirm('Deseja sair da sua conta?')) return;
+  document.getElementById('modal-sair').classList.add('show');
+}
+
+function confirmarSaida() {
+  document.getElementById('modal-sair').classList.remove('show');
   localStorage.removeItem('trdm_u');
   document.getElementById('app-screen').classList.remove('visible');
   document.getElementById('login-screen').style.display = '';
