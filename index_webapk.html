@@ -317,27 +317,176 @@
     .btn:hover .btn-arrow { opacity: 0.85; transform: translateX(3px); }
 
     /* Toast offline */
-    #toast-offline {
+    /* ── MODAL OFFLINE / JOGO ── */
+    #modal-offline {
       position: fixed;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: #2a2a2a;
-      border: 1px solid rgba(255,107,107,0.4);
-      color: #ff8f8f;
-      font-size: 13px;
-      font-weight: 500;
-      padding: 10px 18px;
-      border-radius: 10px;
-      z-index: 999;
+      inset: 0;
+      background: rgba(0,0,0,0.82);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
       opacity: 0;
-      transition: opacity 0.2s, transform 0.2s;
       pointer-events: none;
-      white-space: nowrap;
+      transition: opacity 0.25s;
     }
-    #toast-offline.show {
+    #modal-offline.show {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      pointer-events: all;
+    }
+    .game-box {
+      background: #1e1e1e;
+      border: 1px solid rgba(255,122,0,0.25);
+      border-radius: 18px;
+      width: 300px;
+      padding: 22px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      user-select: none;
+    }
+    .game-header {
+      text-align: center;
+    }
+    .game-header h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ff8f8f;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .game-header p {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+    }
+    .game-score-row {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .game-score-block {
+      text-align: center;
+    }
+    .game-score-block .score-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.35);
+      font-weight: 600;
+    }
+    .game-score-block .score-val {
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .score-val.brand { color: var(--brand); }
+
+    /* Área de tap */
+    #tap-area {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: rgba(255,122,0,0.08);
+      border: 2px solid rgba(255,122,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.05s, border-color 0.05s, transform 0.05s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #tap-area:active, #tap-area.tapped {
+      background: rgba(255,122,0,0.28);
+      border-color: rgba(255,122,0,0.7);
+      transform: scale(0.94);
+    }
+    #tap-area .tap-icon {
+      font-size: 44px;
+      pointer-events: none;
+      transition: transform 0.08s;
+    }
+    #tap-area .tap-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    #tap-area.tapped .tap-icon { transform: scale(1.18); }
+
+    /* Timer bar */
+    .timer-bar-wrap {
+      width: 100%;
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    #timer-bar {
+      height: 100%;
+      width: 100%;
+      background: var(--brand);
+      border-radius: 3px;
+      transition: width linear;
+    }
+    #timer-bar.danger { background: #ff6b6b; }
+
+    .game-state-msg {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      min-height: 18px;
+    }
+    .btn-game {
+      width: 100%;
+      padding: 11px;
+      background: var(--brand);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-game:active { transform: scale(0.97); background: var(--brand-dark); }
+    .btn-fechar {
+      background: none;
+      border: none;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      cursor: pointer;
+      font-family: inherit;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+    .btn-fechar:hover { color: rgba(255,255,255,0.55); }
+
+    /* Partículas de pontos */
+    .tap-particle {
+      position: fixed;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--brand);
+      pointer-events: none;
+      z-index: 99999;
+      animation: particle-up 0.6s ease-out forwards;
+    }
+    @keyframes particle-up {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to   { opacity: 0; transform: translateY(-40px) scale(0.7); }
     }
 
     footer {
@@ -513,8 +662,40 @@
   <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank">By Gabriel Roza</a>
 </footer>
 
-<!-- Toast offline -->
-<div id="toast-offline">📡 Sem conexão — verifique o sinal</div>
+<!-- Modal Offline + Jogo -->
+<div id="modal-offline">
+  <div class="game-box">
+    <div class="game-header">
+      <h3>📡 Sem conexão</h3>
+      <p>Bora jogar enquanto espera o sinal?</p>
+    </div>
+
+    <div class="game-score-row">
+      <div class="game-score-block">
+        <div class="score-label">Pontos</div>
+        <div class="score-val brand" id="g-score">0</div>
+      </div>
+      <div class="game-score-block">
+        <div class="score-label">Recorde</div>
+        <div class="score-val" id="g-best">0</div>
+      </div>
+    </div>
+
+    <div class="timer-bar-wrap">
+      <div id="timer-bar"></div>
+    </div>
+
+    <div id="tap-area">
+      <span class="tap-icon">👆</span>
+      <span class="tap-label" id="tap-label">Toque para começar</span>
+    </div>
+
+    <div class="game-state-msg" id="g-msg"></div>
+
+    <button class="btn-game" id="btn-start-game" onclick="gameStart()">Jogar</button>
+    <button class="btn-fechar" onclick="fecharModalOffline()">Fechar</button>
+  </div>
+</div>
 
 <script>
 // ══════════════════════════════════════════════════════════════════
@@ -596,11 +777,9 @@ function sair() {
 }
 
 function abrir(arquivo, btn) {
-  // 7. Verifica conexão antes de navegar
+  // Verifica conexão antes de navegar
   if (!navigator.onLine) {
-    const toast = document.getElementById('toast-offline');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
+    abrirModalOffline();
     return;
   }
 
@@ -614,16 +793,109 @@ function abrir(arquivo, btn) {
     const arrow = btn.querySelector('.btn-arrow');
     const textoOriginal = label.textContent;
     label.textContent = 'Abrindo...';
-    arrow.textContent = '⏳';
+    arrow.style.opacity = '0';
     // Restaura caso o usuário volte (ex: botão voltar do Android)
     setTimeout(() => {
       label.textContent = textoOriginal;
-      arrow.textContent = '→';
+      arrow.style.opacity = '';
       botoes.forEach(b => b.removeAttribute('disabled'));
     }, 4000);
   }
 
   window.location.href = arquivo;
+}
+
+/* ══════════════════════════════════════════════
+   JOGO — TAP RÁPIDO (offline)
+   ══════════════════════════════════════════════ */
+const GAME_DURATION = 10000; // 10 segundos
+let gameRunning = false, gameScore = 0, gameTimer = null, gameEnd = null;
+
+function abrirModalOffline() {
+  document.getElementById('modal-offline').classList.add('show');
+  gameReset();
+}
+function fecharModalOffline() {
+  document.getElementById('modal-offline').classList.remove('show');
+  gameStop();
+}
+
+function gameReset() {
+  gameStop();
+  gameScore = 0;
+  document.getElementById('g-score').textContent = '0';
+  document.getElementById('g-msg').textContent = '';
+  document.getElementById('tap-label').textContent = 'Toque para começar';
+  document.getElementById('btn-start-game').textContent = 'Jogar';
+  document.getElementById('btn-start-game').style.display = '';
+  const bar = document.getElementById('timer-bar');
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+  bar.classList.remove('danger');
+}
+
+function gameStart() {
+  gameScore = 0;
+  gameRunning = true;
+  document.getElementById('g-score').textContent = '0';
+  document.getElementById('g-msg').textContent = '';
+  document.getElementById('tap-label').textContent = 'TAP!';
+  document.getElementById('btn-start-game').style.display = 'none';
+
+  // Inicia timer bar
+  const bar = document.getElementById('timer-bar');
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+  bar.classList.remove('danger');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      bar.style.transition = `width ${GAME_DURATION}ms linear`;
+      bar.style.width = '0%';
+    });
+  });
+
+  // Vira vermelha nos últimos 3s
+  gameTimer = setTimeout(() => bar.classList.add('danger'), GAME_DURATION - 3000);
+  gameEnd   = setTimeout(() => gameFinish(), GAME_DURATION);
+}
+
+function gameStop() {
+  gameRunning = false;
+  clearTimeout(gameTimer);
+  clearTimeout(gameEnd);
+}
+
+function gameFinish() {
+  gameRunning = false;
+  const best = Math.max(gameScore, parseInt(localStorage.getItem('trdm_tap_best') || '0'));
+  localStorage.setItem('trdm_tap_best', best);
+  document.getElementById('g-best').textContent = best;
+  document.getElementById('tap-label').textContent = '🏁';
+  const msg = gameScore >= 60 ? '🔥 Monstro!' : gameScore >= 40 ? '💪 Boa!' : gameScore >= 20 ? '👍 Tá treinando!' : '😅 Pode melhorar...';
+  document.getElementById('g-msg').textContent = `${gameScore} toques — ${msg}`;
+  document.getElementById('btn-start-game').textContent = 'Jogar de novo';
+  document.getElementById('btn-start-game').style.display = '';
+}
+
+function gameTap(e) {
+  if (!gameRunning) return;
+  e.preventDefault();
+  gameScore++;
+  document.getElementById('g-score').textContent = gameScore;
+
+  // Flash visual
+  const area = document.getElementById('tap-area');
+  area.classList.add('tapped');
+  setTimeout(() => area.classList.remove('tapped'), 80);
+
+  // Partícula +1
+  const p = document.createElement('div');
+  p.className = 'tap-particle';
+  p.textContent = '+1';
+  p.style.left = (e.touches ? e.touches[0].clientX : e.clientX) + 'px';
+  p.style.top  = (e.touches ? e.touches[0].clientY : e.clientY) + 'px';
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 600);
 }
 
 // Enter no campo de senha dispara o login
@@ -646,6 +918,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Verifica sessão ativa (ex: voltou de outra página)
   const s = sessaoAtiva();
   if (s) mostrarApp(s);
+
+  // Jogo — conecta eventos de toque e carrega recorde
+  const tapArea = document.getElementById('tap-area');
+  tapArea.addEventListener('touchstart', gameTap, { passive: false });
+  tapArea.addEventListener('mousedown',  gameTap);
+  const best = localStorage.getItem('trdm_tap_best');
+  if (best) document.getElementById('g-best').textContent = best;
 });
 </script>
 
