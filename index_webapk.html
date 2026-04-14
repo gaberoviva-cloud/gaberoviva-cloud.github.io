@@ -276,7 +276,8 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 10px 13px;
+      min-height: 48px;
+      padding: 12px 13px;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: 8px;
@@ -295,13 +296,49 @@
       border-color: rgba(255,122,0,0.38);
       color: white;
     }
-    .btn:active { transform: scale(0.98); }
+    /* Haptic visual: flash laranja no toque */
+    .btn:active {
+      transform: scale(0.97);
+      background: rgba(255,122,0,0.35) !important;
+      border-color: rgba(255,122,0,0.7) !important;
+      color: white !important;
+    }
+    .btn:disabled, .btn[disabled] {
+      opacity: 0.55;
+      cursor: default;
+      pointer-events: none;
+    }
     .btn .btn-arrow {
       font-size: 12px;
       opacity: 0.35;
+      flex-shrink: 0;
       transition: opacity 0.15s, transform 0.15s;
     }
     .btn:hover .btn-arrow { opacity: 0.85; transform: translateX(3px); }
+
+    /* Toast offline */
+    #toast-offline {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #2a2a2a;
+      border: 1px solid rgba(255,107,107,0.4);
+      color: #ff8f8f;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 18px;
+      border-radius: 10px;
+      z-index: 999;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    #toast-offline.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
 
     footer {
       position: relative;
@@ -332,9 +369,45 @@
     @media (max-width: 480px) {
       #app-screen { max-width: 100%; }
     }
+
+    /* ── LOADING SCREEN ── */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #e8924e 0%, #d4834a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      color: white;
+      gap: 14px;
+      transition: opacity 0.4s ease;
+    }
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
+    .loading-logo { font-size: 52px; animation: ls-pulse 1.2s ease-in-out infinite; }
+    @keyframes ls-pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.8} }
+    .loading-text { font-size: 17px; font-weight: 700; letter-spacing: 0.04em; }
+    .loading-sub  { font-size: 12px; opacity: 0.75; letter-spacing: 0.06em; text-transform: uppercase; }
+    .ls-spinner {
+      width: 30px; height: 30px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: ls-spin 0.8s linear infinite;
+    }
+    @keyframes ls-spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
+
+<!-- ── LOADING SCREEN ── -->
+<div id="loading-screen">
+  <div class="loading-logo">🏗️</div>
+  <div class="loading-text">Tradimaq</div>
+  <div class="ls-spinner"></div>
+  <div class="loading-sub">Carregando sistema...</div>
+</div>
 
 <!-- ══════════════════════════════════════════
      TELA DE LOGIN
@@ -393,7 +466,7 @@
       </div>
     </div>
     <div class="card-body">
-      <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/status_geral.html')">
+      <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/status_geral.html', this)">
         <span>Abrir status</span>
         <span class="btn-arrow">→</span>
       </button>
@@ -410,8 +483,25 @@
       </div>
     </div>
     <div class="card-body">
-      <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/vistoria_tradimaq_saida_retorno.html')">
+      <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/vistoria_tradimaq_saida_retorno.html', this)">
         <span>Abrir vistoria</span>
+        <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Controle de Ferramentas -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🔧</div>
+      <div>
+        <div class="card-title">Controle de Ferramentas</div>
+        <div class="card-subtitle">Empréstimo · Mobile</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/controle_ferramentas_mobile.html', this)">
+        <span>Abrir controle</span>
         <span class="btn-arrow">→</span>
       </button>
     </div>
@@ -422,6 +512,9 @@
 <footer>
   <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank">By Gabriel Roza</a>
 </footer>
+
+<!-- Toast offline -->
+<div id="toast-offline">📡 Sem conexão — verifique o sinal</div>
 
 <script>
 // ══════════════════════════════════════════════════════════════════
@@ -502,12 +595,47 @@ function sair() {
   document.getElementById('inp-pass').value = '';
 }
 
-function abrir(arquivo) {
+function abrir(arquivo, btn) {
+  // 7. Verifica conexão antes de navegar
+  if (!navigator.onLine) {
+    const toast = document.getElementById('toast-offline');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+    return;
+  }
+
+  // 6. Proteção duplo toque: desabilita todos os botões por 4s
+  const botoes = document.querySelectorAll('.btn');
+  botoes.forEach(b => b.setAttribute('disabled', 'true'));
+
+  // 3. Indicador de carregamento no botão clicado
+  if (btn) {
+    const label = btn.querySelector('span:first-child');
+    const arrow = btn.querySelector('.btn-arrow');
+    const textoOriginal = label.textContent;
+    label.textContent = 'Abrindo...';
+    arrow.textContent = '⏳';
+    // Restaura caso o usuário volte (ex: botão voltar do Android)
+    setTimeout(() => {
+      label.textContent = textoOriginal;
+      arrow.textContent = '→';
+      botoes.forEach(b => b.removeAttribute('disabled'));
+    }, 4000);
+  }
+
   window.location.href = arquivo;
 }
 
 // Enter no campo de senha dispara o login
 document.addEventListener('DOMContentLoaded', function() {
+
+  // Esconde loading screen após render
+  const ls = document.getElementById('loading-screen');
+  setTimeout(() => {
+    ls.classList.add('hidden');
+    setTimeout(() => ls.remove(), 450);
+  }, 600);
+
   document.getElementById('inp-pass').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') tentarLogin();
   });
