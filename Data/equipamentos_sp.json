@@ -92,6 +92,7 @@
   { "modelo": "Z-60", "tag": "TPE-1275" },
   { "modelo": "Z-60", "tag": "TPE-1654" },
 
+  { "modelo": "Z-62", "tag": "TPE-2785" },
   { "modelo": "Z-62", "tag": "TPE-2835" },
   { "modelo": "Z-62", "tag": "TPE-2836" },
   { "modelo": "Z-62", "tag": "TPE-3435" },
@@ -99,6 +100,7 @@
   { "modelo": "Z-62", "tag": "TPE-3645" },
 
   { "modelo": "Z-80", "tag": "TPE-1714" },
+  { "modelo": "Z-80", "tag": "TPE-2784" },
   { "modelo": "Z-80", "tag": "TPE-3704" },
 
   { "modelo": "S-80J", "tag": "TPE-3775" }
