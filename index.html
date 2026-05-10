@@ -980,7 +980,7 @@ html, body {
     <div class="card">
       <!-- Foto -->
       <div class="photo-wrap">
-        <div class="photo-ring" id="photo-ring" onclick="document.getElementById('input-foto').click()">
+        <div class="photo-ring" id="photo-ring">
           <img id="photo-preview" src="" alt="Foto do pet">
           <div class="paw-icon" id="paw-icon">
             <!-- Pata combinada cão + gato SVG inline -->
@@ -1009,8 +1009,8 @@ html, body {
           </div>
         </div>
         <p class="photo-hint">Toque para adicionar foto</p>
-        <input type="file" id="input-foto" accept="image/*" capture="environment" style="display:none" onchange="handleFoto(event)">
       </div>
+      <input type="file" id="input-foto" accept="image/*" style="display:none" onchange="handleFoto(event)">
 
       <div class="fld">
         <label>Nome do Pet</label>
@@ -1211,7 +1211,7 @@ html, body {
 <!-- ═══ BOTTOM NAV ═══ -->
 <nav id="nav">
   <!-- Pet -->
-  <button class="nav-item active" onclick="goScreen('pet',this)">
+  <button class="nav-item active" data-screen="pet">
     <div class="nav-icon">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 11c1.38 0 2.5-1.34 2.5-3S5.88 5 4.5 5 2 6.34 2 8s1.12 3 2.5 3zm15 0c1.38 0 2.5-1.34 2.5-3S20.88 5 19.5 5 17 6.34 17 8s1.12 3 2.5 3zM12 11c1.93 0 3.5-1.57 3.5-3.5S13.93 4 12 4 8.5 5.57 8.5 7.5 10.07 11 12 11zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm-7.5-1C2.99 12 0 12.75 0 14.25V16h4.5v-1.75c0-.71.3-1.37.77-1.92C4.91 12.13 4.71 12 4.5 12zm15 0c-.21 0-.41.13-.77.33.47.55.77 1.21.77 1.92V16H24v-1.75c0-1.5-2.99-2.25-4.5-2.25z"/></svg>
     </div>
@@ -1219,7 +1219,7 @@ html, body {
   </button>
 
   <!-- Vacinas -->
-  <button class="nav-item" onclick="goScreen('vacinas',this)">
+  <button class="nav-item" data-screen="vacinas">
     <div class="nav-icon">
       <div class="nav-dot" id="nav-dot-vac"></div>
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.5 10h-2v5h2v-5zm4 0h-2v5h2v-5zm8.5 7H4v2h15v-2zm0-7h-2v5h2v-5zm-7.5-9L2 6v2h19V6l-8.5-5z"/></svg>
@@ -1228,7 +1228,7 @@ html, body {
   </button>
 
   <!-- RG -->
-  <button class="nav-item" onclick="goScreen('rg',this)">
+  <button class="nav-item" data-screen="rg">
     <div class="nav-icon">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>
     </div>
@@ -1236,7 +1236,7 @@ html, body {
   </button>
 
   <!-- Notas -->
-  <button class="nav-item" onclick="goScreen('notas',this)">
+  <button class="nav-item" data-screen="notas">
     <div class="nav-icon">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 18h12v-2H3v2zm0-5h12v-2H3v2zm0-7v2h12V6H3zm14 9.5c0 2.49 2.01 4.5 4.5 4.5S26 17.99 26 15.5 23.99 11 21.5 11 17 13.01 17 15.5zm5.5-3v3.25l2.6 1.55-.75 1.3-3.35-2.05V12.5h1.5z"/></svg>
     </div>
@@ -1244,7 +1244,7 @@ html, body {
   </button>
 
   <!-- Explorar -->
-  <button class="nav-item" onclick="goScreen('explorar',this)">
+  <button class="nav-item" data-screen="explorar">
     <div class="nav-icon">
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
     </div>
@@ -1383,13 +1383,16 @@ const dbGetAll = (store)       => new Promise((r,e) => { const t=db.transaction(
 const uuid     = () => crypto.randomUUID?.() || Math.random().toString(36).slice(2)+Date.now().toString(36);
 
 /* ──────────────────────────────────────────
-   NAVEGAÇÃO
+   NAVEGAÇÃO — event delegation robusto
    ────────────────────────────────────────── */
 function goScreen(name, btn) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('screen-' + name).classList.add('active');
+  const scr = document.getElementById('screen-' + name);
+  if (scr) scr.classList.add('active');
   if (btn) btn.classList.add('active');
+  // scroll topo
+  document.getElementById('main').scrollTop = 0;
   if (name === 'vacinas') renderVacinas();
   if (name === 'rg')      renderRG();
 }
@@ -1630,19 +1633,21 @@ async function renderVacinas() {
 
   let html = '<div class="card">';
   lista.forEach(vac => {
-    const r     = calcStatus(vac, vacApp);
-    const prox  = r.status === 'ok' ? 'Próximo reforço: ' + fmtDate(r.proxima) : r.msg;
+    const r      = calcStatus(vac, vacApp);
+    const prox   = r.status === 'ok' ? 'Próximo reforço: ' + fmtDate(r.proxima) : r.msg;
     const canReg = r.status !== 'soon';
-    html += `
-      <div class="vac-row">
-        <div class="vac-dot ${dotMap[r.status]}"></div>
-        <div class="vac-info">
-          <div class="vac-name">${vac.nome}</div>
-          <div class="vac-date">${prox}</div>
-        </div>
-        <span class="vac-badge ${badgeMap[r.status]}">${labelMap[r.status]}</span>
-        ${canReg ? `<button class="btn-dose" onclick="openModal('${vac.id}','${vac.nome.replace(/'/g,'\\'')}')">+ Dose</button>` : ''}
-      </div>`;
+    const doseBtn = canReg
+      ? '<button class="btn-dose" onclick="openModal(\''+vac.id+'\')">+ Dose</button>'
+      : '';
+    html += '<div class="vac-row">'
+      + '<div class="vac-dot ' + dotMap[r.status] + '"></div>'
+      + '<div class="vac-info">'
+      + '<div class="vac-name">' + vac.nome + '</div>'
+      + '<div class="vac-date">' + prox + '</div>'
+      + '</div>'
+      + '<span class="vac-badge ' + badgeMap[r.status] + '">' + labelMap[r.status] + '</span>'
+      + doseBtn
+      + '</div>';
   });
   html += '</div>';
   cont.innerHTML = html;
@@ -1651,9 +1656,10 @@ async function renderVacinas() {
 /* ──────────────────────────────────────────
    MODAL DOSE
    ────────────────────────────────────────── */
-function openModal(id, nome) {
+function openModal(id) {
+  const vac = CATALOGO.find(v => v.id === id);
   document.getElementById('m-vac-id').value   = id;
-  document.getElementById('m-vac-nome').value = nome;
+  document.getElementById('m-vac-nome').value = vac ? vac.nome : id;
   document.getElementById('m-data').value     = new Date().toISOString().split('T')[0];
   document.getElementById('m-obs').value      = '';
   document.getElementById('modal-dose').classList.add('open');
@@ -1803,6 +1809,19 @@ async function init() {
   loadTheme();
   await openDB();
   await loadPet();
+
+  // ── NAV: event delegation (funciona 100% em mobile) ──
+  document.getElementById('nav').addEventListener('click', e => {
+    const btn = e.target.closest('[data-screen]');
+    if (!btn) return;
+    goScreen(btn.dataset.screen, btn);
+  });
+
+  // ── FOTO: clique no photo-ring abre o input ──
+  document.getElementById('photo-ring').addEventListener('click', () => {
+    document.getElementById('input-foto').click();
+  });
+
   // Verifica alertas de vacinas sem renderizar a tela toda
   if (pet.dataNascimento) {
     vacApp = await dbGetAll('vac_app');
