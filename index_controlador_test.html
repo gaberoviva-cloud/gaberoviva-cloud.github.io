@@ -1,335 +1,1454 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tradimaq — Sistema</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Técnico - Tradimaq</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 
-    :root {
-      --brand: #ff7a00;
-      --brand-dark: #d96500;
-      --brand-light: #fff0e0;
-      --dark: #1a1a1a;
-      --text: #374151;
-      --muted: #6b7280;
-      --border: rgba(255,255,255,0.12);
-    }
+<style>
+:root{--brand:#ff7a00;--g9:#1a1a1a;--g7:#374151;--g5:#6b7280;--g3:#d1d5db;--g1:#f3f4f6;--g0:#f9fafb;--green:#16a34a;--red:#dc2626;--r:6px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9);font-size:14px;min-height:100vh}
 
-    body {
-      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
-      min-height: 100vh;
-      background: #1a1a1a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 28px 20px;
-      overflow-x: hidden;
-    }
+/* ─ APP SHELL ─ */
+.app-header{background:white;border-bottom:3px solid var(--brand);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.app-header .logo-area{display:flex;align-items:center;gap:10px}
+.app-header .logo-area img{height:24px}
+.app-header .logo-title{font-size:11px;font-weight:600;color:var(--g5);letter-spacing:.08em;text-transform:uppercase}
+.app-header .right{display:flex;align-items:center;gap:10px}
+.save-badge{font-size:10px;color:var(--g5);background:var(--g1);border:1px solid var(--g3);padding:3px 8px;border-radius:99px}
+.save-badge.saved{color:var(--green);border-color:var(--green);background:#f0fdf4}
 
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,122,0,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(255,122,0,0.10) 0%, transparent 60%);
-      pointer-events: none;
-      z-index: 0;
-    }
+.app-body{display:grid;grid-template-columns:380px 1fr;min-height:calc(100vh - 52px)}
+@media(max-width:860px){.app-body{grid-template-columns:1fr}}
 
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
+/* ─ EDITOR ─ */
+.editor{background:white;border-right:1px solid var(--g3);padding:18px;overflow-y:auto;max-height:calc(100vh - 52px);position:sticky;top:52px}
+.s-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--g5);margin:16px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--g1)}
+.s-title:first-child{margin-top:0}
+.field{margin-bottom:10px}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--g7);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.field input,.field textarea{width:100%;padding:7px 9px;font-size:13px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);color:var(--g9);background:white;outline:none;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(255,122,0,.1)}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 
-    /* Logo */
-    .logo-area {
-      text-align: center;
-      margin-bottom: 4px;
-      animation: fadeDown 0.5s ease both;
+/* ─ BULK UPLOAD ─ */
+.bulk-zone{border:2px dashed var(--g3);border-radius:var(--r);padding:14px 10px;text-align:center;cursor:pointer;transition:all .15s;position:relative;background:white;margin-bottom:8px}
+.bulk-zone:hover,.bulk-zone.over{border-color:var(--brand);background:#fff8f3}
+.bulk-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.bulk-zone .bz-icon{font-size:20px;margin-bottom:3px}
+.bulk-zone p{font-size:11px;color:var(--g5);line-height:1.4}
+.bulk-zone strong{color:var(--brand)}
+
+.galeria{display:none}
+
+/* pares */
+.foto-par{background:var(--g0);border:1px solid var(--g3);border-radius:var(--r);padding:10px;margin-bottom:8px}
+.par-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.par-num{font-size:11px;font-weight:600;color:var(--g5);text-transform:uppercase;letter-spacing:.06em}
+.par-acts{display:flex;gap:3px}
+.bti{background:none;border:1px solid var(--g3);cursor:pointer;color:var(--g5);font-size:12px;padding:3px 6px;border-radius:4px;transition:all .15s;line-height:1;font-family:inherit}
+.bti:hover{border-color:var(--brand);color:var(--brand);background:#fff8f3}
+.bti.del:hover{border-color:var(--red);color:var(--red);background:#fee2e2}
+
+/* drop slots */
+.drop-slots{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}
+.dslot{border:1.5px dashed var(--g3);border-radius:var(--r);aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:10px;font-weight:600;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;text-align:center;background:white}
+.dslot:hover,.dslot.over{border-color:var(--brand);background:#fff8f3}
+.dslot.swap-over{border-color:#0ea5e9;background:#e0f2fe;box-shadow:inset 0 0 0 2px #0ea5e9}
+.dslot.filled{border-style:solid;border-color:var(--g3);padding:0;justify-content:flex-start;cursor:grab}
+.dslot.filled.dragging-slot{opacity:.4;border-color:var(--brand)}
+.dslot-lbl{text-transform:uppercase;letter-spacing:.07em;padding:3px 0}
+.dslot-lbl.A{color:var(--green)}
+.dslot-lbl.D{color:var(--red)}
+.dslot-hint{font-size:9px;color:var(--g5);font-weight:400}
+.dslot img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.dslot-overlay{position:absolute;bottom:0;left:0;right:0;display:flex;gap:2px;padding:3px;background:rgba(0,0,0,.45);justify-content:center}
+.dslot-act{background:rgba(255,255,255,.15);border:none;color:white;cursor:pointer;font-size:10px;padding:2px 6px;border-radius:3px;transition:background .1s;font-family:inherit;font-weight:600}
+.dslot-act:hover{background:rgba(255,255,255,.35)}
+
+.par-actions-row{display:flex;gap:5px;margin-bottom:5px}
+.par-actions-row .bti{flex:1;text-align:center;padding:4px 6px;font-size:11px}
+.caption-input{width:100%;padding:5px 7px;font-size:11px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);outline:none;color:var(--g7)}
+.caption-input:focus{border-color:var(--brand)}
+.btn-add-par{width:100%;padding:8px;font-size:12px;font-family:inherit;font-weight:600;border:1.5px dashed var(--g3);border-radius:var(--r);background:white;color:var(--g5);cursor:pointer;transition:all .15s;margin-top:3px}
+.btn-add-par:hover{border-color:var(--brand);color:var(--brand);background:#fff8f3}
+
+/* actions */
+.actions{margin-top:16px;display:flex;flex-direction:column;gap:7px}
+.btn{width:100%;padding:10px;font-size:13px;font-family:inherit;font-weight:600;border:none;border-radius:var(--r);cursor:pointer;color:white;transition:opacity .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn:hover{opacity:.88;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-pdf{background:var(--brand)}
+.btn-save{background:var(--green)}
+.btn-clear{background:var(--g7);font-size:12px;padding:7px}
+
+/* ─ FLOATING TOOLBAR ─ */
+.floating-toolbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(150px);
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(8px);
+  padding: 12px 20px;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+  color: white;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.floating-toolbar.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.ft-header {
+  font-size: 11px; font-weight: 600; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; margin-bottom: 2px;
+}
+.ft-row { display: flex; align-items: center; gap: 8px; }
+.ft-btn {
+  background: rgba(255,255,255,0.05); border: 1px solid transparent; color: white;
+  width: 36px; height: 36px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s;
+}
+.ft-btn:hover { background: rgba(255,255,255,0.15); }
+.ft-btn.active { background: var(--brand); box-shadow: 0 2px 8px rgba(255,122,0,0.4); border-color: rgba(255,255,255,0.2); }
+.ft-div { width: 1px; height: 24px; background: rgba(255,255,255,0.15); margin: 0 4px; }
+.ft-color { width: 32px; height: 32px; padding: 0; border: none; border-radius: 6px; cursor: pointer; background: transparent; }
+.ft-color::-webkit-color-swatch-wrapper { padding: 0; }
+.ft-color::-webkit-color-swatch { border: 2px solid rgba(255,255,255,0.2); border-radius: 6px; }
+.ft-range { width: 80px; accent-color: var(--brand); cursor: pointer; }
+.ft-btn.ft-action { width: auto; padding: 0 12px; font-size: 13px; font-weight: 600; }
+.ft-btn.ft-action.del { background: rgba(220,38,38,0.2); color: #fca5a5; }
+.ft-btn.ft-action.del:hover { background: rgba(220,38,38,0.4); }
+.ft-close { background: transparent; color: #a1a1aa; width: auto; padding: 0 8px; margin-left: auto; font-size: 18px; }
+.ft-close:hover { color: white; background: rgba(255,255,255,0.1); }
+
+@media(max-width:860px){
+  .floating-toolbar { width: 95%; padding: 12px; }
+  .ft-row { flex-wrap: wrap; justify-content: center; gap: 6px; }
+  .ft-div { display: none; }
+}
+
+/* ─ PREVIEW ─ */
+.preview-panel{padding:22px;overflow-y:auto;overflow-x:auto;background:var(--g1);position:relative;z-index:1;}
+.preview-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--g5);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.preview-label::after{content:'';flex:1;height:1px;background:var(--g3)}
+
+/* ═══ DOCUMENTO ═══ */
+#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 2px 16px rgba(0,0,0,.1);font-family:'IBM Plex Sans',Arial,sans-serif;font-size:13px;transition:transform 0.3s;}
+.doc-page{padding:20px 20px 0}
+
+/* tabela usada só para permitir cabeçalho/rodapé repetidos em todas as páginas impressas */
+.doc-table{width:100%;table-layout:fixed;border-collapse:collapse}
+.doc-table td{padding:0;vertical-align:top}
+.doc-table thead{display:table-header-group}
+.doc-table-hdr{padding:20px 20px 0}
+.doc-table-ftr{padding:0 20px 20px}
+.doc-td{padding:0 20px}
+.doc-td-first{padding-top:20px}
+.doc-td-last{padding-bottom:20px}
+
+.checklist-bar{display:flex;gap:10px;flex-wrap:wrap;background:var(--g0);border:1px solid var(--g3);border-radius:var(--r);padding:9px 11px;margin-bottom:16px;}
+.cl-item{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--g5);font-weight:600;}
+.cl-dot{width:7px;height:7px;border-radius:50%;background:var(--g3);flex-shrink:0;transition:background .2s}
+.cl-item.done .cl-dot{background:#22c55e}
+.cl-item.done{color:var(--g7)}
+.doc-page-hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:2px solid var(--g1);margin-bottom:12px;min-width:0}
+.doc-page-hdr>*{min-width:0}
+.doc-logo{height:20px;object-fit:contain;display:block}
+.doc-logo-txt{font-size:19px;font-weight:700;letter-spacing:-.03em}
+.doc-logo-txt span{color:var(--brand)}
+.doc-hdr-right{text-align:right;font-size:9px;color:var(--g5);line-height:1.5;overflow-wrap:break-word;word-break:break-word}
+.doc-hdr-right strong{color:var(--g7);font-weight:700}
+
+.doc-info{margin-bottom:12px;border:1.5px solid var(--g9);border-radius:4px;overflow:hidden}
+.doc-info-title{background:var(--g9);color:white;padding:5px 11px;font-size:11px;font-weight:600;letter-spacing:.04em}
+.doc-info-grid{display:grid;grid-template-columns:1fr 1fr}
+.doc-info-cell{padding:6px 11px;display:flex;gap:5px;align-items:baseline;border-right:1px solid var(--g3);border-bottom:1px solid var(--g3)}
+.doc-info-cell:nth-child(even){border-right:none}
+.doc-info-cell:nth-last-child(-n+2){border-bottom:none}
+.doc-info-key{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--g5);white-space:nowrap}
+.doc-info-val{font-size:11px;font-weight:500;color:var(--g9);font-family:'IBM Plex Mono',monospace}
+
+.doc-sec{margin-bottom:12px;border:1.5px solid var(--g9);border-radius:4px;overflow:hidden}
+.doc-sec-title{background:var(--g9);color:white;padding:5px 11px;font-size:11px;font-weight:600;letter-spacing:.04em}
+.doc-sec-body{padding:9px 11px;font-size:11px;line-height:1.7;color:var(--g9);min-height:52px;white-space:pre-line}
+
+/* foto par no documento */
+.doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;margin-bottom:12px}
+.doc-foto-cols{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.doc-foto-box{border:1px solid var(--g3);border-radius:4px;overflow:hidden; position:relative;}
+.doc-foto-lbl{padding:4px 9px;font-size:10px;font-weight:700;text-align:center;color:white;letter-spacing:.04em}
+.doc-foto-lbl.A{background:var(--green)}
+.doc-foto-lbl.D{background:var(--red)}
+
+.doc-foto-viewport{width:100%;aspect-ratio:4/3;overflow:hidden;background:var(--g1);position:relative;cursor:pointer;transition:all 0.2s ease;}
+.doc-foto-viewport.grabbing{cursor:grabbing}
+/* Focus Effect na foto ativa */
+.doc-foto-viewport.active-vp{box-shadow:0 0 0 4px var(--brand), 0 8px 24px rgba(0,0,0,0.2);transform:scale(1.02);z-index:10;border-radius:4px;}
+
+/* modo compacto: fotos mais baixas + menos espaçamento = mais pares por página */
+.compact-doc .doc-foto-viewport{aspect-ratio:4/2}
+.compact-doc .doc-foto-par{margin-bottom:6px}
+.compact-doc .doc-foto-cols{gap:5px}
+.compact-doc .doc-foto-lbl{padding:2px 9px;font-size:9px}
+.compact-doc .doc-foto-caption{padding:2px 9px 3px;font-size:8px}
+.compact-doc .doc-info{margin-bottom:7px}
+.compact-doc .doc-info-cell{padding:4px 11px}
+.compact-doc .doc-sec-body{padding:6px 11px;min-height:auto}
+.compact-doc .doc-sec-title,.compact-doc .doc-info-title{padding:4px 11px}
+
+.doc-foto-viewport img{position:absolute;top:0;left:0;width:auto;height:auto;min-width:10%;min-height:10%;max-width:none;transform-origin:top left;user-select:none;pointer-events:none;display:block}
+.doc-foto-caption{padding:3px 9px 5px;font-size:9px;color:var(--g5);text-align:center;background:var(--g0);border-top:1px solid var(--g1)}
+
+.doc-assinatura{page-break-inside:avoid;break-inside:avoid;margin-bottom:12px}
+.doc-assin-body{border:1px solid var(--g3);border-top:none;padding:22px 14px 10px;border-radius:0 0 3px 3px}
+.doc-assin-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.doc-assin-box{border-top:1.5px solid var(--g9);padding-top:4px}
+.doc-assin-lbl{font-size:9px;color:var(--g5)}
+.doc-assin-name{font-size:10px;font-weight:600;color:var(--g9);margin-top:2px;min-height:13px}
+
+/* rodapé */
+.doc-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:2px solid var(--g1)}
+.doc-footer-site{font-size:9px;color:var(--g5)}
+.doc-footer-logo{height:16px;object-fit:contain;opacity:.55}
+
+/* badges de condição */
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.badge-leve{background:#dcfce7;color:#15803d;border:1px solid #86efac}
+.badge-moderado{background:#fef9c3;color:#a16207;border:1px solid #fde047}
+.badge-grave{background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5}
+.badge-sem{background:#f3f4f6;color:#6b7280;border:1px solid #d1d5db}
+.doc-info-title-row{display:flex;align-items:center;justify-content:space-between}
+.doc-info-title-row span.tit{font-size:11px;font-weight:600;letter-spacing:.04em;color:white}
+
+/* toast */
+#toast{position:fixed;bottom:14px;right:14px;background:var(--g9);color:white;padding:8px 13px;border-radius:var(--r);font-size:12px;font-weight:500;opacity:0;transform:translateY(5px);transition:all .2s;pointer-events:none;z-index:9999}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* ── Anotações sobre fotos ── */
+.doc-foto-wrapper{position:relative;width:100%}
+.annotation-canvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;cursor:crosshair;touch-action:none}
+
+/* PDF / Print mode */
+body.pdf-mode .app-header,
+body.pdf-mode .editor,
+body.pdf-mode .preview-label{display:none!important}
+body.pdf-mode .app-body{display:block!important}
+body.pdf-mode .preview-panel{padding:0!important;background:white!important}
+body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
+
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  @page{
+    margin: 10mm 10mm 14mm 10mm;
+    @bottom-left {
+      content: "www.tradimaq.com.br";
+      font-size: 8px;
+      color: #6b7280;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
-    .logo-area img {
-      height: 38px;
-      width: auto;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 8px;
-    }
-    .logo-fallback {
-      font-size: 26px;
+    @bottom-right {
+      content: "TRADIMAQ";
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: -0.04em;
-      color: white;
+      letter-spacing: 0.03em;
+      color: #9ca3af;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
-    .logo-fallback span { color: var(--brand); }
-    .logo-tagline {
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
-      font-weight: 500;
-    }
+  }
+  body{background:white!important}
+  #toast,.app-header,.editor,.preview-label,.preview-panel>.preview-label,.floating-toolbar{display:none!important}
+  .app-body{display:block!important}
+  .preview-panel{padding:0!important;background:white!important}
+  #documento{box-shadow:none!important;max-width:100%!important;width:100%!important;transform:none!important}
+  .doc-page{padding:0!important}
+  .doc-table-hdr,.doc-table-ftr{padding:0!important}
+  .doc-td,.doc-td-first,.doc-td-last{padding:0!important}
+  .doc-footer-preview-row{display:none!important}
+  .doc-table thead{display:table-header-group!important}
+  .doc-foto-viewport.active-vp{box-shadow: none!important; transform: none!important;}
+  
+  /* Flexbox para evitar sumiço do Grid no Chrome */
+  .doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;display:block!important;margin-bottom:8mm!important;}
+  .doc-foto-cols{display:flex!important;gap:6px!important;width:100%!important;flex-wrap:nowrap!important;}
+  .doc-foto-box{flex:1!important;width:50%!important;page-break-inside:avoid!important;break-inside:avoid!important;display:block!important;}
+  
+  .doc-foto-viewport{width:100%!important;overflow:hidden!important;position:relative!important;aspect-ratio:4/3!important;height:auto!important;}
+  .doc-foto-viewport img{position:static!important;width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important;max-width:none!important;min-width:unset!important;min-height:unset!important;display:block!important;}
+  .doc-info,.doc-sec,.doc-assinatura,.doc-footer{page-break-inside:avoid!important;break-inside:avoid!important}
 
-    /* Cards */
-    .card {
-      width: 100%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      backdrop-filter: blur(12px);
-      animation: fadeUp 0.5s ease both;
-    }
-    .card:nth-child(2) { animation-delay: 0.05s; }
-    .card:nth-child(3) { animation-delay: 0.10s; }
-    .card:nth-child(4) { animation-delay: 0.15s; }
-    .card:nth-child(5) { animation-delay: 0.20s; }
-    .card:nth-child(6) { animation-delay: 0.25s; }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      border-bottom: 1px solid var(--border);
-    }
-    .card-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 7px;
-      background: rgba(255,122,0,0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      flex-shrink: 0;
-    }
-    .card-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-    .card-subtitle {
-      font-size: 10px;
-      color: rgba(255,255,255,0.38);
-      margin-top: 1px;
-    }
-
-    .card-body {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    /* Buttons */
-    .btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding: 10px 13px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 8px;
-      color: rgba(255,255,255,0.82);
-      font-size: 13px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      text-align: left;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
-      touch-action: manipulation;
-      text-decoration: none;
-    }
-    .btn:hover {
-      background: rgba(255,122,0,0.16);
-      border-color: rgba(255,122,0,0.38);
-      color: white;
-    }
-    .btn:active { transform: scale(0.98); }
-
-    .btn .btn-arrow {
-      font-size: 12px;
-      opacity: 0.35;
-      transition: opacity 0.15s, transform 0.15s;
-    }
-    .btn:hover .btn-arrow {
-      opacity: 0.85;
-      transform: translateX(3px);
-    }
-
-    .btn-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-    }
-    .btn-grid .btn {
-      justify-content: center;
-      text-align: center;
-    }
-    .btn-grid .btn .btn-arrow { display: none; }
-
-    .card-divider {
-      height: 1px;
-      background: var(--border);
-      margin: 2px 0;
-    }
-
-    footer {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      font-size: 11px;
-      color: rgba(255,255,255,0.22);
-      margin-top: 6px;
-    }
-    footer a {
-      color: rgba(255,255,255,0.32);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    footer a:hover { color: var(--brand); }
-
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 480px) {
-      .wrapper { max-width: 100%; }
-    }
-  </style>
+  /* modo compacto na impressão: fotos mais baixas + menos espaço = mais pares por página */
+  .compact-doc .doc-foto-par{margin-bottom:4mm!important}
+  .compact-doc .doc-foto-viewport{aspect-ratio:4/2!important}
+  .compact-doc .doc-foto-lbl{padding:2px 9px!important;font-size:9px!important}
+  .compact-doc .doc-foto-caption{padding:2px 9px 3px!important;font-size:8px!important}
+  .compact-doc .doc-info{margin-bottom:7px!important}
+  .compact-doc .doc-info-cell{padding:4px 11px!important}
+  .compact-doc .doc-sec-body{padding:6px 11px!important;min-height:auto!important}
+  .compact-doc .doc-sec-title,.compact-doc .doc-info-title{padding:4px 11px!important}
+}
+</style>
 </head>
 <body>
 
-<div class="wrapper">
-
+<div class="app-header">
   <div class="logo-area">
-    <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq"
-      onerror="this.outerHTML='<div class=\\'logo-fallback\\'>TRADI<span>MAQ</span></div>'">
-    <div class="logo-tagline">Plataformas Elevatórias</div>
+    <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq">
+    <span class="logo-title">Relatório Técnico</span>
+  </div>
+  <div class="right">
+    <span class="save-badge" id="save-badge">Sem alterações</span>
+  </div>
+</div>
+
+<div class="app-body">
+<div class="editor">
+
+  <div class="checklist-bar" id="checklist-bar">
+    <div class="cl-item" data-sec="ident"><span class="cl-dot"></span>Identificação</div>
+    <div class="cl-item" data-sec="desc"><span class="cl-dot"></span>Descrição</div>
+    <div class="cl-item" data-sec="fotos"><span class="cl-dot"></span>Fotos</div>
+    <div class="cl-item" data-sec="assin"><span class="cl-dot"></span>Assinaturas</div>
   </div>
 
-  <!-- Status Diário -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">📊</div>
-      <div>
-        <div class="card-title">Status Diário</div>
-        <div class="card-subtitle">Pátio — Plataformas Genie</div>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="btn-grid">
-        <button class="btn" onclick="abrir('/Pages/status_SP.html')">SP — Taubaté</button>
-        <button class="btn" onclick="abrir('/Pages/status_GO.html')">GO — Goiânia</button>
-        <button class="btn" onclick="abrir('/Pages/status_ES.html')">ES — Cariacica</button>
-        <button class="btn" onclick="abrir('/Pages/status_PA.html')">PA — Parauapebas</button>
-      </div>
-      <div class="card-divider"></div>
-      <button class="btn" onclick="abrir('/Pages/status_MG.html')">
-        <span>MG — Contagem</span>
-        <span class="btn-arrow">→</span>
-      </button>
-    </div>
+  <div class="s-title">Identificação</div>
+  <div class="field"><label>Cliente</label><input id="f-cliente" placeholder="Nome do cliente" oninput="changed()"></div>
+  <div class="f2">
+    <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: Z-34/22 DC" oninput="changed()"></div>
+    <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: Z3413-9493" oninput="changed()"></div>
+  </div>
+  <div class="field"><label>TAG</label><input id="f-tag" placeholder="Ex: TPE-1605" oninput="changed()"></div>
+  <div class="f2">
+    <div class="field"><label>Data</label><input type="date" id="f-data" oninput="changed()"></div>
+    <div class="field"><label>Local</label><input id="f-local" placeholder="Ex: TRADIMAQ SP" oninput="changed()"></div>
   </div>
 
-  <!-- Vistoria -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">🚜</div>
-      <div>
-        <div class="card-title">Vistoria de Saída e Retorno</div>
-        <div class="card-subtitle">Checklist · PDF</div>
-      </div>
-    </div>
-    <div class="card-body">
-      <button class="btn" onclick="abrir('/Pages/vistoria_tradimaq_saida_retorno.html')">
-        <span>Abrir vistoria</span>
-        <span class="btn-arrow">→</span>
-      </button>
-    </div>
+  <div class="s-title">Descrição</div>
+  <div class="field">
+    <label>Status de Condição</label>
+    <select id="f-condicao" onchange="changed()" style="width:100%;padding:7px 9px;font-size:13px;font-family:inherit;border:1px solid var(--g3);border-radius:var(--r);color:var(--g9);background:white;outline:none;">
+      <option value="">Sem dano</option>
+      <option value="leve">🟢 Dano Leve</option>
+      <option value="moderado">🟡 Dano Moderado</option>
+      <option value="grave">🔴 Dano Grave</option>
+    </select>
+  </div>
+  <div class="field"><textarea id="f-descricao" placeholder="Descreva o ocorrido, avarias identificadas..." oninput="changed()"></textarea></div>
+
+  <div class="s-title">Assinaturas</div>
+  <div class="f2">
+    <div class="field"><label>Responsável 1 (Técnico)</label><input id="f-resp1" placeholder="Nome do técnico" oninput="changed()"></div>
+    <div class="field"><label>Responsável 2 (Cliente)</label><input id="f-resp2" placeholder="Nome do cliente" oninput="changed()"></div>
   </div>
 
-  <!-- Controle de Ferramentas -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">🔧</div>
-      <div>
-        <div class="card-title">Controle de Ferramentas</div>
-        <div class="card-subtitle">Retirada e devolução</div>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="btn-grid">
-        <button class="btn" onclick="abrir('/controle_ferramentas_alpha.html')">Desktop</button>
-        <button class="btn" onclick="abrir('/controle_ferramentas_mobile.html')">Mobile</button>
-      </div>
-    </div>
+  <!-- INSTRUÇÃO SUBSTITUINDO O PAINEL ANTIGO -->
+  <div class="s-title" style="color:var(--brand);margin-bottom:4px;">Ajuste de Imagens</div>
+  <p style="font-size:11px;color:var(--g5);line-height:1.4;margin-bottom:12px;background:var(--g0);padding:10px;border-radius:var(--r);border:1px dashed var(--g3);">
+    Para desenhar, mover ou dar zoom, <strong>clique em qualquer foto</strong> no relatório ao lado. O painel de edição flutuante aparecerá automaticamente.
+  </p>
+
+  <div class="s-title">Fotos</div>
+
+  <!-- BULK UPLOAD -->
+  <div class="bulk-zone" id="bulk-zone"
+    ondragover="event.preventDefault();this.classList.add('over')"
+    ondragleave="this.classList.remove('over')"
+    ondrop="onBulkDrop(event)">
+    <input type="file" accept="image/*" multiple onchange="bulkUpload(event)">
+    <div class="bz-icon">📁</div>
+    <p>Selecione <strong>todas as fotos de uma vez</strong><br>
+    Distribuídas automaticamente nos pares — ou arraste entre slots<br>
+    <strong>Ou tire um print e cole com Ctrl+V</strong> em qualquer lugar da página</p>
   </div>
 
-  <!-- Relatório Técnico -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">📋</div>
-      <div>
-        <div class="card-title">Relatório Técnico</div>
-        <div class="card-subtitle">Laudo de inspeção · PDF</div>
-      </div>
-    </div>
-    <div class="card-body">
-      <button class="btn" onclick="abrir('/Pages/relatorio_tecnico_tradimaq.html')">
-        <span>Abrir gerador</span>
-        <span class="btn-arrow">→</span>
-      </button>
-    </div>
-  </div>
+  <div class="galeria" id="galeria"></div>
 
-  <!-- Comparador Terex -->
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">🔄</div>
-      <div>
-        <div class="card-title">Comparador Terex</div>
-        <div class="card-subtitle">Catálogo vs Cadastro</div>
+  <div id="foto-pares"></div>
+  <button class="btn-add-par" onclick="adicionarPar()">+ Adicionar par Antes/Depois</button>
+
+  <div class="actions">
+    <div style="background:var(--g0);border:1px solid var(--g3);border-radius:var(--r);padding:10px;margin-bottom:2px;">
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g5);margin-bottom:6px;">Configuração do PDF</div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:5px;">
+        <label style="font-size:11px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
+          <input type="checkbox" id="toggle-labels" checked onchange="atualizar()">
+          <span style="color:var(--g7);">Títulos Antes/Depois</span>
+        </label>
+      </div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:5px;">
+        <label style="font-size:11px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
+          <input type="checkbox" id="toggle-compact" onchange="atualizar()">
+          <span style="color:var(--g7);">Fotos compactas (mais pares por página)</span>
+        </label>
       </div>
     </div>
-    <div class="card-body">
-      <button class="btn" onclick="abrir('/Pages/comparador_terex.html')">
-        <span>Abrir comparador</span>
-        <span class="btn-arrow">→</span>
-      </button>
-    </div>
+    <button class="btn btn-pdf" onclick="imprimirPDF()">🖨 Imprimir / Salvar PDF</button>
+    <button class="btn btn-save" onclick="salvarCache()">💾 Salvar agora</button>
+    <button class="btn" style="background:#0ea5e9;font-size:12px;padding:7px;" onclick="limparFotos()">🗑 Limpar só as fotos</button>
+    <button class="btn btn-clear" onclick="limpar()">Limpar tudo</button>
   </div>
 
 </div>
 
-<footer>
-  <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank">By Gabriel Roza</a>
-</footer>
+<div class="preview-panel">
+  <div class="preview-label">Pré-visualização</div>
+  <div id="documento"></div>
+</div>
+</div>
+
+<!-- BARRA FLUTUANTE DE FERRAMENTAS (NOVO LAYOUT) -->
+<div class="floating-toolbar" id="global-annot-tools">
+  <div class="ft-header" id="active-photo-label">Nenhuma foto selecionada</div>
+  <div class="ft-row">
+    <button class="ft-btn active" data-tool="sel" onclick="setGlobalTool('sel')" title="Mover Foto">☝</button>
+    <button class="ft-btn" data-tool="rect" onclick="setGlobalTool('rect')" title="Retângulo">▭</button>
+    <button class="ft-btn" data-tool="circ" onclick="setGlobalTool('circ')" title="Círculo">◯</button>
+    <button class="ft-btn" data-tool="arr" onclick="setGlobalTool('arr')" title="Seta">↗</button>
+    <button class="ft-btn" data-tool="txt" onclick="setGlobalTool('txt')" title="Texto">T</button>
+    <div class="ft-div"></div>
+    <input type="color" id="global-color" value="#ef4444" onchange="setGlobalColor(this.value)" class="ft-color" title="Cor do Desenho">
+    <input type="range" id="global-size" min="1" max="10" value="3" step="0.5" oninput="setGlobalSize(this.value)" class="ft-range" title="Espessura/Tamanho">
+    <div class="ft-div"></div>
+    <button class="ft-btn" onclick="triggerGlobalZoom(0.1)" title="Zoom In">➕</button>
+    <button class="ft-btn" onclick="triggerGlobalZoom(-0.1)" title="Zoom Out">➖</button>
+    <button class="ft-btn" onclick="triggerGlobalReset()" title="Centralizar Imagem">↺</button>
+    <div class="ft-div"></div>
+    <button class="ft-btn ft-action" onclick="triggerGlobalUndo()" title="Desfazer Último Desenho">⌫</button>
+    <button class="ft-btn ft-action del" onclick="triggerGlobalClear()" title="Apagar Todos os Desenhos">🗑</button>
+    <button class="ft-btn ft-close" onclick="closeGlobalTools()" title="Fechar Edição">✕</button>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
-  function abrir(arquivo) {
-    window.location.href = arquivo;
-  }
-</script>
+/* ════════ CONSTANTES ════════ */
+const LOGO_URL = 'https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
+let LOGO = LOGO_URL;
 
+const CACHE_KEY = 'tradimaq_relatorio_v1';
+const DESC_TEMPLATE = `Inspeção do equipamento (TAG), realizada no cliente (CLIENTE).
+Durante a inspeção do equipamento, foram identificadas avarias no (Ex: adesivo do painel do cesto), caracterizando dano incompatível com as condições normais de uso.`;
+
+/* ════════ STATE ════════ */
+let pares = [];
+let parCounter = 0;
+let galeria = [];
+let galeriaCounter = 0;
+let draggingGId = null;
+let autoSaveTimer = null;
+let hasUnsaved = false;
+
+let activePhoto = null; 
+let globalTool = 'sel';
+let globalColor = '#ef4444';
+let globalSize = 3;
+
+let hoveredSlot = null; // {parId, lado} - slot sob o mouse, usado para colar (Ctrl+V) direto nele
+function onSlotMouseLeave(parId, lado){
+  if(hoveredSlot && hoveredSlot.parId===parId && hoveredSlot.lado===lado) hoveredSlot = null;
+}
+
+/* ════════ INIT ════════ */
+document.getElementById('f-data').value = new Date().toISOString().split('T')[0];
+
+async function initApp() {
+  try {
+    const resp = await fetch(LOGO_URL);
+    const blob = await resp.blob();
+    LOGO = await new Promise(res => {
+      const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(blob);
+    });
+  } catch(e) {
+    console.warn("Fallback de logo aplicado.");
+  }
+  carregarCache();
+  if (!pares.length) adicionarPar();
+  if (!v('f-descricao')) document.getElementById('f-descricao').value = DESC_TEMPLATE;
+  renderGaleria();
+  atualizar();
+}
+initApp();
+
+/* ════════ COLAR PRINT (CTRL+V) ════════ */
+document.addEventListener('paste', async (e) => {
+  const items = e.clipboardData?.items; if(!items) return;
+  let imageFile = null;
+  for(const item of items){
+    if(item.type && item.type.startsWith('image/')){ imageFile = item.getAsFile(); break; }
+  }
+  if(!imageFile) return; // sem imagem no clipboard -> deixa colar texto normalmente (ex: em campos de texto)
+  e.preventDefault();
+
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    const resized = await processImageOrig(ev.target.result);
+
+    // Se o mouse está sobre um slot específico (Antes/Depois), cola direto nele
+    if(hoveredSlot){
+      const par = pares.find(p => p.id === hoveredSlot.parId);
+      if(par){
+        if(hoveredSlot.lado === 'A'){ par.antesData = resized; par.antesOX = 0; par.antesOY = 0; par.antesScale = 1; }
+        else { par.depoisData = resized; par.depoisOX = 0; par.depoisOY = 0; par.depoisScale = 1; }
+        syncThumbs(par.id); atualizar(); changed();
+        toast('📋 Print colado com sucesso!');
+        return;
+      }
+    }
+
+    // Sem slot em foco -> entra na galeria e é distribuído automaticamente no próximo espaço livre
+    galeriaCounter++;
+    const g = { id: galeriaCounter, data: resized, name: 'print_' + Date.now() + '.jpg' };
+    galeria.push(g);
+    renderGaleria();
+    autoAssign([g]);
+  };
+  reader.readAsDataURL(imageFile);
+});
+
+/* ════════ ASSINATURA DO TÉCNICO ════════ */
+window.sigData = null;
+
+function setSigPreview(data){
+  window.sigData = data;
+  const prev = document.getElementById('sig-preview');
+  const img = document.getElementById('sig-img');
+  if(data){ prev.style.display='block'; img.src=data; } 
+  else { prev.style.display='none'; img.src=''; }
+  atualizar(); changed();
+}
+
+async function uploadSig(e){
+  const file = e.target.files[0]; if(!file) return;
+  if(file.type === 'application/pdf'){
+    toast('Convertendo PDF de assinatura...');
+    // Renderiza primeira página do PDF via canvas usando pdf.js CDN
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    script.onload = async () => {
+      const pdfjsLib = window['pdfjs-dist/build/pdf'];
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const ab = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({data: ab}).promise;
+      const page = await pdf.getPage(1);
+      const vp = page.getViewport({scale: 2});
+      const canvas = document.createElement('canvas');
+      canvas.width = vp.width; canvas.height = vp.height;
+      await page.render({canvasContext: canvas.getContext('2d'), viewport: vp}).promise;
+      setSigPreview(canvas.toDataURL('image/png'));
+      toast('Assinatura carregada!');
+    };
+    document.head.appendChild(script);
+  } else {
+    const r = new FileReader();
+    r.onload = e => { setSigPreview(e.target.result); toast('Assinatura carregada!'); };
+    r.readAsDataURL(file);
+  }
+}
+
+function onSigDrop(e){
+  e.preventDefault();
+  document.getElementById('sig-zone').classList.remove('over');
+  const file = e.dataTransfer.files[0]; if(!file) return;
+  const fakeEvent = {target:{files:[file]}};
+  uploadSig(fakeEvent);
+}
+
+function removerSig(){ setSigPreview(null); toast('Assinatura removida.'); }
+
+/* ════════ TOAST ════════ */
+function toast(msg, dur=2400){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+/* ════════ CACHE ════════ */
+function changed(){
+  hasUnsaved=true; badge('⏳ Não salvo','');
+  clearTimeout(autoSaveTimer); autoSaveTimer=setTimeout(salvarCacheAuto,3000);
+  atualizar();
+}
+function badge(txt,cls){
+  const b=document.getElementById('save-badge'); b.textContent=txt;b.className='save-badge'+(cls?' '+cls:'');
+}
+function salvarCacheAuto(){salvarCache(true);}
+
+function salvarCache(silencioso=false){
+  try{
+    const dados={
+      modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),
+      tag:v('f-tag'),cliente:v('f-cliente'),descricao:v('f-descricao'),
+      resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),
+      sigData: window.sigData||null,
+      pares: pares.map(p=>({
+        id:p.id,antesData:p.antesData,depoisData:p.depoisData, caption:p.caption,
+        antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
+        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1,
+        annots_A:p.annots_A||[],annots_D:p.annots_D||[]
+      })),
+      galeria:galeria.map(g=>({id:g.id,data:g.data,name:g.name})),
+      parCounter,galeriaCounter
+    };
+    localStorage.setItem(CACHE_KEY,JSON.stringify(dados));
+    hasUnsaved=false; badge('✓ Salvo','saved');
+    if(!silencioso) toast('Salvo com sucesso!');
+  }catch(e){toast('Erro ao salvar (armazenamento cheio?)');}
+}
+
+function carregarCache(){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY); if(!raw) return;
+    const d=JSON.parse(raw);
+    ['modelo','serie','data','local','tag','cliente','descricao','resp1','resp2','condicao'].forEach(k=>{
+      const el=document.getElementById('f-'+k); if(el&&d[k]!==undefined) el.value=d[k];
+    });
+    parCounter=d.parCounter||0; galeriaCounter=d.galeriaCounter||0;
+    galeria=(d.galeria||[]); pares=[];
+    document.getElementById('foto-pares').innerHTML='';
+    (d.pares||[]).forEach(p=>{
+      pares.push({
+        id:p.id,antesData:p.antesData||null,depoisData:p.depoisData||null, caption:p.caption||'',
+        antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
+        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1,
+        annots_A:p.annots_A||[],annots_D:p.annots_D||[]
+      });
+      criarParDOM(p.id); syncThumbs(p.id);
+    });
+    renumerar(); badge('✓ Cache carregado','saved');
+    if(d.sigData) setSigPreview(d.sigData);
+  }catch(e){console.warn('Cache inválido',e);}
+}
+function v(id){return document.getElementById(id)?.value||'';}
+
+/* ════════ CANVAS RESIZE ════════ */
+function processImageOrig(dataURL, maxW=1200) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxW / img.naturalWidth);
+      const w = Math.round(img.naturalWidth * scale);
+      const h = Math.round(img.naturalHeight * scale);
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(c.toDataURL('image/jpeg', 0.88));
+    };
+    img.src = dataURL;
+  });
+}
+
+/* ════════ GALERIA BULK ════════ */
+function bulkUpload(event){
+  const files=[...event.target.files]; if(!files.length)return;
+  let loaded = 0; const results = [];
+  files.forEach((f, idx) => {
+    const r = new FileReader();
+    r.onload = async e => {
+      const resized = await processImageOrig(e.target.result);
+      results[idx] = { data: resized, name: f.name };
+      loaded++;
+      if(loaded === files.length) {
+        const novas = results.map(item => {
+          galeriaCounter++; const g = {id: galeriaCounter, data: item.data, name: item.name};
+          galeria.push(g); return g;
+        });
+        renderGaleria(); autoAssign(novas);
+      }
+    };
+    r.readAsDataURL(f);
+  });
+  event.target.value='';
+}
+
+function onBulkDrop(event){
+  event.preventDefault(); document.getElementById('bulk-zone').classList.remove('over');
+  const files=[...event.dataTransfer.files].filter(f=>f.type.startsWith('image/')); if(!files.length)return;
+  let loaded = 0; const results = [];
+  files.forEach((f, idx) => {
+    const r = new FileReader();
+    r.onload = async e => {
+      const resized = await processImageOrig(e.target.result);
+      results[idx] = { data: resized, name: f.name };
+      loaded++;
+      if(loaded === files.length) {
+        const novas = results.map(item => {
+          galeriaCounter++; const g = {id: galeriaCounter, data: item.data, name: item.name};
+          galeria.push(g); return g;
+        });
+        renderGaleria(); autoAssign(novas);
+      }
+    };
+    r.readAsDataURL(f);
+  });
+}
+
+function autoAssign(novas){
+  const fila = [...novas]; let fi = 0;
+  for(const par of pares){
+    if(fi>=fila.length) break;
+    if(!par.antesData){par.antesData=fila[fi].data;fi++;}
+    if(fi>=fila.length) break;
+    if(!par.depoisData){par.depoisData=fila[fi].data;fi++;}
+  }
+  while(fi<fila.length){
+    adicionarParSilencioso(); const par=pares[pares.length-1];
+    if(fi<fila.length){par.antesData=fila[fi].data;fi++;}
+    if(fi<fila.length){par.depoisData=fila[fi].data;fi++;}
+  }
+  pares.forEach(p=>{syncThumbs(p.id);}); renumerar(); atualizar();
+  toast(`${novas.length} foto${novas.length>1?'s':''} adicionada${novas.length>1?'s':''}!`);
+}
+
+function renderGaleria(){
+  const grid=document.getElementById('galeria');
+  grid.innerHTML=galeria.map((g,i)=>`<div class="gitem" id="gi-${g.id}" draggable="true" ondragstart="onGDragStart(event,${g.id})" ondragend="onGDragEnd()"><img src="${g.data}" alt="${g.name}"><span class="gitem-num">${i+1}</span><button class="gitem-del" onclick="delGaleria(${g.id})">✕</button></div>`).join('');
+}
+function delGaleria(id){ galeria=galeria.filter(g=>g.id!==id); renderGaleria(); }
+
+function onGDragStart(event,id){
+  draggingGId=id; event.dataTransfer.effectAllowed='copy';
+  event.dataTransfer.setData('text/plain',String(id));
+  setTimeout(()=>document.getElementById('gi-'+id)?.classList.add('dragging'),0);
+}
+function onGDragEnd(){ document.querySelectorAll('.gitem').forEach(el=>el.classList.remove('dragging')); document.querySelectorAll('.dslot').forEach(el=>el.classList.remove('over')); draggingGId=null; }
+function onSlotOver(event){ event.preventDefault(); if(draggingSlot) { event.currentTarget.classList.add('swap-over'); } else { event.currentTarget.classList.add('over'); } }
+function onSlotLeave(event){ event.currentTarget.classList.remove('over','swap-over'); }
+
+function onSlotDrop(event,parId,lado){
+  event.preventDefault(); event.currentTarget.classList.remove('over','swap-over');
+  const raw = event.dataTransfer.getData('text/plain');
+
+  if(raw && raw.startsWith('slot:')) {
+    const parts = raw.split(':'); const srcParId = parseInt(parts[1]); const srcLado = parts[2];
+    const srcPar = pares.find(p=>p.id===srcParId); const dstPar = pares.find(p=>p.id===parId);
+    if(!srcPar || !dstPar) return;
+    const srcData = srcLado==='A' ? srcPar.antesData : srcPar.depoisData;
+    const srcOX   = srcLado==='A' ? srcPar.antesOX   : srcPar.depoisOX;
+    const srcOY   = srcLado==='A' ? srcPar.antesOY   : srcPar.depoisOY;
+    const srcSc   = srcLado==='A' ? srcPar.antesScale : srcPar.depoisScale;
+    const dstData = lado==='A'   ? dstPar.antesData  : dstPar.depoisData;
+    const dstOX   = lado==='A'   ? dstPar.antesOX    : dstPar.depoisOX;
+    const dstOY   = lado==='A'   ? dstPar.antesOY    : dstPar.depoisOY;
+    const dstSc   = lado==='A'   ? dstPar.antesScale  : dstPar.depoisScale;
+    const setSlot = (par, l, d, ox, oy, sc) => {
+      if(l==='A'){par.antesData=d;par.antesOX=ox;par.antesOY=oy;par.antesScale=sc;} else{par.depoisData=d;par.depoisOX=ox;par.depoisOY=oy;par.depoisScale=sc;}
+    };
+    setSlot(dstPar, lado, srcData, srcOX, srcOY, srcSc); setSlot(srcPar, srcLado, dstData, dstOX, dstOY, dstSc);
+    syncThumbs(srcParId); syncThumbs(parId); atualizar(); changed(); return;
+  }
+  const gId=parseInt(raw); const g=galeria.find(x=>x.id===gId); if(!g)return;
+  const par=pares.find(p=>p.id===parId); if(!par)return;
+  if(lado==='A'){par.antesData=g.data;par.antesOX=0;par.antesOY=0;par.antesScale=1;} else{par.depoisData=g.data;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+  syncThumbs(parId); atualizar(); changed();
+}
+
+/* ════════ PARES ════════ */
+function adicionarPar(){
+  parCounter++; const id=parCounter;
+  pares.push({id,antesData:null,depoisData:null,caption:'', antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1, annots_A:[],annots_D:[]});
+  criarParDOM(id); renumerar(); changed();
+}
+function adicionarParSilencioso(){
+  parCounter++; const id=parCounter;
+  pares.push({id,antesData:null,depoisData:null,caption:'', antesOX:0,antesOY:0,antesScale:1,depoisOX:0,depoisOY:0,depoisScale:1, annots_A:[],annots_D:[]});
+  criarParDOM(id);
+}
+
+function criarParDOM(id){
+  const div=document.createElement('div'); div.className='foto-par';div.id='pe-'+id;
+  div.innerHTML=`
+    <div class="par-head"><span class="par-num">Par 1</span><div class="par-acts"><button class="bti" onclick="moverPar(${id},-1)">↑</button><button class="bti" onclick="moverPar(${id},1)">↓</button><button class="bti del" onclick="removerPar(${id})">✕</button></div></div>
+    <div class="drop-slots">
+      <div class="dslot" id="ds-A-${id}" ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)" ondrop="onSlotDrop(event,${id},'A')" onclick="triggerFileInput(${id},'A')" onmouseenter="hoveredSlot={parId:${id},lado:'A'}" onmouseleave="onSlotMouseLeave(${id},'A')"><span class="dslot-lbl A">Antes</span><span class="dslot-hint">Arraste, clique ou Ctrl+V</span></div>
+      <div class="dslot" id="ds-D-${id}" ondragover="onSlotOver(event)" ondragleave="onSlotLeave(event)" ondrop="onSlotDrop(event,${id},'D')" onclick="triggerFileInput(${id},'D')" onmouseenter="hoveredSlot={parId:${id},lado:'D'}" onmouseleave="onSlotMouseLeave(${id},'D')"><span class="dslot-lbl D">Depois</span><span class="dslot-hint">Arraste, clique ou Ctrl+V</span></div>
+    </div>
+    <div class="par-actions-row"><button class="bti" onclick="trocar(${id})">⇄ Trocar</button><button class="bti" onclick="rotacionar(${id},'A')">↻ Antes</button><button class="bti" onclick="rotacionar(${id},'D')">↻ Depois</button></div>
+    <input class="caption-input" type="text" placeholder="Legenda opcional..." oninput="setCaption(${id},this.value)">
+    <input type="file" accept="image/*" id="fi-A-${id}" style="display:none" onchange="fileInputChange(event,${id},'A')">
+    <input type="file" accept="image/*" id="fi-D-${id}" style="display:none" onchange="fileInputChange(event,${id},'D')">
+  `;
+  document.getElementById('foto-pares').appendChild(div);
+}
+
+function triggerFileInput(id,lado){ document.getElementById(`fi-${lado}-${id}`).click(); }
+function fileInputChange(event,id,lado){
+  const f=event.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=async e=>{
+    const resized = await processImageOrig(e.target.result);
+    const par=pares.find(p=>p.id===id);if(!par)return;
+    if(lado==='A'){par.antesData=resized;par.antesOX=0;par.antesOY=0;par.antesScale=1;}else{par.depoisData=resized;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+    syncThumbs(id);atualizar();changed();
+  };r.readAsDataURL(f);
+  event.target.value='';
+}
+
+function syncThumbs(id){
+  const par=pares.find(p=>p.id===id);if(!par)return;
+  ['A','D'].forEach(lado=>{
+    const slot=document.getElementById(`ds-${lado}-${id}`);if(!slot)return;
+    const data=lado==='A'?par.antesData:par.depoisData; const lbl=lado==='A'?'Antes':'Depois';
+    if(data){
+      slot.classList.add('filled'); slot.setAttribute('draggable','true');
+      slot.innerHTML=`<img src="${data}" alt="${lbl}"><div class="dslot-overlay"><button class="dslot-act" onclick="event.stopPropagation();rotacionar(${id},'${lado}')">↻</button><button class="dslot-act" onclick="event.stopPropagation();clearSlot(${id},'${lado}')">✕</button></div>`;
+    }else{
+      slot.classList.remove('filled'); slot.removeAttribute('draggable');
+      slot.innerHTML=`<span class="dslot-lbl ${lado}">${lbl}</span><span class="dslot-hint">Arraste ou clique</span>`;
+    }
+  });
+  const sA=document.getElementById(`ds-A-${id}`); const sD=document.getElementById(`ds-D-${id}`);
+  if(sA){ sA.ondragover=onSlotOver;sA.ondragleave=onSlotLeave; sA.ondrop=e=>onSlotDrop(e,id,'A'); sA.onclick=()=>triggerFileInput(id,'A'); sA.ondragstart=e=>onSlotDragStart(e,id,'A'); sA.ondragend=e=>onSlotDragEnd(e,id,'A'); }
+  if(sD){ sD.ondragover=onSlotOver;sD.ondragleave=onSlotLeave; sD.ondrop=e=>onSlotDrop(e,id,'D'); sD.onclick=()=>triggerFileInput(id,'D'); sD.ondragstart=e=>onSlotDragStart(e,id,'D'); sD.ondragend=e=>onSlotDragEnd(e,id,'D'); }
+}
+
+let draggingSlot = null;
+function onSlotDragStart(event, parId, lado) {
+  const par = pares.find(p=>p.id===parId); if(!par) return;
+  const data = lado==='A' ? par.antesData : par.depoisData; if(!data) { event.preventDefault(); return; }
+  draggingSlot = { parId, lado }; event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('text/plain', `slot:${parId}:${lado}`);
+  setTimeout(()=>event.target.classList.add('dragging-slot'), 0);
+}
+function onSlotDragEnd(event, parId, lado) { event.target.classList.remove('dragging-slot'); document.querySelectorAll('.dslot').forEach(el=>el.classList.remove('swap-over','over')); draggingSlot = null; }
+
+function clearSlot(id,lado){
+  const par=pares.find(p=>p.id===id);if(!par)return;
+  if(lado==='A'){par.antesData=null;}else{par.depoisData=null;}
+  syncThumbs(id);atualizar();changed();
+}
+function removerPar(id){
+  pares=pares.filter(p=>p.id!==id); document.getElementById('pe-'+id)?.remove();
+  renumerar();atualizar();changed();
+}
+function moverPar(id,dir){
+  const idx=pares.findIndex(p=>p.id===id); const dest=idx+dir; if(dest<0||dest>=pares.length)return;
+  [pares[idx],pares[dest]]=[pares[dest],pares[idx]];
+  const c=document.getElementById('foto-pares'); const els=[...c.children];
+  if(dir===-1)c.insertBefore(els[idx],els[dest]); else c.insertBefore(els[dest],els[idx]);
+  renumerar();atualizar();changed();
+}
+function renumerar(){ document.querySelectorAll('.par-num').forEach((el,i)=>el.textContent=`Par ${i+1}`); }
+
+function rotacionar(id,lado){
+  const par=pares.find(p=>p.id===id); const src=lado==='A'?par.antesData:par.depoisData; if(!src)return;
+  const img=new Image();
+  img.onload=async ()=>{
+    const c=document.createElement('canvas'); c.width=img.height;c.height=img.width;
+    const ctx=c.getContext('2d'); ctx.translate(c.width/2,c.height/2);ctx.rotate(Math.PI/2);
+    ctx.drawImage(img,-img.width/2,-img.height/2);
+    const rotated=c.toDataURL('image/jpeg',.92);
+    const novo = await processImageOrig(rotated);
+    if(lado==='A'){par.antesData=novo;par.antesOX=0;par.antesOY=0;par.antesScale=1;} else{par.depoisData=novo;par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+    syncThumbs(id);atualizar();changed();
+  };img.src=src;
+}
+function trocar(id){
+  const par=pares.find(p=>p.id===id);if(!par)return;
+  [par.antesData,par.depoisData]=[par.depoisData,par.antesData];
+  syncThumbs(id);atualizar();changed();
+}
+function setCaption(id,val){ const par=pares.find(p=>p.id===id); if(par){par.caption=val;atualizar();changed();} }
+
+/* ════════ GLOBAL ANNOTATION TOOLS (NOVO) ════════ */
+function setGlobalFocus(lado, id) {
+  // Impede foco em box sem imagem
+  const par = pares.find(p=>p.id===id);
+  const temDado = lado === 'A' ? par?.antesData : par?.depoisData;
+  if(!temDado) return;
+
+  activePhoto = { lado, id };
+  const tools = document.getElementById('global-annot-tools');
+  tools.classList.add('active');
+  
+  const pIndex = pares.findIndex(p=>p.id===id) + 1;
+  const desc = lado === 'A' ? 'Antes' : 'Depois';
+  document.getElementById('active-photo-label').textContent = `Editando Par ${pIndex}: ${desc}`;
+  
+  // Highlight no preview
+  document.querySelectorAll('.doc-foto-viewport').forEach(v => v.classList.remove('active-vp'));
+  const vp = document.getElementById(`vp-${lado}-${id}`);
+  if(vp) {
+    vp.classList.add('active-vp');
+    // Faz um leve scroll se estiver muito longe
+    vp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Sincroniza estado da ferramenta com a foto
+  const s = getAnnotState(lado, id);
+  s.color = globalColor;
+  
+  document.querySelectorAll('.ft-btn[data-tool]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === globalTool);
+  });
+  setAnnotTool(lado, id, globalTool);
+}
+
+function closeGlobalTools() {
+  activePhoto = null;
+  document.getElementById('global-annot-tools').classList.remove('active');
+  document.querySelectorAll('.doc-foto-viewport').forEach(v => v.classList.remove('active-vp'));
+}
+
+function setGlobalTool(tool) {
+  globalTool = tool;
+  document.querySelectorAll('.ft-btn[data-tool]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tool === globalTool);
+  });
+  if (activePhoto) {
+    setAnnotTool(activePhoto.lado, activePhoto.id, tool);
+  }
+}
+
+function setGlobalColor(hex) {
+  globalColor = hex;
+  if (activePhoto) {
+    const s = getAnnotState(activePhoto.lado, activePhoto.id);
+    s.color = hex;
+    if (s.selected >= 0 && s.annots[s.selected]) {
+      s.annots[s.selected].color = hex;
+      saveAnnotsToPar(activePhoto.lado, activePhoto.id);
+      redrawAnnots(activePhoto.lado, activePhoto.id);
+      changed();
+    }
+  }
+}
+
+function setGlobalSize(val) {
+  globalSize = parseFloat(val);
+  if (activePhoto) {
+    const s = getAnnotState(activePhoto.lado, activePhoto.id);
+    if (s.selected >= 0 && s.annots[s.selected]) {
+      s.annots[s.selected].size = globalSize;
+      saveAnnotsToPar(activePhoto.lado, activePhoto.id);
+      redrawAnnots(activePhoto.lado, activePhoto.id);
+      changed();
+    }
+  }
+}
+
+function triggerGlobalUndo() {
+  if (activePhoto) undoAnnot(activePhoto.lado, activePhoto.id);
+}
+function triggerGlobalClear() {
+  if (activePhoto) clearAnnots(activePhoto.lado, activePhoto.id);
+}
+function triggerGlobalZoom(delta) {
+  if (activePhoto) {
+    const par = pares.find(p=>p.id===activePhoto.id);
+    if(par) zoomFoto(par, activePhoto.lado, delta);
+  }
+}
+function triggerGlobalReset() {
+  if (activePhoto) {
+    const par = pares.find(p=>p.id===activePhoto.id);
+    if(par) resetFoto(par, activePhoto.lado);
+  }
+}
+
+/* ════════ PAN / ZOOM no preview ════════ */
+function calcInitialOffset(vp, par, lado) {
+  const img = vp.querySelector('img'); if (!img) return;
+  const sc = lado==='A' ? (par.antesScale||1) : (par.depoisScale||1);
+  const ox = lado==='A' ? par.antesOX : par.depoisOX;
+  const oy = lado==='A' ? par.antesOY : par.depoisOY;
+  
+  if (ox === 0 && oy === 0) {
+    const vW = vp.offsetWidth; const vH = vp.offsetHeight;
+    const iW = img.naturalWidth  || img.offsetWidth;
+    const iH = img.naturalHeight || img.offsetHeight;
+    if (!iW || !iH) return;
+    
+    const containScale = Math.min(vW / iW, vH / iH);
+    const finalSc = containScale * sc;
+    const centX = (vW - iW * finalSc) / 2;
+    const centY = (vH - iH * finalSc) / 2;
+    
+    if (lado==='A') { par.antesOX = centX; par.antesOY = centY; par.antesScale = containScale; }
+    else { par.depoisOX = centX; par.depoisOY = centY; par.depoisScale = containScale; }
+    applyImgTransform(img, centX, centY, finalSc);
+  } else {
+    applyImgTransform(img, ox, oy, sc);
+  }
+}
+
+function applyImgTransform(img, ox, oy, sc) {
+  img.style.transform = `translate(${ox}px,${oy}px) scale(${sc})`;
+  img.style.transformOrigin = '0 0';
+}
+
+function initPanZoom(viewportEl, par, lado) {
+  let dragging=false, startX, startY, startOX, startOY;
+  const getState = () => lado==='A' ? {ox:par.antesOX, oy:par.antesOY, sc:par.antesScale||1} : {ox:par.depoisOX, oy:par.depoisOY, sc:par.depoisScale||1};
+  const setState = (ox, oy) => {
+    if(lado==='A'){par.antesOX=ox;par.antesOY=oy;} else{par.depoisOX=ox;par.depoisOY=oy;}
+    const img = viewportEl.querySelector('img');
+    const {sc} = getState();
+    if(img) applyImgTransform(img, ox, oy, sc);
+  };
+
+  const img = viewportEl.querySelector('img');
+  if (img) { if (img.complete) { calcInitialOffset(viewportEl, par, lado); } else { img.onload = () => calcInitialOffset(viewportEl, par, lado); } }
+
+  const activate = () => { if(!activePhoto || activePhoto.lado!==lado || activePhoto.id!==par.id) setGlobalFocus(lado, par.id); };
+
+  viewportEl.addEventListener('mousedown', e => {
+    activate();
+    dragging=true; viewportEl.classList.add('grabbing');
+    const {ox,oy} = getState();
+    startX=e.clientX; startY=e.clientY; startOX=ox; startOY=oy;
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', e => { if(!dragging) return; setState(startOX+(e.clientX-startX), startOY+(e.clientY-startY)); });
+  window.addEventListener('mouseup', () => { if(dragging){ dragging=false; viewportEl.classList.remove('grabbing'); changed(); } });
+  
+  viewportEl.addEventListener('touchstart', e => {
+    activate();
+    dragging=true; const {ox,oy} = getState();
+    startX=e.touches[0].clientX; startY=e.touches[0].clientY; startOX=ox; startOY=oy;
+    e.preventDefault();
+  },{passive:false});
+  viewportEl.addEventListener('touchmove', e => { if(!dragging) return; setState(startOX+(e.touches[0].clientX-startX), startOY+(e.touches[0].clientY-startY)); e.preventDefault(); },{passive:false});
+  viewportEl.addEventListener('touchend', () => { dragging=false; changed(); });
+}
+
+function zoomFoto(par, lado, delta) {
+  const oldSc = lado==='A' ? (par.antesScale||1) : (par.depoisScale||1);
+  const newSc = Math.max(.05, Math.min(8, oldSc + delta * oldSc)); 
+  const vp = document.getElementById(`vp-${lado}-${par.id}`);
+  const vW = vp ? vp.offsetWidth  : 330; const vH = vp ? vp.offsetHeight : 185;
+  const ox = lado==='A' ? par.antesOX : par.depoisOX; const oy = lado==='A' ? par.antesOY : par.depoisOY;
+  const px = vW / 2; const py = vH / 2;
+  const ratio = newSc / oldSc;
+  const newOx = px - ratio * (px - ox); const newOy = py - ratio * (py - oy);
+  if(lado==='A'){par.antesScale=newSc;par.antesOX=newOx;par.antesOY=newOy;} else{par.depoisScale=newSc;par.depoisOX=newOx;par.depoisOY=newOy;}
+  atualizar(); changed();
+}
+function resetFoto(par, lado) {
+  if(lado==='A'){par.antesOX=0;par.antesOY=0;par.antesScale=1;} else{par.depoisOX=0;par.depoisOY=0;par.depoisScale=1;}
+  atualizar(); changed();
+}
+
+/* ════════ RENDER DOCUMENTO ════════ */
+function rodape(){
+  const logoFooter = LOGO ? `<img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">` : '';
+  return`<div class="doc-footer"><span class="doc-footer-site">www.tradimaq.com.br</span>${logoFooter}</div>`;
+}
+
+function hdr(dataFmt, cliente, tag){
+  const logoHtml = LOGO ? `<img class="doc-logo" src="${LOGO}" alt="Tradimaq">` : `<div class="doc-logo-txt">TRADI<span>MAQ</span></div>`;
+  return`<div class="doc-page-hdr">${logoHtml}<div class="doc-hdr-right">Cliente: <strong>${cliente}</strong> &nbsp;•&nbsp; TAG: <strong>${tag}</strong> &nbsp;•&nbsp; ${dataFmt}</div></div>`;
+}
+
+function atualizarChecklist(paresOrd){
+  const bar = document.getElementById('checklist-bar');
+  if(!bar) return;
+  const identDone = !!(v('f-cliente') && v('f-tag'));
+  const descDone = !!v('f-condicao');
+  const fotosDone = (paresOrd||[]).some(p=>p.antesData || p.depoisData);
+  const assinDone = !!(v('f-resp1') && v('f-resp2'));
+  const status = {ident:identDone, desc:descDone, fotos:fotosDone, assin:assinDone};
+  bar.querySelectorAll('.cl-item').forEach(el=>{
+    el.classList.toggle('done', !!status[el.dataset.sec]);
+  });
+}
+
+function atualizar(){
+  const modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',local=v('f-local')||'—';
+  const tag=v('f-tag')||'—',cliente=v('f-cliente')||'—',descricao=v('f-descricao')||'—';
+  const resp1=v('f-resp1'),resp2=v('f-resp2');
+  const raw=v('f-data'); const dataFmt=raw?raw.split('-').reverse().join('/'):'—';
+  const condicao=v('f-condicao')||'';
+  const badgeMap={leve:'<span class="badge badge-leve">Dano Leve</span>',moderado:'<span class="badge badge-moderado">Dano Moderado</span>',grave:'<span class="badge badge-grave">Dano Grave</span>','':'<span class="badge badge-sem">Sem Dano</span>'};
+  const badgeHtml=badgeMap[condicao]||badgeMap[''];
+
+  // Atualiza o título da página (usado como nome do arquivo no "Salvar como PDF")
+  const tagTit=v('f-tag'), clienteTit=v('f-cliente'), dataTit=v('f-data');
+  const partsTit=[tagTit,clienteTit,dataTit?dataTit.split('-').reverse().join('-'):''].filter(Boolean);
+  document.title = partsTit.length ? 'RELATORIO - ' + partsTit.join(' - ') : 'RELATORIO - Tradimaq';
+
+  const ordemIds=[...document.querySelectorAll('.foto-par')].map(el=>parseInt(el.id.replace('pe-','')));
+  const paresOrd=ordemIds.map(id=>pares.find(p=>p.id===id)).filter(Boolean);
+
+  const showLabels = document.getElementById('toggle-labels')?.checked !== false;
+  const compactMode = document.getElementById('toggle-compact')?.checked === true;
+  atualizarChecklist(paresOrd);
+  document.getElementById('documento').classList.toggle('compact-doc', compactMode);
+
+  const fotosHtml=paresOrd.map((par,i)=>{
+    const sc_a=par.antesScale||1, ox_a=par.antesOX||0, oy_a=par.antesOY||0;
+    const sc_d=par.depoisScale||1, ox_d=par.depoisOX||0, oy_d=par.depoisOY||0;
+    const lblA = showLabels ? `<div class="doc-foto-lbl A">Antes</div>` : '';
+    const lblD = showLabels ? `<div class="doc-foto-lbl D">Depois</div>` : '';
+
+    const makeVP = (lado, data, ox, oy, sc) => {
+      // Impede setGlobalFocus em divs vazias
+      if(!data) return `<div class="doc-foto-viewport" style="display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--g5)">Sem imagem</div>`;
+      const pid = par.id;
+      const annots = (par[`annots_${lado}`]||[]).map(a=>JSON.stringify(a)).join('||');
+      const isActive = (activePhoto && activePhoto.lado === lado && activePhoto.id === pid) ? 'active-vp' : '';
+      return `
+        <div class="doc-foto-wrapper" onclick="setGlobalFocus('${lado}', ${pid})">
+          <div class="doc-foto-viewport ${isActive}" id="vp-${lado}-${pid}">
+            <img src="${data}" style="transform:translate(${ox}px,${oy}px) scale(${sc});transform-origin:0 0">
+            <canvas class="annotation-canvas" id="ac-${lado}-${pid}" data-par="${pid}" data-lado="${lado}" data-annots="${encodeURIComponent(annots)}"></canvas>
+          </div>
+        </div>`;
+    };
+
+    const vA = makeVP('A', par.antesData, ox_a, oy_a, sc_a);
+    const vD = makeVP('D', par.depoisData, ox_d, oy_d, sc_d);
+    const cap=par.caption?`Figura ${i+1} — ${par.caption}`:`Figura ${i+1}`;
+    return`<div class="doc-foto-par"><div class="doc-foto-cols"><div class="doc-foto-box">${lblA}${vA}</div><div class="doc-foto-box">${lblD}${vD}</div></div><div class="doc-foto-caption">${cap}</div></div>`;
+  });
+
+  const fotosRowsHtml = fotosHtml.map((html,i)=>`<tr><td class="doc-td">${i===0?`<div class="doc-sec-title" style="margin-bottom:10px;">Fotos</div>`:''}${html}</td></tr>`).join('');
+
+  document.getElementById('documento').innerHTML=`
+    <table class="doc-table">
+      <thead><tr><td class="doc-table-hdr">${hdr(dataFmt, cliente, tag)}</td></tr></thead>
+      <tbody>
+      <tr><td class="doc-td doc-td-first">
+        <div class="doc-info">
+          <div class="doc-info-title" style="background:var(--g9)">
+            <div class="doc-info-title-row"><span class="tit">Relatório Técnico</span>${badgeHtml}</div>
+          </div>
+          <div class="doc-info-grid">
+            <div class="doc-info-cell"><span class="doc-info-key">Cliente:</span><span class="doc-info-val">${cliente}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">TAG:</span><span class="doc-info-val">${tag}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Modelo:</span><span class="doc-info-val">${modelo}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Nº Série:</span><span class="doc-info-val">${serie}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Data:</span><span class="doc-info-val">${dataFmt}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Local:</span><span class="doc-info-val">${local}</span></div>
+          </div>
+        </div>
+      </td></tr>
+      <tr><td class="doc-td">
+        <div class="doc-info" style="margin-bottom:12px">
+          <div class="doc-info-title">Descrição</div>
+          <div class="doc-sec-body">${descricao}</div>
+        </div>
+      </td></tr>
+      ${fotosRowsHtml}
+      <tr><td class="doc-td">
+        <div class="doc-assinatura">
+          <div class="doc-sec-title">Assinaturas</div>
+          <div class="doc-assin-body">
+            <div class="doc-assin-grid">
+              <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Técnico</div><div class="doc-assin-name">${resp1}</div></div>
+              <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Cliente</div><div class="doc-assin-name">${resp2}</div></div>
+            </div>
+          </div>
+        </div>
+      </td></tr>
+      <tr class="doc-footer-preview-row"><td class="doc-td doc-td-last">${rodape()}</td></tr>
+      </tbody>
+    </table>`;
+
+  paresOrd.forEach(par=>{
+    ['A','D'].forEach(lado=>{
+      const vp=document.getElementById(`vp-${lado}-${par.id}`); if(vp) initPanZoom(vp,par,lado);
+      const ac=document.getElementById(`ac-${lado}-${par.id}`); if(ac) initAnnotCanvas(ac, par, lado);
+    });
+  });
+}
+
+/* ════════ LIMPAR ════════ */
+function limpar(){
+  if(!confirm('Limpar tudo? Isso também apaga o cache salvo.'))return;
+  localStorage.removeItem(CACHE_KEY);
+  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2','f-condicao'].forEach(id=>{document.getElementById(id).value='';
+  removerSig();});
+  document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
+  pares=[];parCounter=0;galeria=[];galeriaCounter=0; activePhoto=null;
+  closeGlobalTools();
+  document.getElementById('foto-pares').innerHTML='';
+  renderGaleria();adicionarPar();atualizar(); badge('Sem alterações','');
+}
+
+function limparFotos(){
+  if(!confirm('Limpar todas as fotos? Os dados do relatório serão mantidos.'))return;
+  pares.forEach(par=>{
+    par.antesData=null; par.depoisData=null;
+    par.antesOX=0; par.antesOY=0; par.antesScale=1;
+    par.depoisOX=0; par.depoisOY=0; par.depoisScale=1;
+    par.annots_A=[]; par.annots_D=[];
+    ['A','D'].forEach(l=>{ const k=annotKey(l,par.id); if(annotState[k]) annotState[k].annots=[]; });
+    syncThumbs(par.id);
+  });
+  galeria=[]; galeriaCounter=0; activePhoto=null;
+  closeGlobalTools();
+  renderGaleria(); atualizar(); changed(); toast('Fotos limpas!');
+}
+
+/* ════════ MOTOR DE ANOTAÇÕES ════════ */
+const annotState = {};
+function annotKey(lado, parId){ return `${lado}-${parId}`; }
+
+function updatePointerEventsFor(lado, parId){
+  const canvas = document.getElementById(`ac-${lado}-${parId}`); if(!canvas) return;
+  const s = getAnnotState(lado, parId);
+  canvas.style.pointerEvents = (s.tool==='sel' && s.annots.length===0) ? 'none' : 'auto';
+  canvas.style.cursor = s.tool==='sel' ? 'default' : 'crosshair';
+}
+
+function getAnnotState(lado, parId){
+  const k = annotKey(lado, parId);
+  if(!annotState[k]) annotState[k] = { tool: globalTool, color: globalColor, annots:[], selected:-1, dragging:false, dragOff:{x:0,y:0} };
+  return annotState[k];
+}
+
+function setAnnotTool(lado, parId, tool){
+  const s = getAnnotState(lado, parId); s.tool = tool; s.selected = -1;
+  updatePointerEventsFor(lado, parId); redrawAnnots(lado, parId);
+}
+
+function undoAnnot(lado, parId){
+  const s = getAnnotState(lado, parId);
+  if(s.annots.length){ s.annots.pop(); s.selected=-1; saveAnnotsToPar(lado,parId); redrawAnnots(lado,parId); updatePointerEventsFor(lado,parId); changed(); }
+}
+function clearAnnots(lado, parId){
+  const s = getAnnotState(lado, parId);
+  s.annots=[]; s.selected=-1; saveAnnotsToPar(lado,parId); redrawAnnots(lado,parId); updatePointerEventsFor(lado,parId); changed();
+}
+function saveAnnotsToPar(lado, parId){
+  const par = pares.find(p=>p.id===parId); if(!par) return;
+  par[`annots_${lado}`] = getAnnotState(lado,parId).annots.map(a=>({...a}));
+}
+
+function initAnnotCanvas(canvas, par, lado){
+  const k = annotKey(lado, par.id);
+  if(!annotState[k]){ annotState[k] = { tool: globalTool, color: globalColor, annots: (par[`annots_${lado}`]||[]).map(a=>({...a})), selected:-1, dragging:false, dragOff:{x:0,y:0} }; }
+  else { annotState[k].annots = (par[`annots_${lado}`]||[]).map(a=>({...a})); }
+
+  const resizeCanvas = () => { const vp = canvas.parentElement; canvas.width = vp.offsetWidth; canvas.height = vp.offsetHeight; redrawAnnots(lado, par.id); };
+  resizeCanvas(); new ResizeObserver(resizeCanvas).observe(canvas.parentElement);
+
+  const getPos = (e) => { const r = canvas.getBoundingClientRect(); const cl = e.touches ? e.touches[0] : e; return { x: (cl.clientX - r.left) * (canvas.width/r.width), y: (cl.clientY - r.top) * (canvas.height/r.height) }; };
+
+  const hitTest = (annot, x, y, W, H) => {
+    const ax=annot.x1*W, ay=annot.y1*H, bx=annot.x2*W, by=annot.y2*H;
+    if(annot.type==='rect'||annot.type==='circ'){ const minX=Math.min(ax,bx)-8, maxX=Math.max(ax,bx)+8; const minY=Math.min(ay,by)-8, maxY=Math.max(ay,by)+8; return x>=minX&&x<=maxX&&y>=minY&&y<=maxY; }
+    if(annot.type==='arr'){
+      const dx=bx-ax, dy=by-ay, len=Math.sqrt(dx*dx+dy*dy)||1; const t=((x-ax)*dx+(y-ay)*dy)/(len*len); const tc=Math.max(0,Math.min(1,t)); const px=ax+tc*dx-x, py=ay+tc*dy-y; return Math.sqrt(px*px+py*py)<12;
+    }
+    if(annot.type==='txt'){ return Math.abs(x-ax)<80&&Math.abs(y-ay)<20; }
+    return false;
+  };
+
+  let drawing=false, startX=0, startY=0, currentAnnot=null;
+
+  const onDown = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    if(!activePhoto || activePhoto.lado!==lado || activePhoto.id!==par.id) setGlobalFocus(lado, par.id);
+    const {x,y} = getPos(e); const s = getAnnotState(lado, par.id); const W = canvas.width, H = canvas.height;
+
+    if(s.tool==='sel'){
+      let found=-1; for(let i=s.annots.length-1;i>=0;i--){ if(hitTest(s.annots[i],x,y,W,H)){found=i;break;} }
+      s.selected=found;
+      if(found>=0){ s.dragging=true; const a=s.annots[found]; s.dragOff={x:x-a.x1*W, y:y-a.y1*H, x2:a.x2*W-a.x1*W, y2:a.y2*H-a.y1*H}; }
+      redrawAnnots(lado, par.id); return;
+    }
+
+    if(s.tool==='txt'){
+      const label = prompt('Texto da anotação:',''); if(!label) return;
+      s.annots.push({type:'txt',x1:x/W,y1:y/H,x2:(x+100)/W,y2:(y+20)/H,color:globalColor,text:label, size:globalSize});
+      s.selected=s.annots.length-1; saveAnnotsToPar(lado,par.id); redrawAnnots(lado,par.id); changed(); return;
+    }
+    drawing=true; startX=x; startY=y; currentAnnot={type:s.tool,x1:x/W,y1:y/H,x2:x/W,y2:y/H,color:globalColor, size:globalSize};
+  };
+
+  const onMove = (e) => {
+    e.preventDefault(); const {x,y} = getPos(e); const s = getAnnotState(lado, par.id); const W = canvas.width, H = canvas.height;
+    if(s.tool==='sel'&&s.dragging&&s.selected>=0){
+      const a=s.annots[s.selected]; const newX1=(x-s.dragOff.x)/W, newY1=(y-s.dragOff.y)/H;
+      a.x1=newX1; a.y1=newY1; a.x2=newX1+s.dragOff.x2/W; a.y2=newY1+s.dragOff.y2/H; redrawAnnots(lado,par.id); return;
+    }
+    if(!drawing||!currentAnnot) return;
+    currentAnnot.x2=x/W; currentAnnot.y2=y/H; redrawAnnots(lado,par.id,currentAnnot);
+  };
+
+  const onUp = (e) => {
+    const s = getAnnotState(lado, par.id);
+    if(s.tool==='sel'&&s.dragging){ s.dragging=false; saveAnnotsToPar(lado,par.id); changed(); return; }
+    if(!drawing||!currentAnnot) return;
+    drawing=false; const W=canvas.width,H=canvas.height; const dx=Math.abs(currentAnnot.x2-currentAnnot.x1)*W; const dy=Math.abs(currentAnnot.y2-currentAnnot.y1)*H;
+    if(dx>4||dy>4){ s.annots.push({...currentAnnot}); s.selected=s.annots.length-1; saveAnnotsToPar(lado,par.id); changed(); }
+    currentAnnot=null; redrawAnnots(lado,par.id); updatePointerEventsFor(lado,par.id);
+  };
+
+  canvas.addEventListener('mousedown',onDown); canvas.addEventListener('mousemove',onMove); canvas.addEventListener('mouseup',onUp);
+  canvas.addEventListener('touchstart',onDown,{passive:false}); canvas.addEventListener('touchmove',onMove,{passive:false}); canvas.addEventListener('touchend',onUp);
+  updatePointerEventsFor(lado,par.id); redrawAnnots(lado, par.id);
+}
+
+function drawAnnot(ctx, annot, W, H, selected=false){
+  const x1=annot.x1*W, y1=annot.y1*H, x2=annot.x2*W, y2=annot.y2*H;
+  const size = annot.size || 2.5;
+  ctx.save(); ctx.strokeStyle=annot.color; ctx.fillStyle=annot.color;
+  ctx.lineWidth=selected ? size + 1.5 : size;
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  if(selected){ ctx.shadowColor='rgba(0,0,0,0.5)'; ctx.shadowBlur=6; }
+
+  if(annot.type==='rect'){ ctx.strokeRect(Math.min(x1,x2),Math.min(y1,y2),Math.abs(x2-x1),Math.abs(y2-y1)); } 
+  else if(annot.type==='circ'){ const rx=Math.abs(x2-x1)/2, ry=Math.abs(y2-y1)/2; ctx.beginPath(); ctx.ellipse((x1+x2)/2,(y1+y2)/2,rx,ry,0,0,Math.PI*2); ctx.stroke(); } 
+  else if(annot.type==='arr'){
+    const dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy)||1; const ux=dx/len, uy=dy/len;
+    const hw=size*2+5, hl=size*3+9;
+    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x2,y2); ctx.lineTo(x2-ux*hl+uy*hw, y2-uy*hl-ux*hw); ctx.lineTo(x2-ux*hl-uy*hw, y2-uy*hl+ux*hw); ctx.closePath(); ctx.fill();
+  } 
+  else if(annot.type==='txt'){
+    ctx.font=`bold ${size * 4 + 8}px IBM Plex Sans,sans-serif`;
+    ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=3;
+    ctx.fillText(annot.text, x1, y1 + (size * 4));
+  }
+  ctx.restore();
+}
+
+function redrawAnnots(lado, parId, preview=null){
+  const canvas = document.getElementById(`ac-${lado}-${parId}`); if(!canvas) return;
+  const W=canvas.width, H=canvas.height; const ctx=canvas.getContext('2d'); ctx.clearRect(0,0,W,H);
+  const s=getAnnotState(lado,parId); s.annots.forEach((a,i)=>drawAnnot(ctx,a,W,H,i===s.selected));
+  if(preview) drawAnnot(ctx,preview,W,H,false);
+}
+
+/* ════════ IMPRIMIR / SALVAR PDF (CORRIGIDO) ════════ */
+async function imprimirPDF(){
+  closeGlobalTools(); // Fecha o modo de edição
+  salvarCache(true);
+
+  const viewports = [...document.querySelectorAll('.doc-foto-viewport')];
+  const snaps = [];
+  
+  console.log("[PDF] Total de viewports encontrados:", viewports.length);
+
+  for(const vp of viewports){
+    const img = vp.querySelector('img');
+    if(!img || !img.src) continue;
+
+    const VW = vp.offsetWidth || 340;
+    const VH = vp.offsetHeight || Math.round(VW * 3/4);
+    
+    const vpId = vp.id || '';
+    const parts = vpId.split('-');
+    const lado = parts[1];           // 'A' ou 'D'
+    const parId = parseInt(parts[2]);
+    const par = pares.find(p => p.id === parId);
+
+    let ox = 0, oy = 0, sc = 1;
+    if(par){
+      ox = lado === 'A' ? (par.antesOX || 0) : (par.depoisOX || 0);
+      oy = lado === 'A' ? (par.antesOY || 0) : (par.depoisOY || 0);
+      sc = lado === 'A' ? (par.antesScale || 1) : (par.depoisScale || 1);
+    }
+
+    const DPR = 2;
+    const canvas = document.createElement('canvas');
+    canvas.width = VW * DPR;
+    canvas.height = VH * DPR;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(DPR, DPR);
+
+    await new Promise(res => {
+      const src = new Image();
+      src.crossOrigin = "anonymous";
+      let resolved = false;
+
+      const handleLoad = () => {
+        if(resolved) return;
+        resolved = true;
+        try {
+          const iW = src.naturalWidth;
+          const iH = src.naturalHeight;
+          if(iW === 0 || iH === 0) { res(); return; }
+
+          // Fundo do viewport (mesmo cinza do preview)
+          ctx.fillStyle = '#f3f4f6';
+          ctx.fillRect(0, 0, VW, VH);
+
+          ctx.save();
+          ctx.translate(ox, oy);
+          ctx.scale(sc, sc);
+          ctx.drawImage(src, 0, 0);
+          ctx.restore();
+        } catch(err) {
+          console.error("Erro ao renderizar imagem no canvas", err);
+        } finally {
+          res();
+        }
+      };
+
+      src.onload = handleLoad;
+      src.onerror = () => { if(!resolved){ resolved=true; res(); } };
+      src.src = img.src;
+
+      // Fallback para imagens já em cache (data URLs)
+      setTimeout(() => {
+        if(!resolved && src.complete && src.naturalWidth > 0) handleLoad();
+      }, 0);
+    });
+
+    // Desenha as anotações por cima (já no canvas escalado)
+    if(par){
+      const annots = par[`annots_${lado}`] || [];
+      annots.forEach(a => drawAnnot(ctx, a, VW, VH, false));
+    }
+
+    // Guarda estado original para restaurar depois do print
+    snaps.push({
+      el: vp,
+      origHTML: vp.innerHTML,
+      origStyle: vp.getAttribute('style') || ''
+    });
+
+    const bakedSrc = canvas.toDataURL('image/jpeg', 0.95);
+    vp.removeAttribute('style');
+    vp.innerHTML = `<img src="${bakedSrc}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+  }
+
+  // === CORREÇÃO CRÍTICA ===
+  // Garante que a ÚLTIMA imagem do par seja realmente renderizada antes do print
+  await new Promise(resolve => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve);   // double raf = paint garantido
+    });
+  });
+
+  // Print
+  const toastEl = document.getElementById('toast');
+  const toastWas = toastEl.className;
+  toastEl.className = '';
+  window.print();
+  toastEl.className = toastWas;
+
+  // Restaura tudo (pan/zoom + canvases de anotação)
+  snaps.forEach(({ el, origHTML, origStyle }) => {
+    el.innerHTML = origHTML;
+    if(origStyle) el.setAttribute('style', origStyle);
+    else el.removeAttribute('style');
+  });
+
+  // Re-inicializa pan/zoom e canvases de anotação
+  const ordemIds = [...document.querySelectorAll('.foto-par')].map(el => parseInt(el.id.replace('pe-','')));
+  ordemIds.map(id => pares.find(p => p.id===id)).filter(Boolean).forEach(par => {
+    ['A','D'].forEach(lado => {
+      const vp = document.getElementById(`vp-${lado}-${par.id}`);
+      if(vp) initPanZoom(vp, par, lado);
+      const ac = document.getElementById(`ac-${lado}-${par.id}`);
+      if(ac) initAnnotCanvas(ac, par, lado);
+    });
+  });
+}
+</script>
 </body>
 </html>
