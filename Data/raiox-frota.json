@@ -1,0 +1,2303 @@
+{
+  "filiais": {
+    "MG": "TRADIMAQ MATRIZ (MG)",
+    "SP": "TRADIMAQ TAUBATÉ (SP)",
+    "GO": "TRADIMAQ GOIÂNIA (GO)",
+    "ES": "TRADIMAQ CARIACICA (ES)",
+    "PA": "TRADIMAQ PARAUAPEBAS (PA)"
+  },
+  "equipamentos": [
+    {
+      "tpe": "TPE-1252",
+      "modelo": "Z-34/22 DC",
+      "serie": "2546442",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1275",
+      "modelo": "Z-60/34",
+      "serie": "12-11235",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1276",
+      "modelo": "Z-34/22 DC",
+      "serie": "2519414",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1285",
+      "modelo": "Z-34/22 DC",
+      "serie": "2510283",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1286",
+      "modelo": "GS-3246",
+      "serie": "12A-110937",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1302",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-45334",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1320",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A45394",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1325",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A45368",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1326",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A45420",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1327",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A45422",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1328",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A45425",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1334",
+      "modelo": "GS-2646",
+      "serie": "12A111622",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1335",
+      "modelo": "GS-2646",
+      "serie": "12A111623",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1336",
+      "modelo": "GS-2646",
+      "serie": "12A111626",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1337",
+      "modelo": "GS-3246",
+      "serie": "12A111526",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1338",
+      "modelo": "GS-3246",
+      "serie": "12A111531",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1340",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A45357",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1520",
+      "modelo": "GS-2646",
+      "serie": "13A-112978",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1523",
+      "modelo": "GS-2646",
+      "serie": "13A-112992",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1526",
+      "modelo": "GS-2646",
+      "serie": "13A-112942",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1527",
+      "modelo": "GS-2646",
+      "serie": "13A-112951",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1529",
+      "modelo": "GS-2646",
+      "serie": "13A-112970",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1532",
+      "modelo": "GS-1930",
+      "serie": "13A-119655",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1535",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-45914",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1558",
+      "modelo": "GS-3246",
+      "serie": "13A-114635",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1561",
+      "modelo": "GS-3246",
+      "serie": "13A-114658",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1562",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-48536",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1565",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48775",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1567",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48780",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1568",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48785",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1600",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9514",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1601",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9521",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1603",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9528",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1604",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9471",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1605",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9493",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1606",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9506",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1607",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9526",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1640",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49460",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1654",
+      "modelo": "Z-60/34",
+      "serie": "13-12939",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1663",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49503",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1714",
+      "modelo": "Z-80/60",
+      "serie": "Z8014-4685",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-1729",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49245",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2222",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525N-58297",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2224",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z452516N-55985",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2343",
+      "modelo": "GS-4047",
+      "serie": "GS47P-3220",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2344",
+      "modelo": "GS-4047",
+      "serie": "GS47P-2518",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2375",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59472",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2376",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59468",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2377",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59510",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2378",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59514",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2379",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59526",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2380",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59557",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2381",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59984",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2382",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59964",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2383",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60861",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2384",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60856",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2389",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59516",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2393",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60907",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2493",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182077",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2494",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182080",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2495",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182085",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2496",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182089",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2497",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182093",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2498",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182096",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2784",
+      "modelo": "Z-80/60",
+      "serie": "Z80H-7961",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2785",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-641",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2835",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-653",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-2836",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-648",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3285",
+      "modelo": "GS-4046",
+      "serie": "GS46D-24064",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3289",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-5694",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3290",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-5686",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3435",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-942",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3619",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14413",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3620",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14418",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3621",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6579",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3622",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6756",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3623",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6760",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3627",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6837",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3628",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7036",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3629",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7037",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3630",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7042",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3631",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7047",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3632",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7061",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3644",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1041",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3645",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1033",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3704",
+      "modelo": "Z-80/60",
+      "serie": "Z80H-8635",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3723",
+      "modelo": "GS-4046",
+      "serie": "GS46D-25837",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3724",
+      "modelo": "GS-4046",
+      "serie": "GS46D-26850",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3725",
+      "modelo": "GS-1930",
+      "serie": "GS30D-52031",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3726",
+      "modelo": "GS-1930",
+      "serie": "GS30D-52032",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3727",
+      "modelo": "GS-1930",
+      "serie": "GS30D-52033",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-3775",
+      "modelo": "S-80J",
+      "serie": "S80JD-281",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-4109",
+      "modelo": "AWP 30S-DC",
+      "serie": "AWPT-4215",
+      "filial": "SP"
+    },
+    {
+      "tpe": "TPE-0476",
+      "modelo": "Z-45/25 IC",
+      "serie": "Z452507-32639",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-0864",
+      "modelo": "Z-45/25 IC",
+      "serie": "10A-39761",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1297",
+      "modelo": "GS-3246",
+      "serie": "12A-110981",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1301",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-45329",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1303",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A-45377",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1525",
+      "modelo": "GS-2646",
+      "serie": "13A-112264",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1528",
+      "modelo": "GS-2646",
+      "serie": "13A-112968",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1549",
+      "modelo": "GS-3246",
+      "serie": "13A-114598",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1550",
+      "modelo": "GS-3246",
+      "serie": "13A-114599",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1551",
+      "modelo": "GS-3246",
+      "serie": "13A-114613",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1552",
+      "modelo": "GS-3246",
+      "serie": "13A-114616",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1553",
+      "modelo": "GS-3246",
+      "serie": "13A-114625",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1554",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48765",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1555",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48798",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1556",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48800",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1599",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9512",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1602",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9523",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1653",
+      "modelo": "Z-60/34",
+      "serie": "13-12937",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-1662",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49115",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2217",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z452516N-55993",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2218",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z452516N-56014",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2219",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525N-58288",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2220",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525N-58290",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2301",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z-452513A-45991",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2333",
+      "modelo": "Z-80/60",
+      "serie": "Z8011-2854",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2385",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59449",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2386",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59450",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2387",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59474",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2388",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59512",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2390",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60853",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2391",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60860",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2392",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60905",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2394",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60911",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2499",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185696",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2500",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185700",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2501",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185704",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2502",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185727",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2503",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185731",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-2504",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185738",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3433",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6222",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3434",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-941",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3607",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14407",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3608",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14411",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3609",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6275",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3610",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6277",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3611",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6281",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3612",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6285",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3613",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6288",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3614",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6297",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3615",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6299",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3616",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6578",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3617",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6765",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3618",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6970",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3635",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-985",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3636",
+      "modelo": "Z-80/60",
+      "serie": "Z80H-8641",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3693",
+      "modelo": "GS-3246",
+      "serie": "GS46D-28901",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3694",
+      "modelo": "GS-3246",
+      "serie": "GS46D-27457",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3695",
+      "modelo": "GS-3246",
+      "serie": "GS46D-28542",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3696",
+      "modelo": "GS-4046",
+      "serie": "GS46D-25838",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3697",
+      "modelo": "GS-4046",
+      "serie": "GS46D-26849",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-3763",
+      "modelo": "S-80J",
+      "serie": "S80JD-276",
+      "filial": "GO"
+    },
+    {
+      "tpe": "TPE-0758",
+      "modelo": "GS-3246",
+      "serie": "10A-95381",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-0966",
+      "modelo": "Z-80/60",
+      "serie": "8011-2782",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1043",
+      "modelo": "Z-45/25 DC",
+      "serie": "11A-40648",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1044",
+      "modelo": "Z-45/25 IC",
+      "serie": "11A-40655",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1045",
+      "modelo": "Z-34/22 DC",
+      "serie": "2289281",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1055",
+      "modelo": "Z-45/25 IC",
+      "serie": "11A-40501",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1056",
+      "modelo": "Z-45/25 DC",
+      "serie": "11A-40646",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1057",
+      "modelo": "Z-60/34",
+      "serie": "11-10334",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1085",
+      "modelo": "Z-45/25 DC",
+      "serie": "11A-40492",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1086",
+      "modelo": "GS-2646",
+      "serie": "11A-97207",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1148",
+      "modelo": "Z-45/25J IC",
+      "serie": "42957",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1149",
+      "modelo": "GS-3246",
+      "serie": "98366",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1160",
+      "modelo": "Z-34/22 DC",
+      "serie": "2464262",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1161",
+      "modelo": "Z-34/22 DC",
+      "serie": "2470837",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1163",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A-42965",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1164",
+      "modelo": "GS-2646",
+      "serie": "12A-98229",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1165",
+      "modelo": "GS-3246",
+      "serie": "12A-98566",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1166",
+      "modelo": "GS-3246",
+      "serie": "12A-98364",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1210",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-43585",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1211",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-43680",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1212",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-43534",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1213",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-43119",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1253",
+      "modelo": "Z-34/22 DC",
+      "serie": "2552286",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1254",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-43733",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1255",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-43754",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1277",
+      "modelo": "GS-3246",
+      "serie": "12A-98839",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1288",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A-44544",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1299",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-45314",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1305",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-45345",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1309",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A-45389",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1310",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A-45398",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1311",
+      "modelo": "Z-45/25J IC",
+      "serie": "12A-45401",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1318",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-45338",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1319",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-45365",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1321",
+      "modelo": "Z-80/60",
+      "serie": "123758",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1341",
+      "modelo": "GS-2646",
+      "serie": "12A111563",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1343",
+      "modelo": "GS-2646",
+      "serie": "12A111415",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1519",
+      "modelo": "GS-2646",
+      "serie": "13A-112976",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1521",
+      "modelo": "GS-2646",
+      "serie": "13A-112980",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1522",
+      "modelo": "GS-2646",
+      "serie": "13A-112982",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1524",
+      "modelo": "GS-2646",
+      "serie": "13A-112993",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1539",
+      "modelo": "GS-3246",
+      "serie": "13A-114601",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1540",
+      "modelo": "GS-3246",
+      "serie": "13A-114603",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1541",
+      "modelo": "GS-3246",
+      "serie": "13A-114609",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1542",
+      "modelo": "GS-3246",
+      "serie": "13A-114611",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1543",
+      "modelo": "GS-3246",
+      "serie": "13A-114665",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1544",
+      "modelo": "GS-3246",
+      "serie": "13A-114666",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1545",
+      "modelo": "GS-3246",
+      "serie": "13A-114667",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1546",
+      "modelo": "GS-3246",
+      "serie": "13A-114668",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1547",
+      "modelo": "GS-3246",
+      "serie": "13A-114669",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1548",
+      "modelo": "Z-80/60",
+      "serie": "Z8013-4346",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1590",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9540",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1591",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9533",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1592",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9536",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1593",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9537",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1594",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9538",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1595",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9539",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1596",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9541",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1597",
+      "modelo": "Z-80/60",
+      "serie": "Z8013-4254",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1608",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z3413-9531",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1641",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49234",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1643",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49308",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1644",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49328",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1645",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49332",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1646",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49363",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1647",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49369",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1648",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49237",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1649",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49241",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1650",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49254",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1651",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49265",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1652",
+      "modelo": "Z-60/34",
+      "serie": "13-12933",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1655",
+      "modelo": "Z-60/34",
+      "serie": "13-12949",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1656",
+      "modelo": "Z-60/34",
+      "serie": "13-12954",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1661",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49095",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1672",
+      "modelo": "Z-80/60",
+      "serie": "Z8014-4681",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1703",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49286",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1704",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49300",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1705",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49275",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1706",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49295",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1707",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49320",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1708",
+      "modelo": "Z-45/25 DC",
+      "serie": "14A-50152",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1709",
+      "modelo": "Z-80/60",
+      "serie": "Z8014-4683",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1717",
+      "modelo": "Z-45/25 DC",
+      "serie": "14A-50154",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1718",
+      "modelo": "Z-45/25 DC",
+      "serie": "14A-50174",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1719",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49282",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1720",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49304",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1721",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49307",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1722",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49438",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1724",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49272",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1725",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49311",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1726",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49316",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1727",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-49323",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1728",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49322",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2213",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z452516N-56010",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2214",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z452516N-56007",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2215",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z452516N-55983",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2216",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z452516N-55991",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2221",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525N-58296",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2223",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525N-58350",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2404",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-59484",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2405",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60858",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2406",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60903",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2407",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60913",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2408",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60914",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2409",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60921",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2410",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60925",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2411",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60927",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2413",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60918",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2414",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525F-60919",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2505",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182100",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2506",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182104",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2507",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182109",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2508",
+      "modelo": "GS-1930",
+      "serie": "GS30P-182114",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2509",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185688",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2510",
+      "modelo": "GS-1930",
+      "serie": "GS30P-185692",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2731",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16580",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-2732",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16743",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3288",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-5691",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3292",
+      "modelo": "GS-3246",
+      "serie": "GS46D-24216",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3293",
+      "modelo": "GS-3246",
+      "serie": "GS46D-24214",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3436",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-955",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3568",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14401",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3569",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14405",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3570",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6910",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3571",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6955",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3572",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6294",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3573",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6271",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3574",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6908",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3582",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6894",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3584",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6907",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3585",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6293",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3586",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14399",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3587",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6287",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3588",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6562",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3589",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1011",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3590",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1034",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3591",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1010",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3593",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-6254",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3594",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14388",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3647",
+      "modelo": "S-80J",
+      "serie": "S80JD-144",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3659",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7089",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3660",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7079",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3661",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7086",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3684",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-7582",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3685",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-7583",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3686",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1009",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3689",
+      "modelo": "Z-45/25J DC",
+      "serie": "Z4525D-7604",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3690",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14460",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3691",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14458",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3692",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-14456",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3705",
+      "modelo": "Z-80/60",
+      "serie": "Z80H-8637",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3728",
+      "modelo": "GS-1930",
+      "serie": "GS30D-52034",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3729",
+      "modelo": "GS-1930",
+      "serie": "GS30D-52035",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-3764",
+      "modelo": "S-80J",
+      "serie": "S80JD-298",
+      "filial": "MG"
+    },
+    {
+      "tpe": "TPE-1162",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-43102",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1304",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A-45381",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1316",
+      "modelo": "GS-3246",
+      "serie": "12A111007",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1339",
+      "modelo": "Z-45/25 DC",
+      "serie": "12A45354",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1533",
+      "modelo": "GS-1930",
+      "serie": "13A-122476",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1534",
+      "modelo": "GS-1930",
+      "serie": "13A-122477",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1563",
+      "modelo": "Z-45/25 DC",
+      "serie": "13A-48538",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1566",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48777",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1569",
+      "modelo": "Z-45/25J DC",
+      "serie": "13A-48803",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1642",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49379",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-1657",
+      "modelo": "Z-45/25 IC",
+      "serie": "13A-49276",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2728",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16516",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2729",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16517",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2730",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16518",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2733",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16581",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2734",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16739",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2735",
+      "modelo": "GS-3246",
+      "serie": "GS46D-16740",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2736",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-13201",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2737",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-13202",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2738",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-13204",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2739",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-13208",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2740",
+      "modelo": "Z-34/22 DC",
+      "serie": "Z34F-13209",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2834",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-650",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2837",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-652",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-2856",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-663",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3286",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-5685",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3287",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-5688",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3291",
+      "modelo": "GS-3246",
+      "serie": "GS46D-24215",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3294",
+      "modelo": "GS-4046",
+      "serie": "GS46D-23917",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3295",
+      "modelo": "GS-4046",
+      "serie": "GS46D-23918",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3443",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-956",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3576",
+      "modelo": "GS-4046",
+      "serie": "GS46D-25751",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3577",
+      "modelo": "GS-4046",
+      "serie": "GS46D-26847",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3578",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6841",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3579",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6842",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3580",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6892",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3583",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6903",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3596",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-994",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3597",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-993",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3598",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-996",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3599",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-998",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3600",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1035",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3601",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1036",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3706",
+      "modelo": "Z-80/60",
+      "serie": "Z80H-8639",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3711",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1046",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3712",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1045",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3733",
+      "modelo": "GS-3246",
+      "serie": "GS46D-28549",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3734",
+      "modelo": "GS-3246",
+      "serie": "GS46D-28907",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3735",
+      "modelo": "GS-3246",
+      "serie": "GS46D-28908",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3736",
+      "modelo": "GS-3246",
+      "serie": "GS46D-28909",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3737",
+      "modelo": "GS-3246",
+      "serie": "GS46D-28910",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3738",
+      "modelo": "GS-1930",
+      "serie": "GS30D-51431",
+      "filial": "ES"
+    },
+    {
+      "tpe": "TPE-3816",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6478",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3817",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7063",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3818",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7065",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3819",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7067",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3820",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7069",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3821",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7070",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3822",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7514",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3823",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-7627",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3824",
+      "modelo": "S-80J",
+      "serie": "S80JD-275",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3825",
+      "modelo": "S-80J",
+      "serie": "S80JD-285",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3826",
+      "modelo": "S-80J",
+      "serie": "S80JD-287",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3827",
+      "modelo": "S-80J",
+      "serie": "S80JD-290",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3828",
+      "modelo": "S-80J",
+      "serie": "S80JD-299",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3829",
+      "modelo": "S-80J",
+      "serie": "S80JD-300",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3830",
+      "modelo": "S-80J",
+      "serie": "S80JD-302",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3831",
+      "modelo": "S-80J",
+      "serie": "S80JD-308",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3838",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1044",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3839",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1059",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3840",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1060",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-3841",
+      "modelo": "Z-62/40",
+      "serie": "Z62D-1062",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-4075",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6987",
+      "filial": "PA"
+    },
+    {
+      "tpe": "TPE-4076",
+      "modelo": "Z-45/25J IC",
+      "serie": "Z4525D-6988",
+      "filial": "PA"
+    }
+  ]
+}
