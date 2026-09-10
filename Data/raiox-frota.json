@@ -1,10 +1,10 @@
 {
   "filiais": {
-    "MG": "TRADIMAQ MATRIZ (MG)",
-    "SP": "TRADIMAQ TAUBATÉ (SP)",
-    "GO": "TRADIMAQ GOIÂNIA (GO)",
-    "ES": "TRADIMAQ CARIACICA (ES)",
-    "PA": "TRADIMAQ PARAUAPEBAS (PA)"
+    "MG": "TRADIMAQ MATRIZ",
+    "SP": "TRADIMAQ TAUBATÉ",
+    "GO": "TRADIMAQ GOIÂNIA",
+    "ES": "TRADIMAQ CARIACICA",
+    "PA": "TRADIMAQ PARAUAPEBAS"
   },
   "equipamentos": [
     {
