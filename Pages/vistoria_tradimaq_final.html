@@ -390,7 +390,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   <!-- Identificação -->
   <div class="sb-sec">
     <div class="sb-label">Identificação</div>
-    <div class="field"><label>TAG / Frota</label><input id="f-tag" placeholder="Ex: TPE-1605" oninput="autoFillEquip(this);changed()"></div>
+    <div class="field"><label>TAG / Frota</label><input id="f-tag" placeholder="Ex: TPE-1605" oninput="upperCase(this);autoFillEquip(this);changed()"></div>
     <div class="f2">
       <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: Z-34/22 DC" oninput="changed()"></div>
       <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: Z3413-9493" oninput="changed()"></div>
@@ -401,7 +401,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
     </div>
     <div class="f2">
       <div class="field"><label>Local</label><input id="f-local" placeholder="Ex: TRADIMAQ TAUBATÉ (SP)" oninput="changed()"></div>
-      <div class="field"><label>Cliente</label><input id="f-cliente" placeholder="Nome do cliente" oninput="changed()"></div>
+      <div class="field"><label>Cliente</label><input id="f-cliente" placeholder="Nome do cliente" oninput="upperCase(this);changed()"></div>
     </div>
     <div class="field"><label>Horímetro (horas)</label><input id="f-horimetro" type="number" min="0" step="0.1" placeholder="Ex: 1842.5" oninput="changed()"></div>
   </div>
@@ -505,7 +505,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 /* ══════════ CONSTANTES ══════════ */
 const LOGO_URL='https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
 let LOGO=LOGO_URL;
-const EQUIP_URL='https://gaberoviva-cloud.github.io/Data/raiox-frota.json';
+const EQUIP_URL='../data/raiox-frota.json';
 let EQUIP_INDEX={};
 let EQUIP_FILIAIS={};
 const CACHE_KEY='tradimaq_v4';
@@ -682,6 +682,11 @@ async function carregarEquipamentos(){
       EQUIP_INDEX[e.tpe.trim().toUpperCase()]=e;
     });
   }catch(e){console.warn('equipamentos.json indisponível:',e);}
+}
+function upperCase(el){
+  const pos=el.selectionStart;
+  el.value=el.value.toUpperCase();
+  el.setSelectionRange(pos,pos);
 }
 function autoFillEquip(el){
   const raw=el.value.trim().toUpperCase();
