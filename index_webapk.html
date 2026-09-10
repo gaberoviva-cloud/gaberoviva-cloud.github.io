@@ -316,6 +316,28 @@
     }
     .btn:hover .btn-arrow { opacity: 0.85; transform: translateX(3px); }
 
+    .btn-teste {
+      border-color: rgba(74,222,128,0.3);
+      background: rgba(74,222,128,0.07);
+    }
+    .btn-teste:hover {
+      background: rgba(74,222,128,0.16);
+      border-color: rgba(74,222,128,0.45);
+    }
+    .btn-teste .badge-teste {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #4ade80;
+      background: rgba(74,222,128,0.15);
+      border: 1px solid rgba(74,222,128,0.35);
+      border-radius: 5px;
+      padding: 2px 6px;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
     /* ── MODAL QUIZ OFFLINE ── */
     #modal-quiz {
       position: fixed;
@@ -553,6 +575,34 @@
       animation: ls-spin 0.8s linear infinite;
     }
     @keyframes ls-spin { to { transform: rotate(360deg); } }
+
+    /* ── BOTÃO FLUTUANTE DE AJUDA (WHATSAPP) ── */
+    #btn-ajuda-flutuante {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.4), 0 0 0 0 rgba(37,211,102,0.6);
+      cursor: pointer;
+      z-index: 500;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      touch-action: manipulation;
+      animation: ajuda-pulse 2.4s ease-in-out infinite;
+    }
+    #btn-ajuda-flutuante:hover { transform: scale(1.06); }
+    #btn-ajuda-flutuante:active { transform: scale(0.94); }
+    #btn-ajuda-flutuante svg { width: 28px; height: 28px; }
+    @keyframes ajuda-pulse {
+      0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.4), 0 0 0 0 rgba(37,211,102,0.5); }
+      50% { box-shadow: 0 4px 14px rgba(0,0,0,0.4), 0 0 0 8px rgba(37,211,102,0); }
+    }
   </style>
 </head>
 <body>
@@ -643,6 +693,10 @@
         <span>Abrir vistoria</span>
         <span class="btn-arrow">→</span>
       </button>
+      <button class="btn btn-teste" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/vistoria_tradimaq_final.html')">
+        <span>Nova versão (teste)<span class="badge-teste">Beta</span></span>
+        <span class="btn-arrow">→</span>
+      </button>
     </div>
   </div>
 
@@ -668,6 +722,13 @@
 <footer>
   <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank">By Gabriel Roza</a>
 </footer>
+
+<!-- Botão flutuante de ajuda (WhatsApp) -->
+<a id="btn-ajuda-flutuante" href="#" onclick="abrirAjudaWhatsapp(event)" aria-label="Ajuda via WhatsApp">
+  <svg viewBox="0 0 32 32" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.386.7 4.607 1.908 6.47L4 29l7.72-1.867A11.94 11.94 0 0016.001 27C22.628 27 28 21.627 28 15S22.628 3 16.001 3zm0 21.818c-1.94 0-3.75-.536-5.302-1.467l-.38-.226-4.583 1.108 1.127-4.464-.248-.393A9.77 9.77 0 016.182 15c0-5.415 4.404-9.818 9.819-9.818S25.818 9.585 25.818 15 21.415 24.818 16.001 24.818zm5.386-7.34c-.295-.148-1.75-.864-2.021-.963-.272-.099-.47-.148-.667.148-.198.296-.767.963-.94 1.161-.173.198-.346.223-.641.075-.296-.148-1.248-.46-2.377-1.465-.878-.783-1.472-1.75-1.644-2.046-.173-.296-.019-.456.13-.603.133-.132.296-.346.444-.519.148-.173.198-.296.297-.494.099-.198.05-.371-.025-.519-.074-.148-.667-1.608-.914-2.202-.24-.579-.485-.5-.667-.51-.173-.008-.371-.01-.568-.01-.198 0-.519.074-.79.371-.272.296-1.04 1.017-1.04 2.478 0 1.461 1.065 2.874 1.213 3.072.148.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.693.626.711.226 1.359.194 1.871.118.571-.085 1.75-.716 1.997-1.407.247-.692.247-1.285.173-1.408-.074-.123-.271-.198-.567-.346z"/>
+  </svg>
+</a>
 
 <!-- Modal Confirmar Saída -->
 <div id="modal-sair">
@@ -824,6 +885,13 @@ function abrir(arquivo) {
     return;
   }
   window.location.href = arquivo;
+}
+
+function abrirAjudaWhatsapp(e) {
+  e.preventDefault();
+  const fone = '553197237947'; // +55 31 9723-7947
+  const msg = 'Olá Gabriel, preciso de ajuda em (problema)';
+  window.open('https://wa.me/' + fone + '?text=' + encodeURIComponent(msg), '_blank');
 }
 
 /* ══════════════════════════════════════════════
