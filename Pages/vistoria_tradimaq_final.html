@@ -390,19 +390,16 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   <!-- Identificação -->
   <div class="sb-sec">
     <div class="sb-label">Identificação</div>
-    <div class="field"><label>TAG / Frota</label><input id="f-tag" placeholder="Ex: TPE-1605" oninput="upperCase(this);autoFillEquip(this);changed()"></div>
+    <div class="field"><label>TAG / Frota</label><input id="f-tag" placeholder="Ex: 1605" oninput="maskTag(this);autoFillEquip(this);changed()"></div>
     <div class="f2">
-      <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: Z-34/22 DC" oninput="changed()"></div>
-      <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: Z3413-9493" oninput="changed()"></div>
+      <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: Z-34/22 DC" oninput="upperCase(this);changed()"></div>
+      <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: Z3413-9493" oninput="upperCase(this);changed()"></div>
     </div>
     <div class="f2">
       <div class="field"><label>Data</label><input type="date" id="f-data" readonly style="opacity:.7;cursor:not-allowed;"></div>
       <div class="field"><label>Hora</label><input type="time" id="f-hora" readonly style="opacity:.7;cursor:not-allowed;"></div>
     </div>
-    <div class="f2">
-      <div class="field"><label>Local</label><input id="f-local" placeholder="Ex: TRADIMAQ TAUBATÉ (SP)" oninput="changed()"></div>
-      <div class="field"><label>Cliente</label><input id="f-cliente" placeholder="Nome do cliente" oninput="upperCase(this);changed()"></div>
-    </div>
+    <div class="field"><label>Local</label><input id="f-local" placeholder="Ex: TRADIMAQ TAUBATÉ (SP)" oninput="upperCase(this);changed()"></div>
     <div class="field"><label>Horímetro (horas)</label><input id="f-horimetro" type="number" min="0" step="0.1" placeholder="Ex: 1842.5" oninput="changed()"></div>
   </div>
 
@@ -654,10 +651,8 @@ function badge(txt,cls){const b=document.getElementById('status-pill');b.textCon
 function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();atualizarTitulo();}
 function atualizarTitulo(){
   const equip=(v('f-tag')||v('f-serie')||'').trim();
-  const cliente=(v('f-cliente')||'').trim();
   const partes=['Vistoria Tradimaq'];
   if(equip)partes.push(`(${equip})`);
-  if(cliente)partes.push(`(${cliente})`);
   document.title=partes.join(' ');
 }
 function v(id){return document.getElementById(id)?.value||'';}
@@ -688,6 +683,10 @@ function upperCase(el){
   el.value=el.value.toUpperCase();
   el.setSelectionRange(pos,pos);
 }
+function maskTag(el){
+  const digits=el.value.toUpperCase().replace(/[^0-9]/g,'').slice(0,4);
+  el.value=digits?'TPE-'+digits:'';
+}
 function autoFillEquip(el){
   const raw=el.value.trim().toUpperCase();
   const equip=EQUIP_INDEX[raw];
@@ -712,7 +711,7 @@ async function salvarCache(silent=false){
   // 1. Salva campos e estado (sem fotos) no localStorage
   const estadoSemFotos={};
   TOPICOS.forEach(t=>{estadoSemFotos[t.id]={checked:estado[t.id].checked,fotos:[],nota:estado[t.id].nota};});
-  const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),hora:v('f-hora'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),condicao:v('f-condicao'),remessa:v('f-remessa'),transp:v('f-transp'),placa:v('f-placa'),motorista:v('f-motorista'),cpf:v('f-cpf'),ckVals:JSON.parse(JSON.stringify(ckVals)),ckFotos:JSON.parse(JSON.stringify(ckFotos)),estado:estadoSemFotos};
+  const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),hora:v('f-hora'),local:v('f-local'),tag:v('f-tag'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),condicao:v('f-condicao'),remessa:v('f-remessa'),transp:v('f-transp'),placa:v('f-placa'),motorista:v('f-motorista'),cpf:v('f-cpf'),ckVals:JSON.parse(JSON.stringify(ckVals)),ckFotos:JSON.parse(JSON.stringify(ckFotos)),estado:estadoSemFotos};
   try{localStorage.setItem(CACHE_KEY,JSON.stringify(d));}catch(e){console.warn('localStorage:',e);}
   // 2. Salva fotos no IndexedDB
   try{await idbSalvarFotos(estado);}catch(e){console.warn('IDB:',e);}
@@ -722,7 +721,7 @@ async function carregarCache(){
   try{
     const raw=localStorage.getItem(CACHE_KEY);if(!raw)return;
     const d=JSON.parse(raw);
-    ['modelo','serie','local','tag','cliente','horimetro','descricao','resp1',
+    ['modelo','serie','local','tag','horimetro','descricao','resp1',
      'transp','placa','motorista','cpf'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&d[k]!==undefined)el.value=d[k];});
     // data e hora: não restaurar do cache — sempre usar momento atual
     if(d.ckVals){CK.forEach(s=>{if(d.ckVals[s.id])Object.entries(d.ckVals[s.id]).forEach(([k,v])=>{if(ckVals[s.id][k]!==undefined)ckVals[s.id][k]=v;});});}
@@ -751,7 +750,7 @@ function limpar(){
   try{localStorage.removeItem(CACHE_KEY);}catch(e){}
   idbLimparFotos().catch(()=>{});
   TOPICOS.forEach(t=>{estado[t.id]={checked:Array(t.itens.length).fill(false),fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:''};});
-  ['modelo','serie','local','tag','cliente','horimetro','descricao','resp1','transp','placa','motorista','cpf'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value='';});
+  ['modelo','serie','local','tag','horimetro','descricao','resp1','transp','placa','motorista','cpf'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value='';});
   CK.forEach(s=>{Object.keys(ckVals[s.id]).forEach(k=>{ckVals[s.id][k]='';ckFotos[s.id][k]='';});});;
   document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
   document.getElementById('f-condicao').value='';
@@ -780,7 +779,7 @@ function limparFotos(){
   const estadoSemFotos={};
   TOPICOS.forEach(t=>{estadoSemFotos[t.id]={checked:estado[t.id].checked,fotos:[],nota:estado[t.id].nota};});
   try{
-    const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),hora:v('f-hora'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),condicao:v('f-condicao'),remessa:v('f-remessa'),transp:v('f-transp'),placa:v('f-placa'),motorista:v('f-motorista'),cpf:v('f-cpf'),ckVals:JSON.parse(JSON.stringify(ckVals)),ckFotos:JSON.parse(JSON.stringify(ckFotos)),estado:estadoSemFotos};
+    const d={modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),hora:v('f-hora'),local:v('f-local'),tag:v('f-tag'),horimetro:v('f-horimetro'),descricao:v('f-descricao'),resp1:v('f-resp1'),condicao:v('f-condicao'),remessa:v('f-remessa'),transp:v('f-transp'),placa:v('f-placa'),motorista:v('f-motorista'),cpf:v('f-cpf'),ckVals:JSON.parse(JSON.stringify(ckVals)),ckFotos:JSON.parse(JSON.stringify(ckFotos)),estado:estadoSemFotos};
     localStorage.setItem(CACHE_KEY,JSON.stringify(d));
   }catch(e){}
   idbLimparFotos().catch(()=>{});
@@ -1091,7 +1090,7 @@ function condLabel(v){return{leve:'🟢 Dano Leve',moderado:'🟡 Dano Moderado'
 
 function atualizar(){
   const modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',data=v('f-data');
-  const local=v('f-local')||'—',tag=v('f-tag')||'—',cliente=v('f-cliente')||'—';
+  const local=v('f-local')||'—',tag=v('f-tag')||'—';
   const horimetro=v('f-horimetro')||'—';
   const desc=v('f-descricao')||'—',resp1=v('f-resp1')||'—';
   const transp=v('f-transp')||'',placa=v('f-placa')||'',motorista=v('f-motorista')||'',cpf=v('f-cpf')||'';
@@ -1143,9 +1142,8 @@ function atualizar(){
       <div class="doc-info-cell"><div class="doc-info-key">Nº de Série</div><div class="doc-info-val">${serie}</div></div>
       <div class="doc-info-cell"><div class="doc-info-key">TAG / Frota</div><div class="doc-info-val">${tag}</div></div>
       <div class="doc-info-cell"><div class="doc-info-key">Data</div><div class="doc-info-val">${fmtDate(data)}</div></div>
-      <div class="doc-info-cell" style="grid-column:span 2;"><div class="doc-info-key">Cliente</div><div class="doc-info-val">${cliente}</div></div>
       <div class="doc-info-cell"><div class="doc-info-key">Horímetro</div><div class="doc-info-val">${horimetro !== '—' ? horimetro+' h' : '—'}</div></div>
-      <div class="doc-info-cell"><div class="doc-info-key">Local</div><div class="doc-info-val">${local}</div></div>
+      <div class="doc-info-cell" style="grid-column:span 3;"><div class="doc-info-key">Local</div><div class="doc-info-val">${local}</div></div>
     </div>
     <div class="doc-sec">
       <div class="doc-sec-title">Avaliação de Condição</div>
@@ -1199,7 +1197,6 @@ async function gerarPDF(){
   // Identificação
   if(!v('f-modelo'))erros.push('Modelo obrigatório');
   if(!v('f-serie'))erros.push('Nº de série obrigatório');
-  if(!v('f-cliente'))erros.push('Cliente obrigatório');
   // Checklist completo
   let ckIncompleto=false;
   CK.forEach(sec=>{sec.it.forEach(item=>{if(!ckVals[sec.id][item.id])ckIncompleto=true;});});
@@ -1280,15 +1277,14 @@ async function exportarZIP(){
 
   // Nome base do arquivo
   const rLabel=v('f-remessa')==='retorno'?'Retorno':'Saida';
-  const cliente=(v('f-cliente')||'Cliente').replace(/[^\w\s]/g,'').trim();
+  const tagNome=(v('f-tag')||'TAG').replace(/[^\w-]/g,'').trim();
   const modelo=(v('f-modelo')||'').replace(/[^\w\s-]/g,'').trim();
   const data=v('f-data')?v('f-data').split('-').reverse().join('-'):'sem-data';
-  const base=`${rLabel} - ${cliente}${modelo?' - '+modelo:''} - ${data}`;
+  const base=`${rLabel} - ${tagNome}${modelo?' - '+modelo:''} - ${data}`;
 
   // Pasta raiz com info
   const infoLines=[
     `Relatório: ${base}`,
-    `Cliente: ${v('f-cliente')||'—'}`,
     `Modelo: ${v('f-modelo')||'—'}`,
     `Série: ${v('f-serie')||'—'}`,
     `TAG: ${v('f-tag')||'—'}`,
