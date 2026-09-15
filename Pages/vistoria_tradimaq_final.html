@@ -138,8 +138,9 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .ck-btn.s-na{background:var(--bg4);border-color:var(--txt2);color:var(--txt2);}
 .ck-foto-area{margin-top:6px;display:none;}
 .ck-foto-area.show{display:block;}
+.ck-foto-btns{display:flex;gap:7px;}
 .ck-foto-thumb{width:72px;height:54px;object-fit:cover;border-radius:6px;border:2px solid var(--red);cursor:pointer;}
-.ck-foto-add{display:flex;align-items:center;gap:7px;padding:9px 12px;border:1.5px dashed var(--red);border-radius:var(--r);cursor:pointer;font-size:12px;color:var(--red);background:rgba(239,68,68,.05);}
+.ck-foto-add{display:flex;align-items:center;justify-content:center;flex:1;gap:7px;padding:9px 12px;border:1.5px dashed var(--red);border-radius:var(--r);cursor:pointer;font-size:12px;color:var(--red);background:rgba(239,68,68,.05);}
 .ck-foto-add:active{opacity:.7;}
 .ck-progress{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-top:6px;}
 .ck-progress-fill{height:100%;background:linear-gradient(90deg,var(--blue),#60a5fa);border-radius:99px;transition:width .3s;}
@@ -885,7 +886,7 @@ function renderCK(){
         <div class="ck-foto-area${v==='ruim'?' show':''}" id="ckfoto-${sec.id}-${item.id}">
           ${foto
             ?`<img class="ck-foto-thumb" src="${foto}" onclick="ckRemoveFoto('${sec.id}','${item.id}')" title="Toque para remover">`
-            :`<div class="ck-foto-add" onclick="ckAddFoto('${sec.id}','${item.id}')"><span>📷</span><span>Foto do problema</span></div>`}
+            :`<div class="ck-foto-btns"><div class="ck-foto-add" onclick="ckAddFoto('${sec.id}','${item.id}')"><span>📷</span><span>Câmera</span></div><div class="ck-foto-add" onclick="ckAddFotoGaleria('${sec.id}','${item.id}')"><span>📁</span><span>Galeria</span></div></div>`}
         </div>
       </div>`;
     });
@@ -942,12 +943,27 @@ function ckAddFoto(sid,iid){
   };
   inp.click();
 }
+function ckAddFotoGaleria(sid,iid){
+  const inp=document.createElement('input');
+  inp.type='file';inp.accept='image/*';
+  // sem capture — abre galeria
+  inp.onchange=async e=>{
+    const file=e.target.files[0];if(!file)return;
+    const raw=await readFile(file);
+    const stamped=await processImg(raw);
+    ckFotos[sid][iid]=stamped;
+    const area=document.getElementById(`ckfoto-${sid}-${iid}`);
+    if(area)area.innerHTML=`<img class="ck-foto-thumb" src="${stamped}" onclick="ckRemoveFoto('${sid}','${iid}')" title="Toque para remover">`;
+    changed();
+  };
+  inp.click();
+}
 
 function ckRemoveFoto(sid,iid){
   if(!confirm('Remover foto?'))return;
   ckFotos[sid][iid]='';
   const area=document.getElementById(`ckfoto-${sid}-${iid}`);
-  if(area)area.innerHTML=`<div class="ck-foto-add" onclick="ckAddFoto('${sid}','${iid}')"><span>📷</span><span>Foto do problema</span></div>`;
+  if(area)area.innerHTML=`<div class="ck-foto-btns"><div class="ck-foto-add" onclick="ckAddFoto('${sid}','${iid}')"><span>📷</span><span>Câmera</span></div><div class="ck-foto-add" onclick="ckAddFotoGaleria('${sid}','${iid}')"><span>📁</span><span>Galeria</span></div></div>`;
   changed();
 }
 
