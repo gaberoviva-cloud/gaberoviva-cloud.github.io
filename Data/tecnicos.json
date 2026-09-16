@@ -1,0 +1,99 @@
+{
+  "tecnicos": [
+    {
+      "nome": "Lucas de Aguiar",
+      "matricula": "007121",
+      "filial": "PCM"
+    },
+    {
+      "nome": "Gabriel Vale Vimieiro Roza",
+      "matricula": "010809",
+      "filial": "PCM"
+    },
+    {
+      "nome": "Kauan Victor Alves Teixeira",
+      "matricula": "013659",
+      "filial": "PCM"
+    },
+    {
+      "nome": "Washington Durval do Espirito Santo",
+      "matricula": "004995",
+      "filial": "MG"
+    },
+    {
+      "nome": "Edismar Cabral de Melo",
+      "matricula": "002466",
+      "filial": "MG"
+    },
+    {
+      "nome": "Pedro Tiago Hilario Gouvea",
+      "matricula": "013615",
+      "filial": "MG"
+    },
+    {
+      "nome": "Samuel Rodrigues de Oliveira Soares Silva",
+      "matricula": "014270",
+      "filial": "MG"
+    },
+    {
+      "nome": "Elias Junior Neto da Silva",
+      "matricula": "014502",
+      "filial": "MG"
+    },
+    {
+      "nome": "Gabriel Elbert do Nascimento Costa",
+      "matricula": "015011",
+      "filial": "MG"
+    },
+    {
+      "nome": "Daniel de Oliveira Barcelos",
+      "matricula": "007587",
+      "filial": "GO"
+    },
+    {
+      "nome": "Gabriel Alves Ferreira",
+      "matricula": "014845",
+      "filial": "GO"
+    },
+    {
+      "nome": "Lucas Antonio das Gracas",
+      "matricula": "008898",
+      "filial": "SP"
+    },
+    {
+      "nome": "Gederson Morais de Araujo",
+      "matricula": "008618",
+      "filial": "SP"
+    },
+    {
+      "nome": "Marcos Vinicius Rosa Dias",
+      "matricula": "014422",
+      "filial": "SP"
+    },
+    {
+      "nome": "Jose Augusto Santos da Silva",
+      "matricula": "014160",
+      "filial": "SP"
+    },
+    {
+      "nome": "William Martins de Oliveira",
+      "matricula": "012859",
+      "filial": "ES"
+    },
+    {
+      "nome": "Raimundo Oliveira Santana",
+      "matricula": "015009",
+      "filial": "ES"
+    },
+    {
+      "nome": "Jurandir de Souza Moreira",
+      "matricula": "010717",
+      "filial": "PA"
+    },
+    {
+      "nome": "Akson Cairon de Sousa",
+      "matricula": "014411",
+      "filial": "PA"
+    }
+  ]
+}
