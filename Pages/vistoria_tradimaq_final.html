@@ -46,6 +46,13 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .field input,.field textarea,.field select{width:100%;padding:10px 11px;font-size:15px;font-family:'Barlow',sans-serif;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);color:var(--txt);outline:none;transition:border-color .15s;}
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-dim);}
 .field textarea{resize:vertical;min-height:72px;line-height:1.6;}
+.combo-wrap{position:relative;}
+.combo-list{position:absolute;top:calc(100% + 3px);left:0;right:0;background:var(--bg2);border:1px solid var(--line2);border-radius:var(--r);max-height:190px;overflow-y:auto;z-index:80;display:none;box-shadow:0 6px 16px rgba(0,0,0,.18);}
+.combo-list.show{display:block;}
+.combo-item{padding:10px 12px;font-size:13px;color:var(--txt);cursor:pointer;border-bottom:1px solid var(--line);}
+.combo-item:last-child{border-bottom:none;}
+.combo-item:hover{background:var(--brand-dim);}
+.combo-empty{padding:10px 12px;font-size:12px;color:var(--txt3);}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 
 /* Remessa toggle */
@@ -420,7 +427,13 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   <!-- Responsáveis e Assinatura (sem popup) -->
   <div class="sb-sec">
     <div class="sb-label">Responsáveis e Assinatura</div>
-    <div class="field"><label>Técnico Tradimaq</label><input id="f-resp1" placeholder="Nome" oninput="changed()"></div>
+    <div class="field">
+      <label>Técnico Tradimaq</label>
+      <div class="combo-wrap">
+        <input id="f-resp1" placeholder="Digite o nome..." autocomplete="off" oninput="filtrarTecnicos(this)" onfocus="filtrarTecnicos(this)" onblur="validarTecnico(this)">
+        <div class="combo-list" id="resp1-list"></div>
+      </div>
+    </div>
   </div>
 
   <!-- Transportadora -->
@@ -506,6 +519,8 @@ let LOGO=LOGO_URL;
 const EQUIP_URL='https://gaberoviva-cloud.github.io/Data/raiox-frota.json';
 let EQUIP_INDEX={};
 let EQUIP_FILIAIS={};
+const TECNICOS_URL='https://gaberoviva-cloud.github.io/Data/tecnicos.json';
+let TECNICOS=[];
 const CACHE_KEY='tradimaq_v4';
 const IDB_NAME='tradimaq_fotos';
 const IDB_STORE='fotos';
@@ -679,6 +694,47 @@ async function carregarEquipamentos(){
     });
   }catch(e){console.warn('raiox-frota.json indisponível:',e);toast('⚠️ Não consegui carregar dados da frota',3500);}
 }
+async function carregarTecnicos(){
+  try{
+    const r=await fetch(TECNICOS_URL);
+    if(!r.ok){toast('⚠️ tecnicos.json não encontrado (HTTP '+r.status+')',3500);return;}
+    const data=await r.json();
+    TECNICOS=(data.tecnicos||[]).filter(t=>t.nome).map(t=>({...t,nome:t.nome.trim()}));
+  }catch(e){console.warn('tecnicos.json indisponível:',e);toast('⚠️ Não consegui carregar lista de técnicos',3500);}
+}
+function filtrarTecnicos(el){
+  const list=document.getElementById('resp1-list');
+  const q=el.value.trim().toUpperCase();
+  if(!q){list.classList.remove('show');list.innerHTML='';return;}
+  const matches=TECNICOS.filter(t=>t.nome.toUpperCase().includes(q)).slice(0,8);
+  if(!matches.length){
+    list.innerHTML='<div class="combo-empty">Nenhum técnico encontrado</div>';
+    list.classList.add('show');
+    return;
+  }
+  list.innerHTML=matches.map(t=>`<div class="combo-item" onmousedown="selecionarTecnico('${t.nome.replace(/'/g,"\\'")}')">${t.nome.toUpperCase()}</div>`).join('');
+  list.classList.add('show');
+}
+function selecionarTecnico(nome){
+  const el=document.getElementById('f-resp1');
+  el.value=nome.toUpperCase();
+  document.getElementById('resp1-list').classList.remove('show');
+  changed();
+}
+function validarTecnico(el){
+  setTimeout(()=>{
+    document.getElementById('resp1-list').classList.remove('show');
+    const q=el.value.trim().toUpperCase();
+    if(!q)return;
+    const match=TECNICOS.find(t=>t.nome.toUpperCase()===q);
+    if(match){el.value=match.nome.toUpperCase();}
+    else{
+      el.value='';
+      toast('⚠️ Técnico não encontrado — selecione um nome da lista',3000);
+      changed();
+    }
+  },150);
+}
 function upperCase(el){
   const pos=el.selectionStart;
   el.value=el.value.toUpperCase();
@@ -699,6 +755,7 @@ function autoFillEquip(el){
 async function initApp(){
   try{const r=await fetch(LOGO_URL);const b=await r.blob();LOGO=await new Promise(res=>{const rd=new FileReader();rd.onload=e=>res(e.target.result);rd.readAsDataURL(b);});}catch(e){}
   await carregarEquipamentos();
+  await carregarTecnicos();
   renderTopicos();
   renderCK();
   await carregarCache();
@@ -945,10 +1002,11 @@ function ckAddFoto(sid,iid){
 }
 function ckAddFotoGaleria(sid,iid){
   const inp=document.createElement('input');
-  inp.type='file';inp.accept='image/*';
-  // sem capture — abre galeria
+  inp.type='file';
+  // sem accept/capture — abre o app de Arquivos, não só o acesso rápido às fotos recentes
   inp.onchange=async e=>{
     const file=e.target.files[0];if(!file)return;
+    if(!file.type.startsWith('image/')){toast('⚠️ Selecione um arquivo de imagem',2500);return;}
     const raw=await readFile(file);
     const stamped=await processImg(raw);
     ckFotos[sid][iid]=stamped;
@@ -1016,10 +1074,11 @@ function triggerUp(tpId,idx){document.getElementById(`up-${tpId}-${idx}`)?.click
 
 function abrirGaleria(tpId,idx){
   const inp=document.createElement('input');
-  inp.type='file';inp.accept='image/*';inp.multiple=true;
-  // sem capture — abre galeria
+  inp.type='file';inp.multiple=true;
+  // sem accept/capture — abre o app de Arquivos, não só o acesso rápido às fotos recentes
   inp.onchange=async e=>{
-    const files=[...e.target.files];if(!files.length)return;
+    const files=[...e.target.files].filter(f=>f.type.startsWith('image/'));
+    if(!files.length){toast('⚠️ Selecione arquivos de imagem',2500);return;}
     toast(files.length>1?`Processando ${files.length} fotos... ⏳`:'⏳ Processando...',3000);
     for(const file of files){
       const raw=await readFile(file);
