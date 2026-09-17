@@ -398,7 +398,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   <!-- Identificação -->
   <div class="sb-sec">
     <div class="sb-label">Identificação</div>
-    <div class="field"><label>TAG / Frota</label><input id="f-tag" placeholder="Ex: 1605" oninput="maskTag(this);autoFillEquip(this);changed()"></div>
+    <div class="field"><label>TAG / Frota</label><input id="f-tag" placeholder="Ex: 1605" inputmode="numeric" maxlength="8" oninput="maskTag(this);autoFillEquip(this);changed()"></div>
     <div class="f2">
       <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: Z-34/22 DC" oninput="upperCase(this);changed()"></div>
       <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: Z3413-9493" oninput="upperCase(this);changed()"></div>
