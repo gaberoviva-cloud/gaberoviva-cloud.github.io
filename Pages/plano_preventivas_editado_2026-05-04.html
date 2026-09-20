@@ -501,7 +501,14 @@ tr:hover td{background:rgba(255,255,255,.02);}
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
             <span id="edFrotaLabel" style="font-family:JetBrains Mono,monospace;font-size:14px;font-weight:700;color:var(--brand)"></span>
             <span id="edModeloLabel" style="font-size:12px;color:var(--txt2)"></span>
-            <span id="edLocalLabel" style="font-size:10px;color:var(--txt3);background:var(--s3);padding:2px 8px;border-radius:3px"></span>
+            <select id="edLocalLabel" onchange="editarFilial(edEquipAtual, this.value)"
+              style="font-size:11px;color:var(--txt);background:var(--s3);border:1px solid var(--bdr2);padding:3px 8px;border-radius:3px;font-family:Barlow,sans-serif;cursor:pointer">
+              <option value="Minas Gerais">MG — Minas Gerais</option>
+              <option value="São Paulo / Taubaté">SP — São Paulo / Taubaté</option>
+              <option value="Goiás">GO — Goiás</option>
+              <option value="Espírito Santo">ES — Espírito Santo</option>
+              <option value="Pará">PA — Pará</option>
+            </select>
           </div>
           <div style="overflow-x:auto;max-height:260px;overflow-y:auto">
             <table style="width:100%;border-collapse:collapse">
@@ -816,7 +823,7 @@ function selecionarEquip(frota){
   if(!e) return;
   document.getElementById("edFrotaLabel").textContent = e.frota;
   document.getElementById("edModeloLabel").textContent = e.modelo + ' – ' + e.submodelo;
-  document.getElementById("edLocalLabel").textContent = e.filial;
+  document.getElementById("edLocalLabel").value = e.filial;
   document.getElementById("edPainel").style.display = "block";
   renderTabela(e);
   filtrarEditor(); // refresh highlight
@@ -856,6 +863,22 @@ function renderTabela(e){
   }).join('');
 }
 
+const FILIAL_LOCAL = {
+  "Minas Gerais": "MG",
+  "São Paulo / Taubaté": "SP",
+  "Goiás": "GO",
+  "Espírito Santo": "ES",
+  "Pará": "PA"
+};
+
+function editarFilial(frota, novaFilial){
+  const e = PLANO_EDIT.find(x=>x.frota===frota);
+  if(!e) return;
+  e.filial = novaFilial;
+  e.local = FILIAL_LOCAL[novaFilial] || e.local;
+  filtrarEditor(); // atualiza a sigla exibida na lista do editor
+}
+
 function editarLinha(frota, idx, campo, valor){
   const e = PLANO_EDIT.find(x=>x.frota===frota);
   if(!e) return;
@@ -893,7 +916,11 @@ function salvarEquip(){
   // Sincroniza PLANO_EDIT → PLANO global (em memória)
   const e = PLANO_EDIT.find(x=>x.frota===edEquipAtual);
   const idx = PLANO.findIndex(x=>x.frota===edEquipAtual);
-  if(idx>=0) PLANO[idx].reviews = JSON.parse(JSON.stringify(e.reviews));
+  if(idx>=0){
+    PLANO[idx].reviews = JSON.parse(JSON.stringify(e.reviews));
+    PLANO[idx].filial = e.filial;
+    PLANO[idx].local = e.local;
+  }
   // Feedback visual
   const btn = document.querySelector('#edPainel .btn');
   const orig = btn.textContent;
