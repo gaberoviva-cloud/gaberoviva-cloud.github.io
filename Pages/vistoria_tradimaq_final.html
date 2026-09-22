@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="color-scheme" content="light only">
 <title>Vistoria Tradimaq</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--brand:#ff6b00;--brand-dim:rgba(255,107,0,.13);--brand-glow:rgba(255,107,0,.25);--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--r:6px;--r2:10px;--r3:14px;}
+:root{color-scheme:light only;--brand:#ff6b00;--brand-dim:rgba(255,107,0,.13);--brand-glow:rgba(255,107,0,.25);--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--r:6px;--r2:10px;--r3:14px;}
 body{--bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;--bg4:#eceef1;--line:rgba(0,0,0,.08);--line2:rgba(0,0,0,.14);--txt:#111827;--txt2:#4b5563;--txt3:#9ca3af;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
+html,body{height:100%;-webkit-tap-highlight-color:transparent;overflow-x:hidden;color-scheme:light only;forced-color-adjust:none;}
 body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-size:14px;}
 
 /* ═══ HEADER ═══ */
@@ -194,7 +195,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .preview-label::after{content:'';flex:1;height:1px;background:var(--line2);}
 
 /* ═══ DOCUMENT (PRINT) ═══ */
-#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 4px 40px rgba(0,0,0,.3);font-family:'Barlow',Arial,sans-serif;font-size:13px;color:#1a1a1a;}
+#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 4px 40px rgba(0,0,0,.3);font-family:'Barlow',Arial,sans-serif;font-size:13px;color:#1a1a1a;color-scheme:light only;forced-color-adjust:none;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 .doc-masthead{background:#0d0f12;padding:14px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
 .doc-mast-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .doc-logo-img{height:18px;filter:brightness(0) invert(1) opacity(.85);}
