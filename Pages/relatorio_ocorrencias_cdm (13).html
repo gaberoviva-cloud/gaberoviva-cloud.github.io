@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Relatório de Ocorrências CDM</title>
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#ff6b00;--brand-dim:rgba(255,107,0,.13);--brand-glow:rgba(255,107,0,.25);--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--r:6px;--r2:10px;--r3:14px;color-scheme:light only;}
+html{color-scheme:light only;forced-color-adjust:none;}
+body{--bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;--bg4:#eceef1;--line:rgba(0,0,0,.08);--line2:rgba(0,0,0,.14);--txt:#111827;--txt2:#4b5563;--txt3:#9ca3af;color-scheme:light only;forced-color-adjust:none;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;forced-color-adjust:none;}
+html,body{height:100%;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-size:14px;}
+
+/* ═══ HEADER ═══ */
+.hdr{background:var(--bg2);border-bottom:1px solid var(--line);padding:0 12px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:600;gap:6px;}
+.hdr-left{display:flex;align-items:center;gap:8px;min-width:0;flex:1;}
+.hdr-logo{height:20px;}
+.hdr-div{width:1px;height:18px;background:var(--line2);flex-shrink:0;}
+.hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt2);white-space:nowrap;}
+.hdr-right{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.status-pill{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 7px;border-radius:99px;background:var(--bg4);border:1px solid var(--line2);color:var(--txt3);white-space:nowrap;}
+.status-pill.saved{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green);}
+.status-pill.dirty{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3);color:var(--yellow);}
+
+/* ═══ LAYOUT ═══ */
+.main-wrap{display:flex;flex-direction:column;}
+.form-panel{background:var(--bg2);padding-bottom:80px;}
+.preview-panel{background:var(--bg);padding:14px;display:none;}
+.preview-panel.show{display:block;}
+@media(min-width:860px){
+  .main-wrap{flex-direction:row;height:calc(100vh - 52px);}
+  .form-panel{width:400px;flex-shrink:0;overflow-y:auto;height:100%;border-right:1px solid var(--line);}
+  .preview-panel{display:block !important;flex:1;overflow-y:auto;height:100%;padding:24px;}
+}
+
+/* ═══ SECTIONS ═══ */
+.sb-sec{border-bottom:1px solid var(--line);padding:14px 13px;}
+.sb-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:11px;display:flex;align-items:center;gap:6px;}
+.sb-label::before{content:'';width:3px;height:11px;background:var(--brand);border-radius:99px;display:block;}
+.sb-sub{font-size:10px;color:var(--txt3);margin:-5px 0 9px;line-height:1.4;}
+
+.field{margin-bottom:9px;}
+.field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--txt3);margin-bottom:3px;}
+.field input,.field textarea,.field select{width:100%;padding:10px 11px;font-size:15px;font-family:'Barlow',sans-serif;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);color:var(--txt);outline:none;transition:border-color .15s;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-dim);}
+.field textarea{resize:vertical;min-height:72px;line-height:1.6;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* Itens avariados */
+.item-row{display:flex;gap:6px;margin-bottom:7px;}
+.item-row input{flex:1;}
+.item-del{flex-shrink:0;width:38px;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--red);font-size:16px;cursor:pointer;}
+.item-del:active{background:rgba(239,68,68,.1);}
+.item-add{width:100%;padding:10px;border:1.5px dashed var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;margin-top:2px;}
+.item-add:active{border-color:var(--brand);background:var(--brand-dim);color:var(--brand);}
+
+/* Counter bar */
+.foto-bar{background:var(--bg3);border:1px solid var(--line2);border-radius:var(--r);padding:11px 13px;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between;}
+.foto-bar-num{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;color:var(--brand);line-height:1;}
+.foto-bar-sub{font-size:10px;color:var(--txt3);margin-top:2px;}
+.foto-dica{display:flex;align-items:center;gap:7px;margin-top:9px;padding:7px 10px;background:rgba(255,107,0,.06);border:1px solid rgba(255,107,0,.18);border-radius:var(--r);font-size:11px;color:var(--txt2);line-height:1.4;}
+.foto-dica-icon{font-size:14px;flex-shrink:0;}
+.foto-dica strong{color:var(--brand);font-weight:700;}
+
+/* Foto thumbnails */
+.fi-fotos{display:flex;gap:7px;flex-wrap:wrap;}
+.fi-thumb{width:90px;height:67px;border-radius:var(--r);overflow:hidden;position:relative;border:1px solid var(--line2);flex-shrink:0;background:var(--bg4);cursor:pointer;}
+.fi-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.fi-thumb-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.65);border:none;color:white;border-radius:3px;font-size:10px;padding:2px 5px;cursor:pointer;line-height:1;}
+.fi-thumb-cap{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(0deg,rgba(0,0,0,.75),transparent);color:#fff;font-size:9px;line-height:1.25;padding:8px 4px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.fi-thumb-cap-empty{position:absolute;left:3px;bottom:3px;background:rgba(255,107,0,.9);color:#fff;font-size:8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 5px;border-radius:3px;}
+.fi-thumb-add{width:90px;height:67px;border-radius:var(--r);border:1.5px dashed var(--line2);background:var(--bg4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--txt3);transition:all .15s;font-size:11px;gap:2px;}
+.fi-thumb-add:active{border-color:var(--brand);background:var(--brand-dim);}
+.fi-thumb-add-icon{font-size:18px;line-height:1;}
+
+/* Camera/upload buttons */
+.fi-btns{display:flex;gap:6px;margin-top:9px;}
+.fi-btn{flex:1;padding:10px 6px;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s;}
+.fi-btn:active{opacity:.8;transform:scale(.97);}
+.fi-btn.primary{background:var(--brand);color:white;border-color:var(--brand);}
+
+/* Modal (photo viewer) */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;align-items:flex-end;justify-content:center;}
+@media(min-width:500px){.modal-overlay{align-items:center;padding:16px;}}
+.modal-overlay.active{display:flex;}
+
+/* Viewer — enquadramento/crop */
+.viewer-frame-wrap{width:100%;}
+.viewer-frame{position:relative;width:100%;aspect-ratio:4/3;background:#000;border-radius:8px;overflow:hidden;touch-action:none;cursor:grab;}
+.viewer-frame.dragging{cursor:grabbing;}
+.viewer-frame.contain{cursor:default;touch-action:auto;}
+.viewer-frame img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none;pointer-events:none;}
+.viewer-frame.contain img{object-fit:contain;background:#3a3a3a;}
+.viewer-hint{text-align:center;font-size:10.5px;color:rgba(255,255,255,.65);margin-top:6px;}
+.viewer-fit-btns{display:flex;gap:6px;}
+.viewer-fit-btns button{flex:1;padding:9px 4px;font-size:11px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+.viewer-fit-btns button#btn-fit-reset{flex:0 0 40px;font-size:15px;}
+.viewer-fit-btns button.active{background:var(--brand);border-color:var(--brand);}
+.viewer-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.viewer-nav button{padding:10px 16px;border-radius:6px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;text-transform:uppercase;font-size:12px;cursor:pointer;letter-spacing:.03em;}
+.viewer-nav button:disabled{opacity:.3;cursor:default;}
+.viewer-nav span{font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(255,255,255,.7);}
+
+/* Action buttons */
+.act-btns{display:flex;flex-direction:column;gap:7px;}
+.btn-act{width:100%;padding:13px;font-size:14px;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border:none;border-radius:var(--r);cursor:pointer;color:white;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-act:active{opacity:.82;transform:scale(.98);}
+.btn-pdf{background:var(--brand);}
+.btn-save{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);}
+.btn-danger{background:rgba(239,68,68,.08);color:var(--red);font-size:12px;padding:10px;border:1px solid rgba(239,68,68,.2);}
+
+/* ═══ PREVIEW LABEL ═══ */
+.preview-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.preview-label::after{content:'';flex:1;height:1px;background:var(--line2);}
+
+/* ═══ DOCUMENT (PRINT) ═══ */
+#documento{background:white;width:100%;max-width:760px;margin:0 auto;box-shadow:0 4px 40px rgba(0,0,0,.3);font-family:'Barlow',Arial,sans-serif;font-size:13px;color:#1a1a1a;color-scheme:light only;forced-color-adjust:none;}
+.doc-masthead{background:#a6a09c;padding:14px 20px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.doc-mast-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.doc-logo-img{height:34px;display:block;filter:none;}
+.doc-mast-div{width:1px;height:26px;background:rgba(0,0,0,.18);}
+.doc-type-txt{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#fff;}
+.doc-cdm-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);padding:3px 9px;border-radius:99px;white-space:nowrap;}
+.doc-mast-right{text-align:right;flex-shrink:0;}
+.doc-report-id{font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;font-weight:600;}
+.doc-date-loc{font-size:9px;color:rgba(255,255,255,.78);margin-top:2px;}
+.doc-bar{height:3px;background:linear-gradient(90deg,var(--brand),#ffb347 60%,transparent);}
+.doc-body{padding:14px 18px 0;}
+.doc-subtitle{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:.04em;color:#374151;margin-bottom:11px;text-align:center;text-transform:uppercase;}
+.doc-info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e5e7eb;border:1px solid #e5e7eb;border-radius:5px;overflow:hidden;margin-bottom:13px;}
+.doc-info-cell{background:#f9fafb;padding:6px 10px;}
+.doc-info-key{font-size:7.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#9ca3af;margin-bottom:1px;}
+.doc-info-val{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;color:#111827;word-break:break-word;}
+.doc-sec{margin-bottom:12px;}
+.doc-sec-title{background:#a6a09c;color:#fff;padding:5px 12px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;border-radius:4px 4px 0 0;display:flex;align-items:center;gap:6px;}
+.doc-sec-title::before{content:'';width:3px;height:11px;background:var(--brand);border-radius:2px;flex-shrink:0;}
+.doc-sec-body{border:1px solid #e5e7eb;border-top:none;padding:9px 12px;font-size:11px;line-height:1.7;color:#374151;border-radius:0 0 4px 4px;}
+.doc-sec-body p{margin-bottom:7px;}
+.doc-sec-body p:last-child{margin-bottom:0;}
+.doc-itens{margin:6px 0 0;padding-left:16px;}
+.doc-itens li{margin-bottom:3px;}
+.doc-foto-grid{border:1px solid #e5e7eb;border-radius:0 0 4px 4px;overflow:hidden;padding:7px;background:white;display:grid;gap:5px;}
+.doc-foto-grid.c1{grid-template-columns:1fr;}
+.doc-foto-grid.c2{grid-template-columns:1fr 1fr;}
+.doc-foto-grid.c3{grid-template-columns:1fr 1fr 1fr;}
+.doc-foto-grid.c4{grid-template-columns:repeat(4,1fr);}
+.doc-foto-grid.cN{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+.doc-foto-item{border-radius:3px;overflow:hidden;border:1px solid #e5e7eb;}
+.doc-foto-img-wrap{aspect-ratio:4/3;overflow:hidden;background:#f3f4f6;position:relative;}
+.doc-foto-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.doc-foto-img-wrap.contain img{object-fit:contain;}
+.doc-foto-cap{font-size:9.5px;line-height:1.35;color:#4b5563;padding:4px 6px 5px;background:white;border-top:1px solid #e5e7eb;}
+.doc-orcamento{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;background:#fff7ed;border:1px solid #fed7aa;color:#c2410c;padding:6px 11px;border-radius:5px;}
+.doc-sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;border:1px solid #e5e7eb;border-radius:4px;padding:20px 16px 14px;}
+.doc-sig-box{display:flex;flex-direction:column;}
+.doc-sig-space{min-height:52px;}
+.doc-sig-line{border-top:1.5px solid #111827;padding-top:5px;}
+.doc-sig-lbl{font-size:8.5px;color:#9ca3af;margin-top:2px;}
+.doc-sig-name{font-size:11px;font-weight:600;color:#111827;margin-top:1px;min-height:13px;}
+.doc-footer{padding:9px 18px 10px;border-top:2px solid #f3f4f6;margin-top:13px;background:white;}
+.doc-footer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:7px;}
+.doc-footer-col{font-size:7px;color:#9ca3af;line-height:1.5;}
+.doc-footer-col strong{display:block;color:#6b7280;font-size:7px;margin-bottom:1px;}
+.doc-footer-brand{display:flex;align-items:center;justify-content:space-between;padding-top:6px;border-top:1px solid #f3f4f6;}
+.doc-footer-site{font-size:7.5px;color:#9ca3af;}
+.doc-footer-logo{height:12px;object-fit:contain;opacity:.3;filter:brightness(0);}
+
+/* ═══ MOBILE BOTTOM BAR ═══ */
+.mobile-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--line2);padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));display:flex;gap:7px;z-index:500;}
+@media(min-width:860px){.mobile-bar{display:none;}}
+.mbar-btn{flex:1;padding:11px 4px;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2);cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1;}
+.mbar-btn .mbar-icon{font-size:18px;}
+.mbar-btn.primary{background:var(--brand);color:white;border-color:var(--brand);}
+.mbar-btn:active{opacity:.8;}
+
+/* Toast */
+#toast{position:fixed;bottom:68px;right:12px;background:#111827;color:#e8ecf0;padding:9px 14px;border-radius:var(--r2);font-size:12px;font-weight:600;opacity:0;transform:translateY(6px);transition:all .25s;pointer-events:none;z-index:9999;border:1px solid rgba(255,255,255,.1);max-width:calc(100vw - 24px);}
+#toast.show{opacity:1;transform:translateY(0);}
+@media(min-width:860px){#toast{bottom:16px;}}
+
+/* Print */
+@media print{
+  html,body,#documento,#documento *{color-scheme:light only!important;forced-color-adjust:none!important;}
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;forced-color-adjust:exact!important;}
+  @page{
+    size:A4 portrait;
+    margin:12mm 10mm 20mm;
+    @top-right{
+      content:"Página " counter(page) " de " counter(pages);
+      font-family:'Barlow',sans-serif;
+      font-size:8px;
+      color:#c1c5cb;
+    }
+  }
+  #toast,.hdr,.form-panel,.mobile-bar,.modal-overlay,.preview-label{display:none!important;}
+  html,body{height:auto!important;overflow:visible!important;background:white!important;}
+  .main-wrap{display:block!important;height:auto!important;}
+  .preview-panel{display:block!important;padding:0!important;background:white!important;height:auto!important;overflow:visible!important;min-height:unset!important;}
+  #documento{box-shadow:none!important;max-width:100%!important;width:100%!important;height:auto!important;min-height:unset!important;}
+  .doc-masthead{background:#a6a09c!important;-webkit-print-color-adjust:exact!important;}
+  .doc-bar{background:linear-gradient(90deg,#ff6b00,#ffb347 60%,transparent)!important;}
+  .doc-sec{page-break-inside:avoid!important;break-inside:avoid!important;}
+  /* Registro Fotográfico sempre começa na página 2, nunca ocupa espaço na página 1 */
+  .doc-sec-fotos{page-break-before:always!important;break-before:page!important;page-break-inside:auto!important;break-inside:auto!important;}
+  .doc-sec-fotos .doc-sec-title{page-break-after:avoid!important;break-after:avoid!important;}
+  .doc-foto-grid{page-break-inside:auto!important;break-inside:auto!important;display:grid!important;overflow:visible!important;}
+  .doc-foto-item{page-break-inside:avoid!important;break-inside:avoid!important;}
+  .doc-foto-img-wrap{position:relative!important;width:100%!important;padding-bottom:75%!important;height:0!important;overflow:hidden!important;background:#f3f4f6!important;}
+  .doc-foto-img-wrap img{position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;}
+  .doc-foto-img-wrap.contain img{object-fit:contain!important;}
+  .doc-foto-grid.cN{grid-template-columns:repeat(3,1fr)!important;}
+  .doc-foto-grid.c4{grid-template-columns:repeat(2,1fr)!important;}
+  .doc-footer{
+    position:fixed!important;
+    left:0!important;right:0!important;bottom:0!important;
+    margin-top:0!important;
+    page-break-inside:avoid!important;break-inside:avoid!important;
+  }
+}
+</style>
+</head>
+<body id="root">
+
+<!-- Photo viewer -->
+<div class="modal-overlay" id="viewer-modal" onclick="fecharViewer()">
+  <div style="max-width:min(100%,520px);max-height:100%;display:flex;flex-direction:column;gap:8px;" onclick="event.stopPropagation()">
+    <div class="viewer-frame-wrap">
+      <div class="viewer-frame" id="viewer-frame" onpointerdown="frameDown(event)" onpointermove="frameMove(event)" onpointerup="frameUp(event)" onpointercancel="frameUp(event)">
+        <img id="viewer-img" draggable="false">
+      </div>
+      <div class="viewer-hint" id="viewer-hint">☝ Arraste a foto para ajustar o enquadramento</div>
+    </div>
+    <div class="viewer-fit-btns">
+      <button id="btn-fit-cover" onclick="setFit('cover')">✂️ Cortar (preencher)</button>
+      <button id="btn-fit-contain" onclick="setFit('contain')">🖼 Foto inteira</button>
+      <button id="btn-fit-reset" onclick="resetFramePos()" title="Centralizar">↺</button>
+    </div>
+    <div style="background:var(--bg2,#fff);border-radius:8px;padding:10px 12px;">
+      <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txt3,#9ca3af);margin-bottom:6px;">Legenda da foto</label>
+      <textarea id="viewer-legenda" rows="2" placeholder="Descreva o que a foto mostra..." style="width:100%;resize:vertical;border:1px solid var(--line2,#d1d5db);border-radius:6px;padding:8px 9px;font-family:'Barlow',sans-serif;font-size:13px;color:var(--txt,#111827);background:var(--bg3,#f7f8fa);" oninput="salvarLegendaAtual()"></textarea>
+    </div>
+    <div class="viewer-nav">
+      <button id="btn-prev" onclick="navFoto(-1)">‹ Anterior</button>
+      <span id="viewer-counter">1 / 1</span>
+      <button id="btn-next" onclick="navFoto(1)">Próxima ›</button>
+    </div>
+    <button onclick="fecharViewer()" style="position:fixed;top:16px;right:16px;background:rgba(0,0,0,.7);color:white;border:none;border-radius:50%;width:36px;height:36px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app-shell">
+
+<div class="hdr">
+  <div class="hdr-left">
+    <img class="hdr-logo" id="hdr-logo" src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq">
+    <div class="hdr-div"></div>
+    <span class="hdr-title">Relatório de Ocorrências</span>
+  </div>
+  <div class="hdr-right">
+    <span class="status-pill" id="status-pill">—</span>
+  </div>
+</div>
+
+<div class="main-wrap">
+
+<!-- ═══ FORM PANEL ═══ -->
+<div class="form-panel" id="form-panel">
+
+  <!-- Identificação -->
+  <div class="sb-sec">
+    <div class="sb-label">Identificação</div>
+    <div class="f2">
+      <div class="field"><label>Local (cliente/operação)</label><input id="f-local" placeholder="Ex: Metal Stamp" style="text-transform:uppercase;" oninput="toUpper(this);changed()"></div>
+      <div class="field"><label>Data</label><input type="date" id="f-data" oninput="changed()"></div>
+    </div>
+    <div class="f2">
+      <div class="field"><label>Horário</label><input type="time" id="f-hora" oninput="changed()"></div>
+      <div class="field"><label>Revisão</label><input type="date" id="f-revisao" oninput="changed()"></div>
+    </div>
+    <div class="f2">
+      <div class="field"><label>Equipamento (TAG)</label><input id="f-tag" placeholder="Ex: TDE-2254" style="text-transform:uppercase;" oninput="toUpper(this);changed()"></div>
+      <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: GP050VX" style="text-transform:uppercase;" oninput="toUpper(this);changed()"></div>
+    </div>
+    <div class="f2">
+      <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: B975Y021685" style="text-transform:uppercase;" oninput="toUpper(this);changed()"></div>
+      <div class="field"><label>Horímetro (h)</label><input id="f-horimetro" type="number" min="0" step="0.1" placeholder="Ex: 15818" oninput="changed()"></div>
+    </div>
+  </div>
+
+  <!-- Responsáveis -->
+  <div class="sb-sec">
+    <div class="sb-label">Responsáveis</div>
+    <div class="field"><label>Responsável Tradimaq</label><input id="f-resp-tradimaq" placeholder="Nome" style="text-transform:uppercase;" oninput="toUpper(this);changed()"></div>
+    <div class="field"><label>Responsável Contraparte</label><input id="f-resp-contraparte" placeholder="Nome" style="text-transform:uppercase;" oninput="toUpper(this);changed()"></div>
+    <div class="field"><label>Cidade p/ assinatura</label><input id="f-cidade" placeholder="Ex: Contagem" style="text-transform:uppercase;" oninput="toUpper(this);changed()"></div>
+  </div>
+
+  <!-- Tipo de ocorrência -->
+  <div class="sb-sec">
+    <div class="sb-label">Tipo de Ocorrência</div>
+    <div class="field"><input id="f-tipo" placeholder="Ex: Danos Materiais - Troca/Reposição" oninput="changed()"></div>
+  </div>
+
+  <!-- Descrição da Ocorrência -->
+  <div class="sb-sec">
+    <div class="sb-label">Descrição da Ocorrência</div>
+    <div class="field"><textarea id="f-descricao" rows="4" oninput="changed()" placeholder="Descreva o que ocorreu, quando, onde e o equipamento envolvido..."></textarea></div>
+    <div class="sb-sub" style="margin-top:2px;">Itens avariados</div>
+    <div id="itens-root"></div>
+    <button class="item-add" onclick="addItem()">+ Adicionar item avariado</button>
+  </div>
+
+  <!-- Orçamento -->
+  <div class="sb-sec">
+    <div class="sb-label">Orçamento</div>
+    <div class="field"><input id="f-orcamento" placeholder="Ex: CDM nº 1234 — peças e serviço de pintura" oninput="changed()"></div>
+  </div>
+
+  <!-- Registro Fotográfico -->
+  <div class="sb-sec">
+    <div class="sb-label">Registro Fotográfico</div>
+    <div class="foto-bar">
+      <div>
+        <div class="foto-bar-num" id="foto-total">0</div>
+        <div class="foto-bar-sub">fotos registradas</div>
+      </div>
+    </div>
+    <div class="fi-fotos" id="fotos-root"></div>
+    <div class="fi-btns">
+      <button class="fi-btn primary" onclick="document.getElementById('up-camera').click()">📸 Câmera</button>
+      <button class="fi-btn" onclick="document.getElementById('up-galeria').click()">📁 Galeria</button>
+    </div>
+    <input type="file" accept="image/*" capture="environment" id="up-camera" style="display:none;" multiple onchange="onUp(event)">
+    <input type="file" accept="image/*" id="up-galeria" style="display:none;" multiple onchange="onUp(event)">
+    <div class="foto-dica">
+      <span class="foto-dica-icon">📐</span>
+      <span>Registre <strong>o dano específico</strong> e um <strong>plano aberto</strong> do equipamento sempre que possível</span>
+    </div>
+  </div>
+
+  <!-- Conclusão -->
+  <div class="sb-sec">
+    <div class="sb-label">Conclusão</div>
+    <div class="field"><textarea id="f-conclusao" rows="6" oninput="changed()"></textarea></div>
+  </div>
+
+  <!-- Ações -->
+  <div class="sb-sec">
+    <div class="sb-label">Ações</div>
+    <div class="act-btns">
+      <button class="btn-act btn-pdf" onclick="gerarPDF()">🖨 Gerar PDF</button>
+      <button class="btn-act btn-save" onclick="salvarCache()">💾 Salvar agora</button>
+      <button class="btn-act btn-danger" onclick="limpar()">Limpar tudo</button>
+    </div>
+  </div>
+
+</div><!-- /form-panel -->
+
+<!-- ═══ PREVIEW PANEL ═══ -->
+<div class="preview-panel" id="preview-panel">
+  <div class="preview-label">Pré-visualização do Documento</div>
+  <div id="documento"></div>
+</div>
+
+</div><!-- /main-wrap -->
+</div><!-- /app-shell -->
+
+<!-- Mobile bar -->
+<div class="mobile-bar">
+  <button class="mbar-btn" onclick="salvarCache()"><span class="mbar-icon">💾</span>Salvar</button>
+  <button class="mbar-btn" onclick="toggleMobilePreview()" id="mbar-preview-btn"><span class="mbar-icon">👁</span>Preview</button>
+  <button class="mbar-btn primary" onclick="gerarPDF()"><span class="mbar-icon">🖨</span>PDF</button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ══════════ CONSTANTES ══════════ */
+const LOGO_URL='https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png';
+let LOGO=LOGO_URL;
+const CACHE_KEY='tradimaq_cdm_v1';
+const IDB_NAME='tradimaq_cdm_fotos';
+const IDB_STORE='fotos';
+const IDB_VERSION=1;
+const CONCLUSAO_PADRAO='Conforme demonstrado nas evidências apresentadas no relatório fotográfico, verifica-se que o equipamento apresenta avarias compatíveis com impactos e/ou uso indevido durante a operação, comprometendo tanto sua condição estética quanto a integridade de alguns componentes.\n\nDessa forma, torna-se necessária a execução dos reparos identificados, contemplando a substituição dos componentes danificados e a recuperação da pintura, a fim de restabelecer as condições adequadas de segurança, funcionalidade e conservação do equipamento.\n\nPara a regularização das avarias constatadas, será encaminhado o orçamento (CDM), contemplando o fornecimento das peças necessárias e a execução dos serviços de reparo.';
+
+/* ══════════ INDEXEDDB — FOTOS ══════════ */
+let _idb=null;
+function abrirIDB(){
+  if(_idb) return Promise.resolve(_idb);
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(IDB_NAME,IDB_VERSION);
+    req.onupgradeneeded=e=>{
+      const db=e.target.result;
+      if(!db.objectStoreNames.contains(IDB_STORE))
+        db.createObjectStore(IDB_STORE,{keyPath:'id'});
+    };
+    req.onsuccess=e=>{_idb=e.target.result;res(_idb);};
+    req.onerror=e=>rej(e.target.error);
+  });
+}
+async function idbSalvarFotos(fotos){
+  try{
+    const db=await abrirIDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readwrite');
+      tx.objectStore(IDB_STORE).put({id:'fotos_cache',fotos});
+      tx.oncomplete=()=>res();
+      tx.onerror=e=>rej(e.target.error);
+    });
+  }catch(e){console.warn('IDB salvar fotos:',e);}
+}
+async function idbCarregarFotos(){
+  try{
+    const db=await abrirIDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readonly');
+      const req=tx.objectStore(IDB_STORE).get('fotos_cache');
+      req.onsuccess=e=>res(e.target.result?.fotos||null);
+      req.onerror=e=>rej(e.target.error);
+    });
+  }catch(e){console.warn('IDB carregar fotos:',e);return null;}
+}
+async function idbLimparFotos(){
+  try{
+    const db=await abrirIDB();
+    return new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readwrite');
+      tx.objectStore(IDB_STORE).delete('fotos_cache');
+      tx.oncomplete=()=>res();
+      tx.onerror=e=>rej(e.target.error);
+    });
+  }catch(e){console.warn('IDB limpar:',e);}
+}
+
+/* ══════════ ESTADO ══════════ */
+let itens=[''];       // itens avariados
+let fotos=[];         // {src, legenda}
+let fotoAtual=-1;     // índice da foto aberta no viewer
+let autoSaveTimer=null,hasUnsaved=false;
+window.addEventListener('beforeunload',e=>{if(hasUnsaved){e.preventDefault();e.returnValue='Informações não salvas serão perdidas. Continuar?';}});
+let previewShown=false;
+
+function v(id){return document.getElementById(id)?.value||'';}
+function toUpper(el){
+  const s=el.selectionStart,e=el.selectionEnd;
+  el.value=el.value.toUpperCase();
+  try{el.setSelectionRange(s,e);}catch(err){}
+}
+
+/* ══════════ MOBILE PREVIEW ══════════ */
+function toggleMobilePreview(){
+  previewShown=!previewShown;
+  const fp=document.getElementById('form-panel'),pp=document.getElementById('preview-panel'),btn=document.getElementById('mbar-preview-btn');
+  if(previewShown){fp.style.display='none';pp.classList.add('show');btn.textContent='✏️ Editar';atualizar();}
+  else{fp.style.display='';pp.classList.remove('show');btn.textContent='👁 Preview';}
+}
+
+/* ══════════ TOAST / BADGE ══════════ */
+function toast(msg,dur=2400){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
+function badge(txt,cls){const b=document.getElementById('status-pill');b.textContent=txt;b.className='status-pill'+(cls?' '+cls:'');}
+function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarTitulo();if(window.innerWidth>=860)agendarPreview();}
+function atualizarTitulo(){
+  const equip=(v('f-tag')||v('f-serie')||'').trim();
+  const partes=['Relatório CDM'];
+  if(equip)partes.push(`(${equip})`);
+  document.title=partes.join(' ');
+}
+
+/* ══════════ ITENS AVARIADOS ══════════ */
+function renderItens(){
+  const root=document.getElementById('itens-root');root.innerHTML='';
+  itens.forEach((val,idx)=>{
+    const row=document.createElement('div');row.className='item-row';
+    row.innerHTML=`<input value="${escAttr(val)}" placeholder="Ex: Lanterna de freio LE quebrada" oninput="setItem(${idx},this.value)">
+      <button class="item-del" onclick="delItem(${idx})">✕</button>`;
+    root.appendChild(row);
+  });
+}
+function addItem(){itens.push('');renderItens();changed();}
+function setItem(idx,val){itens[idx]=val;changed();}
+function delItem(idx){itens.splice(idx,1);if(!itens.length)itens=[''];renderItens();changed();}
+function escAttr(s){return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;');}
+function escHTML(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ══════════ FOTOS ══════════ */
+function processImg(dataURL){
+  return new Promise(res=>{
+    const img=new Image();
+    img.onload=()=>{
+      const maxW=1400;
+      const scale=Math.min(1,maxW/img.naturalWidth);
+      const W=Math.round(img.naturalWidth*scale),H=Math.round(img.naturalHeight*scale);
+      const c=document.createElement('canvas');c.width=W;c.height=H;
+      const ctx=c.getContext('2d');
+      ctx.drawImage(img,0,0,W,H);
+      // Queima timestamp na imagem
+      const now=new Date();
+      const ts=now.toLocaleDateString('pt-BR')+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+      const pad=Math.round(W*0.014),fs=Math.max(11,Math.round(W*0.024));
+      ctx.font=`bold ${fs}px monospace`;
+      const tw=ctx.measureText(ts).width;
+      ctx.fillStyle='rgba(0,0,0,0.55)';
+      ctx.beginPath();ctx.roundRect(W-tw-pad*2-pad*0.6,H-fs-pad*2-pad*0.6,tw+pad*1.2,fs+pad*1.2,4);ctx.fill();
+      ctx.fillStyle='#fff';ctx.fillText(ts,W-tw-pad*2,H-pad*2+fs*0.82-pad*0.6);
+      res(c.toDataURL('image/jpeg',.86));
+    };img.src=dataURL;
+  });
+}
+function readFile(f){return new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(f);});}
+async function onUp(ev){
+  const files=[...ev.target.files];ev.target.value='';
+  if(!files.length)return;
+  toast('Processando '+files.length+' foto(s)...',2000);
+  for(const f of files){
+    if(!f.type.startsWith('image/'))continue;
+    const raw=await readFile(f);
+    const proc=await processImg(raw);
+    fotos.push({src:proc,legenda:'',fit:'cover',posX:50,posY:50});
+  }
+  renderFotos();changed();
+}
+function normFotos(){
+  // compatibilidade com cache antigo (array de dataURLs simples ou sem fit/posição)
+  fotos=fotos.map(f=>{
+    if(typeof f==='string')return{src:f,legenda:'',fit:'cover',posX:50,posY:50};
+    return{src:f.src,legenda:f.legenda||'',fit:f.fit==='contain'?'contain':'cover',
+      posX:(typeof f.posX==='number'?f.posX:50),posY:(typeof f.posY==='number'?f.posY:50)};
+  });
+}
+function renderFotos(){
+  normFotos();
+  const root=document.getElementById('fotos-root');root.innerHTML='';
+  fotos.forEach((f,idx)=>{
+    const d=document.createElement('div');d.className='fi-thumb';
+    const capHTML=f.legenda
+      ?`<div class="fi-thumb-cap">${escHTML(f.legenda)}</div>`
+      :`<div class="fi-thumb-cap-empty">+ legenda</div>`;
+    const imgStyle=f.fit==='contain'
+      ?`object-fit:contain;background:#e5e7eb;`
+      :`object-fit:cover;object-position:${f.posX}% ${f.posY}%;`;
+    d.innerHTML=`<img src="${f.src}" style="${imgStyle}"><button class="fi-thumb-del" onclick="event.stopPropagation();delFoto(${idx})">✕</button>${capHTML}`;
+    d.querySelector('img').onclick=()=>verFoto(idx);
+    root.appendChild(d);
+  });
+  document.getElementById('foto-total').textContent=fotos.length;
+}
+function delFoto(idx){
+  fotos.splice(idx,1);
+  if(fotoAtual===idx)fotoAtual=-1;
+  renderFotos();changed();
+}
+function verFoto(idx){
+  normFotos();
+  if(idx<0||idx>=fotos.length)return;
+  fotoAtual=idx;
+  const foto=fotos[idx];
+  document.getElementById('viewer-img').src=foto.src;
+  document.getElementById('viewer-legenda').value=foto.legenda||'';
+  atualizarViewerFit();
+  atualizarViewerNav();
+  document.getElementById('viewer-modal').classList.add('active');
+}
+function salvarLegendaAtual(){
+  if(fotoAtual<0||!fotos[fotoAtual])return;
+  fotos[fotoAtual].legenda=document.getElementById('viewer-legenda').value;
+  changed();
+}
+function fecharViewer(){
+  document.getElementById('viewer-modal').classList.remove('active');
+  fotoAtual=-1;
+  renderFotos();
+}
+
+/* ══════════ NAVEGAÇÃO ENTRE FOTOS (sem fechar o visualizador) ══════════ */
+function navFoto(delta){
+  const novo=fotoAtual+delta;
+  if(novo<0||novo>=fotos.length)return;
+  verFoto(novo);
+}
+function atualizarViewerNav(){
+  document.getElementById('viewer-counter').textContent=(fotoAtual+1)+' / '+fotos.length;
+  document.getElementById('btn-prev').disabled=fotoAtual<=0;
+  document.getElementById('btn-next').disabled=fotoAtual>=fotos.length-1;
+}
+
+/* ══════════ ENQUADRAMENTO/CROP DA FOTO NO VISUALIZADOR ══════════ */
+let dragState=null;
+function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+function atualizarViewerFit(){
+  const foto=fotos[fotoAtual];if(!foto)return;
+  const frame=document.getElementById('viewer-frame');
+  frame.classList.toggle('contain',foto.fit==='contain');
+  document.getElementById('btn-fit-cover').classList.toggle('active',foto.fit!=='contain');
+  document.getElementById('btn-fit-contain').classList.toggle('active',foto.fit==='contain');
+  document.getElementById('viewer-hint').style.visibility=foto.fit==='contain'?'hidden':'visible';
+  aplicarFramePos();
+}
+function aplicarFramePos(){
+  const foto=fotos[fotoAtual];if(!foto)return;
+  document.getElementById('viewer-img').style.objectPosition=foto.posX+'% '+foto.posY+'%';
+}
+function setFit(fit){
+  const foto=fotos[fotoAtual];if(!foto)return;
+  foto.fit=fit;
+  atualizarViewerFit();
+  changed();
+}
+function resetFramePos(){
+  const foto=fotos[fotoAtual];if(!foto)return;
+  foto.posX=50;foto.posY=50;
+  aplicarFramePos();
+  changed();
+}
+function frameDown(e){
+  const foto=fotos[fotoAtual];
+  if(!foto||foto.fit==='contain')return;
+  const frame=document.getElementById('viewer-frame');
+  frame.classList.add('dragging');
+  dragState={startX:e.clientX,startY:e.clientY,startPosX:foto.posX,startPosY:foto.posY,rect:frame.getBoundingClientRect()};
+  try{frame.setPointerCapture(e.pointerId);}catch(err){}
+}
+function frameMove(e){
+  if(!dragState)return;
+  const foto=fotos[fotoAtual];if(!foto)return;
+  const dx=e.clientX-dragState.startX,dy=e.clientY-dragState.startY;
+  const pctX=(dx/dragState.rect.width)*100,pctY=(dy/dragState.rect.height)*100;
+  foto.posX=clamp(dragState.startPosX-pctX,0,100);
+  foto.posY=clamp(dragState.startPosY-pctY,0,100);
+  aplicarFramePos();
+}
+function frameUp(e){
+  if(!dragState)return;
+  document.getElementById('viewer-frame').classList.remove('dragging');
+  dragState=null;
+  changed();
+}
+
+/* ══════════ INIT ══════════ */
+(function(){
+  const now=new Date();
+  const fd=document.getElementById('f-data');
+  const fh=document.getElementById('f-hora');
+  const fr=document.getElementById('f-revisao');
+  const isoDate=now.toISOString().split('T')[0];
+  if(fd&&!fd.value)fd.value=isoDate;
+  if(fr&&!fr.value)fr.value=isoDate;
+  if(fh&&!fh.value)fh.value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+})();
+async function initApp(){
+  try{const r=await fetch(LOGO_URL);const b=await r.blob();LOGO=await new Promise(res=>{const rd=new FileReader();rd.onload=e=>res(e.target.result);rd.readAsDataURL(b);});}catch(e){}
+  renderItens();
+  await carregarCache();
+  if(!v('f-conclusao'))document.getElementById('f-conclusao').value=CONCLUSAO_PADRAO;
+  if(!v('f-tipo'))document.getElementById('f-tipo').value='Danos Materiais - Troca/Reposição';
+  if(!v('f-cidade'))document.getElementById('f-cidade').value='Contagem';
+  renderFotos();
+  atualizarTitulo();badge('—','');
+  if(window.innerWidth>=860)atualizar();
+}
+initApp();
+
+/* ══════════ CACHE ══════════ */
+function coletarDados(){
+  return {
+    local:v('f-local'),data:v('f-data'),hora:v('f-hora'),revisao:v('f-revisao'),
+    tag:v('f-tag'),modelo:v('f-modelo'),serie:v('f-serie'),horimetro:v('f-horimetro'),
+    respTradimaq:v('f-resp-tradimaq'),respContraparte:v('f-resp-contraparte'),cidade:v('f-cidade'),
+    tipo:v('f-tipo'),descricao:v('f-descricao'),itens:itens.slice(),orcamento:v('f-orcamento'),
+    conclusao:v('f-conclusao')
+  };
+}
+async function salvarCache(silent=false){
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify(coletarDados()));}catch(e){console.warn('localStorage:',e);}
+  try{await idbSalvarFotos(fotos);}catch(e){console.warn('IDB:',e);}
+  hasUnsaved=false;badge('✓','saved');if(!silent)toast('Salvo!');
+}
+async function carregarCache(){
+  try{
+    const raw=localStorage.getItem(CACHE_KEY);
+    if(raw){
+      const d=JSON.parse(raw);
+      const map={local:'f-local',hora:'f-hora',revisao:'f-revisao',tag:'f-tag',modelo:'f-modelo',
+        serie:'f-serie',horimetro:'f-horimetro',respTradimaq:'f-resp-tradimaq',respContraparte:'f-resp-contraparte',
+        cidade:'f-cidade',tipo:'f-tipo',descricao:'f-descricao',orcamento:'f-orcamento',conclusao:'f-conclusao'};
+      Object.entries(map).forEach(([k,id])=>{const el=document.getElementById(id);if(el&&d[k]!==undefined)el.value=d[k];});
+      // data: não restaurar do cache — sempre usar a data atual
+      if(Array.isArray(d.itens)&&d.itens.length)itens=d.itens;
+    }
+    ['f-local','f-tag','f-modelo','f-serie','f-resp-tradimaq','f-resp-contraparte','f-cidade'].forEach(id=>{
+      const el=document.getElementById(id);if(el&&el.value)el.value=el.value.toUpperCase();
+    });
+    const fotosIDB=await idbCarregarFotos();
+    if(Array.isArray(fotosIDB))fotos=fotosIDB;
+    normFotos();
+    badge('✓','saved');
+  }catch(e){console.warn(e);}
+}
+function limpar(){
+  if(!confirm('Limpar tudo e recomeçar?'))return;
+  try{localStorage.removeItem(CACHE_KEY);}catch(e){}
+  idbLimparFotos().catch(()=>{});
+  ['f-local','f-tag','f-modelo','f-serie','f-horimetro','f-resp-tradimaq','f-resp-contraparte',
+   'f-descricao','f-orcamento'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('f-tipo').value='Danos Materiais - Troca/Reposição';
+  document.getElementById('f-cidade').value='Contagem';
+  document.getElementById('f-conclusao').value=CONCLUSAO_PADRAO;
+  const now=new Date(),isoDate=now.toISOString().split('T')[0];
+  document.getElementById('f-data').value=isoDate;
+  document.getElementById('f-revisao').value=isoDate;
+  document.getElementById('f-hora').value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  itens=[''];fotos=[];fotoAtual=-1;
+  renderItens();renderFotos();
+  badge('--','');
+  window.scrollTo({top:0,behavior:'smooth'});
+  toast('Pronto para novo relatório!',3000);
+}
+
+/* ══════════ GERAR DOCUMENTO ══════════ */
+function fmtDate(d){if(!d)return'—';const p=d.split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d;}
+function fmtDateExtenso(d){
+  if(!d)return'—';
+  const meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  const p=d.split('-');if(p.length!==3)return d;
+  return `${parseInt(p[2],10)} de ${meses[parseInt(p[1],10)-1]} de ${p[0]}`;
+}
+
+let previewTimer=null;
+function agendarPreview(){clearTimeout(previewTimer);previewTimer=setTimeout(atualizar,250);}
+
+function atualizar(){
+  normFotos();
+  const local=v('f-local')||'—',data=v('f-data'),hora=v('f-hora'),revisao=v('f-revisao');
+  const tag=v('f-tag')||'—',modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',horimetro=v('f-horimetro');
+  const respT=v('f-resp-tradimaq')||'—',respC=v('f-resp-contraparte')||'—',cidade=v('f-cidade')||'—';
+  const tipo=v('f-tipo')||'Danos Materiais - Troca/Reposição';
+  const descricao=v('f-descricao')||'—';
+  const orcamento=v('f-orcamento');
+  const conclusao=v('f-conclusao')||'—';
+  const reportId=`CDM-${(tag||serie).replace(/[^a-z0-9]/gi,'').toUpperCase()||'XXXX'}-${new Date().getFullYear()}`;
+
+  const itensValidos=itens.map(i=>i.trim()).filter(Boolean);
+  const itensHTML=itensValidos.length?`<ul class="doc-itens">${itensValidos.map(i=>`<li>${escHTML(i)}</li>`).join('')}</ul>`:'';
+
+  let fotosHTML='';
+  if(fotos.length){
+    const n=fotos.length;
+    const cls=n<=1?'c1':n===2?'c2':n===3?'c3':n===4?'c4':'cN';
+    const items=fotos.map(f=>{
+      const wrapCls=f.fit==='contain'?'doc-foto-img-wrap contain':'doc-foto-img-wrap';
+      const imgStyle=f.fit==='contain'?'':`object-position:${f.posX}% ${f.posY}%;`;
+      return `<div class="doc-foto-item"><div class="${wrapCls}"><img src="${f.src}" style="${imgStyle}"></div>${f.legenda?`<div class="doc-foto-cap">${escHTML(f.legenda)}</div>`:''}</div>`;
+    }).join('');
+    fotosHTML=`<div class="doc-sec doc-sec-fotos"><div class="doc-sec-title">Registro Fotográfico</div><div class="doc-foto-grid ${cls}">${items}</div></div>`;
+  }else{
+    fotosHTML=`<div class="doc-sec"><div class="doc-sec-title">Registro Fotográfico</div><div class="doc-sec-body" style="text-align:center;color:#9ca3af;">Nenhuma foto registrada ainda</div></div>`;
+  }
+
+  document.getElementById('documento').innerHTML=`
+  <div class="doc-masthead">
+    <div class="doc-mast-left">
+      <img class="doc-logo-img" src="${LOGO}" alt="Tradimaq">
+      <div class="doc-mast-div"></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-start;gap:3px;">
+        <div class="doc-type-txt">Relatório de Ocorrências</div>
+        <div class="doc-cdm-tag">CDM</div>
+      </div>
+    </div>
+    <div class="doc-mast-right">
+      <div class="doc-report-id">${reportId}</div>
+      <div class="doc-date-loc">${fmtDate(data)} · ${escHTML(local)}</div>
+    </div>
+  </div>
+  <div class="doc-bar"></div>
+  <div class="doc-body">
+    <div class="doc-subtitle">${escHTML(tipo)}</div>
+    <div class="doc-info-grid">
+      <div class="doc-info-cell"><div class="doc-info-key">Equipamento</div><div class="doc-info-val">${escHTML(tag)}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Modelo</div><div class="doc-info-val">${escHTML(modelo)}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Nº de Série</div><div class="doc-info-val">${escHTML(serie)}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Horímetro</div><div class="doc-info-val">${horimetro?horimetro+' h':'—'}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Local</div><div class="doc-info-val">${escHTML(local)}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Data / Horário</div><div class="doc-info-val">${fmtDate(data)}${hora?' '+hora:''}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Resp. Tradimaq</div><div class="doc-info-val">${escHTML(respT)}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Resp. Contraparte</div><div class="doc-info-val">${escHTML(respC)}</div></div>
+    </div>
+    ${orcamento?`<div class="doc-sec"><div class="doc-sec-title">Orçamento</div><div class="doc-sec-body"><span class="doc-orcamento">${escHTML(orcamento)}</span></div></div>`:''}
+    <div class="doc-sec">
+      <div class="doc-sec-title">Descrição da Ocorrência</div>
+      <div class="doc-sec-body">
+        <p>${escHTML(descricao).replace(/\n/g,'<br>')}</p>
+        ${itensValidos.length?`<div style="font-weight:700;color:#111827;margin-top:8px;">Itens avariados:</div>${itensHTML}`:''}
+      </div>
+    </div>
+    ${fotosHTML}
+    <div class="doc-sec">
+      <div class="doc-sec-title">Conclusão</div>
+      <div class="doc-sec-body"><p>${escHTML(conclusao).replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')}</p></div>
+    </div>
+    <div class="doc-sec" style="margin-bottom:14px;">
+      <div class="doc-sec-title">Validação dos Responsáveis</div>
+      <div class="doc-sec-body" style="padding:0;border-radius:0 0 4px 4px;">
+        <div class="doc-sig-grid" style="border:none;">
+          <div class="doc-sig-box"><div class="doc-sig-space"></div><div class="doc-sig-line"><div class="doc-sig-lbl">Responsável Tradimaq</div><div class="doc-sig-name">${escHTML(respT)}</div></div></div>
+          <div class="doc-sig-box"><div class="doc-sig-space"></div><div class="doc-sig-line"><div class="doc-sig-lbl">Responsável Contratante</div><div class="doc-sig-name">${escHTML(respC)}</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="doc-footer">
+    <div class="doc-footer-grid">
+      <div class="doc-footer-col"><strong>Razão Social</strong>Tradimaq Ltda — CNPJ: 22.320.881/0001-60</div>
+      <div class="doc-footer-col"><strong>Matriz — Contagem/MG</strong>R. Sete, 61 - Inconfidentes, CEP 32260-010, 0800 007 8004</div>
+      <div class="doc-footer-col"><strong>Filial Taubaté/SP</strong>R. Cmte. José Renato C. de Moura, 1000 Galpão 01, CEP 12051-150</div>
+      <div class="doc-footer-col"><strong>Filial Goiânia/GO</strong>Av. Perimetral Norte, 11.365 - St. Goiânia 2, CEP 74665-510</div>
+      <div class="doc-footer-col"><strong>Filiais RJ / ES</strong>Campo Grande-RJ, CEP 23078-001 · Cariacica-ES, CEP 29147-030</div>
+    </div>
+    <div class="doc-footer-brand">
+      <div class="doc-footer-site">www.tradimaq.com.br</div>
+      <img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">
+    </div>
+  </div>`;
+}
+
+/* ══════════ MARGEM DINÂMICA DO RODAPÉ (evita sobra de página em branco) ══════════ */
+function ajustarMargemRodape(){
+  const footerEl=document.querySelector('#documento .doc-footer');
+  let bottomMM=20; // fallback
+  if(footerEl){
+    const pxHeight=footerEl.getBoundingClientRect().height;
+    bottomMM=Math.ceil(pxHeight*25.4/96)+3; // px -> mm + folga de segurança
+  }
+  let styleEl=document.getElementById('dynamic-print-style');
+  if(!styleEl){
+    styleEl=document.createElement('style');
+    styleEl.id='dynamic-print-style';
+    document.head.appendChild(styleEl);
+  }
+  styleEl.textContent=`@media print{ @page{ margin-bottom:${bottomMM}mm; } }`;
+}
+
+/* ══════════ PDF (IMPRESSÃO) ══════════ */
+async function gerarPDF(){
+  const erros=[];
+  if(!v('f-tag'))erros.push('Equipamento (TAG) obrigatório');
+  if(!v('f-descricao'))erros.push('Descrição da ocorrência obrigatória');
+  if(erros.length){toast('⚠ '+erros[0],3500);return;}
+  await salvarCache(true);
+  atualizar();
+
+  const fp=document.getElementById('form-panel');
+  const pp=document.getElementById('preview-panel');
+  const eraMobile=window.innerWidth<860;
+
+  if(eraMobile){
+    fp.style.display='none';
+    pp.classList.add('show');
+  }
+
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+  const imgs=[...document.querySelectorAll('#documento img')];
+  await Promise.all(imgs.map(img=>{
+    if(img.complete && img.naturalWidth>0) return Promise.resolve();
+    return new Promise(res=>{
+      img.onload=res;
+      img.onerror=res;
+      setTimeout(res,3000);
+    });
+  }));
+
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+  ajustarMargemRodape();
+
+  atualizarTitulo();
+  window.print();
+
+  if(eraMobile&&!previewShown){
+    fp.style.display='';
+    pp.classList.remove('show');
+  }
+}
+
+document.addEventListener('input',()=>{
+  if(window.innerWidth>=860)agendarPreview();
+});
+</script>
+</body>
+</html>
