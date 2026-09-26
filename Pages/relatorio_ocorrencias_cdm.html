@@ -67,15 +67,24 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .foto-dica strong{color:var(--brand);font-weight:700;}
 
 /* Foto thumbnails */
-.fi-fotos{display:flex;gap:7px;flex-wrap:wrap;}
-.fi-thumb{width:90px;height:67px;border-radius:var(--r);overflow:hidden;position:relative;border:1px solid var(--line2);flex-shrink:0;background:var(--bg4);cursor:pointer;}
+.fi-fotos{display:flex;gap:7px;flex-wrap:wrap;min-height:10px;}
+.fi-thumb{width:90px;height:67px;border-radius:var(--r);overflow:hidden;position:relative;border:1px solid var(--line2);flex-shrink:0;background:var(--bg4);cursor:pointer;transition:border-color .12s,transform .12s,opacity .12s;}
 .fi-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
-.fi-thumb-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.65);border:none;color:white;border-radius:3px;font-size:10px;padding:2px 5px;cursor:pointer;line-height:1;}
+.fi-thumb.dragging{opacity:.42;transform:scale(.96);}
+.fi-thumb.drop-target{border:2px solid var(--brand);box-shadow:0 0 0 2px var(--brand-dim);}
+.fi-thumb-del{position:absolute;top:2px;right:2px;background:rgba(0,0,0,.65);border:none;color:white;border-radius:3px;font-size:10px;padding:2px 5px;cursor:pointer;line-height:1;z-index:4;}
+.fi-thumb-drag{position:absolute;top:2px;left:2px;width:23px;height:23px;border:none;border-radius:4px;background:rgba(0,0,0,.62);color:white;font-size:14px;font-weight:800;line-height:23px;text-align:center;cursor:grab;z-index:4;touch-action:none;user-select:none;-webkit-user-select:none;}
+.fi-thumb-drag:active{cursor:grabbing;background:var(--brand);}
 .fi-thumb-cap{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(0deg,rgba(0,0,0,.75),transparent);color:#fff;font-size:9px;line-height:1.25;padding:8px 4px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .fi-thumb-cap-empty{position:absolute;left:3px;bottom:3px;background:rgba(255,107,0,.9);color:#fff;font-size:8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 5px;border-radius:3px;}
 .fi-thumb-add{width:90px;height:67px;border-radius:var(--r);border:1.5px dashed var(--line2);background:var(--bg4);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--txt3);transition:all .15s;font-size:11px;gap:2px;}
 .fi-thumb-add:active{border-color:var(--brand);background:var(--brand-dim);}
 .fi-thumb-add-icon{font-size:18px;line-height:1;}
+.foto-drop-hint{margin-top:8px;padding:8px 10px;border:1.5px dashed var(--line2);border-radius:var(--r);font-size:10.5px;color:var(--txt3);text-align:center;transition:all .15s;}
+#foto-drop-zone.drop-active .foto-drop-hint{border-color:var(--brand);color:var(--brand);background:var(--brand-dim);}
+#foto-drop-zone.drop-active{background:rgba(255,107,0,.025);}
+.preview-panel.drop-active{box-shadow:inset 0 0 0 3px var(--brand);}
+@media(max-width:859px){.foto-drop-hint{display:none;}}
 
 /* Camera/upload buttons */
 .fi-btns{display:flex;gap:6px;margin-top:9px;}
@@ -170,7 +179,14 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .doc-foto-grid.c3{grid-template-columns:1fr 1fr 1fr;}
 .doc-foto-grid.c4{grid-template-columns:repeat(4,1fr);}
 .doc-foto-grid.cN{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
-.doc-foto-item{border-radius:3px;overflow:hidden;border:1px solid #e5e7eb;}
+.doc-foto-item{border-radius:3px;overflow:hidden;border:1px solid #e5e7eb;position:relative;}
+.doc-foto-item.doc-foto-editable{cursor:pointer;transition:outline-color .12s,opacity .12s,transform .12s;}
+.doc-foto-item.doc-foto-editable:hover{outline:2px solid rgba(255,107,0,.45);outline-offset:-2px;}
+.doc-foto-item.dragging{opacity:.45;transform:scale(.985);}
+.doc-foto-item.drop-target{outline:3px solid var(--brand);outline-offset:-3px;}
+.doc-foto-edit-badge{position:absolute;right:4px;top:4px;z-index:4;background:rgba(0,0,0,.68);color:#fff;border-radius:4px;padding:3px 6px;font-family:'Barlow Condensed',sans-serif;font-size:8px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;pointer-events:none;}
+.doc-foto-drag{position:absolute;left:4px;top:4px;z-index:5;width:25px;height:25px;border:0;border-radius:4px;background:rgba(0,0,0,.68);color:#fff;font-size:15px;font-weight:800;line-height:25px;text-align:center;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;}
+.doc-foto-drag:active{cursor:grabbing;background:var(--brand);}
 .doc-foto-img-wrap{aspect-ratio:4/3;overflow:hidden;background:#f3f4f6;position:relative;}
 .doc-foto-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
 .doc-foto-img-wrap.contain img{object-fit:contain;}
@@ -230,6 +246,8 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   .doc-sec-fotos .doc-sec-title{page-break-after:avoid!important;break-after:avoid!important;}
   .doc-foto-grid{page-break-inside:auto!important;break-inside:auto!important;display:grid!important;overflow:visible!important;}
   .doc-foto-item{page-break-inside:avoid!important;break-inside:avoid!important;}
+  .doc-foto-edit-badge,.doc-foto-drag{display:none!important;}
+  .doc-foto-item.doc-foto-editable{cursor:default!important;outline:none!important;}
   .doc-foto-img-wrap{position:relative!important;width:100%!important;padding-bottom:75%!important;height:0!important;overflow:hidden!important;background:#f3f4f6!important;}
   .doc-foto-img-wrap img{position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;}
   .doc-foto-img-wrap.contain img{object-fit:contain!important;}
@@ -357,7 +375,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   </div>
 
   <!-- Registro Fotográfico -->
-  <div class="sb-sec">
+  <div class="sb-sec" id="foto-drop-zone">
     <div class="sb-label">Registro Fotográfico</div>
     <div class="foto-bar">
       <div>
@@ -370,6 +388,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
       <button class="fi-btn primary" onclick="document.getElementById('up-camera').click()">📸 Câmera</button>
       <button class="fi-btn" onclick="document.getElementById('up-galeria').click()">📁 Galeria</button>
     </div>
+    <div class="foto-drop-hint">↧ No computador, arraste imagens para esta área ou para a pré-visualização</div>
     <input type="file" accept="image/*" capture="environment" id="up-camera" style="display:none;" multiple onchange="onUp(event)">
     <input type="file" accept="image/*" id="up-galeria" style="display:none;" multiple onchange="onUp(event)">
     <div class="foto-dica">
@@ -551,7 +570,7 @@ function toggleMobilePreview(){
 /* ══════════ TOAST / BADGE ══════════ */
 function toast(msg,dur=2400){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 function badge(txt,cls){const b=document.getElementById('status-pill');b.textContent=txt;b.className='status-pill'+(cls?' '+cls:'');}
-function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarTitulo();if(window.innerWidth>=860)agendarPreview();}
+function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarTitulo();if(window.innerWidth>=860||previewShown)agendarPreview();}
 function atualizarTitulo(){
   const equip=(v('f-tag')||v('f-serie')||'').trim();
   const partes=['Relatório CDM'];
@@ -610,18 +629,28 @@ function processImg(dataURL){
     };img.src=dataURL;
   });
 }
-function readFile(f){return new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(f);});}
+function readFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej(r.error||new Error('Falha ao ler imagem'));r.readAsDataURL(f);});}
+async function adicionarArquivos(lista){
+  const files=[...(lista||[])].filter(f=>f&&typeof f.type==='string'&&f.type.startsWith('image/'));
+  if(!files.length){toast('Nenhuma imagem válida encontrada.',2500);return;}
+  toast('Processando '+files.length+' foto(s)...',2000);
+  let adicionadas=0;
+  for(const f of files){
+    try{
+      const raw=await readFile(f);
+      const proc=await processImg(raw);
+      fotos.push({src:proc,legenda:'',fit:'cover',posX:50,posY:50});
+      adicionadas++;
+    }catch(e){console.warn('Imagem ignorada:',f?.name,e);}
+  }
+  if(!adicionadas){toast('⚠ Não consegui processar as imagens.',3200);return;}
+  renderFotos();changed();
+  if(window.innerWidth>=860||previewShown)atualizar();
+  toast(adicionadas+' foto(s) adicionada(s)!',2200);
+}
 async function onUp(ev){
   const files=[...ev.target.files];ev.target.value='';
-  if(!files.length)return;
-  toast('Processando '+files.length+' foto(s)...',2000);
-  for(const f of files){
-    if(!f.type.startsWith('image/'))continue;
-    const raw=await readFile(f);
-    const proc=await processImg(raw);
-    fotos.push({src:proc,legenda:'',fit:'cover',posX:50,posY:50});
-  }
-  renderFotos();changed();
+  if(files.length)await adicionarArquivos(files);
 }
 function normFotos(){
   // compatibilidade com cache antigo (array de dataURLs simples ou sem fit/posição)
@@ -631,27 +660,101 @@ function normFotos(){
       posX:(typeof f.posX==='number'?f.posX:50),posY:(typeof f.posY==='number'?f.posY:50)};
   });
 }
+let dragFotoOrigem=null;
+let pointerReorder=null;
+function limparDestaquesReordenacao(){
+  document.querySelectorAll('.fi-thumb.drop-target,.doc-foto-item.drop-target').forEach(el=>el.classList.remove('drop-target'));
+  document.querySelectorAll('.fi-thumb.dragging,.doc-foto-item.dragging').forEach(el=>el.classList.remove('dragging'));
+}
+function ajustarFotoAtualAposMover(from,to){
+  if(fotoAtual<0||from===to)return;
+  if(fotoAtual===from)fotoAtual=to;
+  else if(from<fotoAtual&&to>=fotoAtual)fotoAtual--;
+  else if(from>fotoAtual&&to<=fotoAtual)fotoAtual++;
+}
+function moverFoto(from,to){
+  from=Number(from);to=Number(to);
+  if(!Number.isInteger(from)||!Number.isInteger(to)||from<0||to<0||from>=fotos.length||to>=fotos.length||from===to)return false;
+  const [movida]=fotos.splice(from,1);
+  fotos.splice(to,0,movida);
+  ajustarFotoAtualAposMover(from,to);
+  renderFotos();changed();
+  if(window.innerWidth>=860||previewShown)atualizar();
+  return true;
+}
+function iniciarDragFoto(ev,idx){
+  dragFotoOrigem=idx;
+  ev.currentTarget.classList.add('dragging');
+  try{ev.dataTransfer.effectAllowed='move';ev.dataTransfer.setData('text/x-cdm-photo',String(idx));}catch(e){}
+}
+function sobreDragFoto(ev,idx){
+  if(dragFotoOrigem===null)return;
+  ev.preventDefault();
+  try{ev.dataTransfer.dropEffect='move';}catch(e){}
+  document.querySelectorAll('.fi-thumb.drop-target,.doc-foto-item.drop-target').forEach(el=>el.classList.remove('drop-target'));
+  ev.currentTarget.classList.add('drop-target');
+}
+function soltarDragFoto(ev,idx){
+  if(dragFotoOrigem===null)return;
+  ev.preventDefault();ev.stopPropagation();
+  const origem=dragFotoOrigem;dragFotoOrigem=null;limparDestaquesReordenacao();
+  if(moverFoto(origem,idx))toast('Ordem das fotos atualizada.',1600);
+}
+function fimDragFoto(){dragFotoOrigem=null;limparDestaquesReordenacao();}
+function iniciarReordenacaoPointer(ev,idx){
+  ev.preventDefault();ev.stopPropagation();
+  pointerReorder={from:idx,to:idx,pointerId:ev.pointerId};
+  limparDestaquesReordenacao();
+  const card=ev.currentTarget.closest('[data-photo-idx]');if(card)card.classList.add('dragging');
+  document.addEventListener('pointermove',moverReordenacaoPointer,{passive:false});
+  document.addEventListener('pointerup',finalizarReordenacaoPointer,{once:true});
+  document.addEventListener('pointercancel',cancelarReordenacaoPointer,{once:true});
+}
+function moverReordenacaoPointer(ev){
+  if(!pointerReorder)return;
+  ev.preventDefault();
+  const el=document.elementFromPoint(ev.clientX,ev.clientY)?.closest('[data-photo-idx]');
+  if(!el)return;
+  const idx=Number(el.dataset.photoIdx);if(!Number.isInteger(idx))return;
+  pointerReorder.to=idx;
+  document.querySelectorAll('.fi-thumb.drop-target,.doc-foto-item.drop-target').forEach(x=>x.classList.remove('drop-target'));
+  el.classList.add('drop-target');
+}
+function encerrarPointerListeners(){
+  document.removeEventListener('pointermove',moverReordenacaoPointer);
+  document.removeEventListener('pointerup',finalizarReordenacaoPointer);
+  document.removeEventListener('pointercancel',cancelarReordenacaoPointer);
+}
+function finalizarReordenacaoPointer(){
+  if(!pointerReorder){encerrarPointerListeners();return;}
+  const {from,to}=pointerReorder;pointerReorder=null;encerrarPointerListeners();limparDestaquesReordenacao();
+  if(moverFoto(from,to))toast('Ordem das fotos atualizada.',1600);
+}
+function cancelarReordenacaoPointer(){pointerReorder=null;encerrarPointerListeners();limparDestaquesReordenacao();}
 function renderFotos(){
   normFotos();
   const root=document.getElementById('fotos-root');root.innerHTML='';
   fotos.forEach((f,idx)=>{
-    const d=document.createElement('div');d.className='fi-thumb';
+    const d=document.createElement('div');d.className='fi-thumb';d.dataset.photoIdx=idx;d.draggable=true;
+    d.ondragstart=e=>iniciarDragFoto(e,idx);d.ondragover=e=>sobreDragFoto(e,idx);d.ondrop=e=>soltarDragFoto(e,idx);d.ondragend=fimDragFoto;
     const capHTML=f.legenda
       ?`<div class="fi-thumb-cap">${escHTML(f.legenda)}</div>`
       :`<div class="fi-thumb-cap-empty">+ legenda</div>`;
     const imgStyle=f.fit==='contain'
       ?`object-fit:contain;background:#e5e7eb;`
       :`object-fit:cover;object-position:${f.posX}% ${f.posY}%;`;
-    d.innerHTML=`<img src="${f.src}" style="${imgStyle}"><button class="fi-thumb-del" onclick="event.stopPropagation();delFoto(${idx})">✕</button>${capHTML}`;
+    d.innerHTML=`<img src="${f.src}" style="${imgStyle}"><span class="fi-thumb-drag" title="Arrastar para reordenar">⠿</span><button class="fi-thumb-del" onclick="event.stopPropagation();delFoto(${idx})">✕</button>${capHTML}`;
     d.querySelector('img').onclick=()=>verFoto(idx);
+    d.querySelector('.fi-thumb-drag').addEventListener('pointerdown',e=>iniciarReordenacaoPointer(e,idx));
     root.appendChild(d);
   });
   document.getElementById('foto-total').textContent=fotos.length;
 }
 function delFoto(idx){
   fotos.splice(idx,1);
-  if(fotoAtual===idx)fotoAtual=-1;
+  if(fotoAtual===idx)fotoAtual=-1;else if(fotoAtual>idx)fotoAtual--;
   renderFotos();changed();
+  if(window.innerWidth>=860||previewShown)atualizar();
 }
 function verFoto(idx){
   normFotos();
@@ -739,6 +842,34 @@ function frameUp(e){
   changed();
 }
 
+/* ══════════ ARRASTAR ARQUIVOS EXTERNOS ══════════ */
+function arquivosImagemDoDrop(ev){
+  return [...(ev.dataTransfer?.files||[])].filter(f=>f&&f.type&&f.type.startsWith('image/'));
+}
+function configurarDropExterno(){
+  const zonas=[document.getElementById('foto-drop-zone'),document.getElementById('preview-panel')].filter(Boolean);
+  zonas.forEach(zona=>{
+    let depth=0;
+    zona.addEventListener('dragenter',ev=>{
+      if(!(ev.dataTransfer?.types||[]).includes('Files'))return;
+      ev.preventDefault();depth++;zona.classList.add('drop-active');
+    });
+    zona.addEventListener('dragover',ev=>{
+      if((ev.dataTransfer?.types||[]).includes('Files')){ev.preventDefault();try{ev.dataTransfer.dropEffect='copy';}catch(e){}}
+    });
+    zona.addEventListener('dragleave',()=>{depth=Math.max(0,depth-1);if(!depth)zona.classList.remove('drop-active');});
+    zona.addEventListener('drop',async ev=>{
+      const files=arquivosImagemDoDrop(ev);
+      depth=0;zona.classList.remove('drop-active');
+      if(!files.length)return;
+      ev.preventDefault();ev.stopPropagation();
+      await adicionarArquivos(files);
+    });
+  });
+  window.addEventListener('dragover',ev=>{if((ev.dataTransfer?.types||[]).includes('Files'))ev.preventDefault();});
+  window.addEventListener('drop',ev=>{if((ev.dataTransfer?.types||[]).includes('Files'))ev.preventDefault();});
+}
+
 /* ══════════ INIT ══════════ */
 (function(){
   const now=new Date();
@@ -758,6 +889,7 @@ async function initApp(){
   if(!v('f-tipo'))document.getElementById('f-tipo').value='Danos Materiais - Troca/Reposição';
   if(!v('f-cidade'))document.getElementById('f-cidade').value='Contagem';
   renderFotos();
+  configurarDropExterno();
   atualizarTitulo();if(!temConteudoAtual())badge('—','');
   if(window.innerWidth>=860)atualizar();
 }
@@ -974,10 +1106,10 @@ function atualizar(){
   if(fotos.length){
     const n=fotos.length;
     const cls=n<=1?'c1':n===2?'c2':n===3?'c3':n===4?'c4':'cN';
-    const items=fotos.map(f=>{
+    const items=fotos.map((f,idx)=>{
       const wrapCls=f.fit==='contain'?'doc-foto-img-wrap contain':'doc-foto-img-wrap';
       const imgStyle=f.fit==='contain'?'':`object-position:${f.posX}% ${f.posY}%;`;
-      return `<div class="doc-foto-item"><div class="${wrapCls}"><img src="${f.src}" style="${imgStyle}"></div>${f.legenda?`<div class="doc-foto-cap">${escHTML(f.legenda)}</div>`:''}</div>`;
+      return `<div class="doc-foto-item doc-foto-editable" data-photo-idx="${idx}" draggable="true" title="Clique para editar · arraste para reordenar" onclick="verFoto(${idx})" ondragstart="iniciarDragFoto(event,${idx})" ondragover="sobreDragFoto(event,${idx})" ondrop="soltarDragFoto(event,${idx})" ondragend="fimDragFoto()"><span class="doc-foto-drag" title="Arrastar para reordenar" onpointerdown="iniciarReordenacaoPointer(event,${idx})" onclick="event.stopPropagation()">⠿</span><span class="doc-foto-edit-badge">Editar</span><div class="${wrapCls}"><img src="${f.src}" style="${imgStyle}"></div>${f.legenda?`<div class="doc-foto-cap">${escHTML(f.legenda)}</div>`:''}</div>`;
     }).join('');
     fotosHTML=`<div class="doc-sec doc-sec-fotos"><div class="doc-sec-title">Registro Fotográfico</div><div class="doc-foto-grid ${cls}">${items}</div></div>`;
   }else{
