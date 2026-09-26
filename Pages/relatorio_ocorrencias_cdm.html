@@ -111,7 +111,28 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .btn-act:active{opacity:.82;transform:scale(.98);}
 .btn-pdf{background:var(--brand);}
 .btn-save{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);}
+.btn-drafts{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.25);color:var(--blue);}
+.btn-backup{background:var(--bg4);border:1px solid var(--line2);color:var(--txt2);font-size:12px;padding:10px;}
 .btn-danger{background:rgba(239,68,68,.08);color:var(--red);font-size:12px;padding:10px;border:1px solid rgba(239,68,68,.2);}
+
+/* Rascunhos / backup */
+.draft-card{background:var(--bg2);width:100%;max-width:560px;max-height:min(82vh,720px);overflow:auto;border-radius:14px 14px 0 0;border:1px solid var(--line2);padding:16px;}
+@media(min-width:500px){.draft-card{border-radius:14px;}}
+.draft-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.draft-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--txt);}
+.draft-close{border:none;background:var(--bg4);color:var(--txt2);width:34px;height:34px;border-radius:50%;font-size:17px;cursor:pointer;}
+.draft-empty{padding:28px 12px;text-align:center;color:var(--txt3);font-size:12px;border:1px dashed var(--line2);border-radius:var(--r2);}
+.draft-list{display:flex;flex-direction:column;gap:8px;}
+.draft-item{border:1px solid var(--line2);border-radius:var(--r2);background:var(--bg3);padding:11px;}
+.draft-item.active{border-color:rgba(255,107,0,.55);box-shadow:0 0 0 2px var(--brand-dim);}
+.draft-item-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+.draft-equip{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:var(--txt);text-transform:uppercase;}
+.draft-meta{font-size:10px;color:var(--txt3);line-height:1.45;margin-top:2px;}
+.draft-active-tag{font-family:'JetBrains Mono',monospace;font-size:8px;background:var(--brand-dim);border:1px solid rgba(255,107,0,.3);color:var(--brand);padding:2px 6px;border-radius:99px;white-space:nowrap;}
+.draft-actions{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-top:9px;}
+.draft-actions button{border:1px solid var(--line2);background:white;color:var(--txt2);border-radius:6px;padding:8px 7px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;cursor:pointer;}
+.draft-actions .restore{background:var(--brand);border-color:var(--brand);color:white;}
+.draft-actions .delete{color:var(--red);width:38px;}
 
 /* ═══ PREVIEW LABEL ═══ */
 .preview-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--txt3);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
@@ -252,6 +273,20 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   </div>
 </div>
 
+<!-- Rascunhos -->
+<div class="modal-overlay" id="draft-modal" onclick="fecharRascunhos()">
+  <div class="draft-card" onclick="event.stopPropagation()">
+    <div class="draft-head">
+      <div>
+        <div class="draft-title">Rascunhos</div>
+        <div class="draft-meta">Até 5 relatórios salvos neste aparelho</div>
+      </div>
+      <button class="draft-close" onclick="fecharRascunhos()">✕</button>
+    </div>
+    <div id="draft-list"></div>
+  </div>
+</div>
+
 <!-- APP -->
 <div class="app-shell">
 
@@ -355,7 +390,11 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
     <div class="act-btns">
       <button class="btn-act btn-pdf" onclick="gerarPDF()">🖨 Gerar PDF</button>
       <button class="btn-act btn-save" onclick="salvarCache()">💾 Salvar agora</button>
-      <button class="btn-act btn-danger" onclick="limpar()">Limpar tudo</button>
+      <button class="btn-act btn-drafts" onclick="abrirRascunhos()">🗂 Rascunhos <span id="draft-count"></span></button>
+      <button class="btn-act btn-backup" onclick="exportarBackupAtual()">⬇ Backup JSON</button>
+      <button class="btn-act btn-backup" onclick="document.getElementById('backup-import').click()">⬆ Importar backup</button>
+      <input type="file" id="backup-import" accept="application/json,.json" style="display:none" onchange="importarBackup(event)">
+      <button class="btn-act btn-danger" onclick="limpar()">Nova ocorrência</button>
     </div>
   </div>
 
@@ -384,12 +423,17 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 const LOGO_URL='https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png';
 let LOGO=LOGO_URL;
 const CACHE_KEY='tradimaq_cdm_v1';
+const ACTIVE_DRAFT_KEY='tradimaq_cdm_active_draft_v2';
 const IDB_NAME='tradimaq_cdm_fotos';
 const IDB_STORE='fotos';
-const IDB_VERSION=1;
+const IDB_DRAFT_STORE='rascunhos';
+const IDB_VERSION=2;
+const DRAFT_LIMIT=5;
+const BACKUP_FORMAT='tradimaq-cdm-backup';
+const BACKUP_VERSION=1;
 const CONCLUSAO_PADRAO='Conforme demonstrado nas evidências apresentadas no relatório fotográfico, verifica-se que o equipamento apresenta avarias compatíveis com impactos e/ou uso indevido durante a operação, comprometendo tanto sua condição estética quanto a integridade de alguns componentes.\n\nDessa forma, torna-se necessária a execução dos reparos identificados, contemplando a substituição dos componentes danificados e a recuperação da pintura, a fim de restabelecer as condições adequadas de segurança, funcionalidade e conservação do equipamento.\n\nPara a regularização das avarias constatadas, será encaminhado o orçamento (CDM), contemplando o fornecimento das peças necessárias e a execução dos serviços de reparo.';
 
-/* ══════════ INDEXEDDB — FOTOS ══════════ */
+/* ══════════ INDEXEDDB — FOTOS + RASCUNHOS ══════════ */
 let _idb=null;
 function abrirIDB(){
   if(_idb) return Promise.resolve(_idb);
@@ -397,28 +441,38 @@ function abrirIDB(){
     const req=indexedDB.open(IDB_NAME,IDB_VERSION);
     req.onupgradeneeded=e=>{
       const db=e.target.result;
-      if(!db.objectStoreNames.contains(IDB_STORE))
-        db.createObjectStore(IDB_STORE,{keyPath:'id'});
+      if(!db.objectStoreNames.contains(IDB_STORE)) db.createObjectStore(IDB_STORE,{keyPath:'id'});
+      if(!db.objectStoreNames.contains(IDB_DRAFT_STORE)) db.createObjectStore(IDB_DRAFT_STORE,{keyPath:'id'});
     };
-    req.onsuccess=e=>{_idb=e.target.result;res(_idb);};
-    req.onerror=e=>rej(e.target.error);
+    req.onsuccess=e=>{
+      _idb=e.target.result;
+      _idb.onversionchange=()=>{try{_idb.close();}catch(err){} _idb=null;};
+      res(_idb);
+    };
+    req.onerror=e=>rej(e.target.error||new Error('Falha ao abrir armazenamento local'));
+    req.onblocked=()=>console.warn('IndexedDB bloqueado por outra aba aberta');
   });
 }
-async function idbSalvarFotos(fotos){
-  try{
-    const db=await abrirIDB();
-    return new Promise((res,rej)=>{
-      const tx=db.transaction(IDB_STORE,'readwrite');
-      tx.objectStore(IDB_STORE).put({id:'fotos_cache',fotos});
-      tx.oncomplete=()=>res();
-      tx.onerror=e=>rej(e.target.error);
-    });
-  }catch(e){console.warn('IDB salvar fotos:',e);}
+function idbTx(storeName,mode,fn){
+  return abrirIDB().then(db=>new Promise((res,rej)=>{
+    let result;
+    try{
+      const tx=db.transaction(storeName,mode);
+      const store=tx.objectStore(storeName);
+      result=fn(store,tx);
+      tx.oncomplete=()=>res(result);
+      tx.onerror=()=>rej(tx.error||new Error('Falha no armazenamento local'));
+      tx.onabort=()=>rej(tx.error||new Error('Operação de armazenamento cancelada'));
+    }catch(e){rej(e);}
+  }));
+}
+async function idbSalvarFotos(fotosAtuais){
+  return idbTx(IDB_STORE,'readwrite',store=>store.put({id:'fotos_cache',fotos:fotosAtuais}));
 }
 async function idbCarregarFotos(){
   try{
     const db=await abrirIDB();
-    return new Promise((res,rej)=>{
+    return await new Promise((res,rej)=>{
       const tx=db.transaction(IDB_STORE,'readonly');
       const req=tx.objectStore(IDB_STORE).get('fotos_cache');
       req.onsuccess=e=>res(e.target.result?.fotos||null);
@@ -427,15 +481,42 @@ async function idbCarregarFotos(){
   }catch(e){console.warn('IDB carregar fotos:',e);return null;}
 }
 async function idbLimparFotos(){
+  return idbTx(IDB_STORE,'readwrite',store=>store.delete('fotos_cache'));
+}
+async function idbListarRascunhos(){
   try{
     const db=await abrirIDB();
-    return new Promise((res,rej)=>{
-      const tx=db.transaction(IDB_STORE,'readwrite');
-      tx.objectStore(IDB_STORE).delete('fotos_cache');
-      tx.oncomplete=()=>res();
-      tx.onerror=e=>rej(e.target.error);
+    return await new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_DRAFT_STORE,'readonly');
+      const req=tx.objectStore(IDB_DRAFT_STORE).getAll();
+      req.onsuccess=()=>res((req.result||[]).sort((a,b)=>(b.updatedAt||'').localeCompare(a.updatedAt||'')));
+      req.onerror=()=>rej(req.error);
     });
-  }catch(e){console.warn('IDB limpar:',e);}
+  }catch(e){console.warn('IDB listar rascunhos:',e);return [];}
+}
+async function idbObterRascunho(id){
+  if(!id)return null;
+  try{
+    const db=await abrirIDB();
+    return await new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_DRAFT_STORE,'readonly');
+      const req=tx.objectStore(IDB_DRAFT_STORE).get(id);
+      req.onsuccess=()=>res(req.result||null);
+      req.onerror=()=>rej(req.error);
+    });
+  }catch(e){console.warn('IDB obter rascunho:',e);return null;}
+}
+async function idbExcluirRascunho(id){
+  return idbTx(IDB_DRAFT_STORE,'readwrite',store=>store.delete(id));
+}
+async function idbSalvarRascunho(snapshot){
+  const existentes=await idbListarRascunhos();
+  const jaExiste=existentes.some(r=>r.id===snapshot.id);
+  if(!jaExiste && existentes.length>=DRAFT_LIMIT){
+    const remover=existentes.slice(DRAFT_LIMIT-1);
+    for(const r of remover) await idbExcluirRascunho(r.id);
+  }
+  await idbTx(IDB_DRAFT_STORE,'readwrite',store=>store.put(snapshot));
 }
 
 /* ══════════ ESTADO ══════════ */
@@ -443,10 +524,16 @@ let itens=[''];       // itens avariados
 let fotos=[];         // {src, legenda}
 let fotoAtual=-1;     // índice da foto aberta no viewer
 let autoSaveTimer=null,hasUnsaved=false;
+let activeDraftId=null,activeDraftCreatedAt=null;
+try{activeDraftId=localStorage.getItem(ACTIVE_DRAFT_KEY)||null;}catch(e){}
 window.addEventListener('beforeunload',e=>{if(hasUnsaved){e.preventDefault();e.returnValue='Informações não salvas serão perdidas. Continuar?';}});
 let previewShown=false;
 
 function v(id){return document.getElementById(id)?.value||'';}
+function localDateISO(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function localTimeHM(d=new Date()){return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;}
+function novoDraftId(){return (window.crypto&&window.crypto.randomUUID)?window.crypto.randomUUID():'cdm-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);}
+function cloneJSON(v){return JSON.parse(JSON.stringify(v));}
 function toUpper(el){
   const s=el.selectionStart,e=el.selectionEnd;
   el.value=el.value.toUpperCase();
@@ -499,15 +586,26 @@ function processImg(dataURL){
       const c=document.createElement('canvas');c.width=W;c.height=H;
       const ctx=c.getContext('2d');
       ctx.drawImage(img,0,0,W,H);
-      // Queima timestamp na imagem
+      // Queima timestamp sem deixar texto escapar do container
       const now=new Date();
       const ts=now.toLocaleDateString('pt-BR')+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-      const pad=Math.round(W*0.014),fs=Math.max(11,Math.round(W*0.024));
+      const margin=Math.max(6,Math.round(W*0.012));
+      const padX=Math.max(7,Math.round(W*0.010)),padY=Math.max(4,Math.round(W*0.006));
+      let fs=Math.max(11,Math.round(W*0.024));
       ctx.font=`bold ${fs}px monospace`;
-      const tw=ctx.measureText(ts).width;
-      ctx.fillStyle='rgba(0,0,0,0.55)';
-      ctx.beginPath();ctx.roundRect(W-tw-pad*2-pad*0.6,H-fs-pad*2-pad*0.6,tw+pad*1.2,fs+pad*1.2,4);ctx.fill();
-      ctx.fillStyle='#fff';ctx.fillText(ts,W-tw-pad*2,H-pad*2+fs*0.82-pad*0.6);
+      let tw=ctx.measureText(ts).width;
+      const maxTextW=Math.max(40,W-(margin*2)-(padX*2));
+      while(tw>maxTextW && fs>9){fs--;ctx.font=`bold ${fs}px monospace`;tw=ctx.measureText(ts).width;}
+      const boxW=Math.min(W-margin*2,Math.ceil(tw+padX*2));
+      const boxH=Math.ceil(fs+padY*2);
+      const x=Math.max(margin,W-margin-boxW),y=Math.max(margin,H-margin-boxH);
+      ctx.fillStyle='rgba(0,0,0,0.58)';
+      ctx.beginPath();
+      if(ctx.roundRect)ctx.roundRect(x,y,boxW,boxH,Math.max(3,Math.round(fs*.22)));else ctx.rect(x,y,boxW,boxH);
+      ctx.fill();
+      ctx.fillStyle='#fff';ctx.textBaseline='middle';
+      ctx.fillText(ts,x+padX,y+boxH/2);
+      ctx.textBaseline='alphabetic';
       res(c.toDataURL('image/jpeg',.86));
     };img.src=dataURL;
   });
@@ -647,10 +745,10 @@ function frameUp(e){
   const fd=document.getElementById('f-data');
   const fh=document.getElementById('f-hora');
   const fr=document.getElementById('f-revisao');
-  const isoDate=now.toISOString().split('T')[0];
+  const isoDate=localDateISO(now);
   if(fd&&!fd.value)fd.value=isoDate;
   if(fr&&!fr.value)fr.value=isoDate;
-  if(fh&&!fh.value)fh.value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+  if(fh&&!fh.value)fh.value=localTimeHM(now);
 })();
 async function initApp(){
   try{const r=await fetch(LOGO_URL);const b=await r.blob();LOGO=await new Promise(res=>{const rd=new FileReader();rd.onload=e=>res(e.target.result);rd.readAsDataURL(b);});}catch(e){}
@@ -660,12 +758,12 @@ async function initApp(){
   if(!v('f-tipo'))document.getElementById('f-tipo').value='Danos Materiais - Troca/Reposição';
   if(!v('f-cidade'))document.getElementById('f-cidade').value='Contagem';
   renderFotos();
-  atualizarTitulo();badge('—','');
+  atualizarTitulo();if(!temConteudoAtual())badge('—','');
   if(window.innerWidth>=860)atualizar();
 }
 initApp();
 
-/* ══════════ CACHE ══════════ */
+/* ══════════ CACHE / RASCUNHOS / BACKUP ══════════ */
 function coletarDados(){
   return {
     local:v('f-local'),data:v('f-data'),hora:v('f-hora'),revisao:v('f-revisao'),
@@ -675,50 +773,175 @@ function coletarDados(){
     conclusao:v('f-conclusao')
   };
 }
+function aplicarDados(d){
+  if(!d||typeof d!=='object')return;
+  const map={local:'f-local',data:'f-data',hora:'f-hora',revisao:'f-revisao',tag:'f-tag',modelo:'f-modelo',
+    serie:'f-serie',horimetro:'f-horimetro',respTradimaq:'f-resp-tradimaq',respContraparte:'f-resp-contraparte',
+    cidade:'f-cidade',tipo:'f-tipo',descricao:'f-descricao',orcamento:'f-orcamento',conclusao:'f-conclusao'};
+  Object.entries(map).forEach(([k,id])=>{const el=document.getElementById(id);if(el&&d[k]!==undefined&&d[k]!==null)el.value=String(d[k]);});
+  if(Array.isArray(d.itens))itens=d.itens.length?d.itens.map(x=>String(x??'')):[''];
+  ['f-local','f-tag','f-modelo','f-serie','f-resp-tradimaq','f-resp-contraparte','f-cidade'].forEach(id=>{
+    const el=document.getElementById(id);if(el&&el.value)el.value=el.value.toUpperCase();
+  });
+}
+function temConteudoAtual(){
+  return !!(v('f-tag').trim()||v('f-local').trim()||v('f-descricao').trim()||v('f-orcamento').trim()||
+    itens.some(i=>(i||'').trim())||fotos.length);
+}
+function criarSnapshot(forcarId=null){
+  const now=new Date().toISOString();
+  const id=forcarId||activeDraftId||novoDraftId();
+  if(!activeDraftId || activeDraftId!==id){activeDraftId=id;activeDraftCreatedAt=now;}
+  if(!activeDraftCreatedAt)activeDraftCreatedAt=now;
+  try{localStorage.setItem(ACTIVE_DRAFT_KEY,id);}catch(e){}
+  return {
+    id,app:'tradimaq-cdm',schemaVersion:2,createdAt:activeDraftCreatedAt,updatedAt:now,
+    dados:cloneJSON(coletarDados()),fotos:cloneJSON(fotos)
+  };
+}
+async function atualizarContadorRascunhos(){
+  const el=document.getElementById('draft-count');if(!el)return;
+  const rs=await idbListarRascunhos();el.textContent=rs.length?`(${rs.length})`:'';
+}
 async function salvarCache(silent=false){
-  try{localStorage.setItem(CACHE_KEY,JSON.stringify(coletarDados()));}catch(e){console.warn('localStorage:',e);}
-  try{await idbSalvarFotos(fotos);}catch(e){console.warn('IDB:',e);}
-  hasUnsaved=false;badge('✓','saved');if(!silent)toast('Salvo!');
+  let ok=true;
+  const dados=coletarDados();
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify(dados));}catch(e){ok=false;console.warn('localStorage:',e);}
+  try{await idbSalvarFotos(cloneJSON(fotos));}catch(e){ok=false;console.warn('IDB fotos:',e);}
+  if(temConteudoAtual()){
+    try{const snap=criarSnapshot();await idbSalvarRascunho(snap);}catch(e){ok=false;console.warn('IDB rascunho:',e);}
+  }
+  hasUnsaved=!ok;
+  if(ok){badge('✓','saved');if(!silent)toast('Salvo!');}
+  else{badge('⚠','dirty');if(!silent)toast('⚠ Não foi possível salvar tudo. Verifique o espaço do navegador.',4200);}
+  atualizarContadorRascunhos();
+  return ok;
 }
 async function carregarCache(){
   try{
+    let carregou=false;
     const raw=localStorage.getItem(CACHE_KEY);
-    if(raw){
-      const d=JSON.parse(raw);
-      const map={local:'f-local',hora:'f-hora',revisao:'f-revisao',tag:'f-tag',modelo:'f-modelo',
-        serie:'f-serie',horimetro:'f-horimetro',respTradimaq:'f-resp-tradimaq',respContraparte:'f-resp-contraparte',
-        cidade:'f-cidade',tipo:'f-tipo',descricao:'f-descricao',orcamento:'f-orcamento',conclusao:'f-conclusao'};
-      Object.entries(map).forEach(([k,id])=>{const el=document.getElementById(id);if(el&&d[k]!==undefined)el.value=d[k];});
-      // data: não restaurar do cache — sempre usar a data atual
-      if(Array.isArray(d.itens)&&d.itens.length)itens=d.itens;
-    }
-    ['f-local','f-tag','f-modelo','f-serie','f-resp-tradimaq','f-resp-contraparte','f-cidade'].forEach(id=>{
-      const el=document.getElementById(id);if(el&&el.value)el.value=el.value.toUpperCase();
-    });
+    if(raw){const d=JSON.parse(raw);aplicarDados(d);carregou=true;}
     const fotosIDB=await idbCarregarFotos();
-    if(Array.isArray(fotosIDB))fotos=fotosIDB;
+    if(Array.isArray(fotosIDB)){fotos=fotosIDB;carregou=carregou||fotos.length>0;}
+    if(!carregou && activeDraftId){
+      const snap=await idbObterRascunho(activeDraftId);
+      if(snap){aplicarDados(snap.dados);fotos=Array.isArray(snap.fotos)?snap.fotos:[];activeDraftCreatedAt=snap.createdAt||snap.updatedAt||null;carregou=true;}
+    }else if(activeDraftId){
+      const snap=await idbObterRascunho(activeDraftId);
+      if(snap)activeDraftCreatedAt=snap.createdAt||snap.updatedAt||null;
+    }
     normFotos();
-    badge('✓','saved');
-  }catch(e){console.warn(e);}
+    if(carregou && !activeDraftId && temConteudoAtual()){
+      const snap=criarSnapshot();
+      try{await idbSalvarRascunho(snap);}catch(e){console.warn('Migração para rascunho:',e);}
+    }
+    renderItens();renderFotos();
+    badge(carregou?'✓':'—',carregou?'saved':'');
+    atualizarContadorRascunhos();
+  }catch(e){console.warn('carregarCache:',e);badge('⚠','dirty');}
 }
-function limpar(){
-  if(!confirm('Limpar tudo e recomeçar?'))return;
-  try{localStorage.removeItem(CACHE_KEY);}catch(e){}
-  idbLimparFotos().catch(()=>{});
-  ['f-local','f-tag','f-modelo','f-serie','f-horimetro','f-resp-tradimaq','f-resp-contraparte',
-   'f-descricao','f-orcamento'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+function nomeArquivoSeguro(s){return (s||'SEM-TAG').toUpperCase().replace(/[^A-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'')||'SEM-TAG';}
+function baixarJSON(obj,nome){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=nome;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+function envelopeBackup(snapshot){return{format:BACKUP_FORMAT,version:BACKUP_VERSION,exportedAt:new Date().toISOString(),snapshot};}
+async function exportarBackupAtual(){
+  if(!temConteudoAtual()){toast('Nada preenchido para fazer backup.',2800);return;}
+  await salvarCache(true);
+  const snap=criarSnapshot(activeDraftId||novoDraftId());
+  const tag=nomeArquivoSeguro(snap.dados?.tag||snap.dados?.serie);
+  const data=snap.dados?.data||localDateISO();
+  baixarJSON(envelopeBackup(snap),`backup_CDM_${tag}_${data}.json`);
+  toast('Backup JSON gerado com fotos e dados!',3000);
+}
+function validarSnapshot(snap){
+  return !!(snap&&typeof snap==='object'&&snap.dados&&typeof snap.dados==='object'&&Array.isArray(snap.fotos) &&
+    snap.fotos.every(f=>typeof f==='string'||(f&&typeof f==='object'&&typeof f.src==='string')) &&
+    (snap.dados.itens===undefined||Array.isArray(snap.dados.itens)));
+}
+async function importarBackup(ev){
+  const file=ev.target.files?.[0];ev.target.value='';if(!file)return;
+  try{
+    if(file.size>150*1024*1024 && !confirm('Este backup é muito grande. Continuar a importação?'))return;
+    const txt=await file.text();
+    const obj=JSON.parse(txt);
+    let snap=obj?.format===BACKUP_FORMAT?obj.snapshot:obj;
+    if(!validarSnapshot(snap))throw new Error('Formato de backup inválido');
+    if(temConteudoAtual())await salvarCache(true);
+    snap=cloneJSON(snap);
+    snap.id=novoDraftId();snap.createdAt=new Date().toISOString();snap.updatedAt=snap.createdAt;
+    await restaurarSnapshot(snap,true);
+    toast('Backup importado com sucesso!',3200);
+  }catch(e){console.warn(e);toast('⚠ Não foi possível importar este backup.',4200);}
+}
+async function restaurarSnapshot(snap,salvar=true){
+  if(!validarSnapshot(snap))throw new Error('Rascunho inválido');
+  activeDraftId=snap.id||novoDraftId();
+  activeDraftCreatedAt=snap.createdAt||new Date().toISOString();
+  try{localStorage.setItem(ACTIVE_DRAFT_KEY,activeDraftId);}catch(e){}
+  aplicarDados(snap.dados);fotos=cloneJSON(snap.fotos);normFotos();fotoAtual=-1;
+  renderItens();renderFotos();atualizarTitulo();
+  if(window.innerWidth>=860)atualizar();
+  if(salvar)await salvarCache(true);
+}
+function fecharRascunhos(){document.getElementById('draft-modal').classList.remove('active');}
+function formatarAtualizacao(iso){
+  if(!iso)return'—';const d=new Date(iso);if(Number.isNaN(d.getTime()))return'—';
+  return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+}
+async function abrirRascunhos(){
+  const modal=document.getElementById('draft-modal'),root=document.getElementById('draft-list');
+  root.innerHTML='<div class="draft-empty">Carregando...</div>';modal.classList.add('active');
+  const rs=await idbListarRascunhos();
+  if(!rs.length){root.innerHTML='<div class="draft-empty">Nenhum rascunho salvo ainda.</div>';return;}
+  root.innerHTML='<div class="draft-list">'+rs.map(r=>{
+    const d=r.dados||{},equip=escHTML(d.tag||d.serie||'Sem TAG'),local=escHTML(d.local||'Local não informado');
+    const qtd=Array.isArray(r.fotos)?r.fotos.length:0,ativo=r.id===activeDraftId;
+    return `<div class="draft-item ${ativo?'active':''}">
+      <div class="draft-item-top"><div><div class="draft-equip">${equip}</div><div class="draft-meta">${fmtDate(d.data)}${d.hora?' · '+escHTML(d.hora):''} · ${local}<br>${qtd} foto(s) · salvo ${formatarAtualizacao(r.updatedAt)}</div></div>${ativo?'<span class="draft-active-tag">ABERTO</span>':''}</div>
+      <div class="draft-actions"><button class="restore" onclick="restaurarRascunho('${r.id}')">Restaurar</button><button onclick="exportarRascunho('${r.id}')">Exportar</button><button class="delete" onclick="excluirRascunho('${r.id}')">✕</button></div>
+    </div>`;
+  }).join('')+'</div>';
+}
+async function restaurarRascunho(id){
+  try{
+    if(hasUnsaved&&temConteudoAtual())await salvarCache(true);
+    const snap=await idbObterRascunho(id);if(!snap)throw new Error('Rascunho não encontrado');
+    await restaurarSnapshot(snap,true);fecharRascunhos();window.scrollTo({top:0,behavior:'smooth'});toast('Rascunho restaurado!',2800);
+  }catch(e){console.warn(e);toast('⚠ Não foi possível restaurar o rascunho.',3500);}
+}
+async function exportarRascunho(id){
+  const snap=await idbObterRascunho(id);if(!snap){toast('Rascunho não encontrado.',2500);return;}
+  const tag=nomeArquivoSeguro(snap.dados?.tag||snap.dados?.serie),data=snap.dados?.data||localDateISO();
+  baixarJSON(envelopeBackup(snap),`backup_CDM_${tag}_${data}.json`);
+}
+async function excluirRascunho(id){
+  if(!confirm('Excluir este rascunho deste aparelho?'))return;
+  try{
+    await idbExcluirRascunho(id);
+    if(id===activeDraftId){activeDraftId=null;activeDraftCreatedAt=null;try{localStorage.removeItem(ACTIVE_DRAFT_KEY);}catch(e){}}
+    await atualizarContadorRascunhos();await abrirRascunhos();
+  }catch(e){console.warn(e);toast('⚠ Não foi possível excluir.',3000);}
+}
+async function limpar(){
+  if(!confirm('Iniciar uma nova ocorrência? O relatório atual será mantido em Rascunhos.'))return;
+  if(temConteudoAtual())await salvarCache(true);
+  try{localStorage.removeItem(CACHE_KEY);localStorage.removeItem(ACTIVE_DRAFT_KEY);}catch(e){}
+  try{await idbLimparFotos();}catch(e){}
+  activeDraftId=null;activeDraftCreatedAt=null;
+  ['f-local','f-tag','f-modelo','f-serie','f-horimetro','f-resp-tradimaq','f-resp-contraparte','f-descricao','f-orcamento'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('f-tipo').value='Danos Materiais - Troca/Reposição';
   document.getElementById('f-cidade').value='Contagem';
   document.getElementById('f-conclusao').value=CONCLUSAO_PADRAO;
-  const now=new Date(),isoDate=now.toISOString().split('T')[0];
-  document.getElementById('f-data').value=isoDate;
-  document.getElementById('f-revisao').value=isoDate;
-  document.getElementById('f-hora').value=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-  itens=[''];fotos=[];fotoAtual=-1;
-  renderItens();renderFotos();
-  badge('--','');
-  window.scrollTo({top:0,behavior:'smooth'});
-  toast('Pronto para novo relatório!',3000);
+  const now=new Date(),isoDate=localDateISO(now);
+  document.getElementById('f-data').value=isoDate;document.getElementById('f-revisao').value=isoDate;document.getElementById('f-hora').value=localTimeHM(now);
+  itens=[''];fotos=[];fotoAtual=-1;hasUnsaved=false;
+  renderItens();renderFotos();atualizarTitulo();if(window.innerWidth>=860)atualizar();
+  badge('—','');await atualizarContadorRascunhos();window.scrollTo({top:0,behavior:'smooth'});toast('Nova ocorrência pronta!',3000);
 }
 
 /* ══════════ GERAR DOCUMENTO ══════════ */
