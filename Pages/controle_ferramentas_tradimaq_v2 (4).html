@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#ff7a00">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ferramentas">
+    <link rel="manifest" id="pwa-manifest">
+    <title>Controle de Ferramentas - Tradimaq</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+    <style>
+        :root {
+            --brand: #ff7a00;
+            --brand-dark: #d96500;
+            --brand-soft: #fff3e8;
+            --gray-900: #1a1a1a;
+            --gray-700: #374151;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --green: #16a34a;
+            --green-soft: #dcfce7;
+            --red: #dc2626;
+            --red-soft: #fee2e2;
+            --blue: #2563eb;
+            --radius: 8px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+            --bottom-bar: 64px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: var(--gray-100);
+            color: var(--gray-900);
+            font-size: 14px;
+            line-height: 1.5;
+            padding-bottom: var(--bottom-bar);
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            border-bottom: 3px solid var(--brand);
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 52px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        header .logo-area { display: flex; align-items: center; gap: 10px; }
+        header img { height: 24px; }
+        header .title { font-size: 11px; font-weight: 600; color: var(--gray-500); letter-spacing: 0.08em; text-transform: uppercase; }
+        .header-right { display: flex; align-items: center; gap: 8px; }
+        #loadingIndicator { display: none; align-items: center; gap: 6px; font-size: 12px; color: var(--brand); }
+        #offlineBadge { display: none; font-size: 10px; font-weight: 600; background: var(--gray-700); color: white; padding: 2px 8px; border-radius: 99px; }
+        .spinner { width: 14px; height: 14px; border: 2px solid var(--brand-soft); border-top-color: var(--brand); border-radius: 50%; animation: spin 0.7s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .container { max-width: 960px; margin: 0 auto; padding: 12px 12px 0; }
+
+        /* DASHBOARD */
+        .dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 10px; }
+        @media (max-width: 480px) { .dashboard { grid-template-columns: repeat(2, 1fr); } }
+        .card { background: white; border-radius: var(--radius); padding: 10px 12px; box-shadow: var(--shadow); border-top: 3px solid var(--gray-300); }
+        .card.brand { border-top-color: var(--brand); }
+        .card.green { border-top-color: var(--green); }
+        .card.red   { border-top-color: var(--red); }
+        .card.blue  { border-top-color: var(--blue); }
+        .card-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-500); margin-bottom: 2px; }
+        .card-value { font-family: 'IBM Plex Mono', monospace; font-size: 24px; font-weight: 500; line-height: 1; }
+        .card.green .card-value { color: var(--green); }
+        .card.red   .card-value { color: var(--red); }
+
+        /* PROGRESS */
+        .progress-section { background: white; border-radius: var(--radius); padding: 10px 14px; margin-bottom: 8px; box-shadow: var(--shadow); display: none; }
+        .progress-section.visible { display: block; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--gray-500); margin-bottom: 5px; }
+        .progress-bar { height: 6px; background: var(--gray-100); border-radius: 99px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--green); border-radius: 99px; transition: width 0.4s ease; }
+
+        /* PANEL */
+        .panel { background: white; border-radius: var(--radius); padding: 12px 14px; box-shadow: var(--shadow); margin-bottom: 8px; }
+        .panel-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-500); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--gray-100); }
+        .fields-grid { display: grid; gap: 8px; grid-template-columns: 1fr 1fr 1fr; }
+        @media (max-width: 600px) { .fields-grid { grid-template-columns: 1fr; } }
+        .field label { display: block; font-size: 11px; font-weight: 600; color: var(--gray-700); margin-bottom: 3px; }
+        .field input {
+            width: 100%; padding: 10px; font-size: 16px;
+            font-family: inherit; border: 1px solid var(--gray-300);
+            border-radius: var(--radius); color: var(--gray-900);
+            background: white; outline: none; transition: border-color 0.15s;
+        }
+        .field input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(255,122,0,0.1); }
+
+        /* PRESETS */
+        .preset-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .preset-label { font-size: 11px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; }
+        .btn-preset { padding: 8px 16px; font-size: 13px; font-family: inherit; font-weight: 500; border: 1px solid var(--gray-300); background: white; border-radius: var(--radius); cursor: pointer; color: var(--gray-700); transition: all 0.15s; min-height: 44px; }
+        .btn-preset:active { opacity: 0.8; }
+        .btn-preset.active { background: var(--brand); border-color: var(--brand); color: white; }
+
+        /* SEARCH */
+        .search-wrap { position: relative; margin-bottom: 8px; }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-500); font-size: 14px; pointer-events: none; }
+        #busca { width: 100%; padding: 12px 12px 12px 36px; font-size: 16px; font-family: inherit; border: 1.5px solid var(--brand); border-radius: var(--radius); outline: none; background: white; }
+        #busca:focus { box-shadow: 0 0 0 3px rgba(255,122,0,0.12); }
+
+        /* BACKUP */
+        .backup-section { background: var(--gray-50); border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 8px; display: none; }
+        .backup-section.open { display: block; }
+        .backup-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+        .backup-row input { flex: 1; min-width: 160px; padding: 9px 10px; font-size: 13px; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray-300); border-radius: var(--radius); background: white; outline: none; }
+        .backup-row input:focus { border-color: var(--brand); }
+        .btn-sm { padding: 9px 14px; font-size: 12px; font-family: inherit; font-weight: 600; border: 1px solid var(--gray-300); background: white; border-radius: var(--radius); cursor: pointer; color: var(--gray-700); transition: all 0.15s; white-space: nowrap; min-height: 44px; }
+        .btn-sm.primary { background: var(--brand); border-color: var(--brand); color: white; }
+
+        /* TABLE */
+        .table-wrap { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        thead { background: var(--gray-700); }
+        th { padding: 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: white; text-align: left; background: var(--gray-700); }
+        td { padding: 11px 10px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--gray-50); }
+        tr.row-ok td { background: #f0fdf4 !important; }
+
+        /* Mobile: esconde colunas secundárias */
+        @media (max-width: 540px) {
+            .col-code, .td-code { display: none; }
+            .col-qty,  .td-qty  { display: none; }
+            td { padding: 13px 10px; }
+        }
+
+        .col-check  { width: 40px; }
+        .col-code   { width: 120px; }
+        .col-qty    { width: 80px; }
+        .col-status { width: 100px; }
+        .col-action { width: 90px; }
+
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 99px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+        .badge-ok       { background: var(--green-soft); color: #15803d; }
+        .badge-pendente { background: var(--red-soft);   color: #b91c1c; }
+
+        .btn-action { padding: 7px 12px; font-size: 12px; font-weight: 600; font-family: inherit; border: 1px solid var(--gray-300); border-radius: var(--radius); cursor: pointer; background: white; color: var(--gray-700); min-height: 36px; white-space: nowrap; transition: all 0.15s; }
+        .btn-action.entregar { border-color: var(--green); color: var(--green); background: var(--green-soft); }
+        .btn-action.estornar { border-color: var(--gray-400); color: var(--gray-500); }
+
+        input[type="checkbox"] { accent-color: var(--brand); width: 20px; height: 20px; cursor: pointer; }
+        input.qty-input { width: 58px; padding: 5px 6px; font-size: 14px; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray-300); border-radius: var(--radius); text-align: center; outline: none; }
+        input.qty-input:focus { border-color: var(--brand); }
+
+        .empty-state { text-align: center; padding: 40px; color: var(--gray-500); }
+        .empty-state .icon { font-size: 32px; margin-bottom: 8px; }
+
+        /* BOTTOM BAR */
+        .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid var(--gray-300); padding: 8px 12px; display: flex; gap: 6px; z-index: 200; box-shadow: 0 -2px 12px rgba(0,0,0,0.08); }
+        .btn-bar { flex: 1; height: 46px; font-size: 13px; font-family: inherit; font-weight: 600; border: none; border-radius: var(--radius); cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; gap: 5px; transition: opacity 0.15s; }
+        .btn-bar:active { opacity: 0.8; }
+        .btn-bar.pdf   { background: #dc2626; }
+        .btn-bar.excel { background: #16a34a; }
+        .btn-bar.more  { background: var(--gray-700); flex: 0 0 46px; font-size: 20px; }
+
+        /* SHEET */
+        .sheet-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 300; }
+        .sheet-backdrop.open { display: flex; align-items: flex-end; }
+        .sheet { width: 100%; background: white; border-radius: 16px 16px 0 0; padding: 16px 12px 40px; transform: translateY(0); }
+        .sheet-handle { width: 36px; height: 4px; background: var(--gray-300); border-radius: 99px; margin: 0 auto 16px; }
+        .sheet-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-500); margin-bottom: 12px; }
+        .sheet-btn { width: 100%; padding: 14px 16px; font-size: 14px; font-family: inherit; font-weight: 500; border: none; background: var(--gray-50); border-radius: var(--radius); cursor: pointer; color: var(--gray-900); display: flex; align-items: center; gap: 12px; margin-bottom: 6px; text-align: left; }
+        .sheet-btn:active { background: var(--gray-100); }
+        .sheet-btn .icon { font-size: 18px; width: 24px; text-align: center; }
+        .sheet-btn.danger { color: var(--red); }
+
+        /* TOAST */
+        #toast { position: fixed; bottom: calc(var(--bottom-bar) + 12px); left: 50%; transform: translateX(-50%) translateY(8px); background: var(--gray-900); color: white; padding: 10px 18px; border-radius: 99px; font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 999; white-space: nowrap; max-width: 90vw; }
+        #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+
+        /* ===== V2 — UX PROFISSIONAL / RESPONSIVA ===== */
+        :root { --surface: #ffffff; --line: #e5e7eb; --ink-soft:#4b5563; }
+        body { background:#eef1f4; padding-bottom:76px; }
+        header { height:60px; border-bottom-width:2px; }
+        header img { height:28px; max-width:150px; object-fit:contain; }
+        header .title { font-size:12px; color:var(--gray-700); }
+        .header-kicker { display:block; font-size:9px; color:var(--gray-400); letter-spacing:.08em; text-transform:uppercase; margin-top:1px; }
+        .container { max-width:1180px; padding:16px 14px 0; }
+        .dashboard { gap:10px; margin-bottom:12px; }
+        .card { padding:12px 14px; border-top-width:2px; }
+        .card-label { font-size:10px; }
+        .card-value { font-size:25px; }
+        .panel { padding:14px 16px; margin-bottom:10px; border:1px solid rgba(17,24,39,.04); }
+        .panel-title { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--gray-700); }
+        .panel-hint { font-size:10px; font-weight:400; text-transform:none; letter-spacing:0; color:var(--gray-400); }
+        .fields-grid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:10px; }
+        .field label { color:var(--gray-700); }
+        .field input { min-height:44px; font-size:14px; }
+        .field input::placeholder { color:#9ca3af; }
+        .preset-row { gap:8px; }
+        .btn-preset { min-height:40px; padding:8px 14px; }
+        .search-toolbar { display:flex; gap:8px; align-items:center; margin-bottom:8px; }
+        .search-wrap { flex:1; margin-bottom:0; }
+        .filter-row { display:flex; gap:6px; overflow-x:auto; padding:2px 0 8px; scrollbar-width:none; }
+        .filter-row::-webkit-scrollbar { display:none; }
+        .filter-chip { border:1px solid var(--gray-300); background:#fff; color:var(--gray-700); border-radius:999px; padding:7px 12px; min-height:36px; font:600 11px 'IBM Plex Sans',sans-serif; white-space:nowrap; cursor:pointer; }
+        .filter-chip.active { color:#fff; background:var(--gray-700); border-color:var(--gray-700); }
+        .draft-state { font-size:11px; color:var(--gray-500); white-space:nowrap; display:flex; align-items:center; gap:6px; }
+        .draft-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; }
+        .table-wrap { border:1px solid var(--line); }
+        thead { position:sticky; top:60px; z-index:20; }
+        th { padding:11px 10px; background:#2f343a; }
+        td { padding:12px 10px; }
+        .tool-name { font-size:13px; font-weight:500; color:var(--gray-900); }
+        .tool-code-mobile { display:none; font:500 10px 'IBM Plex Mono',monospace; color:var(--gray-400); margin-top:2px; }
+        .badge { border-radius:6px; padding:5px 8px; text-transform:uppercase; letter-spacing:.03em; font-size:10px; }
+        .badge-ok { background:#eaf7ee; color:#157a38; }
+        .badge-pendente { background:#fff1f0; color:#b42318; }
+        .btn-action { border-radius:6px; min-height:34px; }
+        .btn-action.entregar { background:#fff; border-color:#b7dfc2; color:#157a38; }
+        .btn-action.estornar { background:#fff; border-color:#d1d5db; color:#4b5563; }
+        .bottom-bar { justify-content:center; padding:9px max(12px, calc((100vw - 1180px)/2 + 14px)); }
+        .btn-bar { max-width:320px; height:48px; }
+        .btn-bar.pdf { background:#b42318; }
+        .btn-bar.excel { background:#147a3d; }
+        .btn-bar.more { max-width:none; }
+        .sheet { max-width:560px; margin:0 auto; }
+        .sheet-btn { font-weight:600; }
+        @media (max-width: 900px) { .fields-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+        @media (max-width: 640px) {
+            body { background:#f4f5f7; }
+            header { height:56px; padding:0 12px; }
+            header img { height:24px; max-width:125px; }
+            header .title { font-size:10px; }
+            .header-kicker { display:none; }
+            .container { padding:10px 8px 0; }
+            .dashboard { grid-template-columns:repeat(2,1fr); gap:7px; }
+            .card { padding:10px 11px; }
+            .card-value { font-size:22px; }
+            .panel { padding:12px; border-radius:7px; }
+            .panel-title { margin-bottom:8px; }
+            .panel-hint { display:none; }
+            .fields-grid { grid-template-columns:1fr; gap:8px; }
+            .preset-row { align-items:stretch; }
+            .preset-label { width:100%; }
+            .btn-preset { flex:1 1 calc(50% - 6px); padding:8px 10px; font-size:12px; }
+            .draft-state { display:none; }
+            .table-wrap { background:transparent; border:none; box-shadow:none; overflow:visible; }
+            table, tbody { display:block; width:100%; }
+            thead { display:none; }
+            tr { display:grid; grid-template-columns:34px minmax(0,1fr) auto; grid-template-areas:'check desc status' 'check desc action'; gap:3px 8px; align-items:center; background:white; border:1px solid var(--line); border-radius:8px; margin-bottom:7px; padding:10px; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+            tr.row-ok td { background:transparent !important; }
+            td { display:block; border:0; padding:0; background:transparent !important; }
+            td:nth-child(1) { grid-area:check; }
+            td:nth-child(2), td:nth-child(4) { display:none; }
+            td:nth-child(3) { grid-area:desc; min-width:0; }
+            td:nth-child(5) { grid-area:status; justify-self:end; }
+            td:nth-child(6) { grid-area:action; justify-self:end; }
+            .tool-name { font-size:13px; line-height:1.3; }
+            .tool-code-mobile { display:block; }
+            input[type='checkbox'] { width:22px; height:22px; }
+            .btn-action { min-height:32px; padding:6px 10px; font-size:11px; }
+            .badge { font-size:9px; padding:4px 7px; }
+            tbody tr:has(.empty-state) { display:block; padding:0; }
+            tbody tr:has(.empty-state) td { display:block; }
+            .bottom-bar { padding:8px; gap:6px; }
+            .btn-bar { height:46px; font-size:12px; }
+            .btn-bar.more { flex-basis:46px; }
+            #toast { font-size:12px; max-width:94vw; white-space:normal; text-align:center; }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-area">
+        <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq">
+        <div><span class="title">Controle de Ferramentas</span><span class="header-kicker">Checklist de movimentação e conferência</span></div>
+    </div>
+    <div class="header-right">
+        <span id="offlineBadge">OFFLINE</span>
+        <div id="loadingIndicator"><div class="spinner"></div><span>Carregando...</span></div>
+    </div>
+</header>
+
+<div class="container">
+
+    <div class="dashboard">
+        <div class="card brand"><div class="card-label">Itens da lista</div><div class="card-value" id="totalFerramentas">0</div></div>
+        <div class="card blue"><div class="card-label">No checklist</div><div class="card-value" id="totalSelecionado">0</div></div>
+        <div class="card green"><div class="card-label">Conferidas</div><div class="card-value" id="totalOK">0</div></div>
+        <div class="card red"><div class="card-label">Pendentes</div><div class="card-value" id="totalPendentes">0</div></div>
+    </div>
+
+    <div class="progress-section" id="progressSection">
+        <div class="progress-label"><span>Progresso da conferência</span><span id="progressText">0 / 0</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title"><span>Identificação do checklist</span><span class="panel-hint">Campos principais do registro</span></div>
+        <div class="fields-grid">
+            <div class="field"><label>Data</label><input type="date" id="data"></div>
+            <div class="field"><label>Técnico / Mecânico</label><input id="mecanico" placeholder="Nome completo" autocomplete="name"></div>
+            <div class="field"><label>Responsável pela conferência</label><input id="responsavel" placeholder="Nome do responsável"></div>
+            <div class="field"><label>Unidade / Setor</label><input id="unidade" placeholder="Ex.: Oficina MG"></div>
+            <div class="field"><label>OS / Referência</label><input id="referencia" placeholder="Opcional"></div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="panel-title"><span>Composição do checklist</span><span class="panel-hint">Escolha uma lista padrão ou selecione manualmente</span></div>
+        <div class="preset-row">
+            <span class="preset-label">Lista padrão:</span>
+            <button class="btn-preset active" id="preset-geral" onclick="limparPreset(this)">Lista completa</button>
+            <button class="btn-preset" id="preset-campo" onclick="aplicarPreset('campo', this)">Técnico de campo</button>
+            <button class="btn-preset" id="preset-ajudante" onclick="aplicarPreset('ajudante', this)">Ajudante técnico</button>
+        </div>
+    </div>
+
+    <div class="backup-section" id="backupSection">
+        <div class="backup-row">
+            <input id="codigoSave" placeholder="Código de backup...">
+            <button class="btn-sm primary" onclick="gerarCodigo()">Gerar</button>
+            <button class="btn-sm" onclick="carregarCodigo()">Carregar</button>
+            <button class="btn-sm" onclick="copiarCodigo()">Copiar</button>
+        </div>
+    </div>
+
+    <div class="search-toolbar">
+        <div class="search-wrap">
+            <span class="search-icon">⌕</span>
+            <input id="busca" name="ferramenta_busca" type="text" inputmode="text" placeholder="Buscar ferramenta por código ou descrição" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" oninput="filtrarFerramentas(this.value)" onkeyup="filtrarFerramentas(this.value)" onchange="filtrarFerramentas(this.value)">
+        </div>
+        <div class="draft-state" id="draftState"><span class="draft-dot"></span><span>Rascunho local</span></div>
+    </div>
+    <div class="filter-row" aria-label="Filtros do checklist">
+        <button class="filter-chip active" data-filter="todos" onclick="setFiltroStatus('todos', this)">Todos</button>
+        <button class="filter-chip" data-filter="selecionados" onclick="setFiltroStatus('selecionados', this)">No checklist</button>
+        <button class="filter-chip" data-filter="pendentes" onclick="setFiltroStatus('pendentes', this)">Pendentes</button>
+        <button class="filter-chip" data-filter="conferidos" onclick="setFiltroStatus('conferidos', this)">Conferidos</button>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-check"><input type="checkbox" id="selectAll" onclick="toggleAll(this)"></th>
+                    <th class="col-code">Código</th>
+                    <th>Descrição</th>
+                    <th class="col-qty">Qtd</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-action">Ação</th>
+                </tr>
+            </thead>
+            <tbody id="tabela">
+                <tr><td colspan="6"><div class="empty-state"><div class="icon">⏳</div><p>Carregando banco de dados...</p></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="bottom-bar">
+    <button class="btn-bar pdf"   onclick="gerarPDF()">Gerar PDF</button>
+    <button class="btn-bar excel" onclick="gerarExcel()">Gerar Excel</button>
+    <button class="btn-bar more"  onclick="abrirSheet()">⋯</button>
+</div>
+
+<div class="sheet-backdrop" id="sheetBackdrop" onclick="fecharSheet()">
+    <div class="sheet" onclick="event.stopPropagation()">
+        <div class="sheet-handle"></div>
+        <div class="sheet-title">Mais opções</div>
+        <button class="sheet-btn" onclick="marcarVisiveisConferidos(); fecharSheet()">
+            <span class="icon">✓</span><span>Conferir itens visíveis</span>
+        </button>
+        <button class="sheet-btn" onclick="toggleBackup(); fecharSheet()">
+            <span class="icon">↕</span> Backup / Restaurar
+        </button>
+        <button class="sheet-btn danger" onclick="novoChecklist(); fecharSheet()">
+            <span class="icon">＋</span> Novo checklist
+        </button>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+    document.getElementById("data").value = new Date(new Date().getTime() - new Date().getTimezoneOffset()*60000).toISOString().split("T")[0];
+
+    let ferramentas = [], filtrado = [], bancoBase = [];
+    let selectedCodes = new Map();
+    let filtroStatus = 'todos';
+    let rascunhoRestaurado = false;
+    const DRAFT_KEY = 'tradimaq_ferramentas_checklist_v2';
+
+    const PRESETS = {
+        ajudante: new Set(["4.09.000026610","4.09.000029125","4.09.000029487","4.09.000029205","4.09.000029220","4.09.000029200","4.09.000029210","4.09.000029240","4.09.000029230","4.09.000029010","4.09.000029400","4.09.000001007","4.09.000002553","4.09.000002562","4.09.000002563","4.09.000002564","4.09.000002566","4.09.000002572","4.09.000003553","4.09.000003502","4.09.000003504","4.09.000003505","4.09.000003506","4.09.000036320","4.09.000036310","4.09.000036330","4.09.000036410","4.09.000036130","4.09.000036100","4.09.000036030","4.09.000036070","4.09.000036250","4.09.000004551","4.09.000004505","4.09.000004559","4.09.000004509","4.09.000004552","4.09.000025053","4.09.000025051","4.09.000025050","4.09.000006052","4.09.00000006051","4.09.000000057","4.09.00986450778","4.09.00D19TPZ","4.09.000206340","4.09.000000439","4.09.00000050145","4.09.000037030","4.09.000038210","4.09.000038220","4.09.000038230","4.09.000038240","4.09.000038250","4.09.000038260","4.09.00000038104","4.09.0L516CME"]),
+        campo: new Set(["4.09.000026610","4.09.000029125","4.09.000029487","4.09.000029205","4.09.000029220","4.09.000029200","4.09.000029210","4.09.000029240","4.09.000029230","4.09.000029010","4.09.000029400","4.09.000039001","4.09.000017110","4.09.000006925","4.09.000000007","4.09.000001002","4.09.000028006","4.09.000028202","4.09.000012061","4.09.000012057","4.09.000012053","4.09.000012055","4.09.000012054","4.09.000012056","4.09.000012058","4.09.000012059","4.09.000012060","4.09.000012062","4.09.000012004","4.09.000012005","4.09.000012006","4.09.000012007","4.09.000012009","4.09.000012011","4.09.000012013","4.09.000012014","4.09.000012012","4.09.00000012016","4.09.000012017","4.09.000012002","4.09.000012052","4.09.000012065","4.09.000012008","4.09.000012010","4.09.000012209","4.09.000002501","4.09.000002502","4.09.000002503","4.09.000002504","4.09.000002505","4.09.000002506","4.09.000002507","4.09.000002508","4.09.000002509","4.09.000002510","4.09.000002511","4.09.000002512","4.09.000002513","4.09.000002514","4.09.000067915","4.09.000002516","4.09.000002517","4.09.000002518","4.09.000002519","4.09.000002520","4.09.000002521","4.09.000002522","4.09.00000000496","4.09.00000002539","4.09.000002524","4.09.000002525","4.09.000002551","4.09.000002552","4.09.000002553","4.09.000002554","4.09.000002555","4.09.000002556","4.09.000002557","4.09.000002558","4.09.000002559","4.09.000002561","4.09.000002562","4.09.000002563","4.09.000002564","4.09.000002565","4.09.000002566","4.09.000002568","4.09.000002572","4.09.000002569","4.09.000002560","4.09.000002526","4.09.000026280","4.09.000026270","4.09.000003553","4.09.000003502","4.09.000003504","4.09.000003505","4.09.000003506","4.09.000036320","4.09.000036290","4.09.000036324","4.09.000036308","4.09.000036310","4.09.000036330","4.09.000036410","4.09.000036130","4.09.000036100","4.09.000036030","4.09.000036070","4.09.000036250","4.09.000004562","4.09.000004553","4.09.000004551","4.09.000004504","4.09.000004505","4.09.000004559","4.09.000004507","4.09.000004560","4.09.000004509","4.09.000004511","4.09.000004513","4.09.000004514","4.09.000004515","4.09.000004516","4.09.000004517","4.09.000004518","4.09.000004558","4.09.000004552","4.09.000004555","4.09.000004501","4.09.000004502","4.09.000024603","4.09.000024604","4.09.000024605","4.09.000024606","4.09.000024607","4.09.000024608","4.09.000024609","4.09.000024610","4.09.000032295","4.09.000032210","4.09.000006001","4.09.00000006003","4.09.000006004","4.09.00000006051","4.09.000006052","4.09.000025052","4.09.000025001","4.09.000025002","4.09.000025003","4.09.000025004","4.09.000025005","4.09.000025006","4.09.000025008","4.09.000025010","4.09.000025051","4.09.000025053","4.09.000000470","4.09.000206340","4.09.000017120","4.09.000000439","4.09.000015230","4.09.00000015240","4.09.00000015250","4.09.00000015300","4.09.00000015270","4.09.00000015005","4.09.00000015006","4.09.00000015007","4.09.000019008","4.09.000019009","4.09.000019010","4.09.000019011","4.09.000019012","4.09.000019013","4.09.000019014","4.09.000017467","4.09.000015016","4.09.00000015017","4.09.00000015018","4.09.000021006","4.09.00000015020","4.09.000019022","4.09.00000015022","4.09.000019025","4.09.000019027","4.09.00000001938","4.09.00000019716","4.09.00000001912","4.09.00000019916","4.09.00000191932","4.09.00000001958","4.09.00000191116","4.09.00000001934","4.09.00000192532","4.09.00000191316","4.09.00000001978","4.09.00000192932","4.09.00000191516","4.09.00000000191","4.09.00000015067","4.09.00000015068","4.09.00000015069","4.09.00000015070","4.09.00000013200","4.09.00000013220","4.09.00000013250","4.09.00000013270","4.09.00000013230","4.09.00000013001","4.09.00000013002","4.09.00000013003","4.09.00000013004","4.09.00000013005","4.09.00000013006","4.09.00000013007","4.09.00000013008","4.09.00000013009","4.09.00000013010","4.09.00000013011","4.09.00000100000","4.09.000000319","4.09.000000424","4.09.00000031996","4.09.000000016","4.09.000000014","4.09.0000M3005","4.09.0000M4007","4.09.0000M5008","4.09.00000M601","4.09.000M80125","4.09.00000015220","4.09.00000050145","4.09.000037030","4.09.000000425","4.09.0530109B1","4.09.000000107","4.09.000038001","4.09.000038002","4.09.000038210","4.09.000038220","4.09.000038230","4.09.000038240","4.09.000038250","4.09.000038260","4.09.00000015755","4.09.000015156","4.09.000000699","4.09.00000017458","4.09.00000017402","4.09.00000017009","4.09.000017407","4.09.00000017418","4.09.00000038104","4.09.0L516CME","4.09.00000000343","4.09.00000000344","4.09.00000000345","4.09.00000000346","4.09.00000000347","4.09.00000000348","4.09.00000000349","4.09.00000000350","4.09.00000000351","4.09.00000079452","4.09.00000079453","4.09.00000012500","4.09.000003219"])
+    };
+
+    function normalizeStr(str) { return str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+    function showLoading(show) { document.getElementById("loadingIndicator").style.display = show ? "flex" : "none"; }
+    function showToast(msg, dur = 2500) {
+        const t = document.getElementById("toast");
+        t.textContent = msg; t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), dur);
+    }
+
+    function getTodayISO() {
+        const d = new Date();
+        const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+        return local.toISOString().split('-').slice(0,3).join('-').split('T')[0];
+    }
+    function salvarRascunho() {
+        const payload = { data: data.value, mecanico: mecanico.value, responsavel: responsavel.value, unidade: unidade.value, referencia: referencia.value, itens: Array.from(selectedCodes.entries()) };
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+        const el=document.getElementById('draftState'); if(el) el.title='Rascunho salvo neste dispositivo';
+    }
+    function restaurarRascunho() {
+        if (rascunhoRestaurado) return; rascunhoRestaurado = true;
+        try {
+            const raw=localStorage.getItem(DRAFT_KEY); if(!raw) return; const d=JSON.parse(raw);
+            if(d.data) data.value=d.data; mecanico.value=d.mecanico||''; responsavel.value=d.responsavel||''; unidade.value=d.unidade||''; referencia.value=d.referencia||'';
+            if(Array.isArray(d.itens)){ selectedCodes.clear(); d.itens.forEach(([code,e])=>selectedCodes.set(code,{status:Number(e.status)||0,qty:Math.max(1,Number(e.qty)||1)})); }
+            render(); if(selectedCodes.size||d.mecanico||d.responsavel) showToast('Rascunho anterior restaurado.');
+        } catch(e) {}
+    }
+    function novoChecklist() {
+        if(!confirm('Iniciar um novo checklist? O rascunho atual será apagado.')) return;
+        selectedCodes.clear(); data.value=getTodayISO(); ['mecanico','responsavel','unidade','referencia','busca'].forEach(id=>document.getElementById(id).value='');
+        filtroStatus='todos'; document.querySelectorAll('.filter-chip').forEach(b=>b.classList.toggle('active',b.dataset.filter==='todos'));
+        ferramentas=[...bancoBase]; filtrado=[...bancoBase]; setActivePreset(document.getElementById('preset-geral')); localStorage.removeItem(DRAFT_KEY); render(); showToast('Novo checklist iniciado.');
+    }
+
+
+    // Sheet
+    function abrirSheet()  { document.getElementById("sheetBackdrop").classList.add("open"); }
+    function fecharSheet() { document.getElementById("sheetBackdrop").classList.remove("open"); }
+    function toggleBackup(){ document.getElementById("backupSection").classList.toggle("open"); }
+
+    // Carregar JSON com cache offline
+    const CACHE_KEY = 'tradimaq_ferramentas_v1';
+
+    async function carregarCSV() {
+        showLoading(true);
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (cached) {
+            try {
+                const data = JSON.parse(cached);
+                ferramentas = data; bancoBase = [...data]; filtrado = [...data];
+                render(); restaurarRascunho(); showLoading(false);
+                fetchJSON().catch(() => document.getElementById("offlineBadge").style.display = "inline");
+                return;
+            } catch(e) {}
+        }
+        try {
+            const data = await fetchJSON();
+            ferramentas = data; bancoBase = [...data]; filtrado = [...data];
+            render(); restaurarRascunho();
+        } catch(e) {
+            document.getElementById("tabela").innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">⚠️</div><p>Sem conexão e sem cache. Conecte-se uma vez para ativar o modo offline.</p></div></td></tr>`;
+            document.getElementById("offlineBadge").style.display = "inline";
+        } finally { showLoading(false); }
+    }
+
+    async function fetchJSON() {
+        const r = await fetch('https://gaberoviva-cloud.github.io/Data/ferramentas.json');
+        if (!r.ok) throw new Error();
+        const data = await r.json();
+        const lista = data.map(i => ({ codigo: String(i.codigo).trim(), descricao: String(i.descricao).trim() }));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(lista));
+        return lista;
+    }
+
+    // Presets
+    function aplicarPreset(nome, btnEl) {
+        setActivePreset(btnEl);
+        const codigos = PRESETS[nome];
+        ferramentas = bancoBase.filter(f => codigos.has(f.codigo));
+        filtrado = [...ferramentas];
+        document.getElementById("busca").value = "";
+        render();
+        showToast(`Preset "${btnEl.textContent}" — ${ferramentas.length} ferramentas`);
+    }
+    function setActivePreset(btn) { document.querySelectorAll(".btn-preset").forEach(b => b.classList.remove("active")); if (btn) btn.classList.add("active"); }
+    function limparPreset(btnEl) {
+        ferramentas = [...bancoBase]; filtrado = [...bancoBase];
+        document.getElementById("busca").value = "";
+        setActivePreset(btnEl || document.getElementById("preset-geral"));
+        render();
+    }
+
+    // Filtros
+    function toggleFiltroSelecionados() {
+        apenasSelecioandos = !apenasSelecioandos;
+        document.getElementById("btnFiltrarLabel").textContent = apenasSelecioandos ? "Ver Todos" : "Ver Selecionados";
+        aplicarBusca();
+    }
+    function setFiltroStatus(status, btnEl) {
+        filtroStatus = status || 'todos';
+        document.querySelectorAll('.filter-chip').forEach(b => b.classList.toggle('active', b === btnEl || b.dataset.filter === filtroStatus));
+        aplicarBusca();
+    }
+
+    function filtrarFerramentas(valorBusca) {
+        const termo = normalizeStr(valorBusca == null ? '' : valorBusca).trim();
+        const origem = Array.isArray(ferramentas) ? ferramentas : [];
+
+        let base = origem.filter(f => {
+            const codigo = normalizeStr(f && f.codigo != null ? f.codigo : '');
+            const descricao = normalizeStr(f && f.descricao != null ? f.descricao : '');
+            return termo === '' || codigo.includes(termo) || descricao.includes(termo);
+        });
+
+        if (filtroStatus === 'selecionados') {
+            base = base.filter(f => selectedCodes.has(f.codigo));
+        } else if (filtroStatus === 'pendentes') {
+            base = base.filter(f => {
+                const e = selectedCodes.get(f.codigo);
+                return !!e && e.status !== 1;
+            });
+        } else if (filtroStatus === 'conferidos') {
+            base = base.filter(f => {
+                const e = selectedCodes.get(f.codigo);
+                return !!e && e.status === 1;
+            });
+        }
+
+        filtrado = base;
+        render();
+    }
+
+    function aplicarBusca() {
+        const campo = document.getElementById('busca');
+        filtrarFerramentas(campo ? campo.value : '');
+    }
+
+    // Render
+    function render() {
+        const tabela = document.getElementById("tabela");
+        tabela.innerHTML = "";
+        if (filtrado.length === 0) {
+            const msg = filtroStatus !== 'todos' ? 'Nenhum item encontrado neste filtro.' : 'Nenhuma ferramenta encontrada.';
+            tabela.innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">🔍</div><p>${msg}</p></div></td></tr>`;
+            atualizarDashboard(); return;
+        }
+        const fragment = document.createDocumentFragment();
+        filtrado.forEach(f => {
+            const tr = document.createElement("tr");
+            const entry = selectedCodes.get(f.codigo);
+            const isSelected = !!entry;
+            const status = entry ? entry.status : null;
+            const qty = entry ? entry.qty : 1;
+            if (isSelected && status === 1) tr.classList.add("row-ok");
+            const statusHtml = isSelected ? (status === 1 ? '<span class="badge badge-ok">Conferido</span>' : '<span class="badge badge-pendente">Pendente</span>') : '<span style="color:var(--gray-300)">—</span>';
+            const actionHtml = isSelected ? (status === 1 ? `<button class="btn-action estornar" onclick="toggleStatus('${f.codigo}')">Reabrir</button>` : `<button class="btn-action entregar" onclick="toggleStatus('${f.codigo}')">Conferir</button>`) : '';
+            const qtyHtml = isSelected ? `<input class="qty-input" type="number" min="1" value="${qty}" onchange="updateQty('${f.codigo}', this.value)">` : '<span style="color:var(--gray-300)">—</span>';
+            tr.innerHTML = `
+                <td><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect(this, '${f.codigo}')"></td>
+                <td class="td-code" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray-500)">${f.codigo}</td>
+                <td><div class="tool-name">${f.descricao}</div><div class="tool-code-mobile">${f.codigo}${isSelected ? ` · Qtd. ${qty}` : ''}</div></td>
+                <td class="td-qty">${qtyHtml}</td>
+                <td>${statusHtml}</td>
+                <td>${actionHtml}</td>`;
+            fragment.appendChild(tr);
+        });
+        tabela.appendChild(fragment);
+        atualizarDashboard();
+        const allChecked = filtrado.length > 0 && filtrado.every(f => selectedCodes.has(f.codigo));
+        const sa = document.getElementById("selectAll");
+        if (sa) sa.checked = allChecked;
+    }
+
+    function toggleSelect(checkbox, code) {
+        if (checkbox.checked) selectedCodes.set(code, { status: 0, qty: 1 });
+        else selectedCodes.delete(code);
+        salvarRascunho();
+        if (filtroStatus !== 'todos') aplicarBusca(); else render();
+    }
+    function updateQty(code, value) {
+        const e = selectedCodes.get(code);
+        if (e) { e.qty = Math.max(1, parseInt(value) || 1); selectedCodes.set(code, e); salvarRascunho(); }
+    }
+    function toggleStatus(code) {
+        const e = selectedCodes.get(code);
+        if (e) { e.status = e.status === 0 ? 1 : 0; selectedCodes.set(code, e); salvarRascunho(); }
+        if (filtroStatus !== 'todos') aplicarBusca(); else render();
+    }
+    function toggleAll(cb) {
+        const checked = cb.checked;
+        const sa = document.getElementById("selectAll");
+        if (sa) sa.checked = checked;
+        filtrado.forEach(f => {
+            if (checked) { if (!selectedCodes.has(f.codigo)) selectedCodes.set(f.codigo, { status: 0, qty: 1 }); }
+            else selectedCodes.delete(f.codigo);
+        });
+        salvarRascunho();
+        if (filtroStatus !== 'todos') aplicarBusca(); else render();
+    }
+
+    function atualizarDashboard() {
+        let ok = 0, pendentes = 0;
+        selectedCodes.forEach(e => { if (e.status === 1) ok++; else pendentes++; });
+        const total = selectedCodes.size;
+        document.getElementById("totalFerramentas").textContent = ferramentas.length;
+        document.getElementById("totalSelecionado").textContent = total;
+        document.getElementById("totalOK").textContent = ok;
+        document.getElementById("totalPendentes").textContent = pendentes;
+        const ps = document.getElementById("progressSection");
+        if (total > 0) {
+            ps.classList.add("visible");
+            const pct = Math.round((ok / total) * 100);
+            document.getElementById("progressFill").style.width = pct + "%";
+            document.getElementById("progressText").textContent = `${ok} de ${total} conferidas (${pct}%)`;
+        } else ps.classList.remove("visible");
+    }
+
+    // Backup
+    function gerarCodigo() {
+        let entries = [];
+        selectedCodes.forEach((e, code) => entries.push(`${code}:${e.status}:${e.qty}`));
+        document.getElementById("codigoSave").value = btoa(unescape(encodeURIComponent(entries.join("|"))));
+        showToast("Código de backup gerado!");
+    }
+    function carregarCodigo() {
+        try {
+            const texto = decodeURIComponent(escape(atob(document.getElementById("codigoSave").value.trim())));
+            selectedCodes.clear();
+            texto.split("|").forEach(p => { const [code, status, qty] = p.split(":"); if (code) selectedCodes.set(code, { status: parseInt(status)||0, qty: parseInt(qty)||1 }); });
+            salvarRascunho(); render(); showToast("Backup carregado!");
+        } catch { showToast("Código inválido."); }
+    }
+    function copiarCodigo() {
+        const input = document.getElementById("codigoSave");
+        if (!input.value) { showToast("Gere um código primeiro."); return; }
+        navigator.clipboard.writeText(input.value).then(() => showToast("Código copiado!"));
+    }
+    function limparTudo() { if (confirm("Limpar toda a seleção atual?")) { selectedCodes.clear(); salvarRascunho(); render(); } }
+
+    // Exportar
+    function validarCampos() {
+        const m = document.getElementById("mecanico").value.trim();
+        if (!m) { showToast("⚠️ Informe o mecânico."); document.getElementById("mecanico").focus(); return false; }
+        if (selectedCodes.size === 0) { showToast("⚠️ Nenhuma ferramenta selecionada."); return false; }
+        return true;
+    }
+
+    function formatarDataBR(iso) {
+        if (!iso) return '—'; const p=iso.split('-'); return p.length===3 ? `${p[2]}/${p[1]}/${p[0]}` : iso;
+    }
+    async function obterLogoBase64() {
+        try {
+            const r = await fetch('https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png', { cache: 'no-store' });
+            if (!r.ok) throw new Error('Logo não encontrada');
+            const blob = await r.blob();
+            return await new Promise((resolve,reject)=>{
+                const fr=new FileReader();
+                fr.onload=()=>resolve(fr.result);
+                fr.onerror=reject;
+                fr.readAsDataURL(blob);
+            });
+        } catch(e){ return null; }
+    }
+
+    function desenharCabecalhoPDF(doc, logo, pageW, dark, orange) {
+        doc.setFillColor(...dark);
+        doc.rect(0,0,pageW,28,'F');
+        doc.setFillColor(...orange);
+        doc.rect(0,28,pageW,2,'F');
+
+        if (logo) {
+            try { doc.addImage(logo,'PNG',14,7,42,12,undefined,'FAST'); } catch(e) {}
+        }
+
+        doc.setTextColor(255);
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(14);
+        doc.text('CHECKLIST DE CONTROLE DE FERRAMENTAS',62,12);
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8.5);
+        doc.text('Movimentação, conferência e rastreabilidade de itens',62,18);
+        doc.setFontSize(7.5);
+        doc.text('Documento de controle interno',62,23);
+    }
+    async function gerarPDF() {
+        if (!validarCampos()) return;
+        const { jsPDF } = window.jspdf; const doc=new jsPDF({unit:'mm',format:'a4'});
+        const dataDoc=data.value, nome=mecanico.value.trim(), resp=responsavel.value.trim()||'Não informado', un=unidade.value.trim()||'Não informada', ref=referencia.value.trim()||'—';
+        const logo=await obterLogoBase64(); const orange=[255,122,0], dark=[35,39,43], gray=[95,105,115], light=[244,246,248], pageW=doc.internal.pageSize.getWidth();
+        desenharCabecalhoPDF(doc, logo, pageW, dark, orange);
+        doc.setTextColor(...dark); doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.text('IDENTIFICAÇÃO DO REGISTRO',14,39);
+        let ok=0,pend=0; selectedCodes.forEach(e=>e.status===1?ok++:pend++);
+        const meta=[['Data',formatarDataBR(dataDoc),'Unidade / Setor',un],['Técnico / Mecânico',nome,'OS / Referência',ref],['Responsável pela conferência',resp,'Situação',pend===0?'CONCLUÍDO':`${pend} PENDÊNCIA(S)`]];
+        doc.autoTable({startY:42,body:meta,theme:'grid',margin:{left:14,right:14},styles:{fontSize:8.5,cellPadding:2.5,lineColor:[220,224,228],lineWidth:.25,textColor:dark},columnStyles:{0:{fontStyle:'bold',fillColor:light,cellWidth:33},1:{cellWidth:56},2:{fontStyle:'bold',fillColor:light,cellWidth:35},3:{cellWidth:58}}});
+        const yResumo=doc.lastAutoTable.finalY+6, resumo=[['Itens no checklist',String(selectedCodes.size)],['Conferidos',String(ok)],['Pendentes',String(pend)]], bw=56,gap=4;
+        resumo.forEach((r,i)=>{const x=14+i*(bw+gap);doc.setFillColor(...light);doc.roundedRect(x,yResumo,bw,16,1.5,1.5,'F');doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...gray);doc.text(r[0].toUpperCase(),x+4,yResumo+5);doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(...dark);doc.text(r[1],x+4,yResumo+12);});
+        const linhas=[]; selectedCodes.forEach((entry,code)=>{const f=bancoBase.find(x=>x.codigo===code)||ferramentas.find(x=>x.codigo===code);linhas.push([code,f?f.descricao:'Item não localizado',entry.qty,entry.status===1?'CONFERIDO':'PENDENTE']);}); linhas.sort((a,b)=>a[1].localeCompare(b[1],'pt-BR'));
+        doc.autoTable({
+            startY:yResumo+22,
+            head:[['Código','Descrição da ferramenta','Qtd.','Situação']],
+            body:linhas,
+            margin:{left:14,right:14,top:36,bottom:26},
+            headStyles:{fillColor:dark,textColor:255,fontSize:8,fontStyle:'bold',cellPadding:2.4},
+            bodyStyles:{fontSize:8,cellPadding:2.2,lineColor:[230,233,236],lineWidth:.2,textColor:dark},
+            alternateRowStyles:{fillColor:[249,250,251]},
+            columnStyles:{0:{cellWidth:34,font:'courier',fontSize:7.2},1:{cellWidth:'auto'},2:{cellWidth:14,halign:'center'},3:{cellWidth:26,halign:'center',fontStyle:'bold'}},
+            didParseCell:d=>{if(d.section==='body'&&d.column.index===3)d.cell.styles.textColor=d.cell.raw==='PENDENTE'?[180,35,24]:[21,122,56];},
+            didDrawPage:()=>desenharCabecalhoPDF(doc, logo, pageW, dark, orange)
+        });
+        let y=doc.lastAutoTable.finalY+8;
+        if(y>235){
+            doc.addPage();
+            desenharCabecalhoPDF(doc, logo, pageW, dark, orange);
+            y=40;
+        }
+        doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...dark);doc.text('DECLARAÇÃO DE CONFERÊNCIA',14,y);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...gray);doc.text(doc.splitTextToSize('Declaro que os itens acima foram relacionados e conferidos conforme a situação registrada neste documento. Eventuais pendências deverão ser regularizadas e registradas pelo responsável.',pageW-28),14,y+5);
+        const sy=y+24;doc.setDrawColor(130);doc.line(14,sy,88,sy);doc.line(108,sy,pageW-14,sy);doc.setFontSize(7.5);doc.text('Técnico / Mecânico',51,sy+5,{align:'center'});doc.text('Responsável pela conferência',151,sy+5,{align:'center'});
+        const pages=doc.internal.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);const h=doc.internal.pageSize.getHeight();doc.setDrawColor(220);doc.line(14,h-13,pageW-14,h-13);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...gray);doc.text(`Gerado em ${new Date().toLocaleString('pt-BR')}`,14,h-8);doc.text(`Página ${i} de ${pages}`,pageW-14,h-8,{align:'right'});}
+        const safe=nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_');doc.save(`Checklist_Ferramentas_${safe}_${dataDoc.replaceAll('-','')}.pdf`);showToast('PDF profissional gerado.');
+    }
+
+    function gerarExcel() {
+        if (!validarCampos()) return;
+        const mecanico = document.getElementById("mecanico").value.trim();
+        const lista = [];
+        selectedCodes.forEach((entry, code) => {
+            const f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
+            lista.push([code, f ? f.descricao : "", entry.qty, entry.status === 1 ? "CONFERIDO" : "PENDENTE"]);
+        });
+        const dados = [["CHECKLIST DE CONTROLE DE FERRAMENTAS"],["Técnico / Mecânico:", mecanico],["Data:", formatarDataBR(document.getElementById("data").value)],["Responsável pela conferência:", document.getElementById("responsavel").value],["Unidade / Setor:", document.getElementById("unidade").value],["OS / Referência:", document.getElementById("referencia").value],[],["Código","Descrição da ferramenta","Qtd.","Situação"]].concat(lista);
+        const ws = XLSX.utils.aoa_to_sheet(dados);
+        ws['!cols'] = [{wch:15},{wch:45},{wch:8},{wch:12}];
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Ferramentas");
+        XLSX.writeFile(wb, `controle_${mecanico.replace(/ /g,'_')}.xlsx`);
+        showToast("Excel gerado!");
+    }
+
+    const campoBusca = document.getElementById("busca");
+    if (campoBusca) {
+        campoBusca.addEventListener("input", () => filtrarFerramentas(campoBusca.value));
+        campoBusca.addEventListener("search", () => filtrarFerramentas(campoBusca.value));
+    }
+    ['data','mecanico','responsavel','unidade','referencia'].forEach(id => document.getElementById(id).addEventListener('input', salvarRascunho));
+
+    // PWA Manifest inline
+    const manifest = { name:"Controle de Ferramentas — Tradimaq", short_name:"Ferramentas", start_url:"./", display:"standalone", background_color:"#f3f4f6", theme_color:"#ff7a00", icons:[{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"192x192",type:"image/png"},{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"512x512",type:"image/png"}] };
+    document.getElementById('pwa-manifest').href = URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}));
+
+    // Service Worker para PWA offline
+    if ('serviceWorker' in navigator) {
+        const swCode = `
+const CACHE='tradimaq-v1';
+const ASSETS=['./',
+'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js',
+'https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png',
+'https://gaberoviva-cloud.github.io/Data/ferramentas.json'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>{})));self.skipWaiting();});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
+self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(r=>{const cl=r.clone();caches.open(CACHE).then(c=>c.put(e.request,cl));return r;}).catch(()=>caches.match(e.request)));});`;
+        const swUrl = URL.createObjectURL(new Blob([swCode],{type:'application/javascript'}));
+        navigator.serviceWorker.register(swUrl).catch(()=>{});
+    }
+
+    carregarCSV();
+</script>
+</body>
+</html>
