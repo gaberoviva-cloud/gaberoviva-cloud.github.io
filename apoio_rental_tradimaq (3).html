@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tradimaq — Apoio Rental</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" id="pwa-manifest">
+  <meta name="theme-color" content="#ff7a00">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Apoio Rental">
+  <link rel="apple-touch-icon" href="./empilhadeira_amarela_em_estilo_vetorial.png">
+  <link rel="icon" type="image/png" href="./empilhadeira_amarela_em_estilo_vetorial.png">
+  <link rel="shortcut icon" type="image/png" href="./empilhadeira_amarela_em_estilo_vetorial.png">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #ff7a00;
+      --brand-dark: #d96500;
+      --border: rgba(255,255,255,0.12);
+      --bg: #1a1a1a;
+    }
+
+    html { background: var(--bg); }
+
+    body {
+      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 20px;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,122,0,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(255,122,0,0.10) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #app-screen {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .logo-area {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .logo-area img {
+      width: 84px;
+      height: 84px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 10px;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,0.28));
+    }
+
+    .logo-fallback {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: white;
+    }
+
+    .logo-fallback span { color: var(--brand); }
+
+    .logo-tagline {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.46);
+      font-weight: 600;
+    }
+
+    .card {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: rgba(255,122,0,0.18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .card-subtitle {
+      font-size: 10px;
+      color: rgba(255,255,255,0.38);
+      margin-top: 1px;
+    }
+
+    .card-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 13px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.82);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, border-color 0.15s, transform 0.1s;
+      touch-action: manipulation;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:hover {
+      background: rgba(255,122,0,0.16);
+      border-color: rgba(255,122,0,0.38);
+      color: white;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+      background: rgba(255,122,0,0.35);
+      border-color: rgba(255,122,0,0.7);
+      color: white;
+    }
+
+    .btn-arrow {
+      font-size: 12px;
+      opacity: 0.35;
+      flex-shrink: 0;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .btn:hover .btn-arrow { opacity: 0.85; transform: translateX(3px); }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.22);
+      margin-top: 12px;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.32);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    footer a:hover { color: var(--brand); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #e8924e 0%, #d4834a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      color: white;
+      gap: 14px;
+      transition: opacity 0.4s ease;
+    }
+
+    #loading-screen.hidden { opacity: 0; pointer-events: none; }
+    .loading-logo { width: 92px; height: 92px; object-fit: contain; animation: ls-pulse 1.2s ease-in-out infinite; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.18)); }
+    @keyframes ls-pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.8} }
+    .loading-text { font-size: 17px; font-weight: 700; letter-spacing: 0.04em; }
+    .loading-sub  { font-size: 12px; opacity: 0.75; letter-spacing: 0.06em; text-transform: uppercase; }
+    .ls-spinner {
+      width: 30px; height: 30px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: ls-spin 0.8s linear infinite;
+    }
+    @keyframes ls-spin { to { transform: rotate(360deg); } }
+    @media (max-width: 480px) {
+      body { justify-content: flex-start; padding-top: 34px; }
+      #app-screen { max-width: 100%; }
+}
+  </style>
+</head>
+<body>
+
+  <div id="loading-screen">
+    <img class="loading-logo" src="./empilhadeira_amarela_em_estilo_vetorial.png" alt="Apoio Rental">
+    <div class="loading-text">Apoio Rental</div>
+    <div class="ls-spinner"></div>
+    <div class="loading-sub">Carregando Apoio Rental...</div>
+  </div>
+
+  <main id="app-screen">
+    <div class="logo-area">
+      <img src="./empilhadeira_amarela_em_estilo_vetorial.png" alt="Apoio Rental">
+      <div class="logo-tagline">Apoio Rental</div>
+    </div>
+
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <div>
+          <div class="card-title">Registros e Vistorias</div>
+          <div class="card-subtitle">Ocorrências · Veículos · PDF</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/relatorio_ocorrencias_cdm.html')">
+          <span>📝 Relatório de Ocorrências (CDM)</span>
+          <span class="btn-arrow">→</span>
+        </button>
+
+        <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/vistoria_veicular_tradimaq.html')">
+          <span>🚗 Vistoria Veicular</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <div class="card-icon">🔧</div>
+        <div>
+          <div class="card-title">Controle de Ferramentas</div>
+          <div class="card-subtitle">Empréstimo · Mobile</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/controle_ferramentas_tradimaq.html')">
+          <span>Abrir controle</span>
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank" rel="noopener noreferrer">By Gabriel Roza</a>
+  </footer>
+<script>
+    function abrir(url) {
+      if (!navigator.onLine) {
+        alert('Sem conexão com a internet. Verifique sua rede e tente novamente.');
+        return;
+      }
+      window.location.href = url;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const ls = document.getElementById('loading-screen');
+      setTimeout(() => {
+        ls.classList.add('hidden');
+        setTimeout(() => ls.remove(), 450);
+      }, 450);
+    });
+
+    (function () {
+      const icon = './empilhadeira_amarela_em_estilo_vetorial.png';
+      const manifest = {
+        name: 'Tradimaq — Apoio Rental',
+        short_name: 'Apoio Rental',
+        start_url: './',
+        display: 'standalone',
+        background_color: '#1a1a1a',
+        theme_color: '#ff7a00',
+        icons: [
+          { src: icon, sizes: '192x192', type: 'image/png' },
+          { src: icon, sizes: '512x512', type: 'image/png' }
+        ]
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/manifest+json' });
+      document.getElementById('pwa-manifest').href = URL.createObjectURL(blob);
+    })();
+  </script>
+</body>
+</html>
