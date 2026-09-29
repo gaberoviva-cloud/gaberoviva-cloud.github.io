@@ -138,6 +138,72 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g1);color:var(--g9)
   .ft-div { display: none; }
 }
 
+
+/* ── FROTA / TPE ── */
+.fleet-hint{font-size:9.5px;color:var(--g5);margin-top:4px;min-height:13px;line-height:1.35}
+.fleet-hint.ok{color:var(--green);font-weight:600}
+.fleet-hint.warn{color:#b45309}
+
+/* ── RASCUNHOS ── */
+.draft-overlay{position:fixed;inset:0;background:rgba(17,24,39,.58);z-index:1500;display:none;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(3px)}
+.draft-overlay.active{display:flex}
+.draft-modal{width:100%;max-width:560px;max-height:min(82vh,720px);overflow:auto;background:white;border-radius:16px 16px 0 0;padding:16px;border:1px solid var(--g3);box-shadow:0 -10px 35px rgba(0,0,0,.18)}
+@media(min-width:600px){.draft-overlay{align-items:center;padding:18px}.draft-modal{border-radius:16px}}
+.draft-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.draft-head h3{font-size:15px;letter-spacing:.04em;text-transform:uppercase}.draft-head p{font-size:10px;color:var(--g5);margin-top:2px}
+.draft-close{width:34px;height:34px;border-radius:50%;border:1px solid var(--g3);background:var(--g0);cursor:pointer;color:var(--g7);font-size:17px}
+.draft-list{display:flex;flex-direction:column;gap:8px}
+.draft-empty{padding:24px 12px;text-align:center;border:1.5px dashed var(--g3);border-radius:8px;color:var(--g5);font-size:11px}
+.draft-item{border:1px solid var(--g3);border-radius:8px;background:var(--g0);padding:10px}
+.draft-item.current{border-color:rgba(255,122,0,.55);box-shadow:inset 0 0 0 2px rgba(255,122,0,.08)}
+.draft-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.draft-name{font-size:13px;font-weight:700;color:var(--g9)}
+.draft-current{font-size:8px;font-weight:700;color:var(--brand);background:#fff3e8;border:1px solid #ffd2ad;border-radius:99px;padding:2px 6px;white-space:nowrap;text-transform:uppercase}
+.draft-meta{font-size:9.5px;color:var(--g5);line-height:1.45;margin-top:3px}
+.draft-actions{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-top:8px}
+.draft-actions button{border:1px solid var(--g3);background:white;border-radius:6px;padding:8px 7px;font:600 10px 'IBM Plex Sans',sans-serif;color:var(--g7);cursor:pointer;text-transform:uppercase}
+.draft-actions .restore{background:var(--brand);border-color:var(--brand);color:white}.draft-actions .delete{color:var(--red);width:38px}
+
+/* ── AÇÕES FLUTUANTES ── */
+.quick-actions{position:fixed;right:20px;bottom:20px;z-index:1200;display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+.quick-menu{display:flex;flex-direction:column;gap:6px;align-items:flex-end;opacity:0;transform:translateY(10px) scale(.98);pointer-events:none;transition:.18s ease}
+.quick-actions.open .quick-menu{opacity:1;transform:none;pointer-events:auto}
+.quick-item{min-width:184px;border:1px solid rgba(255,255,255,.12);background:rgba(26,26,26,.96);color:white;border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:9px;font:600 11px 'IBM Plex Sans',sans-serif;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.18);backdrop-filter:blur(8px);text-align:left}
+.quick-item:hover{background:#303030}.quick-item.primary{background:var(--brand);border-color:var(--brand)}.quick-item.danger{color:#fecaca}.quick-item .qi-icon{width:20px;text-align:center;font-size:15px}
+.quick-fab{width:54px;height:54px;border-radius:50%;border:none;background:var(--brand);color:white;display:flex;align-items:center;justify-content:center;font-size:23px;cursor:pointer;box-shadow:0 10px 28px rgba(255,122,0,.35);transition:.18s ease}
+.quick-actions.open .quick-fab{transform:rotate(45deg);background:var(--g9)}
+.quick-count{margin-left:auto;font-size:8px;background:rgba(255,255,255,.15);border-radius:99px;padding:2px 6px}
+@media(max-width:600px){.quick-actions{right:14px;bottom:14px}.quick-item{min-width:170px}.quick-fab{width:52px;height:52px}}
+body.editing-photo .quick-actions{opacity:0;pointer-events:none;transform:translateY(8px)}
+
+/* ── PDF / DOCUMENTO V2 ── */
+.doc-page-hdr{position:relative;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid #e5e7eb}
+.doc-page-hdr::after{content:'';position:absolute;left:0;bottom:-1px;width:84px;height:3px;background:var(--brand);border-radius:99px}
+.doc-hdr-brand{display:flex;align-items:center;gap:10px;min-width:0}
+.doc-hdr-divider{width:1px;height:28px;background:#d1d5db;flex-shrink:0}
+.doc-hdr-kicker{font-size:8px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--brand);line-height:1.2}
+.doc-hdr-title{font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--g9);line-height:1.15}
+.doc-report-code{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;color:var(--g9)}
+.doc-hdr-meta{font-size:8px;color:var(--g5);margin-top:2px;line-height:1.45}
+.doc-info,.doc-sec{border-color:#d7dbe0;box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.doc-info-title,.doc-sec-title{position:relative;padding-left:15px;background:#20242a}
+.doc-info-title::before,.doc-sec-title::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--brand)}
+.doc-info-grid{background:#fff}
+.doc-info-cell{background:#fff;padding:7px 11px}
+.doc-info-val{overflow-wrap:anywhere}
+.doc-sec-body{color:#374151}
+.doc-foto-box{border-color:#d7dbe0;background:white}
+.doc-foto-caption{background:#fafafa;color:#6b7280}
+.doc-assin-body{background:#fff}
+.doc-footer{font-size:8px;color:#9ca3af;padding-top:8px}
+.doc-footer-left{display:flex;flex-direction:column;gap:2px}.doc-footer-ref{font-family:'IBM Plex Mono',monospace;font-size:7.5px;color:#9ca3af}
+
+@media print{
+  .quick-actions,.draft-overlay{display:none!important}
+  .doc-page-hdr{padding-bottom:9px!important;margin-bottom:10px!important}
+  .doc-info,.doc-sec{box-shadow:none!important}
+}
+
 /* ─ PREVIEW ─ */
 .preview-panel{padding:22px;overflow-y:auto;overflow-x:auto;background:var(--g1);position:relative;z-index:1;}
 .preview-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--g5);margin-bottom:12px;display:flex;align-items:center;gap:8px}
@@ -267,29 +333,29 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
     }
   }
   body{background:white!important}
-  #toast,.app-header,.editor,.preview-label,.preview-panel>.preview-label,.floating-toolbar{display:none!important}
+  #toast,.app-header,.editor,.preview-label,.preview-panel>.preview-label,.floating-toolbar,.quick-actions,.draft-overlay{display:none!important}
   .app-body{display:block!important}
-  .preview-panel{padding:0!important;background:white!important}
-  #documento{box-shadow:none!important;max-width:100%!important;width:100%!important;transform:none!important}
+  .preview-panel{display:block!important;padding:0!important;background:white!important;overflow:visible!important}
+  #documento{display:block!important;visibility:visible!important;box-shadow:none!important;width:190mm!important;max-width:190mm!important;min-width:0!important;margin:0 auto!important;transform:none!important;overflow:visible!important}
   .doc-page{padding:0!important}
   .doc-table-hdr,.doc-table-ftr{padding:0!important}
   .doc-td,.doc-td-first,.doc-td-last{padding:0!important}
   .doc-footer-preview-row{display:none!important}
+  .doc-table{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important}
   .doc-table thead{display:table-header-group!important}
-  .doc-foto-viewport.active-vp{box-shadow: none!important; transform: none!important;}
-  
-  /* Flexbox para evitar sumiço do Grid no Chrome */
-  .doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;display:block!important;margin-bottom:8mm!important;}
-  .doc-foto-cols{display:flex!important;gap:6px!important;width:100%!important;flex-wrap:nowrap!important;}
-  .doc-foto-box{flex:1!important;width:50%!important;page-break-inside:avoid!important;break-inside:avoid!important;display:block!important;}
-  
-  .doc-foto-viewport{width:100%!important;overflow:hidden!important;position:relative!important;aspect-ratio:4/3!important;height:auto!important;}
-  .doc-foto-viewport img{position:static!important;width:100%!important;height:100%!important;object-fit:cover!important;transform:none!important;max-width:none!important;min-width:unset!important;min-height:unset!important;display:block!important;}
+  .doc-table tbody{display:table-row-group!important}
+  .doc-table tr{display:table-row!important}
+  .doc-table td{display:table-cell!important;width:auto!important}
+  .doc-foto-viewport.active-vp{box-shadow:none!important;transform:none!important}
+  .doc-foto-par{page-break-inside:avoid!important;break-inside:avoid!important;display:block!important;margin-bottom:8mm!important}
+  .doc-foto-cols{display:flex!important;gap:6px!important;width:100%!important;flex-wrap:nowrap!important}
+  .doc-foto-box{flex:1 1 0!important;width:50%!important;min-width:0!important;page-break-inside:avoid!important;break-inside:avoid!important;display:block!important}
+  .doc-foto-viewport{width:100%!important;overflow:hidden!important;position:relative!important;aspect-ratio:4/3!important;height:auto!important;min-height:0!important}
+  .doc-foto-viewport img{position:static!important;width:100%!important;height:auto!important;aspect-ratio:4/3!important;object-fit:cover!important;transform:none!important;max-width:100%!important;min-width:0!important;min-height:0!important;display:block!important}
   .doc-info,.doc-sec,.doc-assinatura,.doc-footer{page-break-inside:avoid!important;break-inside:avoid!important}
-
-  /* modo compacto na impressão: fotos mais baixas + menos espaço = mais pares por página */
   .compact-doc .doc-foto-par{margin-bottom:4mm!important}
-  .compact-doc .doc-foto-viewport{aspect-ratio:4/2!important}
+  .compact-doc .doc-foto-viewport{aspect-ratio:2/1!important}
+  .compact-doc .doc-foto-viewport img{aspect-ratio:2/1!important}
   .compact-doc .doc-foto-lbl{padding:2px 9px!important;font-size:9px!important}
   .compact-doc .doc-foto-caption{padding:2px 9px 3px!important;font-size:8px!important}
   .compact-doc .doc-info{margin-bottom:7px!important}
@@ -297,6 +363,20 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
   .compact-doc .doc-sec-body{padding:6px 11px!important;min-height:auto!important}
   .compact-doc .doc-sec-title,.compact-doc .doc-info-title{padding:4px 11px!important}
 }
+
+
+/* ─ CORREÇÃO DE PRÉ-VISUALIZAÇÃO / MOBILE ─ */
+.preview-runtime-error{border:1px solid #fecaca;background:#fff7f7;color:#991b1b;border-radius:6px;padding:14px;font-size:12px;line-height:1.5}
+@media(max-width:860px){
+  .editor{position:relative!important;top:auto!important;max-height:none!important;overflow:visible!important;border-right:none!important}
+  .preview-panel{display:none!important;padding:14px 10px 96px!important;overflow:visible!important;min-height:calc(100vh - 52px)}
+  body.mobile-preview .editor{display:none!important}
+  body.mobile-preview .preview-panel{display:block!important}
+  body.mobile-preview .app-body{display:block!important}
+  body.mobile-preview .preview-label{display:flex!important}
+}
+@media(min-width:861px){body.mobile-preview .editor{display:block!important}body.mobile-preview .preview-panel{display:block!important}}
+
 </style>
 </head>
 <body>
@@ -327,7 +407,7 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
     <div class="field"><label>Modelo</label><input id="f-modelo" placeholder="Ex: Z-34/22 DC" oninput="changed()"></div>
     <div class="field"><label>Nº de Série</label><input id="f-serie" placeholder="Ex: Z3413-9493" oninput="changed()"></div>
   </div>
-  <div class="field"><label>TAG</label><input id="f-tag" placeholder="Ex: TPE-1605" oninput="changed()"></div>
+  <div class="field"><label>TAG / TPE</label><input id="f-tag" placeholder="Ex: TPE-1605" autocomplete="off" oninput="onTpeInput(this)" onblur="buscarTPE(this.value,true)" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarTPE(this.value,true);this.blur();}"><div class="fleet-hint" id="fleet-hint">Digite o TPE para preencher modelo, série e filial automaticamente.</div></div>
   <div class="f2">
     <div class="field"><label>Data</label><input type="date" id="f-data" oninput="changed()"></div>
     <div class="field"><label>Local</label><input id="f-local" placeholder="Ex: TRADIMAQ SP" oninput="changed()"></div>
@@ -381,21 +461,19 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
       <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g5);margin-bottom:6px;">Configuração do PDF</div>
       <div style="margin-top:8px;display:flex;align-items:center;gap:5px;">
         <label style="font-size:11px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
-          <input type="checkbox" id="toggle-labels" checked onchange="atualizar()">
+          <input type="checkbox" id="toggle-labels" checked onchange="changed()">
           <span style="color:var(--g7);">Títulos Antes/Depois</span>
         </label>
       </div>
       <div style="margin-top:8px;display:flex;align-items:center;gap:5px;">
         <label style="font-size:11px;display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none;">
-          <input type="checkbox" id="toggle-compact" onchange="atualizar()">
+          <input type="checkbox" id="toggle-compact" onchange="changed()">
           <span style="color:var(--g7);">Fotos compactas (mais pares por página)</span>
         </label>
       </div>
     </div>
-    <button class="btn btn-pdf" onclick="imprimirPDF()">🖨 Imprimir / Salvar PDF</button>
-    <button class="btn btn-save" onclick="salvarCache()">💾 Salvar agora</button>
-    <button class="btn" style="background:#0ea5e9;font-size:12px;padding:7px;" onclick="limparFotos()">🗑 Limpar só as fotos</button>
-    <button class="btn btn-clear" onclick="limpar()">Limpar tudo</button>
+    <button class="btn" style="background:#0ea5e9;font-size:12px;padding:8px;" onclick="limparFotos()">🗑 Limpar somente as fotos</button>
+    <div style="font-size:10px;color:var(--g5);text-align:center;line-height:1.45;padding:2px 6px 8px;">PDF, rascunhos, backup e novo relatório ficam no botão flutuante.</div>
   </div>
 
 </div>
@@ -404,6 +482,33 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
   <div class="preview-label">Pré-visualização</div>
   <div id="documento"></div>
 </div>
+</div>
+
+
+<!-- RASCUNHOS / BACKUP -->
+<div class="draft-overlay" id="draft-overlay" onclick="fecharRascunhos()">
+  <div class="draft-modal" onclick="event.stopPropagation()">
+    <div class="draft-head">
+      <div><h3>Rascunhos recentes</h3><p>Até 5 relatórios completos salvos neste aparelho.</p></div>
+      <button class="draft-close" onclick="fecharRascunhos()">✕</button>
+    </div>
+    <div class="draft-list" id="draft-list"></div>
+  </div>
+</div>
+<input type="file" id="backup-import" accept="application/json,.json" style="display:none" onchange="importarBackup(event)">
+
+<!-- AÇÕES PRINCIPAIS -->
+<div class="quick-actions" id="quick-actions">
+  <div class="quick-menu">
+    <button class="quick-item primary" onclick="quickRun(imprimirPDF)"><span class="qi-icon">🖨</span> Imprimir / Salvar PDF</button>
+    <button class="quick-item" id="quick-preview-item" onclick="quickRun(togglePreviewMode)"><span class="qi-icon">👁</span> <span id="quick-preview-label">Pré-visualização</span></button>
+    <button class="quick-item" onclick="quickRun(()=>salvarCache(false))"><span class="qi-icon">💾</span> Salvar agora</button>
+    <button class="quick-item" onclick="quickRun(abrirRascunhos)"><span class="qi-icon">🗂</span> Rascunhos <span class="quick-count" id="draft-count">0</span></button>
+    <button class="quick-item" onclick="quickRun(exportarBackupAtual)"><span class="qi-icon">⬇</span> Exportar backup</button>
+    <button class="quick-item" onclick="quickRun(()=>document.getElementById('backup-import').click())"><span class="qi-icon">⬆</span> Importar backup</button>
+    <button class="quick-item danger" onclick="quickRun(novoRelatorio)"><span class="qi-icon">＋</span> Novo relatório</button>
+  </div>
+  <button class="quick-fab" id="quick-fab" onclick="toggleQuickActions()" aria-label="Ações do relatório" title="Ações">＋</button>
 </div>
 
 <!-- BARRA FLUTUANTE DE FERRAMENTAS (NOVO LAYOUT) -->
@@ -434,9 +539,19 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
 <script>
 /* ════════ CONSTANTES ════════ */
 const LOGO_URL = 'https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
+const EQUIP_URL = 'https://gaberoviva-cloud.github.io/Data/raiox-frota.json';
 let LOGO = LOGO_URL;
+let EQUIP_INDEX = {};
+let EQUIP_FILIAIS = {};
 
-const CACHE_KEY = 'tradimaq_relatorio_v1';
+const CACHE_KEY = 'tradimaq_relatorio_v1'; // legado: usado apenas para migração
+const DB_NAME = 'tradimaq_relatorio_tecnico_db';
+const DB_VERSION = 1;
+const STORE_DRAFTS = 'rascunhos';
+const ACTIVE_DRAFT_KEY = 'tradimaq_relatorio_tecnico_active_draft';
+const DRAFT_LIMIT = 5;
+const BACKUP_FORMAT = 'tradimaq-relatorio-tecnico-backup';
+const BACKUP_VERSION = 1;
 const DESC_TEMPLATE = `Inspeção do equipamento (TAG), realizada no cliente (CLIENTE).
 Durante a inspeção do equipamento, foram identificadas avarias no (Ex: adesivo do painel do cesto), caracterizando dano incompatível com as condições normais de uso.`;
 
@@ -448,6 +563,12 @@ let galeriaCounter = 0;
 let draggingGId = null;
 let autoSaveTimer = null;
 let hasUnsaved = false;
+let activeDraftId = null;
+let activeDraftCreatedAt = null;
+let storageDB = null;
+let tpeTimer = null;
+try{ activeDraftId = localStorage.getItem(ACTIVE_DRAFT_KEY) || null; }catch(e){}
+window.addEventListener('beforeunload',e=>{if(hasUnsaved){e.preventDefault();e.returnValue='Há alterações ainda não salvas.';}});
 
 let activePhoto = null; 
 let globalTool = 'sel';
@@ -459,24 +580,77 @@ function onSlotMouseLeave(parId, lado){
   if(hoveredSlot && hoveredSlot.parId===parId && hoveredSlot.lado===lado) hoveredSlot = null;
 }
 
-/* ════════ INIT ════════ */
-document.getElementById('f-data').value = new Date().toISOString().split('T')[0];
+/* ════════ INIT / FROTA ════════ */
+function localDateISO(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function v(id){const el=document.getElementById(id);return el?el.value:'';}
+function novoDraftId(){return (window.crypto&&crypto.randomUUID)?crypto.randomUUID():'rt-'+Date.now()+'-'+Math.random().toString(36).slice(2,9);}
+function cloneJSON(obj){return JSON.parse(JSON.stringify(obj));}
+function escHTML(str){return String(str??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+function safeFile(str){return String(str||'RELATORIO').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9_-]+/gi,'_').replace(/^_+|_+$/g,'').slice(0,70)||'RELATORIO';}
+
+function normalizarTPE(raw){
+  const up=String(raw||'').trim().toUpperCase().replace(/\s+/g,'');
+  if(!up)return'';
+  if(/^\d+$/.test(up))return 'TPE-'+up;
+  const m=up.match(/^TPE-?(\d+)$/);if(m)return'TPE-'+m[1];
+  return up;
+}
+async function carregarEquipamentos(){
+  const hint=document.getElementById('fleet-hint');
+  try{
+    const r=await fetch(EQUIP_URL,{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();EQUIP_FILIAIS=data.filiais||{};EQUIP_INDEX={};
+    (data.equipamentos||[]).forEach(e=>{if(e?.tpe)EQUIP_INDEX[String(e.tpe).trim().toUpperCase()]=e;});
+    if(hint)hint.textContent='Digite o TPE para preencher modelo, série e filial automaticamente.';
+  }catch(e){console.warn('Frota indisponível:',e);if(hint){hint.textContent='Base da frota indisponível agora — preenchimento manual continua funcionando.';hint.className='fleet-hint warn';}}
+}
+function onTpeInput(el){
+  el.value=String(el.value||'').toUpperCase();changed();clearTimeout(tpeTimer);
+  tpeTimer=setTimeout(()=>buscarTPE(el.value,false),350);
+}
+function buscarTPE(raw,avisar=false){
+  const key=normalizarTPE(raw),hint=document.getElementById('fleet-hint');if(!key)return false;
+  const eq=EQUIP_INDEX[key];
+  if(!eq){if(avisar&&hint){hint.textContent='TPE não localizado na base da frota. Você pode preencher manualmente.';hint.className='fleet-hint warn';}return false;}
+  document.getElementById('f-tag').value=eq.tpe||key;
+  if(eq.modelo)document.getElementById('f-modelo').value=eq.modelo;
+  if(eq.serie)document.getElementById('f-serie').value=eq.serie;
+  const filial=EQUIP_FILIAIS[eq.filial]||eq.filial||'';if(filial)document.getElementById('f-local').value=filial;
+  if(hint){hint.textContent=`✓ ${eq.modelo||'Equipamento'} · ${eq.serie||'série não informada'}${filial?' · '+filial:''}`;hint.className='fleet-hint ok';}
+  changed();return true;
+}
+
+async function carregarLogoNaoBloqueante(){
+  try{
+    const resp=await fetch(LOGO_URL);
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    const blob=await resp.blob();
+    LOGO=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej(r.error);r.readAsDataURL(blob);});
+    atualizar();
+  }catch(e){console.warn('Fallback de logo aplicado.',e);}
+}
 
 async function initApp() {
-  try {
-    const resp = await fetch(LOGO_URL);
-    const blob = await resp.blob();
-    LOGO = await new Promise(res => {
-      const r = new FileReader(); r.onload = e => res(e.target.result); r.readAsDataURL(blob);
-    });
-  } catch(e) {
-    console.warn("Fallback de logo aplicado.");
-  }
-  carregarCache();
-  if (!pares.length) adicionarPar();
-  if (!v('f-descricao')) document.getElementById('f-descricao').value = DESC_TEMPLATE;
+  // A prévia precisa existir imediatamente, sem depender de internet ou da base da frota.
+  const dataEl=document.getElementById('f-data');
+  if(dataEl&&!dataEl.value)dataEl.value=localDateISO();
+  if(!pares.length){adicionarParSilencioso();renumerar();}
+  if(!v('f-descricao'))document.getElementById('f-descricao').value=DESC_TEMPLATE;
   renderGaleria();
   atualizar();
+  atualizarDraftCount().catch(()=>{});
+
+  // Recursos remotos carregam em paralelo e nunca bloqueiam a pré-visualização.
+  carregarEquipamentos().then(()=>{if(v('f-tag'))buscarTPE(v('f-tag'),false);}).catch(e=>console.warn(e));
+  carregarLogoNaoBloqueante();
+
+  // Recupera o trabalho local. Se houver rascunho, ele substitui o estado inicial.
+  try{await carregarCache();}catch(e){console.warn('Falha ao recuperar cache:',e);}
+  if(!pares.length){adicionarParSilencioso();renumerar();}
+  if(!v('f-descricao'))document.getElementById('f-descricao').value=DESC_TEMPLATE;
+  renderGaleria();
+  atualizar();
+  await atualizarDraftCount().catch(()=>{});
 }
 initApp();
 
@@ -523,8 +697,7 @@ function setSigPreview(data){
   window.sigData = data;
   const prev = document.getElementById('sig-preview');
   const img = document.getElementById('sig-img');
-  if(data){ prev.style.display='block'; img.src=data; } 
-  else { prev.style.display='none'; img.src=''; }
+  if(prev&&img){if(data){prev.style.display='block';img.src=data;}else{prev.style.display='none';img.src='';}}
   atualizar(); changed();
 }
 
@@ -572,125 +745,181 @@ function toast(msg, dur=2400){
   setTimeout(()=>t.classList.remove('show'),dur);
 }
 
-/* ════════ CACHE ════════ */
+/* ════════ ARMAZENAMENTO / RASCUNHOS / BACKUP ════════ */
+function abrirStorageDB(){
+  if(storageDB)return Promise.resolve(storageDB);
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open(DB_NAME,DB_VERSION);
+    req.onupgradeneeded=e=>{const db=e.target.result;if(!db.objectStoreNames.contains(STORE_DRAFTS))db.createObjectStore(STORE_DRAFTS,{keyPath:'id'});};
+    req.onsuccess=e=>{storageDB=e.target.result;storageDB.onversionchange=()=>{try{storageDB.close();}catch(_){}storageDB=null;};res(storageDB);};
+    req.onerror=()=>rej(req.error||new Error('Falha ao abrir IndexedDB'));
+  });
+}
+async function dbGet(id){const db=await abrirStorageDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE_DRAFTS,'readonly');const q=tx.objectStore(STORE_DRAFTS).get(id);q.onsuccess=()=>res(q.result||null);q.onerror=()=>rej(q.error);});}
+async function dbAll(){const db=await abrirStorageDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE_DRAFTS,'readonly');const q=tx.objectStore(STORE_DRAFTS).getAll();q.onsuccess=()=>res((q.result||[]).sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||''))));q.onerror=()=>rej(q.error);});}
+async function dbPut(obj){const db=await abrirStorageDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE_DRAFTS,'readwrite');tx.objectStore(STORE_DRAFTS).put(obj);tx.oncomplete=res;tx.onerror=()=>rej(tx.error);});}
+async function dbDelete(id){const db=await abrirStorageDB();return new Promise((res,rej)=>{const tx=db.transaction(STORE_DRAFTS,'readwrite');tx.objectStore(STORE_DRAFTS).delete(id);tx.oncomplete=res;tx.onerror=()=>rej(tx.error);});}
+async function podarRascunhos(){const all=await dbAll();for(const r of all.slice(DRAFT_LIMIT))await dbDelete(r.id);}
+
+function coletarSnapshot(){
+  if(!activeDraftId)activeDraftId=novoDraftId();
+  if(!activeDraftCreatedAt)activeDraftCreatedAt=new Date().toISOString();
+  return{
+    id:activeDraftId,createdAt:activeDraftCreatedAt,updatedAt:new Date().toISOString(),
+    fields:{modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao')},
+    sigData:window.sigData||null,
+    pares:cloneJSON(pares),galeria:cloneJSON(galeria),parCounter,galeriaCounter,
+    pdf:{labels:document.getElementById('toggle-labels')?.checked!==false,compact:document.getElementById('toggle-compact')?.checked===true}
+  };
+}
+function temConteudoSnapshot(s){
+  if(!s)return false;const f=s.fields||{};
+  const texto=[f.modelo,f.serie,f.local,f.tag,f.cliente,f.resp1,f.resp2].some(x=>String(x||'').trim());
+  const desc=String(f.descricao||'').trim()&&String(f.descricao||'').trim()!==DESC_TEMPLATE.trim();
+  const imgs=(s.pares||[]).some(p=>p.antesData||p.depoisData)||(s.galeria||[]).length>0;
+  return !!(texto||desc||imgs||s.sigData);
+}
+function contarFotosSnapshot(s){return (s?.pares||[]).reduce((n,p)=>n+(p.antesData?1:0)+(p.depoisData?1:0),0);}
+
+function reconstruirPares(){
+  document.getElementById('foto-pares').innerHTML='';
+  pares.forEach(p=>{criarParDOM(p.id);syncThumbs(p.id);const inp=document.querySelector(`#pe-${p.id} .caption-input`);if(inp)inp.value=p.caption||'';});
+  renumerar();
+}
+function aplicarSnapshot(s,{setActive=true}={}){
+  if(!s)return;closeGlobalTools();activePhoto=null;
+  const f=s.fields||s;const map={modelo:'f-modelo',serie:'f-serie',data:'f-data',local:'f-local',tag:'f-tag',cliente:'f-cliente',descricao:'f-descricao',resp1:'f-resp1',resp2:'f-resp2',condicao:'f-condicao'};
+  Object.entries(map).forEach(([k,id])=>{const el=document.getElementById(id);if(el&&f[k]!==undefined)el.value=f[k]??'';});
+  if(!v('f-data'))document.getElementById('f-data').value=localDateISO();
+  pares=cloneJSON(s.pares||[]);galeria=cloneJSON(s.galeria||[]);parCounter=Number(s.parCounter)||Math.max(0,...pares.map(p=>Number(p.id)||0));galeriaCounter=Number(s.galeriaCounter)||Math.max(0,...galeria.map(g=>Number(g.id)||0));
+  window.sigData=s.sigData||null;
+  if(setActive){activeDraftId=s.id||novoDraftId();activeDraftCreatedAt=s.createdAt||new Date().toISOString();try{localStorage.setItem(ACTIVE_DRAFT_KEY,activeDraftId);}catch(e){}}
+  reconstruirPares();renderGaleria();
+  if(s.pdf){const l=document.getElementById('toggle-labels'),c=document.getElementById('toggle-compact');if(l)l.checked=s.pdf.labels!==false;if(c)c.checked=!!s.pdf.compact;}
+  if(!pares.length){adicionarParSilencioso();renumerar();}
+  atualizar();hasUnsaved=false;badge('✓ Recuperado','saved');
+  const hint=document.getElementById('fleet-hint');
+  if(hint&&v('f-tag')){const eq=EQUIP_INDEX[normalizarTPE(v('f-tag'))];if(eq){const filial=EQUIP_FILIAIS[eq.filial]||eq.filial||'';hint.textContent=`✓ ${eq.modelo||'Equipamento'} · ${eq.serie||'série não informada'}${filial?' · '+filial:''}`;hint.className='fleet-hint ok';}}
+}
+
 function changed(){
-  hasUnsaved=true; badge('⏳ Não salvo','');
-  clearTimeout(autoSaveTimer); autoSaveTimer=setTimeout(salvarCacheAuto,3000);
+  hasUnsaved=true;badge('⏳ Não salvo','');clearTimeout(autoSaveTimer);
+  autoSaveTimer=setTimeout(()=>salvarCache(true).catch(e=>console.warn('Autosave:',e)),3000);atualizar();
+}
+function badge(txt,cls){const b=document.getElementById('save-badge');if(!b)return;b.textContent=txt;b.className='save-badge'+(cls?' '+cls:'');}
+function salvarCacheAuto(){salvarCache(true).catch(()=>{});}
+async function salvarCache(silencioso=false){
+  const snap=coletarSnapshot();if(!temConteudoSnapshot(snap)){hasUnsaved=false;badge('Sem alterações','');return snap;}
+  try{
+    await dbPut(snap);await podarRascunhos();try{localStorage.setItem(ACTIVE_DRAFT_KEY,snap.id);}catch(e){}
+    try{localStorage.removeItem(CACHE_KEY);}catch(e){}
+    hasUnsaved=false;badge('✓ Salvo','saved');await atualizarDraftCount();if(!silencioso)toast('Salvo com sucesso!');return snap;
+  }catch(e){console.error(e);badge('⚠ Falha ao salvar','');if(!silencioso)toast('⚠ Não foi possível salvar. Verifique o armazenamento do navegador.',3800);throw e;}
+}
+async function carregarCache(){
+  try{
+    if(activeDraftId){const r=await dbGet(activeDraftId);if(r){aplicarSnapshot(r);return;}}
+    const all=await dbAll();if(all.length){aplicarSnapshot(all[0]);return;}
+    // Migração da versão antiga em localStorage
+    const raw=localStorage.getItem(CACHE_KEY);if(raw){const d=JSON.parse(raw);activeDraftId=novoDraftId();activeDraftCreatedAt=new Date().toISOString();aplicarSnapshot({...d,id:activeDraftId,createdAt:activeDraftCreatedAt,updatedAt:new Date().toISOString(),fields:d,pdf:{labels:true,compact:false}});await salvarCache(true);return;}
+  }catch(e){console.warn('Recuperação de cache falhou:',e);}
+}
+
+async function atualizarDraftCount(){try{const all=await dbAll();const el=document.getElementById('draft-count');if(el)el.textContent=String(all.slice(0,DRAFT_LIMIT).length);}catch(e){}}
+async function abrirRascunhos(){
+  document.getElementById('draft-overlay').classList.add('active');const root=document.getElementById('draft-list');root.innerHTML='<div class="draft-empty">Carregando...</div>';
+  const all=(await dbAll()).slice(0,DRAFT_LIMIT);if(!all.length){root.innerHTML='<div class="draft-empty">Nenhum rascunho salvo ainda.</div>';return;}
+  root.innerHTML=all.map(r=>{const f=r.fields||{},name=escHTML(f.tag||f.modelo||'Relatório sem TAG'),dt=f.data?f.data.split('-').reverse().join('/'):'—',upd=r.updatedAt?new Date(r.updatedAt).toLocaleString('pt-BR'):'—';return`<div class="draft-item ${r.id===activeDraftId?'current':''}"><div class="draft-top"><div><div class="draft-name">${name}</div><div class="draft-meta">${escHTML(f.cliente||'Cliente não informado')} · ${dt} · ${contarFotosSnapshot(r)} foto(s)<br>Salvo: ${escHTML(upd)}</div></div>${r.id===activeDraftId?'<span class="draft-current">aberto</span>':''}</div><div class="draft-actions"><button class="restore" onclick="restaurarRascunho('${r.id}')">Restaurar</button><button onclick="exportarRascunho('${r.id}')">Exportar</button><button class="delete" onclick="excluirRascunho('${r.id}')">✕</button></div></div>`;}).join('');
+}
+function fecharRascunhos(){document.getElementById('draft-overlay').classList.remove('active');}
+async function restaurarRascunho(id){
+  if(hasUnsaved)await salvarCache(true).catch(()=>{});const r=await dbGet(id);if(!r)return toast('Rascunho não encontrado.');aplicarSnapshot(r);fecharRascunhos();toast('Rascunho restaurado!');
+}
+async function excluirRascunho(id){
+  if(!confirm('Excluir este rascunho?'))return;await dbDelete(id);
+  if(id===activeDraftId){activeDraftId=novoDraftId();activeDraftCreatedAt=null;try{localStorage.setItem(ACTIVE_DRAFT_KEY,activeDraftId);}catch(e){}}
+  await abrirRascunhos();await atualizarDraftCount();
+}
+function baixarJSON(snapshot){
+  const f=snapshot.fields||{};const payload={format:BACKUP_FORMAT,version:BACKUP_VERSION,exportedAt:new Date().toISOString(),snapshot};const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`RELATORIO_${safeFile(f.tag||f.modelo)}_${f.data||localDateISO()}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+}
+async function exportarBackupAtual(){const s=await salvarCache(true).catch(()=>coletarSnapshot());baixarJSON(s);toast('Backup JSON gerado!');}
+async function exportarRascunho(id){const r=await dbGet(id);if(r)baixarJSON(r);}
+async function importarBackup(ev){
+  const file=ev.target.files?.[0];ev.target.value='';if(!file)return;
+  try{const txt=await file.text(),p=JSON.parse(txt);if(p.format!==BACKUP_FORMAT||!p.snapshot)throw new Error('Formato inválido');if(hasUnsaved)await salvarCache(true).catch(()=>{});const s=p.snapshot;s.id=novoDraftId();s.createdAt=new Date().toISOString();s.updatedAt=s.createdAt;aplicarSnapshot(s);await salvarCache(true);toast('Backup importado com fotos e ajustes!');}catch(e){console.warn(e);toast('⚠ Backup inválido ou incompatível.',3500);}
+}
+async function novoRelatorio(){
+  if(!confirm('Iniciar um novo relatório? O atual será preservado nos rascunhos.'))return;
+  await salvarCache(true).catch(()=>{});activeDraftId=novoDraftId();activeDraftCreatedAt=null;try{localStorage.setItem(ACTIVE_DRAFT_KEY,activeDraftId);}catch(e){}
+  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-resp1','f-resp2'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('f-data').value=localDateISO();document.getElementById('f-condicao').value='';document.getElementById('f-descricao').value=DESC_TEMPLATE;window.sigData=null;
+  pares=[];parCounter=0;galeria=[];galeriaCounter=0;activePhoto=null;closeGlobalTools();document.getElementById('foto-pares').innerHTML='';renderGaleria();adicionarParSilencioso();renumerar();
+  document.getElementById('toggle-labels').checked=true;document.getElementById('toggle-compact').checked=false;
+  const hint=document.getElementById('fleet-hint');if(hint){hint.textContent='Digite o TPE para preencher modelo, série e filial automaticamente.';hint.className='fleet-hint';}
+  atualizar();hasUnsaved=false;badge('Sem alterações','');await atualizarDraftCount();window.scrollTo({top:0,behavior:'smooth'});toast('Novo relatório pronto!');
+}
+function limpar(){novoRelatorio();}
+
+function atualizarRotuloPreview(){
+  const label=document.getElementById('quick-preview-label');
+  if(!label)return;
+  label.textContent=(window.innerWidth<=860&&document.body.classList.contains('mobile-preview'))?'Voltar para edição':'Pré-visualização';
+}
+function togglePreviewMode(){
   atualizar();
+  if(window.innerWidth<=860){
+    document.body.classList.toggle('mobile-preview');
+    atualizarRotuloPreview();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }else{
+    document.querySelector('.preview-panel')?.scrollIntoView({behavior:'smooth',block:'start'});
+  }
 }
-function badge(txt,cls){
-  const b=document.getElementById('save-badge'); b.textContent=txt;b.className='save-badge'+(cls?' '+cls:'');
-}
-function salvarCacheAuto(){salvarCache(true);}
-
-function salvarCache(silencioso=false){
-  try{
-    const dados={
-      modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),
-      tag:v('f-tag'),cliente:v('f-cliente'),descricao:v('f-descricao'),
-      resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),
-      sigData: window.sigData||null,
-      pares: pares.map(p=>({
-        id:p.id,antesData:p.antesData,depoisData:p.depoisData, caption:p.caption,
-        antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
-        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1,
-        annots_A:p.annots_A||[],annots_D:p.annots_D||[]
-      })),
-      galeria:galeria.map(g=>({id:g.id,data:g.data,name:g.name})),
-      parCounter,galeriaCounter
-    };
-    localStorage.setItem(CACHE_KEY,JSON.stringify(dados));
-    hasUnsaved=false; badge('✓ Salvo','saved');
-    if(!silencioso) toast('Salvo com sucesso!');
-  }catch(e){toast('Erro ao salvar (armazenamento cheio?)');}
-}
-
-function carregarCache(){
-  try{
-    const raw=localStorage.getItem(CACHE_KEY); if(!raw) return;
-    const d=JSON.parse(raw);
-    ['modelo','serie','data','local','tag','cliente','descricao','resp1','resp2','condicao'].forEach(k=>{
-      const el=document.getElementById('f-'+k); if(el&&d[k]!==undefined) el.value=d[k];
-    });
-    parCounter=d.parCounter||0; galeriaCounter=d.galeriaCounter||0;
-    galeria=(d.galeria||[]); pares=[];
-    document.getElementById('foto-pares').innerHTML='';
-    (d.pares||[]).forEach(p=>{
-      pares.push({
-        id:p.id,antesData:p.antesData||null,depoisData:p.depoisData||null, caption:p.caption||'',
-        antesOX:p.antesOX||0,antesOY:p.antesOY||0,antesScale:p.antesScale||1,
-        depoisOX:p.depoisOX||0,depoisOY:p.depoisOY||0,depoisScale:p.depoisScale||1,
-        annots_A:p.annots_A||[],annots_D:p.annots_D||[]
-      });
-      criarParDOM(p.id); syncThumbs(p.id);
-    });
-    renumerar(); badge('✓ Cache carregado','saved');
-    if(d.sigData) setSigPreview(d.sigData);
-  }catch(e){console.warn('Cache inválido',e);}
-}
-function v(id){return document.getElementById(id)?.value||'';}
+window.addEventListener('resize',()=>{
+  if(window.innerWidth>860)document.body.classList.remove('mobile-preview');
+  atualizarRotuloPreview();
+});
+function toggleQuickActions(){document.getElementById('quick-actions').classList.toggle('open');}
+function fecharQuickActions(){document.getElementById('quick-actions').classList.remove('open');}
+function quickRun(fn){fecharQuickActions();setTimeout(()=>{try{const r=fn();if(r&&typeof r.catch==='function')r.catch(e=>console.warn(e));}catch(e){console.warn(e);}},80);}
+document.addEventListener('click',e=>{const q=document.getElementById('quick-actions');if(q&&!q.contains(e.target))q.classList.remove('open');});
+atualizarRotuloPreview();
 
 /* ════════ CANVAS RESIZE ════════ */
 function processImageOrig(dataURL, maxW=1200) {
-  return new Promise(resolve => {
+  return new Promise((resolve,reject) => {
     const img = new Image();
     img.onload = () => {
-      const scale = Math.min(1, maxW / img.naturalWidth);
-      const w = Math.round(img.naturalWidth * scale);
-      const h = Math.round(img.naturalHeight * scale);
-      const c = document.createElement('canvas');
-      c.width = w; c.height = h;
-      c.getContext('2d').drawImage(img, 0, 0, w, h);
-      resolve(c.toDataURL('image/jpeg', 0.88));
+      try{
+        if(!img.naturalWidth||!img.naturalHeight)throw new Error('Imagem sem dimensões válidas');
+        const scale = Math.min(1, maxW / img.naturalWidth);
+        const w = Math.max(1,Math.round(img.naturalWidth * scale));
+        const h = Math.max(1,Math.round(img.naturalHeight * scale));
+        const c = document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',0.86));
+      }catch(e){reject(e);}
     };
+    img.onerror=()=>reject(new Error('Falha ao carregar imagem'));
     img.src = dataURL;
   });
 }
 
 /* ════════ GALERIA BULK ════════ */
-function bulkUpload(event){
-  const files=[...event.target.files]; if(!files.length)return;
-  let loaded = 0; const results = [];
-  files.forEach((f, idx) => {
-    const r = new FileReader();
-    r.onload = async e => {
-      const resized = await processImageOrig(e.target.result);
-      results[idx] = { data: resized, name: f.name };
-      loaded++;
-      if(loaded === files.length) {
-        const novas = results.map(item => {
-          galeriaCounter++; const g = {id: galeriaCounter, data: item.data, name: item.name};
-          galeria.push(g); return g;
-        });
-        renderGaleria(); autoAssign(novas);
-      }
-    };
-    r.readAsDataURL(f);
-  });
-  event.target.value='';
+async function lerImagemArquivo(f){
+  if(!f||!String(f.type||'').startsWith('image/'))throw new Error('Arquivo não é imagem');
+  const raw=await new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej(r.error||new Error('Falha ao ler arquivo'));r.readAsDataURL(f);});
+  return{data:await processImageOrig(raw),name:f.name||'imagem.jpg'};
 }
-
-function onBulkDrop(event){
-  event.preventDefault(); document.getElementById('bulk-zone').classList.remove('over');
-  const files=[...event.dataTransfer.files].filter(f=>f.type.startsWith('image/')); if(!files.length)return;
-  let loaded = 0; const results = [];
-  files.forEach((f, idx) => {
-    const r = new FileReader();
-    r.onload = async e => {
-      const resized = await processImageOrig(e.target.result);
-      results[idx] = { data: resized, name: f.name };
-      loaded++;
-      if(loaded === files.length) {
-        const novas = results.map(item => {
-          galeriaCounter++; const g = {id: galeriaCounter, data: item.data, name: item.name};
-          galeria.push(g); return g;
-        });
-        renderGaleria(); autoAssign(novas);
-      }
-    };
-    r.readAsDataURL(f);
-  });
+async function importarListaImagens(files){
+  const valid=[...(files||[])].filter(f=>String(f.type||'').startsWith('image/'));if(!valid.length)return toast('Nenhuma imagem válida selecionada.');
+  toast(`Processando ${valid.length} foto(s)...`);const settled=await Promise.allSettled(valid.map(lerImagemArquivo));const ok=settled.filter(x=>x.status==='fulfilled').map(x=>x.value);
+  if(!ok.length)return toast('⚠ Não consegui processar as imagens.',3200);
+  const novas=ok.map(item=>{galeriaCounter++;const g={id:galeriaCounter,data:item.data,name:item.name};galeria.push(g);return g;});renderGaleria();autoAssign(novas);changed();
+  if(ok.length<valid.length)toast(`${ok.length} foto(s) adicionada(s); ${valid.length-ok.length} ignorada(s).`,3200);
 }
+async function bulkUpload(event){const files=[...event.target.files];event.target.value='';await importarListaImagens(files);}
+async function onBulkDrop(event){event.preventDefault();document.getElementById('bulk-zone').classList.remove('over');await importarListaImagens(event.dataTransfer.files);}
 
 function autoAssign(novas){
   const fila = [...novas]; let fi = 0;
@@ -867,6 +1096,7 @@ function setGlobalFocus(lado, id) {
   if(!temDado) return;
 
   activePhoto = { lado, id };
+  fecharQuickActions();document.body.classList.add('editing-photo');
   const tools = document.getElementById('global-annot-tools');
   tools.classList.add('active');
   
@@ -894,7 +1124,7 @@ function setGlobalFocus(lado, id) {
 }
 
 function closeGlobalTools() {
-  activePhoto = null;
+  activePhoto = null;document.body.classList.remove('editing-photo');
   document.getElementById('global-annot-tools').classList.remove('active');
   document.querySelectorAll('.doc-foto-viewport').forEach(v => v.classList.remove('active-vp'));
 }
@@ -1041,19 +1271,21 @@ function resetFoto(par, lado) {
 /* ════════ RENDER DOCUMENTO ════════ */
 function rodape(){
   const logoFooter = LOGO ? `<img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">` : '';
-  return`<div class="doc-footer"><span class="doc-footer-site">www.tradimaq.com.br</span>${logoFooter}</div>`;
+  const ref=safeFile(v('f-tag')||'SEM-TAG');
+  return`<div class="doc-footer"><div class="doc-footer-left"><span class="doc-footer-site">www.tradimaq.com.br</span><span class="doc-footer-ref">RT · ${escHTML(ref)} · ${new Date().getFullYear()}</span></div>${logoFooter}</div>`;
 }
 
 function hdr(dataFmt, cliente, tag){
   const logoHtml = LOGO ? `<img class="doc-logo" src="${LOGO}" alt="Tradimaq">` : `<div class="doc-logo-txt">TRADI<span>MAQ</span></div>`;
-  return`<div class="doc-page-hdr">${logoHtml}<div class="doc-hdr-right">Cliente: <strong>${cliente}</strong> &nbsp;•&nbsp; TAG: <strong>${tag}</strong> &nbsp;•&nbsp; ${dataFmt}</div></div>`;
+  const reportId=`RT-${safeFile(tag==='—'?'XXXX':tag)}-${new Date().getFullYear()}`;
+  return`<div class="doc-page-hdr"><div class="doc-hdr-brand">${logoHtml}<div class="doc-hdr-divider"></div><div><div class="doc-hdr-kicker">Tradimaq · Manutenção</div><div class="doc-hdr-title">Relatório Técnico</div></div></div><div class="doc-hdr-right"><div class="doc-report-code">${escHTML(reportId)}</div><div class="doc-hdr-meta">${escHTML(dataFmt)} · ${escHTML(cliente)}<br>TAG: <strong>${escHTML(tag)}</strong></div></div></div>`;
 }
 
 function atualizarChecklist(paresOrd){
   const bar = document.getElementById('checklist-bar');
   if(!bar) return;
   const identDone = !!(v('f-cliente') && v('f-tag'));
-  const descDone = !!v('f-condicao');
+  const descDone = !!String(v('f-descricao')||'').trim();
   const fotosDone = (paresOrd||[]).some(p=>p.antesData || p.depoisData);
   const assinDone = !!(v('f-resp1') && v('f-resp2'));
   const status = {ident:identDone, desc:descDone, fotos:fotosDone, assin:assinDone};
@@ -1062,10 +1294,11 @@ function atualizarChecklist(paresOrd){
   });
 }
 
-function atualizar(){
+function atualizarCore(){
   const modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',local=v('f-local')||'—';
   const tag=v('f-tag')||'—',cliente=v('f-cliente')||'—',descricao=v('f-descricao')||'—';
   const resp1=v('f-resp1'),resp2=v('f-resp2');
+  const smodelo=escHTML(modelo),sserie=escHTML(serie),slocal=escHTML(local),stag=escHTML(tag),scliente=escHTML(cliente),sdescricao=escHTML(descricao),sresp1=escHTML(resp1),sresp2=escHTML(resp2);
   const raw=v('f-data'); const dataFmt=raw?raw.split('-').reverse().join('/'):'—';
   const condicao=v('f-condicao')||'';
   const badgeMap={leve:'<span class="badge badge-leve">Dano Leve</span>',moderado:'<span class="badge badge-moderado">Dano Moderado</span>',grave:'<span class="badge badge-grave">Dano Grave</span>','':'<span class="badge badge-sem">Sem Dano</span>'};
@@ -1107,11 +1340,11 @@ function atualizar(){
 
     const vA = makeVP('A', par.antesData, ox_a, oy_a, sc_a);
     const vD = makeVP('D', par.depoisData, ox_d, oy_d, sc_d);
-    const cap=par.caption?`Figura ${i+1} — ${par.caption}`:`Figura ${i+1}`;
+    const cap=par.caption?`Figura ${i+1} — ${escHTML(par.caption)}`:`Figura ${i+1}`;
     return`<div class="doc-foto-par"><div class="doc-foto-cols"><div class="doc-foto-box">${lblA}${vA}</div><div class="doc-foto-box">${lblD}${vD}</div></div><div class="doc-foto-caption">${cap}</div></div>`;
   });
 
-  const fotosRowsHtml = fotosHtml.map((html,i)=>`<tr><td class="doc-td">${i===0?`<div class="doc-sec-title" style="margin-bottom:10px;">Fotos</div>`:''}${html}</td></tr>`).join('');
+  const fotosRowsHtml = fotosHtml.map((html,i)=>`<tr><td class="doc-td">${i===0?`<div class="doc-sec-title" style="margin-bottom:10px;">Registro Fotográfico</div>`:''}${html}</td></tr>`).join('');
 
   document.getElementById('documento').innerHTML=`
     <table class="doc-table">
@@ -1120,32 +1353,32 @@ function atualizar(){
       <tr><td class="doc-td doc-td-first">
         <div class="doc-info">
           <div class="doc-info-title" style="background:var(--g9)">
-            <div class="doc-info-title-row"><span class="tit">Relatório Técnico</span>${badgeHtml}</div>
+            <div class="doc-info-title-row"><span class="tit">Identificação do Equipamento</span>${badgeHtml}</div>
           </div>
           <div class="doc-info-grid">
-            <div class="doc-info-cell"><span class="doc-info-key">Cliente:</span><span class="doc-info-val">${cliente}</span></div>
-            <div class="doc-info-cell"><span class="doc-info-key">TAG:</span><span class="doc-info-val">${tag}</span></div>
-            <div class="doc-info-cell"><span class="doc-info-key">Modelo:</span><span class="doc-info-val">${modelo}</span></div>
-            <div class="doc-info-cell"><span class="doc-info-key">Nº Série:</span><span class="doc-info-val">${serie}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Cliente:</span><span class="doc-info-val">${scliente}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">TAG:</span><span class="doc-info-val">${stag}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Modelo:</span><span class="doc-info-val">${smodelo}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Nº Série:</span><span class="doc-info-val">${sserie}</span></div>
             <div class="doc-info-cell"><span class="doc-info-key">Data:</span><span class="doc-info-val">${dataFmt}</span></div>
-            <div class="doc-info-cell"><span class="doc-info-key">Local:</span><span class="doc-info-val">${local}</span></div>
+            <div class="doc-info-cell"><span class="doc-info-key">Local:</span><span class="doc-info-val">${slocal}</span></div>
           </div>
         </div>
       </td></tr>
       <tr><td class="doc-td">
         <div class="doc-info" style="margin-bottom:12px">
-          <div class="doc-info-title">Descrição</div>
-          <div class="doc-sec-body">${descricao}</div>
+          <div class="doc-info-title">Descrição Técnica</div>
+          <div class="doc-sec-body">${sdescricao}</div>
         </div>
       </td></tr>
       ${fotosRowsHtml}
       <tr><td class="doc-td">
         <div class="doc-assinatura">
-          <div class="doc-sec-title">Assinaturas</div>
+          <div class="doc-sec-title">Validação dos Responsáveis</div>
           <div class="doc-assin-body">
             <div class="doc-assin-grid">
-              <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Técnico</div><div class="doc-assin-name">${resp1}</div></div>
-              <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Cliente</div><div class="doc-assin-name">${resp2}</div></div>
+              <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Técnico</div><div class="doc-assin-name">${sresp1}</div></div>
+              <div class="doc-assin-box"><div class="doc-assin-lbl">Responsável / Cliente</div><div class="doc-assin-name">${sresp2}</div></div>
             </div>
           </div>
         </div>
@@ -1162,19 +1395,25 @@ function atualizar(){
   });
 }
 
-/* ════════ LIMPAR ════════ */
-function limpar(){
-  if(!confirm('Limpar tudo? Isso também apaga o cache salvo.'))return;
-  localStorage.removeItem(CACHE_KEY);
-  ['f-modelo','f-serie','f-local','f-tag','f-cliente','f-descricao','f-resp1','f-resp2','f-condicao'].forEach(id=>{document.getElementById(id).value='';
-  removerSig();});
-  document.getElementById('f-data').value=new Date().toISOString().split('T')[0];
-  pares=[];parCounter=0;galeria=[];galeriaCounter=0; activePhoto=null;
-  closeGlobalTools();
-  document.getElementById('foto-pares').innerHTML='';
-  renderGaleria();adicionarPar();atualizar(); badge('Sem alterações','');
+function atualizar(){
+  try{
+    const r=atualizarCore();
+    const doc=document.getElementById('documento');
+    if(doc)doc.dataset.previewOk='1';
+    return r;
+  }catch(e){
+    console.error('Falha ao atualizar pré-visualização:',e);
+    const doc=document.getElementById('documento');
+    if(doc){
+      doc.innerHTML=`<div class="preview-runtime-error"><strong>Não foi possível atualizar a pré-visualização.</strong><br>Os dados continuam no formulário. Tente atualizar a página; se persistir, veja o console para o erro técnico.</div>`;
+      doc.dataset.previewOk='0';
+    }
+    return false;
+  }
 }
 
+
+/* ════════ LIMPEZA DE FOTOS ════════ */
 function limparFotos(){
   if(!confirm('Limpar todas as fotos? Os dados do relatório serão mantidos.'))return;
   pares.forEach(par=>{
@@ -1322,10 +1561,56 @@ function redrawAnnots(lado, parId, preview=null){
   if(preview) drawAnnot(ctx,preview,W,H,false);
 }
 
+
+/* ════════ IMPRESSÃO ISOLADA — evita conflito do layout do app com A4 retrato ════════ */
+function montarHTMLImpressaoIsolada(){
+  const estilos=[...document.querySelectorAll('style')].map(el=>el.textContent||'').join('\n');
+  const fontes=[...document.querySelectorAll('link[rel="stylesheet"]')].map(el=>el.outerHTML).join('\n');
+  const doc=document.getElementById('documento');
+  const conteudo=doc?doc.outerHTML:'<div>Relatório indisponível.</div>';
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">${fontes}<style>${estilos}
+  html,body{margin:0!important;padding:0!important;background:#fff!important;min-height:0!important;height:auto!important;overflow:visible!important}
+  body{display:block!important}
+  #documento{display:block!important;visibility:visible!important;width:190mm!important;max-width:190mm!important;min-width:0!important;margin:0!important;box-shadow:none!important;transform:none!important;overflow:visible!important}
+  .app-header,.editor,.preview-label,.floating-toolbar,.quick-actions,.draft-overlay,#toast{display:none!important}
+  @media print{html,body{margin:0!important;padding:0!important;background:#fff!important;overflow:visible!important}#documento{width:190mm!important;max-width:190mm!important;margin:0!important}}
+  </style></head><body>${conteudo}</body></html>`;
+}
+
+function esperarImagensDocumento(doc,timeout=5000){
+  const imgs=[...doc.images];
+  if(!imgs.length)return Promise.resolve();
+  return Promise.race([
+    Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(res=>{img.addEventListener('load',res,{once:true});img.addEventListener('error',res,{once:true});}))),
+    new Promise(res=>setTimeout(res,timeout))
+  ]);
+}
+
+async function imprimirEmDocumentoIsolado(){
+  const iframe=document.createElement('iframe');
+  iframe.setAttribute('aria-hidden','true');
+  iframe.style.cssText='position:fixed;left:-10000px;top:0;width:210mm;height:297mm;border:0;opacity:.01;pointer-events:none;background:white;';
+  document.body.appendChild(iframe);
+  const doc=iframe.contentDocument;
+  if(!doc){iframe.remove();throw new Error('Não foi possível criar a área de impressão.');}
+  doc.open();doc.write(montarHTMLImpressaoIsolada());doc.close();
+  try{if(doc.fonts&&doc.fonts.ready)await Promise.race([doc.fonts.ready,new Promise(r=>setTimeout(r,1800))]);}catch(e){}
+  await esperarImagensDocumento(doc);
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  const win=iframe.contentWindow;
+  if(!win){iframe.remove();throw new Error('Janela de impressão indisponível.');}
+  let cleaned=false;
+  const limpar=()=>{if(cleaned)return;cleaned=true;setTimeout(()=>{try{iframe.remove();}catch(e){}},250);};
+  try{win.addEventListener('afterprint',limpar,{once:true});}catch(e){}
+  win.focus();
+  win.print();
+  setTimeout(limpar,60000);
+}
+
 /* ════════ IMPRIMIR / SALVAR PDF (CORRIGIDO) ════════ */
 async function imprimirPDF(){
   closeGlobalTools(); // Fecha o modo de edição
-  salvarCache(true);
+  await salvarCache(true).catch(()=>{});
 
   const viewports = [...document.querySelectorAll('.doc-foto-viewport')];
   const snaps = [];
@@ -1424,12 +1709,21 @@ async function imprimirPDF(){
     });
   });
 
-  // Print
+  // Imprime somente o relatório em um documento isolado. Isso evita que o
+  // layout do aplicativo contamine a paginação A4 em retrato e mantém o
+  // diálogo nativo do navegador com Retrato/Paisagem, margens e escala.
   const toastEl = document.getElementById('toast');
   const toastWas = toastEl.className;
   toastEl.className = '';
-  window.print();
-  toastEl.className = toastWas;
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  try{
+    await imprimirEmDocumentoIsolado();
+  }catch(err){
+    console.error('Falha na impressão isolada:',err);
+    toast('Falha ao preparar impressão. Tente novamente.',3200);
+  }finally{
+    toastEl.className = toastWas;
+  }
 
   // Restaura tudo (pan/zoom + canvases de anotação)
   snaps.forEach(({ el, origHTML, origStyle }) => {
