@@ -268,6 +268,16 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .doc-footer-site{font-size:7.5px;color:#9ca3af;}
 .doc-footer-logo{height:12px;object-fit:contain;opacity:.3;}
 
+
+/* Cabeçalho funcional do PDF: o thead é repetido pelo navegador em todas as páginas. */
+.doc-print-table{width:100%;table-layout:fixed;border-collapse:collapse;border-spacing:0;}
+.doc-print-table td{vertical-align:top;}
+.doc-print-table thead{display:table-header-group;}
+.doc-table-hdr{padding:0;}
+.doc-table-body{padding:0;}
+.doc-head-spacer{height:0;display:block;}
+.doc-footer-preview-row td{padding:0;}
+
 /* ═══ MOBILE BOTTOM BAR ═══ */
 .mobile-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--line2);padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));display:flex;gap:7px;z-index:500;}
 @media(min-width:860px){.mobile-bar{display:none;}}
@@ -286,11 +296,25 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   @page{
     size:A4 portrait;
-    margin:10mm 10mm 18mm;
-    @bottom-center{
+    margin:11mm 10mm 14mm 10mm;
+    @top-right{
       content:"Página " counter(page) " de " counter(pages);
       font-family:'Barlow',sans-serif;
       font-size:8px;
+      color:#9ca3af;
+    }
+    @bottom-left{
+      content:"www.tradimaq.com.br";
+      font-family:'Barlow',sans-serif;
+      font-size:7.5px;
+      color:#9ca3af;
+    }
+    @bottom-right{
+      content:"TRADIMAQ";
+      font-family:'Barlow',sans-serif;
+      font-size:8px;
+      font-weight:700;
+      letter-spacing:.05em;
       color:#9ca3af;
     }
   }
@@ -302,6 +326,16 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   .main-wrap{display:block!important;height:auto!important;}
   .preview-panel{display:block!important;padding:0!important;background:white!important;height:auto!important;overflow:visible!important;min-height:unset!important;}
   #documento{box-shadow:none!important;max-width:100%!important;width:100%!important;height:auto!important;min-height:unset!important;}
+  .doc-print-table{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;}
+  .doc-print-table thead{display:table-header-group!important;}
+  .doc-table-hdr{padding:0!important;}
+  .doc-table-body{padding:0!important;}
+  /* Zona de segurança repetida abaixo do cabeçalho. O margin-top da doc-body
+     compensa apenas o início da primeira página; nas páginas seguintes o spacer
+     permanece e evita título/foto colados ou invadindo o cabeçalho. */
+  .doc-head-spacer{display:block!important;height:4mm!important;}
+  .doc-body{margin-top:-4mm!important;}
+  .doc-footer-preview-row{display:none!important;}
 
   /* Cabeçalho escuro impresso corretamente */
   .doc-masthead{background:#0d0f12!important;-webkit-print-color-adjust:exact!important;}
@@ -1102,7 +1136,7 @@ async function excluirRascunho(id){
 }
 
 /* ══════════ IMAGE PROCESSING (força 4:3 horizontal) ══════════ */
-function processImg(dataURL){
+function processImg(dataURL,comTimestamp=false){
   return new Promise(res=>{
     const img=new Image();
     img.onload=()=>{
@@ -1114,29 +1148,32 @@ function processImg(dataURL){
       const c=document.createElement('canvas');c.width=W;c.height=H;
       const ctx=c.getContext('2d');ctx.drawImage(img,sx,sy,sw,sh,0,0,W,H);
 
-      // Timestamp sempre dentro do container, com métricas reais da fonte
-      const now=new Date();
-      const ts=`${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-      let fs=Math.max(14,Math.round(W*0.022));
-      const margin=Math.max(8,Math.round(W*0.012));
-      const padX=Math.max(8,Math.round(fs*0.38));
-      const padY=Math.max(5,Math.round(fs*0.24));
-      ctx.font=`700 ${fs}px monospace`;ctx.textBaseline='alphabetic';ctx.textAlign='left';
-      let m=ctx.measureText(ts);
-      while(m.width+padX*2>W-margin*2&&fs>11){fs--;ctx.font=`700 ${fs}px monospace`;m=ctx.measureText(ts);}
-      const ascent=m.actualBoundingBoxAscent||fs*0.78;
-      const descent=m.actualBoundingBoxDescent||fs*0.22;
-      const boxW=Math.ceil(m.width+padX*2);
-      const boxH=Math.ceil(ascent+descent+padY*2);
-      const x=Math.max(margin,W-boxW-margin);
-      const y=Math.max(margin,H-boxH-margin);
-      ctx.fillStyle='rgba(0,0,0,0.58)';
-      ctx.beginPath();
-      if(typeof ctx.roundRect==='function')ctx.roundRect(x,y,boxW,boxH,Math.max(4,Math.round(fs*.18)));
-      else ctx.rect(x,y,boxW,boxH);
-      ctx.fill();
-      ctx.fillStyle='#fff';
-      ctx.fillText(ts,x+padX,y+padY+ascent);
+      // Data/hora só é gravada quando a imagem vem do botão Câmera.
+      // Fotos anexadas da Galeria/Arquivos permanecem limpas.
+      if(comTimestamp){
+        const now=new Date();
+        const ts=`${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
+        let fs=Math.max(14,Math.round(W*0.022));
+        const margin=Math.max(8,Math.round(W*0.012));
+        const padX=Math.max(8,Math.round(fs*0.38));
+        const padY=Math.max(5,Math.round(fs*0.24));
+        ctx.font=`700 ${fs}px monospace`;ctx.textBaseline='alphabetic';ctx.textAlign='left';
+        let m=ctx.measureText(ts);
+        while(m.width+padX*2>W-margin*2&&fs>11){fs--;ctx.font=`700 ${fs}px monospace`;m=ctx.measureText(ts);}
+        const ascent=m.actualBoundingBoxAscent||fs*0.78;
+        const descent=m.actualBoundingBoxDescent||fs*0.22;
+        const boxW=Math.ceil(m.width+padX*2);
+        const boxH=Math.ceil(ascent+descent+padY*2);
+        const x=Math.max(margin,W-boxW-margin);
+        const y=Math.max(margin,H-boxH-margin);
+        ctx.fillStyle='rgba(0,0,0,0.58)';
+        ctx.beginPath();
+        if(typeof ctx.roundRect==='function')ctx.roundRect(x,y,boxW,boxH,Math.max(4,Math.round(fs*.18)));
+        else ctx.rect(x,y,boxW,boxH);
+        ctx.fill();
+        ctx.fillStyle='#fff';
+        ctx.fillText(ts,x+padX,y+padY+ascent);
+      }
       res(c.toDataURL('image/jpeg',.88));
     };img.src=dataURL;
   });
@@ -1262,7 +1299,7 @@ function ckAddFoto(sid,iid){
   inp.onchange=async e=>{
     const file=e.target.files[0];if(!file)return;
     const raw=await readFile(file);
-    const stamped=await processImg(raw);
+    const stamped=await processImg(raw,true);
     ckFotos[sid][iid]=stamped;
     const area=document.getElementById(`ckfoto-${sid}-${iid}`);
     if(area)area.innerHTML=`<img class="ck-foto-thumb" src="${stamped}" onclick="ckRemoveFoto('${sid}','${iid}')" title="Toque para remover">`;
@@ -1278,7 +1315,7 @@ function ckAddFotoGaleria(sid,iid){
     const file=e.target.files[0];if(!file)return;
     if(!file.type.startsWith('image/')){toast('⚠️ Selecione um arquivo de imagem',2500);return;}
     const raw=await readFile(file);
-    const stamped=await processImg(raw);
+    const stamped=await processImg(raw,false);
     ckFotos[sid][iid]=stamped;
     const area=document.getElementById(`ckfoto-${sid}-${iid}`);
     if(area)area.innerHTML=`<img class="ck-foto-thumb" src="${stamped}" onclick="ckRemoveFoto('${sid}','${iid}')" title="Toque para remover">`;
@@ -1352,7 +1389,7 @@ function abrirGaleria(tpId,idx){
     toast(files.length>1?`Processando ${files.length} fotos... ⏳`:'⏳ Processando...',3000);
     for(const file of files){
       const raw=await readFile(file);
-      const stamped=await processImg(raw);
+      const stamped=await processImg(raw,false);
       estado[tpId].fotos[idx].push(stamped);
       estado[tpId].checked[idx]=true;
     }
@@ -1371,7 +1408,7 @@ function abrirCamItem(tpId,idx){
     toast('⏳ Processando...',2500);
     for(const file of files){
       const raw=await readFile(file);
-      const stamped=await processImg(raw);
+      const stamped=await processImg(raw,true);
       estado[tpId].fotos[idx].push(stamped);
       estado[tpId].checked[idx]=true;
     }
@@ -1387,7 +1424,7 @@ async function onUp(event,tpId,idx){
   if(!files.length)return;
   const n=files.length;
   toast(n>1?`Processando ${n} fotos... ⏳`:'⏳ Processando...',4000);
-  const resizeds=await Promise.all(files.map(async f=>{const data=await readFile(f);return processImg(data);}));
+  const resizeds=await Promise.all(files.map(async f=>{const data=await readFile(f);return processImg(data,false);}));
   resizeds.forEach(r=>{estado[tpId].fotos[idx].push(r);});
   estado[tpId].checked[idx]=true;
   renderItemFotos(tpId,idx);atualizarContador();
@@ -1477,6 +1514,8 @@ function atualizar(){
 
 
   document.getElementById('documento').innerHTML=`
+  <table class="doc-print-table">
+    <thead><tr><td class="doc-table-hdr">
   <div class="doc-masthead">
     <div class="doc-mast-left">
       <img class="doc-logo-img" src="${LOGO}" alt="Tradimaq">
@@ -1492,6 +1531,9 @@ function atualizar(){
     </div>
   </div>
   <div class="doc-bar"></div>
+  <div class="doc-head-spacer" aria-hidden="true"></div>
+    </td></tr></thead>
+    <tbody><tr><td class="doc-table-body">
   <div class="doc-body">
     <div class="doc-info-grid">
       <div class="doc-info-cell"><div class="doc-info-key">Modelo</div><div class="doc-info-val">${modelo}</div></div>
@@ -1532,18 +1574,23 @@ function atualizar(){
       </div>
     </div>
   </div>
-  <div class="doc-footer">
-    <div class="doc-footer-grid">
-      <div class="doc-footer-col"><strong>Tradimaq Equipamentos</strong>Plataformas elevatórias e equipamentos de acesso</div>
-      <div class="doc-footer-col"><strong>Validade</strong>Registra o estado visual na ${remLabel.toLowerCase()}. Avarias não registradas não serão aceitas no retorno.</div>
-      <div class="doc-footer-col"><strong>Relatório</strong>${reportId}<br>Tipo: ${remLabel}<br>${fmtDate(data)}</div>
-      <div class="doc-footer-col"><strong>Contato</strong>www.tradimaq.com.br</div>
-    </div>
-    <div class="doc-footer-brand">
-      <div class="doc-footer-site">www.tradimaq.com.br</div>
-      <img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">
-    </div>
-  </div>`;
+    </td></tr>
+    <tr class="doc-footer-preview-row"><td>
+      <div class="doc-footer">
+        <div class="doc-footer-grid">
+          <div class="doc-footer-col"><strong>Tradimaq Equipamentos</strong>Plataformas elevatórias e equipamentos de acesso</div>
+          <div class="doc-footer-col"><strong>Validade</strong>Registra o estado visual na ${remLabel.toLowerCase()}. Avarias não registradas não serão aceitas no retorno.</div>
+          <div class="doc-footer-col"><strong>Relatório</strong>${reportId}<br>Tipo: ${remLabel}<br>${fmtDate(data)}</div>
+          <div class="doc-footer-col"><strong>Contato</strong>www.tradimaq.com.br</div>
+        </div>
+        <div class="doc-footer-brand">
+          <div class="doc-footer-site">www.tradimaq.com.br</div>
+          <img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">
+        </div>
+      </div>
+    </td></tr>
+    </tbody>
+  </table>`;
 }
 
 /* ══════════ PDF (IMPRESSÃO) ══════════ */
