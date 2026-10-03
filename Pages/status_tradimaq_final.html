@@ -809,6 +809,117 @@
       .chart-title{font-size:10px;margin-bottom:8px}
     }
 
+    /* ── REVISÃO FINAL MOBILE ─────────────────────────────────────
+       Nº de série permanece no DOM para PDF/Excel, mas não ocupa
+       espaço no status em tela. */
+    #equipamentos-table .serie-status-only{display:none!important}
+
+    @media(max-width:700px){
+      /* Volta a densidade/legibilidade do status antigo, mantendo a skin nova */
+      .toolbar{padding:7px 7px 6px;gap:6px}
+      .search-wrap input{
+        height:38px;
+        font-size:14px;
+        padding:7px 10px 7px 34px;
+      }
+      .search-icon{left:10px;font-size:15px}
+      .model-select{
+        height:36px;
+        flex:0 0 158px;
+        min-width:158px;
+        max-width:158px;
+        font-size:11.5px;
+        padding-left:9px;
+      }
+      .pill{
+        min-height:36px;
+        padding:7px 11px;
+        font-size:11.5px;
+        font-weight:650;
+      }
+      .legend{
+        padding:6px 8px;
+        gap:6px 12px;
+        font-size:10.5px;
+      }
+      .legend-dot{width:12px;height:12px}
+
+      .table-container{max-height:64vh}
+      #equipamentos-table{
+        min-width:600px;
+        font-size:12.4px;
+        table-layout:fixed;
+      }
+      #equipamentos-table th,
+      #equipamentos-table td{
+        height:39px;
+        padding:5px 6px;
+      }
+      #equipamentos-table th{
+        font-size:8.5px;
+        letter-spacing:.04em;
+      }
+
+      #equipamentos-table th:nth-child(1),
+      #equipamentos-table td:nth-child(1){
+        min-width:102px;
+        width:102px;
+        padding-left:8px;
+        font-size:12.6px;
+        font-weight:600;
+      }
+      #equipamentos-table th:nth-child(2),
+      #equipamentos-table td:nth-child(2){
+        min-width:82px;
+        width:82px;
+        font-size:12.4px;
+      }
+      #equipamentos-table th:nth-child(2){left:102px}
+      #equipamentos-table td:nth-child(2){left:102px}
+
+      /* Série continua escondida apenas na interface */
+      #equipamentos-table th:nth-child(3),
+      #equipamentos-table td:nth-child(3){display:none!important}
+
+      #equipamentos-table th:nth-child(4),
+      #equipamentos-table td:nth-child(4){
+        min-width:112px;
+        width:112px;
+      }
+      #equipamentos-table th:nth-child(5),
+      #equipamentos-table td:nth-child(5){
+        min-width:72px;
+        width:72px;
+      }
+      #equipamentos-table th:nth-child(n+6),
+      #equipamentos-table td:nth-child(n+6){
+        min-width:64px;
+        width:64px;
+      }
+
+      .energia-cell{font-size:12px}
+      .carga-badge,.comb-badge{
+        font-size:10.8px;
+        padding:4px 8px;
+        gap:4px;
+      }
+      .horimetro-input{
+        width:62px;
+        min-height:30px;
+        font-size:12px;
+        padding:4px;
+      }
+      .status-radio{
+        width:21px;
+        height:21px;
+      }
+
+      /* A informação superior também respira um pouco mais */
+      .form-section{padding:8px 9px}
+      .form-group label,.obs-label{font-size:9.5px}
+      .obs{font-size:13px;min-height:54px}
+    }
+
   </style>
 </head>
 <body>
@@ -973,7 +1084,7 @@
         <tr>
           <th>Modelo</th>
           <th>TPE</th>
-          <th>Nº Série</th>
+          <th class="serie-status-only">Nº Série</th>
           <th>Carga / Combust.</th>
           <th>Horímetro</th>
           <th>Disponível</th>
@@ -1270,7 +1381,7 @@ function buildTable(){
     tr.innerHTML=`
       <td>${eq.modelo}</td>
       <td>${eq.tag}</td>
-      <td title="Número de série">${eq.serie || '—'}</td>
+      <td class="serie-status-only" title="Número de série">${eq.serie || '—'}</td>
       <td class="energia-cell" data-tag="${eq.tag}" data-tipo="${tipo}" style="${tipo?'cursor:pointer;':'color:#bbb;font-size:10px;'}">—</td>
       <td><input type="text" class="horimetro-input" data-tag="${eq.tag}" placeholder="—" inputmode="numeric"></td>
       <td><input type="checkbox" class="status-radio" data-status="disponivel" data-tag="${eq.tag}" title="Disponível"></td>
