@@ -133,6 +133,26 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
 @media(max-width:1050px){.filter-grid{grid-template-columns:repeat(2,minmax(160px,1fr))}}
 @media(max-width:600px){.filter-grid{grid-template-columns:1fr}.plan-summary{grid-template-columns:1fr 1fr}.plan-hero{padding:13px}.plan-hero h2{font-size:17px}}
 
+
+/* ═══ V5.2.4 · PDF CLÁSSICO + PLANO PADRÃO PARA CLIENTE ═══ */
+.pdf-tpe-tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.pdf-tpe-tools input{flex:1;min-width:240px}
+.pdf-tpe-count{font:800 11px "Barlow Condensed";letter-spacing:.05em;text-transform:uppercase;color:var(--brand);margin-left:auto}
+.pdf-tpe-list{border:1px solid var(--bdr);border-radius:9px;max-height:430px;overflow:auto;background:var(--s1)}
+.pdf-tpe-row{display:grid;grid-template-columns:30px 100px 1fr 170px;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--bdr);cursor:pointer}
+.pdf-tpe-row:last-child{border-bottom:0}.pdf-tpe-row:hover{background:var(--brand-dim)}
+.pdf-tpe-row input{width:16px;height:16px;accent-color:var(--brand)}
+.pdf-tpe-row .tpe{font:700 11px "JetBrains Mono";color:var(--brand)}
+.pdf-tpe-row .desc{font-size:11px;color:var(--txt2)}
+.pdf-tpe-row .fil{font-size:10px;color:var(--txt3);text-align:right}
+.pdf-tpe-selected{background:rgba(255,107,0,.075)}
+@media(max-width:650px){.pdf-tpe-row{grid-template-columns:28px 92px 1fr}.pdf-tpe-row .fil{grid-column:3;text-align:left}}
+.pure-plan-box{margin-top:16px;padding:12px;border:1px solid rgba(255,107,0,.25);border-left:3px solid var(--brand);border-radius:8px;background:linear-gradient(135deg,rgba(255,107,0,.08),rgba(255,107,0,.02))}
+.pure-plan-box .ttl{font:800 11px "Barlow Condensed";letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin-bottom:4px}
+.pure-plan-box .sub{font-size:11px;line-height:1.45;color:var(--txt3);margin-bottom:9px}
+.pure-plan-box select{width:100%;margin-bottom:8px}
+.pure-plan-info{font-size:10.5px;color:var(--txt2);line-height:1.5;margin:6px 0 10px;padding:8px 9px;border-radius:6px;background:var(--s2);border:1px solid var(--bdr)}
+
 #print-root{display:none}
 @media(max-width:850px){
   .hdr-sub{display:none}.toolbar{padding:10px 12px}.stats{padding:10px 12px}.nav{padding:10px 12px 0}.view{padding:12px}
@@ -279,7 +299,15 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </section>
 
   <section id="view-cronograma" class="view hidden">
-    <div class="note">Visão de carga por filial e mês. Clique em uma célula para abrir os equipamentos previstos naquele período.</div>
+    <div class="searchline" style="justify-content:space-between">
+      <div style="display:flex;gap:3px;flex-wrap:wrap">
+        <button id="cronModoEquip" class="btn btn-primary" onclick="setCronModo('equipamento')">▤ Por equipamento</button>
+        <button id="cronModoFilial" class="btn btn-ghost" onclick="setCronModo('filial')">▦ Carga por filial</button>
+        <button class="btn btn-soft" onclick="abrirSelecaoPdfTPE()">▣ PDF — selecionar TPEs</button>
+      </div>
+      <input id="cronBusca" type="text" placeholder="Buscar TPE, série, modelo ou filial..." oninput="renderCronograma()" style="min-width:280px;max-width:520px">
+    </div>
+    <div id="cronNota" class="note">Cada equipamento em uma linha, com a revisão prevista em cada mês do período. Clique na revisão para abrir o plano.</div>
     <div class="panel"><div class="table-wrap"><table class="heat" id="ganttTable"></table></div></div>
     <div id="ganttDetail"></div>
   </section>
@@ -328,6 +356,13 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
             <button class="btn btn-ghost" onclick="copiarDescritivo()">⧉ Copiar descritivo</button>
           </div>
           <div class="pdf-status">● PDF no padrão Tradimaq com cabeçalho em todas as páginas</div>
+          <div class="pure-plan-box">
+            <div class="ttl">Plano padrão para cliente</div>
+            <div class="sub">Gera um documento sem TPE, série ou filial, reunindo as quatro revisões do plano em um único PDF e mostrando somente os modelos/configurações aplicáveis.</div>
+            <div class="group"><label>Plano / configuração</label><select id="plPlanoPuro" onchange="renderPlanoPuroInfo()"></select></div>
+            <div id="plPlanoPuroInfo" class="pure-plan-info">Selecione um plano para visualizar a aplicação.</div>
+            <button class="btn btn-soft" style="width:100%;justify-content:center" onclick="imprimirPlanoCompletoModelo()">▣ PDF completo · 4 revisões</button>
+          </div>
         </div>
       </aside>
       <section class="detail-card">
@@ -427,6 +462,27 @@ tbody tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+
+
+<div id="pdfTpeOverlay" class="overlay hidden" onclick="if(event.target===this)fecharSelecaoPdfTPE()">
+  <div class="modal" style="width:min(900px,100%)">
+    <div class="modal-head"><h2>PDF por TPEs selecionadas</h2><button class="close" onclick="fecharSelecaoPdfTPE()">×</button></div>
+    <div class="modal-body">
+      <div class="note"><strong>Selecione somente as máquinas que deseja no PDF.</strong> O documento usará o mês, ano e horizonte escolhidos na barra principal e mostrará as preventivas de cada TPE nos respectivos meses.</div>
+      <div class="pdf-tpe-tools">
+        <input id="pdfTpeBusca" type="text" placeholder="Buscar TPE, série, modelo, configuração ou filial..." oninput="renderSelecaoPdfTPE()">
+        <button class="btn btn-ghost" onclick="selecionarPdfTpeVisiveis()">✓ Marcar visíveis</button>
+        <button class="btn btn-ghost" onclick="limparSelecaoPdfTPE()">× Limpar</button>
+        <span id="pdfTpeCount" class="pdf-tpe-count">0 selecionadas</span>
+      </div>
+      <div id="pdfTpeLista" class="pdf-tpe-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="fecharSelecaoPdfTPE()">Cancelar</button>
+      <button class="btn btn-primary" onclick="gerarPdfTpesSelecionadas()">▣ Gerar PDF das selecionadas</button>
+    </div>
+  </div>
+</div>
 
 <div id="fichaOverlay" class="overlay hidden" onclick="if(event.target===this)fecharFicha()">
   <div class="modal" style="width:min(900px,100%)">
@@ -560,6 +616,7 @@ function init(){
   document.getElementById("anoRef").value=y;
   popularFiltros();
   popularPlanoEquip();
+  popularPlanoPuro();
   renderBaseStatus();
   prepararFiltrosAuditoria();
   gerarAuditoria();
@@ -585,6 +642,27 @@ function popularPlanoEquip(filtro){
   const cnt=document.getElementById("plBuscaCount"); if(cnt)cnt.textContent=`${arr.length} equipamento${arr.length===1?"":"s"} encontrado${arr.length===1?"":"s"}`;
 }
 function filtrarPlanos(){popularPlanoEquip(document.getElementById("plBusca").value);renderPlanoDetalhe();}
+
+function planoAplicacoes(nomePlano){
+  const seen=new Set(),arr=[];
+  EQUIPAMENTOS.filter(e=>e.plano===nomePlano).forEach(e=>{
+    const modelo=String(e.modelo||"").trim(),sub=String(e.submodelo||"").trim(),k=(modelo+"|"+sub).toLowerCase();
+    if(!seen.has(k)){seen.add(k);arr.push({modelo,submodelo:sub});}
+  });
+  return arr.sort((a,b)=>(a.modelo+" "+a.submodelo).localeCompare(b.modelo+" "+b.submodelo,"pt-BR",{numeric:true}));
+}
+function popularPlanoPuro(){
+  const s=document.getElementById("plPlanoPuro");if(!s)return;const cur=s.value,keys=Object.keys(PLANOS).sort((a,b)=>a.localeCompare(b,"pt-BR",{numeric:true}));
+  s.innerHTML=keys.map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join("");
+  if(keys.includes(cur))s.value=cur;else if(keys.length)s.value=keys[0];renderPlanoPuroInfo();
+}
+function renderPlanoPuroInfo(){
+  const nome=document.getElementById("plPlanoPuro")?.value,box=document.getElementById("plPlanoPuroInfo");if(!box)return;
+  if(!nome||!PLANOS[nome]){box.textContent="Nenhum plano disponível.";return;}
+  const apps=planoAplicacoes(nome),p=PLANOS[nome]||{},counts=["250","500","1000","2000"].map(t=>(p[t]||[]).filter(x=>x.tipo==="atividade"&&!String(x.descricao).toUpperCase().startsWith("REVISÃO")).length);
+  const appTxt=apps.length?apps.map(x=>`${x.modelo}${x.submodelo?` · ${x.submodelo}`:""}`).join(" | "):nome;
+  box.innerHTML=`<strong style="color:var(--txt)">Aplicação:</strong> ${esc(appTxt)}<br><strong style="color:var(--txt)">Escopos:</strong> 250h (${counts[0]} atividades) · 500h (${counts[1]}) · 1000h (${counts[2]}) · 2000h (${counts[3]})`;
+}
 
 function filtrosBase(){
   return {
@@ -659,26 +737,72 @@ function renderProgramacao(){
   }).join("");
 }
 
+let cronModo="equipamento";
+function setCronModo(modo){
+  cronModo=modo==="filial"?"filial":"equipamento";
+  const be=document.getElementById("cronModoEquip"),bf=document.getElementById("cronModoFilial"),nota=document.getElementById("cronNota");
+  if(be){be.className="btn "+(cronModo==="equipamento"?"btn-primary":"btn-ghost");}
+  if(bf){bf.className="btn "+(cronModo==="filial"?"btn-primary":"btn-ghost");}
+  if(nota)nota.textContent=cronModo==="equipamento"
+    ?"Cada equipamento em uma linha, com a revisão prevista em cada mês do período. Clique na revisão para abrir o plano."
+    :"Visão de carga por filial e mês. Clique em uma célula para abrir os equipamentos previstos naquele período.";
+  renderCronograma();
+}
+function cronMesesSelecionados(){
+  const f=filtrosBase();
+  return Array.from({length:f.hr},(_,i)=>{const x=addMonths(f.mr,f.ar,i);return {...x,label:`${MA[x.m-1]}/${String(x.a).slice(-2)}`};});
+}
+function cronEquipamentosFiltrados(){
+  const q=(document.getElementById("cronBusca")?.value||"").trim().toLowerCase();
+  const ids=new Set(exp.map(e=>e.frota));
+  return EQUIPAMENTOS.filter(e=>ids.has(e.frota)&&(!q||[e.frota,e.serie,e.modelo,e.submodelo,e.filial,e.local].join(" ").toLowerCase().includes(q)))
+    .sort((a,b)=>a.frota.localeCompare(b.frota,'pt-BR',{numeric:true}));
+}
 function renderCronograma(){
-  const t=document.getElementById("ganttTable");
-  if(!exp.length){t.innerHTML='<tbody><tr><td class="empty">Sem dados para o período.</td></tr></tbody>';document.getElementById("ganttDetail").innerHTML="";return;}
-  const months=[...new Map(exp.map(e=>[monthKey(e.m,e.ano),{m:e.m,a:e.ano,label:`${MA[e.m-1]}/${String(e.ano).slice(-2)}`}])).values()].sort((x,y)=>monthKey(x.m,x.a).localeCompare(monthKey(y.m,y.a)));
-  // Include empty selected months too
-  const f=filtrosBase(), fullMonths=Array.from({length:f.hr},(_,i)=>{const x=addMonths(f.mr,f.ar,i);return {...x,label:`${MA[x.m-1]}/${String(x.a).slice(-2)}`};});
-  const fil=[...new Set(exp.map(e=>e.filial))].sort();
-  const max=Math.max(1,...fil.flatMap(ff=>fullMonths.map(mm=>exp.filter(e=>e.filial===ff&&e.m===mm.m&&e.ano===mm.a).length)));
-  let h='<thead><tr><th class="rowname">Filial</th>'+fullMonths.map(m=>`<th>${m.label}</th>`).join("")+'<th>Total</th></tr></thead><tbody>';
-  fil.forEach(ff=>{
-    let total=0;h+=`<tr><td class="rowname"><strong>${esc(ff)}</strong></td>`;
-    fullMonths.forEach(mm=>{const n=exp.filter(e=>e.filial===ff&&e.m===mm.m&&e.ano===mm.a).length;total+=n;const alpha=n?(.08+.32*n/max):0;h+=`<td><div class="heat-cell" onclick="showGanttDetail('${esc(ff)}',${mm.m},${mm.a})" style="padding:7px;background:rgba(255,107,0,${alpha.toFixed(2)});color:${n?"var(--txt)":"var(--txt3)"}">${n||"—"}</div></td>`;});
-    h+=`<td><strong style="color:var(--brand)">${total}</strong></td></tr>`;
+  if(cronModo==="filial")renderCronogramaFilial();
+  else renderCronogramaEquipamento();
+}
+function renderCronogramaEquipamento(){
+  const t=document.getElementById("ganttTable"),det=document.getElementById("ganttDetail");
+  if(det)det.innerHTML="";
+  const months=cronMesesSelecionados(),equips=cronEquipamentosFiltrados();
+  if(!equips.length){t.innerHTML='<tbody><tr><td class="empty">Nenhum equipamento encontrado para o período/filtros selecionados.</td></tr></tbody>';return;}
+  const byKey=new Map();
+  exp.forEach(ev=>byKey.set(`${ev.frota}|${ev.ano}|${ev.m}`,ev));
+  let h='<thead><tr><th class="rowname">TPE</th><th class="rowname">Filial</th><th class="rowname">Modelo / configuração</th>'+months.map(mm=>`<th>${mm.label}</th>`).join('')+'<th>Total</th></tr></thead><tbody>';
+  equips.forEach(e=>{
+    let total=0;
+    h+=`<tr><td class="rowname"><button class="tpe-link" onclick="abrirFicha('${esc(e.frota)}')">${esc(e.frota)}</button><div style="font-size:9px;color:var(--txt3);margin-top:2px">${esc(e.serie||'')}</div></td><td class="rowname" style="font-size:11px">${esc(e.filial)}</td><td class="rowname"><strong style="font-size:11px">${esc(e.modelo)}</strong><div style="font-size:9px;color:var(--txt3);margin-top:2px">${esc(e.submodelo)}</div></td>`;
+    months.forEach(mm=>{
+      const ev=byKey.get(`${e.frota}|${mm.a}|${mm.m}`);
+      if(ev){total++;h+=`<td style="text-align:center"><button class="tag t${ev.tipo}" style="cursor:pointer" title="Abrir plano ${ev.tipo}h" onclick="abrirPlanoEvento('${esc(ev.frota)}','${ev.tipo}',${ev.m},${ev.ano})">${ev.tipo}h</button></td>`;}
+      else h+='<td style="text-align:center;color:var(--txt3)">—</td>';
+    });
+    h+=`<td style="text-align:center"><strong style="color:var(--brand)">${total}</strong></td></tr>`;
   });
   h+='</tbody>';t.innerHTML=h;
 }
+function renderCronogramaFilial(){
+  const t=document.getElementById("ganttTable"),det=document.getElementById("ganttDetail");
+  if(!exp.length){t.innerHTML='<tbody><tr><td class="empty">Sem dados para o período.</td></tr></tbody>';if(det)det.innerHTML="";return;}
+  const q=(document.getElementById("cronBusca")?.value||"").trim().toLowerCase();
+  const data=exp.filter(e=>!q||[e.frota,e.serie,e.modelo,e.submodelo,e.filial,e.local].join(" ").toLowerCase().includes(q));
+  const fullMonths=cronMesesSelecionados(),fil=[...new Set(data.map(e=>e.filial))].sort();
+  if(!fil.length){t.innerHTML='<tbody><tr><td class="empty">Nenhum resultado para a busca.</td></tr></tbody>';if(det)det.innerHTML="";return;}
+  const max=Math.max(1,...fil.flatMap(ff=>fullMonths.map(mm=>data.filter(e=>e.filial===ff&&e.m===mm.m&&e.ano===mm.a).length)));
+  let h='<thead><tr><th class="rowname">Filial</th>'+fullMonths.map(m=>`<th>${m.label}</th>`).join("")+'<th>Total</th></tr></thead><tbody>';
+  fil.forEach(ff=>{
+    let total=0;h+=`<tr><td class="rowname"><strong>${esc(ff)}</strong></td>`;
+    fullMonths.forEach(mm=>{const n=data.filter(e=>e.filial===ff&&e.m===mm.m&&e.ano===mm.a).length;total+=n;const alpha=n?(.08+.32*n/max):0;h+=`<td><div class="heat-cell" onclick="showGanttDetail('${esc(ff)}',${mm.m},${mm.a})" style="padding:7px;background:rgba(255,107,0,${alpha.toFixed(2)});color:${n?'var(--txt)':'var(--txt3)'}">${n||'—'}</div></td>`;});
+    h+=`<td><strong style="color:var(--brand)">${total}</strong></td></tr>`;
+  });
+  h+='</tbody>';t.innerHTML=h;if(det)det.innerHTML="";
+}
 function showGanttDetail(filial,m,a){
-  const arr=exp.filter(e=>e.filial===filial&&e.m===m&&e.ano===a);
+  const q=(document.getElementById("cronBusca")?.value||"").trim().toLowerCase();
+  const arr=exp.filter(e=>e.filial===filial&&e.m===m&&e.ano===a&&(!q||[e.frota,e.serie,e.modelo,e.submodelo,e.filial,e.local].join(" ").toLowerCase().includes(q)));
   document.getElementById("ganttDetail").innerHTML=`<div class="panel"><div class="panel-head"><div class="panel-title">${esc(filial)} · ${MF[m-1]} ${a}</div><div class="panel-meta">${arr.length} OS</div></div>
-    <div class="table-wrap"><table><thead><tr><th>Frota</th><th>Modelo</th><th>Submodelo</th><th>Revisão</th><th></th></tr></thead><tbody>${arr.map(e=>`<tr><td><button class="tpe-link" onclick="abrirFicha(\'${esc(e.frota)}\')">${esc(e.frota)}</button></td><td>${esc(e.modelo)}</td><td class="muted">${esc(e.submodelo)}</td><td>${tag(e.tipo)}</td><td><button class="btn btn-ghost" style="padding:4px 8px" onclick="abrirPlanoEvento('${esc(e.frota)}','${e.tipo}',${m},${a})">Plano</button></td></tr>`).join("")}</tbody></table></div></div>`;
+    <div class="table-wrap"><table><thead><tr><th>Frota</th><th>Modelo</th><th>Submodelo</th><th>Revisão</th><th></th></tr></thead><tbody>${arr.map(e=>`<tr><td><button class="tpe-link" onclick="abrirFicha('${esc(e.frota)}')">${esc(e.frota)}</button></td><td>${esc(e.modelo)}</td><td class="muted">${esc(e.submodelo)}</td><td>${tag(e.tipo)}</td><td><button class="btn btn-ghost" style="padding:4px 8px" onclick="abrirPlanoEvento('${esc(e.frota)}','${e.tipo}',${m},${a})">Plano</button></td></tr>`).join("")}</tbody></table></div></div>`;
 }
 
 function materialCategoria(desc){
@@ -861,7 +985,7 @@ function salvarNovoEquipamento(){
   if(EQUIPAMENTOS.some(e=>String(e.frota).toUpperCase()===frota.toUpperCase())){alert(`${frota} já existe na base mestre.`);return;}
   const [a,m,d]=base.split("-").map(Number),awp=String(modelo).toUpperCase().startsWith("AWP")||plano==="AWP 30S-DC Padrão";
   const e={frota,serie,anoAquisicao:ano||"",modelo,submodelo,centroCusto:centro||filialInfo(filial).centro,filial,local:local||filialInfo(filial).local,plano:plano||"",baseDia:d,baseMes:m,baseAno:a,baseTipo:awp?"1000":tipo,baseFonte:"Cadastro manual na Central V5.2",baseObs:plano?"":"Equipamento cadastrado sem plano vinculado",tempoOrigem:awp||tipo==="1000"?"PREVENTIVA ANUAL":"PREVENTIVA 2 ANOS"};
-  EQUIPAMENTOS.push(e);EQUIPAMENTOS.sort((a,b)=>a.frota.localeCompare(b.frota,"pt-BR",{numeric:true}));saveState();edAtual=frota;popularFiltros();popularPlanoEquip();renderBaseStatus();gerarAuditoria();gerar();renderEditorLista();renderEditorPainel();toast(`${frota} adicionado à base mestre.`);
+  EQUIPAMENTOS.push(e);EQUIPAMENTOS.sort((a,b)=>a.frota.localeCompare(b.frota,"pt-BR",{numeric:true}));saveState();edAtual=frota;popularFiltros();popularPlanoEquip();popularPlanoPuro();renderBaseStatus();gerarAuditoria();gerar();renderEditorLista();renderEditorPainel();toast(`${frota} adicionado à base mestre.`);
 }
 function renderEditorPainel(){
   if(edAtual==="__NOVO__"){renderNovoEquipamento();return;}
@@ -890,7 +1014,7 @@ function sugerirPlanoEditor(){const m=document.getElementById("edModelo")?.value
 function salvarCadastroEditor(){
   const e=EQUIPAMENTOS.find(x=>x.frota===edAtual);if(!e)return;
   e.serie=(document.getElementById("edSerie")?.value||"").trim();e.anoAquisicao=+(document.getElementById("edAnoAquisicao")?.value||0)||"";e.filial=document.getElementById("edFilial")?.value||e.filial;e.local=(document.getElementById("edLocal")?.value||"").trim()||filialInfo(e.filial).local;e.centroCusto=(document.getElementById("edCentro")?.value||"").trim()||filialInfo(e.filial).centro;e.modelo=(document.getElementById("edModelo")?.value||"").trim();e.submodelo=(document.getElementById("edSubmodelo")?.value||"").trim();e.plano=document.getElementById("edPlano")?.value||resolvePlano(e.modelo,e.submodelo)||"";e.baseFonte=String(e.baseFonte||"").includes("Cadastro manual")?e.baseFonte:e.baseFonte;
-  saveState();popularFiltros();popularPlanoEquip();renderBaseStatus();gerarAuditoria();gerar();renderEditorLista();renderEditorPainel();toast(`${e.frota}: cadastro e filial atualizados.`);
+  saveState();popularFiltros();popularPlanoEquip();popularPlanoPuro();renderBaseStatus();gerarAuditoria();gerar();renderEditorLista();renderEditorPainel();toast(`${e.frota}: cadastro e filial atualizados.`);
 }
 function salvarBaseEditor(){const e=EQUIPAMENTOS.find(x=>x.frota===edAtual),v=document.getElementById("edBaseDate").value;if(!e||!v){alert("Informe a data da preventiva mestre.");return;}const [a,m,d]=v.split("-").map(Number);e.baseAno=a;e.baseMes=m;e.baseDia=d;e.baseTipo=isAWP(e)?"1000":document.getElementById("edBaseTipo").value;e.baseFonte="Ajuste manual na Central V5.2";e.baseObs="";e.tempoOrigem=e.baseTipo==="2000"?"PREVENTIVA 2 ANOS":"PREVENTIVA ANUAL";saveState();renderEditorLista();renderEditorPainel();renderBaseStatus();gerarAuditoria();gerar();toast("Base do ciclo atualizada.");}
 function abrirAtualizacao(){document.getElementById("updateOverlay").classList.remove("hidden");}
@@ -912,7 +1036,7 @@ function importarFrotaExcel(input){
     const heads=rows[0].map(normHeader),idx={};heads.forEach((h,i)=>idx[h]=i);const need=["CENTRODECUSTO","BEM","SERIE","ANOAQUISICAO","MODELO","SUBMODELO","ULTIMAPREVENTIVA","TEMPO"],miss=need.filter(h=>idx[h]===undefined);if(miss.length){alert("Colunas não encontradas: "+miss.join(", "));return;}
     const old=new Map(EQUIPAMENTOS.map(e=>[e.frota,e])),novos=[],invalidos=[];
     rows.slice(1).forEach(r=>{const frota=String(r[idx.BEM]??"").trim();if(!frota)return;const modelo=String(r[idx.MODELO]??"").trim(),sub=String(r[idx.SUBMODELO]??"").trim(),cc=String(r[idx.CENTRODECUSTO]??"").trim(),br=CENTRO_MAP[cc]||[cc,cc],prev=old.get(frota),dt=parseDataPlanilha(r[idx.ULTIMAPREVENTIVA]),bt=tipoBaseTempo(r[idx.TEMPO],modelo);let baseDia=dt?.d||prev?.baseDia||null,baseMes=dt?.m||prev?.baseMes||null,baseAno=dt?.a||prev?.baseAno||null,baseTipo=bt||prev?.baseTipo||null,baseFonte=dt?"Excel importado":(prev?.baseFonte||"Sem base válida"),baseObs="";if(!dt){invalidos.push(frota);baseObs=`ULTIMA PREVENTIVA não reconhecida: ${String(r[idx.ULTIMAPREVENTIVA]??"")}`;}novos.push({frota,serie:String(r[idx.SERIE]??"").trim(),anoAquisicao:r[idx.ANOAQUISICAO]??"",modelo,submodelo:sub,centroCusto:cc,filial:br[0],local:br[1],plano:resolvePlano(modelo,sub),baseDia,baseMes,baseAno,baseTipo,baseFonte,baseObs,tempoOrigem:String(r[idx.TEMPO]??"").trim()});});
-    const newCount=novos.filter(e=>!old.has(e.frota)).length,semPlano=novos.filter(e=>!e.plano).length,semBase=novos.filter(e=>!e.baseMes||!e.baseAno||!e.baseTipo).length;EQUIPAMENTOS=novos;saveState();popularFiltros();popularPlanoEquip();renderBaseStatus();prepararFiltrosAuditoria();gerarAuditoria();gerar();toast(`Base mestre atualizada: ${novos.length} equipamentos.`);alert(`Base mestre atualizada.\n\n${novos.length} equipamentos\n${newCount} novos\n${semBase} sem base válida\n${semPlano} sem plano vinculado${invalidos.length?`\n${invalidos.length} data(s) não reconhecida(s) — base anterior preservada quando disponível.`:""}`);
+    const newCount=novos.filter(e=>!old.has(e.frota)).length,semPlano=novos.filter(e=>!e.plano).length,semBase=novos.filter(e=>!e.baseMes||!e.baseAno||!e.baseTipo).length;EQUIPAMENTOS=novos;saveState();popularFiltros();popularPlanoEquip();popularPlanoPuro();renderBaseStatus();prepararFiltrosAuditoria();gerarAuditoria();gerar();toast(`Base mestre atualizada: ${novos.length} equipamentos.`);alert(`Base mestre atualizada.\n\n${novos.length} equipamentos\n${newCount} novos\n${semBase} sem base válida\n${semPlano} sem plano vinculado${invalidos.length?`\n${invalidos.length} data(s) não reconhecida(s) — base anterior preservada quando disponível.`:""}`);
   });
 }
 function inferTipo(desc){const u=String(desc||"").toUpperCase();if(u.includes("TRIMESTRAL"))return"250";if(u.includes("SEMESTRAL"))return"500";if(u.includes("BIENAL")||u.includes("2 ANOS"))return"2000";if(u.includes("ANUAL"))return"1000";return"";}
@@ -946,7 +1070,7 @@ function importarPlanosExcel(input){
       if(Object.keys(blocks).length)novo[sn]=blocks;
     });
     if(!Object.keys(novo).length){alert("Nenhum plano reconhecido.");return;}
-    PLANOS=novo;popularFiltros();renderCurrentView();toast(`Planos atualizados: ${Object.keys(PLANOS).length} abas.`);
+    PLANOS=novo;popularFiltros();popularPlanoPuro();renderCurrentView();toast(`Planos atualizados: ${Object.keys(PLANOS).length} abas.`);
     alert(`Planos atualizados com sucesso.\n${Object.keys(PLANOS).length} abas reconhecidas.`);
   });
 }
@@ -1125,7 +1249,7 @@ function exportarHTMLAtualizado(){
   const clear=id=>{const el=byId(id);if(el)el.innerHTML="";};
 
   // Não serializar resultados calculados/renderizados. O init() recria tudo ao abrir.
-  ["programacao","ganttDetail","matKpis","plSideInfo","plDetalhe","edLista","edPainel","tpeLookupResults"].forEach(clear);
+  ["programacao","ganttDetail","matKpis","plSideInfo","plDetalhe","edLista","edPainel","tpeLookupResults","pdfTpeLista"].forEach(clear);
 
   const gt=byId("ganttTable");
   if(gt)gt.innerHTML='<thead><tr><th class="rowname">Frota</th></tr></thead><tbody></tbody>';
@@ -1137,11 +1261,13 @@ function exportarHTMLAtualizado(){
   const mm=byId("matMes");if(mm)mm.innerHTML='<option value="">Todos os meses</option>';
   const mf=byId("matFilial");if(mf)mf.innerHTML='<option value="">Todas as filiais</option>';
   const pe=byId("plEquip");if(pe)pe.innerHTML="";
+  const ppu=byId("plPlanoPuro");if(ppu)ppu.innerHTML="";
+  const ppi=byId("plPlanoPuroInfo");if(ppi)ppi.textContent="Selecione um plano para visualizar a aplicação.";
   const pc=byId("plBuscaCount");if(pc)pc.textContent="";
-  const ep=byId("editorOverlay");if(ep)ep.classList.add("hidden");
+  const ep=byId("editorOverlay");if(ep)ep.classList.add("hidden");const pp=byId("pdfTpeOverlay");if(pp)pp.classList.add("hidden");
 
   // Normalizar filtros e telas para evitar salvar o estado visual da sessão.
-  ["buscaProg","matBusca","plBusca","edBusca","tpeLookup"].forEach(id=>{const el=byId(id);if(el)el.value="";});
+  ["buscaProg","matBusca","plBusca","edBusca","tpeLookup","cronBusca","pdfTpeBusca"].forEach(id=>{const el=byId(id);if(el)el.value="";});
   const dh=byId("data-historico");if(dh)dh.textContent="[]";
   const sm=byId("auditSourceMain");if(sm)sm.textContent="Nenhum CUBO carregado";
   const ss=byId("auditSourceSub");if(ss)ss.textContent="Importe um CUBO para iniciar uma conferência temporária.";
@@ -1154,7 +1280,7 @@ function exportarHTMLAtualizado(){
   const src="<!DOCTYPE html>\n"+clone.outerHTML;
   const blob=new Blob([src],{type:"text/html;charset=utf-8"}),a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
-  a.download=`central_preventivas_tradimaq_v5_2_1_${new Date().toISOString().slice(0,10)}.html`;
+  a.download=`central_preventivas_tradimaq_v5_2_4_${new Date().toISOString().slice(0,10)}.html`;
   a.click();URL.revokeObjectURL(a.href);
   toast("HTML atualizado gerado em modo compacto, sem resultados temporários.");
 }
@@ -1168,16 +1294,38 @@ function periodoTexto(){
    jsPDF + AutoTable elimina artefatos do print do navegador
    ═══════════════════════════════════════════════════════════════ */
 let _logoPdfCache;
+let _logoPdfRatio=3.6;
 async function obterLogoBase64(){
   if(_logoPdfCache!==undefined)return _logoPdfCache;
-  try{const r=await fetch('https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png',{cache:'no-store'});if(!r.ok)throw new Error();const blob=await r.blob();_logoPdfCache=await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(blob);});}
-  catch(e){_logoPdfCache=null;}return _logoPdfCache;
+  try{
+    const r=await fetch('https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png',{cache:'no-store'});
+    if(!r.ok)throw new Error();
+    const blob=await r.blob();
+    _logoPdfCache=await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(blob);});
+    await new Promise((resolve)=>{
+      const img=new Image();
+      img.onload=()=>{if(img.width&&img.height)_logoPdfRatio=img.width/img.height;resolve();};
+      img.onerror=()=>resolve();
+      img.src=_logoPdfCache;
+    });
+  }
+  catch(e){_logoPdfCache=null;}
+  return _logoPdfCache;
+}
+function desenharLogoPDF(doc,logo,x,y,maxW,maxH){
+  if(!logo)return;
+  try{
+    const ratio=_logoPdfRatio||3.6;
+    let w=maxW,h=w/ratio;
+    if(h>maxH){h=maxH;w=h*ratio;}
+    doc.addImage(logo,'PNG',x,y,w,h,undefined,'FAST');
+  }catch(e){}
 }
 function verificarPdf(){if(!window.jspdf?.jsPDF){alert('Biblioteca de PDF não carregou. Verifique a conexão e abra novamente o arquivo.');return false;}return true;}
 function desenharCabecalhoPDF(doc,logo,titulo,subtitulo){
   const pageW=doc.internal.pageSize.getWidth(),dark=[35,39,43],orange=[255,122,0];
   doc.setFillColor(...dark);doc.rect(0,0,pageW,28,'F');doc.setFillColor(...orange);doc.rect(0,28,pageW,2,'F');
-  if(logo){try{doc.addImage(logo,'PNG',14,7,42,12,undefined,'FAST');}catch(e){}}
+  if(logo){desenharLogoPDF(doc,logo,14,7,42,12);}
   else{doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(255,122,0);doc.text('TRADIMAQ',14,15);}
   doc.setTextColor(255);doc.setFont('helvetica','bold');doc.setFontSize(13);doc.text(String(titulo||'CENTRAL DE PREVENTIVAS').toUpperCase(),62,12);
   doc.setFont('helvetica','normal');doc.setFontSize(8.2);doc.setTextColor(220,220,220);doc.text(subtitulo||'Planejamento e controle de manutenção preventiva',62,18);
@@ -1214,6 +1362,115 @@ async function imprimirProgramacao(){
   doc.autoTable(pdfTableBase(doc,{startY:y,head:[['Período','Filial','Frota','Série','Ano','Modelo','Configuração','Revisão']],body,columnStyles:{0:{cellWidth:16},1:{cellWidth:24},2:{cellWidth:19,font:'courier',fontSize:7},3:{cellWidth:21,font:'courier',fontSize:6.5},4:{cellWidth:10,halign:'center'},5:{cellWidth:23},6:{cellWidth:'auto'},7:{cellWidth:17,halign:'center',fontStyle:'bold'}},didDrawPage:header}));
   rodapePdf(doc);doc.save(`programacao_preventivas_${new Date().toISOString().slice(0,10)}.pdf`);toast('PDF da programação gerado.');
 }
+
+let PDF_TPE_SELECIONADAS=new Set();
+function abrirSelecaoPdfTPE(){
+  const ov=document.getElementById("pdfTpeOverlay"),q=document.getElementById("pdfTpeBusca");
+  if(q)q.value="";renderSelecaoPdfTPE();if(ov)ov.classList.remove("hidden");
+}
+function fecharSelecaoPdfTPE(){const ov=document.getElementById("pdfTpeOverlay");if(ov)ov.classList.add("hidden");}
+function pdfTpeEquipamentosVisiveis(){
+  const q=(document.getElementById("pdfTpeBusca")?.value||"").trim().toLowerCase();
+  return EQUIPAMENTOS.filter(e=>!q||[e.frota,e.serie,e.modelo,e.submodelo,e.filial,e.local].join(" ").toLowerCase().includes(q)).sort((a,b)=>a.frota.localeCompare(b.frota,"pt-BR",{numeric:true}));
+}
+function atualizarContadorPdfTPE(){
+  const el=document.getElementById("pdfTpeCount"),n=PDF_TPE_SELECIONADAS.size;if(el)el.textContent=`${n} selecionada${n===1?"":"s"}`;
+}
+function renderSelecaoPdfTPE(){
+  const box=document.getElementById("pdfTpeLista");if(!box)return;const arr=pdfTpeEquipamentosVisiveis();
+  box.innerHTML=arr.length?arr.map(e=>{const on=PDF_TPE_SELECIONADAS.has(e.frota);return `<label class="pdf-tpe-row ${on?"pdf-tpe-selected":""}"><input type="checkbox" ${on?"checked":""} onchange="alternarPdfTPE('${esc(e.frota)}',this.checked)"><span class="tpe">${esc(e.frota)}</span><span class="desc"><strong>${esc(e.modelo)}</strong> · ${esc(e.submodelo)}<br><span class="muted">Série: ${esc(e.serie||"—")}</span></span><span class="fil">${esc(e.filial||"—")}</span></label>`;}).join(""):'<div class="empty" style="padding:30px">Nenhum equipamento encontrado.</div>';
+  atualizarContadorPdfTPE();
+}
+function alternarPdfTPE(frota,checked){checked?PDF_TPE_SELECIONADAS.add(frota):PDF_TPE_SELECIONADAS.delete(frota);renderSelecaoPdfTPE();}
+function selecionarPdfTpeVisiveis(){pdfTpeEquipamentosVisiveis().forEach(e=>PDF_TPE_SELECIONADAS.add(e.frota));renderSelecaoPdfTPE();}
+function limparSelecaoPdfTPE(){PDF_TPE_SELECIONADAS.clear();renderSelecaoPdfTPE();}
+async function gerarPdfTpesSelecionadas(){
+  if(!PDF_TPE_SELECIONADAS.size){alert("Selecione pelo menos uma TPE para gerar o PDF.");return;}
+  const selecionadas=EQUIPAMENTOS.filter(e=>PDF_TPE_SELECIONADAS.has(e.frota)).sort((a,b)=>a.frota.localeCompare(b.frota,"pt-BR",{numeric:true}));
+  await imprimirCronogramaEquipamentos(selecionadas);
+}
+
+function reviewPdfInfo(tipo){
+  return ({
+    "250":{nome:"250H TRIM",periodo:"Trimestral",txt:[37,99,235],bg:[240,245,255],bd:[199,219,255]},
+    "500":{nome:"500H SEM",periodo:"Semestral",txt:[124,58,237],bg:[248,240,255],bd:[223,199,255]},
+    "1000":{nome:"1000H ANUAL",periodo:"Anual",txt:[21,128,61],bg:[240,255,245],bd:[199,255,216]},
+    "2000":{nome:"2000H BIENAL",periodo:"Bienal",txt:[161,98,7],bg:[255,250,240],bd:[255,229,160]}
+  })[String(tipo)]||{nome:String(tipo)+"H",periodo:"Preventiva",txt:[60,60,60],bg:[248,248,248],bd:[225,225,225]};
+}
+function desenharCabecalhoClassicoPDF(doc,logo,contexto,titulo="PLANO DE MANUTENÇÃO PREVENTIVA"){
+  const w=doc.internal.pageSize.getWidth(),black=[15,15,15],orange=[255,122,0];
+  doc.setFillColor(...black);doc.rect(10,7,w-20,18,"F");
+  if(logo){desenharLogoPDF(doc,logo,14,11,43,9);}
+  else{doc.setFont("helvetica","bold");doc.setFontSize(15);doc.setTextColor(255);doc.text("TRADIMAQ",14,17);}
+  doc.setTextColor(165,165,165);doc.setFont("courier","normal");doc.setFontSize(6.5);doc.text(`Emitido em ${new Date().toISOString().slice(0,10)}`,w-14,13,{align:"right"});doc.text(String(contexto||""),w-14,18,{align:"right"});
+  doc.setFillColor(...orange);doc.rect(10,25,w-20,1.2,"F");
+  doc.setFont("helvetica","bold");doc.setFontSize(12.5);doc.setTextColor(20,20,20);doc.text(String(titulo).toUpperCase(),14,34);
+}
+function rodapeClassicoPdf(doc,texto="Documento gerado automaticamente - Plataformas Elevatórias"){
+  const pages=doc.internal.getNumberOfPages(),w=doc.internal.pageSize.getWidth();
+  for(let i=1;i<=pages;i++){doc.setPage(i);const h=doc.internal.pageSize.getHeight();doc.setFillColor(15,15,15);doc.rect(10,h-13,w-20,8,"F");doc.setFont("helvetica","bold");doc.setFontSize(5.8);doc.setTextColor(255,122,0);doc.text("TRADIMAQ",14,h-8);doc.setFont("helvetica","normal");doc.setTextColor(125,125,125);doc.text(texto,w/2,h-8,{align:"center"});doc.text(`Página ${i}/${pages}`,w-14,h-8,{align:"right"});}
+}
+function cardsInfoClassico(doc,y,cards){
+  const w=doc.internal.pageSize.getWidth(),gap=4,bw=(w-28-gap*(cards.length-1))/cards.length;
+  cards.forEach((c,i)=>{const x=14+i*(bw+gap);doc.setFillColor(250,250,250);doc.setDrawColor(229,229,229);doc.roundedRect(x,y,bw,16,1.5,1.5,"FD");doc.setFont("helvetica","bold");doc.setFontSize(6.1);doc.setTextColor(145,145,145);doc.text(String(c[0]).toUpperCase(),x+3,y+4.5);doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(35,35,35);const lines=doc.splitTextToSize(String(c[1]),bw-6);doc.text(lines.slice(0,2),x+3,y+10);});return y+21;
+}
+function resumoRevisoesClassico(doc,y,counts){
+  const w=doc.internal.pageSize.getWidth(),items=[{k:"TOTAL",v:Object.values(counts).reduce((a,b)=>a+b,0),txt:[255,107,0],bg:[255,248,244],bd:[255,213,184]},...['250','500','1000','2000'].map(k=>({k,v:counts[k]||0,...reviewPdfInfo(k)}))],gap=3,bw=(w-28-gap*4)/5;
+  items.forEach((it,i)=>{const x=14+i*(bw+gap),label=it.k==="TOTAL"?"TOTAL":it.nome;doc.setFillColor(...it.bg);doc.setDrawColor(...it.bd);doc.roundedRect(x,y,bw,17,1.5,1.5,"FD");doc.setFont("helvetica","bold");doc.setFontSize(12);doc.setTextColor(...it.txt);doc.text(String(it.v),x+bw/2,y+7,{align:"center"});doc.setFont("helvetica","normal");doc.setFontSize(5.8);doc.setTextColor(130,130,130);doc.text(label,x+bw/2,y+12.8,{align:"center"});});return y+22;
+}
+function ensureClassicPage(doc,header,y,need=20){if(y+need>doc.internal.pageSize.getHeight()-19){doc.addPage();header();return 41;}return y;}
+
+async function imprimirCronogramaEquipamentos(equipsSelecionados=null){
+  const equips=Array.isArray(equipsSelecionados)&&equipsSelecionados.length?equipsSelecionados:[];
+  if(!equips.length){alert("Selecione pelo menos uma TPE para gerar o PDF.");return;}if(!verificarPdf())return;
+  const months=cronMesesSelecionados(),events=[];
+  months.forEach(mm=>equips.forEach(e=>{const tipo=tipoRevisaoNoMes(e,mm.m,mm.a);if(tipo)events.push({...e,tipo:String(tipo),m:mm.m,ano:mm.a});}));
+  if(!events.length){alert("As TPEs selecionadas não possuem preventivas no período escolhido.");return;}
+  events.sort((a,b)=>monthKey(a.m,a.ano).localeCompare(monthKey(b.m,b.ano))||a.filial.localeCompare(b.filial,"pt-BR")||a.frota.localeCompare(b.frota,"pt-BR",{numeric:true}));
+  const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4",orientation:"portrait"}),logo=await obterLogoBase64(),w=doc.internal.pageSize.getWidth();
+  const filiais=[...new Set(equips.map(e=>e.filial).filter(Boolean))],abr=filiais.length===1?filiais[0]:`${filiais.length} filiais`,header=()=>desenharCabecalhoClassicoPDF(doc,logo,abr);header();
+  let y=40;const periodo=`${MF[months[0].m-1]} - ${MF[months[months.length-1].m-1]} ${months[0].a===months[months.length-1].a?months[0].a:`${months[0].a}/${months[months.length-1].a}`}`;
+  y=cardsInfoClassico(doc,y,[["Período",periodo],["Abrangência",abr],["Total de OS",String(events.length)]]);
+  doc.setFont("helvetica","bold");doc.setFontSize(6.5);doc.setTextColor(145,145,145);doc.text("RESUMO POR TIPO DE REVISÃO",14,y);y+=4;
+  const c={250:0,500:0,1000:0,2000:0};events.forEach(e=>c[e.tipo]=(c[e.tipo]||0)+1);y=resumoRevisoesClassico(doc,y,c);
+  doc.setFillColor(255,250,245);doc.setDrawColor(255,224,195);doc.roundedRect(14,y,w-28,9,1,1,"FD");doc.setFillColor(255,122,0);doc.rect(14,y,1.2,9,"F");doc.setFont("helvetica","bold");doc.setFontSize(6.8);doc.setTextColor(185,83,0);doc.text(`RELATÓRIO PARCIAL - ${equips.length} equipamento${equips.length===1?"":"s"} selecionado${equips.length===1?"":"s"} - ${events.length} OS`,18,y+5.6);y+=15;
+  const byMonth={};events.forEach(e=>{const k=monthKey(e.m,e.ano);(byMonth[k]=byMonth[k]||[]).push(e);});
+  for(const k of Object.keys(byMonth).sort()){
+    const arr=byMonth[k],sample=arr[0],mc={250:0,500:0,1000:0,2000:0};arr.forEach(e=>mc[e.tipo]++);y=ensureClassicPage(doc,header,y,24);
+    doc.setFont("helvetica","bold");doc.setFontSize(8.8);doc.setTextColor(255,107,0);doc.text(`${MF[sample.m-1].toUpperCase()} ${sample.ano}`,14,y);
+    const sum=Object.entries(mc).filter(([,n])=>n).map(([t,n])=>`${n}x${reviewPdfInfo(t).nome.split(" ")[0]}`).join("  ·  ");doc.setFont("helvetica","normal");doc.setFontSize(6.3);doc.setTextColor(130,130,130);doc.text(`${arr.length} OS${sum?" · "+sum:""}`,w-14,y,{align:"right"});doc.setDrawColor(255,122,0);doc.setLineWidth(.6);doc.line(14,y+2,w-14,y+2);y+=5;
+    const byF={};arr.forEach(e=>(byF[e.filial]=byF[e.filial]||[]).push(e));
+    for(const filial of Object.keys(byF).sort((a,b)=>a.localeCompare(b,"pt-BR"))){
+      const rows=byF[filial];y=ensureClassicPage(doc,header,y,19);doc.setFillColor(255,248,242);doc.rect(14,y,w-28,7,"F");doc.setFillColor(255,122,0);doc.rect(14,y,1.2,7,"F");doc.setFont("helvetica","bold");doc.setFontSize(6.3);doc.setTextColor(190,85,0);doc.text(String(filial).toUpperCase(),18,y+4.6);doc.setFont("helvetica","normal");doc.setTextColor(155,155,155);doc.text(`${rows.length} equip.`,w-16,y+4.6,{align:"right"});y+=7;
+      doc.autoTable({startY:y,theme:"plain",margin:{left:14,right:14,top:40,bottom:20},head:[["FROTA","MODELO","SUBMODELO","REVISÃO"]],body:rows.map(e=>[e.frota,e.modelo,e.submodelo,reviewPdfInfo(e.tipo).nome]),headStyles:{fillColor:[246,246,246],textColor:[130,130,130],fontSize:5.7,fontStyle:"bold",cellPadding:{top:2,bottom:2,left:2,right:2}},bodyStyles:{fontSize:6.6,textColor:[45,45,45],cellPadding:{top:2.1,bottom:2.1,left:2,right:2},lineColor:[235,235,235],lineWidth:{bottom:.15}},columnStyles:{0:{cellWidth:38,fontStyle:"bold"},1:{cellWidth:48},2:{cellWidth:55,textColor:[125,125,125]},3:{cellWidth:35,halign:"center",fontStyle:"bold"}},didParseCell:data=>{if(data.section==="body"&&data.column.index===3){const raw=String(data.cell.raw||"");const t=raw.startsWith("250")?"250":raw.startsWith("500")?"500":raw.startsWith("1000")?"1000":"2000",ri=reviewPdfInfo(t);data.cell.styles.textColor=ri.txt;data.cell.styles.fillColor=ri.bg;}},didDrawPage:header});y=doc.lastAutoTable.finalY+7;
+    }
+  }
+  y=ensureClassicPage(doc,header,y,35);doc.setFont("helvetica","bold");doc.setFontSize(6.2);doc.setTextColor(155,155,155);doc.text("ASSINATURAS",14,y);y+=10;doc.setDrawColor(70,70,70);doc.line(14,y,91,y);doc.line(108,y,196,y);doc.setFont("helvetica","bold");doc.setFontSize(6.7);doc.setTextColor(40,40,40);doc.text("GABRIEL ROZA",52.5,y+5,{align:"center"});doc.text("LUCAS AGUIAR",152,y+5,{align:"center"});doc.setFont("helvetica","normal");doc.setFontSize(5.8);doc.setTextColor(130,130,130);doc.text("CONTROLADOR DE MANUTENÇÃO",52.5,y+9,{align:"center"});doc.text("GERENTE",152,y+9,{align:"center"});doc.text("Data: ____ / ____ / ______",52.5,y+13,{align:"center"});doc.text("Data: ____ / ____ / ______",152,y+13,{align:"center"});
+  rodapeClassicoPdf(doc);doc.save(`plano_preventivas_tpes_${new Date().toISOString().slice(0,10)}.pdf`);fecharSelecaoPdfTPE();toast(`PDF clássico gerado com ${equips.length} TPE${equips.length===1?"":"s"}.`);
+}
+
+function nomeArquivoSeguro(v){return String(v||"plano").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9_-]+/g,"_").replace(/^_+|_+$/g,"").slice(0,80)||"plano";}
+async function imprimirPlanoCompletoModelo(){
+  const nome=document.getElementById("plPlanoPuro")?.value,p=PLANOS[nome];if(!nome||!p){alert("Selecione um plano válido.");return;}if(!verificarPdf())return;
+  const {jsPDF}=window.jspdf,doc=new jsPDF({unit:"mm",format:"a4",orientation:"portrait"}),logo=await obterLogoBase64(),apps=planoAplicacoes(nome),w=doc.internal.pageSize.getWidth();
+  const appTxt=apps.length?apps.map(x=>`${x.modelo}${x.submodelo?` - ${x.submodelo}`:""}`).join(" | "):nome,header=()=>desenharCabecalhoClassicoPDF(doc,logo,"Plano técnico para cliente","PLANO DE MANUTENÇÃO PREVENTIVA");header();
+  let y=40;y=cardsInfoClassico(doc,y,[["Modelo aplicável",appTxt],["Plano de referência",nome],["Periodicidade","250h / 500h / 1000h / 2000h"]]);
+  doc.setFillColor(255,250,245);doc.setDrawColor(255,224,195);doc.roundedRect(14,y,w-28,16,1.5,1.5,"FD");doc.setFillColor(255,122,0);doc.rect(14,y,1.2,16,"F");doc.setFont("helvetica","normal");doc.setFontSize(7);doc.setTextColor(85,85,85);const intro="Documento técnico com o escopo padrão de manutenção preventiva do modelo/configuração indicada. As revisões são apresentadas separadamente para facilitar consulta, orçamento, programação e apresentação ao cliente.";doc.text(doc.splitTextToSize(intro,w-38),19,y+5.2);y+=22;
+  const revs=["250","500","1000","2000"];
+  for(let i=0;i<revs.length;i++){
+    const tipo=revs[i],ri=reviewPdfInfo(tipo),items=p[tipo]||[],mats=items.filter(x=>x.tipo==="material"),acts=items.filter(x=>x.tipo==="atividade"&&!String(x.descricao).toUpperCase().startsWith("REVISÃO"));
+    if(i>0){doc.addPage();header();y=40;}
+    doc.setFillColor(...ri.bg);doc.setDrawColor(...ri.bd);doc.roundedRect(14,y,w-28,17,2,2,"FD");doc.setFont("helvetica","bold");doc.setFontSize(14);doc.setTextColor(...ri.txt);doc.text(`REVISÃO ${tipo}H`,19,y+7.2);doc.setFontSize(7);doc.setFont("helvetica","normal");doc.setTextColor(90,90,90);doc.text(`Periodicidade: ${ri.periodo}`,19,y+12.5);doc.setFont("helvetica","bold");doc.setTextColor(...ri.txt);doc.text(`${mats.length} materiais · ${acts.length} atividades`,w-19,y+10,{align:"right"});y+=24;
+    doc.setFont("helvetica","bold");doc.setFontSize(7);doc.setTextColor(80,80,80);doc.text("MATERIAIS / CONSUMÍVEIS",14,y);doc.setDrawColor(...ri.txt);doc.setLineWidth(.5);doc.line(14,y+2,w-14,y+2);y+=5;
+    doc.autoTable({startY:y,theme:"grid",margin:{left:14,right:14,top:40,bottom:20},head:[["QTD.","CÓDIGO","DESCRIÇÃO","CATEGORIA"]],body:mats.length?mats.map(x=>[fmtQtd(x.qtd),x.codigo||"-",x.descricao||"-",materialCategoria(x.descricao)]):[["-","-","Não há materiais cadastrados para esta revisão.","-"]],headStyles:{fillColor:[246,246,246],textColor:[105,105,105],fontSize:6.2,fontStyle:"bold"},bodyStyles:{fontSize:6.8,textColor:[45,45,45],cellPadding:2,lineColor:[230,230,230],lineWidth:.2},alternateRowStyles:{fillColor:[252,252,252]},columnStyles:{0:{cellWidth:17,halign:"right",fontStyle:"bold"},1:{cellWidth:40,font:"courier",fontSize:6.2},2:{cellWidth:"auto"},3:{cellWidth:34}},didDrawPage:header});y=doc.lastAutoTable.finalY+8;
+    y=ensureClassicPage(doc,header,y,20);doc.setFont("helvetica","bold");doc.setFontSize(7);doc.setTextColor(80,80,80);doc.text("ESCOPO DA MANUTENÇÃO",14,y);doc.setDrawColor(...ri.txt);doc.line(14,y+2,w-14,y+2);y+=5;
+    doc.autoTable({startY:y,theme:"grid",margin:{left:14,right:14,top:40,bottom:20},head:[["#","CÓDIGO","ATIVIDADE / VERIFICAÇÃO"]],body:acts.length?acts.map((x,idx)=>[String(idx+1),x.codigo||"-",x.descricao||"-"]):[["-","-","Revisão não aplicável ou sem atividades cadastradas neste plano."]],headStyles:{fillColor:[246,246,246],textColor:[105,105,105],fontSize:6.2,fontStyle:"bold"},bodyStyles:{fontSize:6.8,textColor:[45,45,45],cellPadding:2.1,lineColor:[230,230,230],lineWidth:.2,valign:"top"},alternateRowStyles:{fillColor:[252,252,252]},columnStyles:{0:{cellWidth:12,halign:"center",fontStyle:"bold"},1:{cellWidth:40,font:"courier",fontSize:6.2},2:{cellWidth:"auto"}},didDrawPage:header});
+  }
+  const pages=doc.internal.getNumberOfPages();doc.setPage(pages);y=doc.lastAutoTable?.finalY?doc.lastAutoTable.finalY+9:45;y=ensureClassicPage(doc,header,y,28);doc.setFillColor(248,248,248);doc.setDrawColor(225,225,225);doc.roundedRect(14,y,w-28,16,1.5,1.5,"FD");doc.setFont("helvetica","normal");doc.setFontSize(6.5);doc.setTextColor(100,100,100);const note="Observação: este documento representa o plano padrão do modelo e não identifica uma máquina específica. A execução deve considerar condições reais do equipamento, ambiente de operação e recomendações técnicas aplicáveis.";doc.text(doc.splitTextToSize(note,w-36),18,y+5);
+  rodapeClassicoPdf(doc,"Plano técnico de manutenção preventiva - Plataformas Elevatórias");doc.save(`plano_completo_${nomeArquivoSeguro(nome)}.pdf`);toast("Plano completo para cliente gerado sem TPE.");
+}
+
 async function imprimirMateriais(){
   const raw=calcularMateriais();popularFiltrosMateriais(raw);const filtered=filtrarMateriaisRaw(raw);if(!filtered.length){alert('Não há materiais previstos para os filtros selecionados.');return;}if(!verificarPdf())return;
   const f=filtrosMateriaisAtuais(),arr=agruparMateriais(filtered,f.group),{jsPDF}=window.jspdf,doc=new jsPDF({unit:'mm',format:'a4'}),logo=await obterLogoBase64();
