@@ -1059,19 +1059,25 @@ async function excluirRascunho(id){
 }
 
 /* ══════════ IMAGE PROCESSING (força 4:3 horizontal) ══════════ */
-function processImg(dataURL){
-  return new Promise(res=>{
+function processImg(dataURL,comTimestamp=false){
+  return new Promise((res,rej)=>{
     const img=new Image();
     img.onload=()=>{
-      const R=4/3,ir=img.naturalWidth/img.naturalHeight;
-      let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
-      if(ir>R){sw=Math.round(sh*R);sx=Math.round((img.naturalWidth-sw)/2);}
-      else if(ir<R){sh=Math.round(sw/R);sy=Math.round((img.naturalHeight-sh)/2);}
-      const W=Math.min(sw,1280),H=Math.round(W/R);
-      const c=document.createElement('canvas');c.width=W;c.height=H;
-      c.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,W,H);
-      res(c.toDataURL('image/jpeg',.88));
-    };img.src=dataURL;
+      try{
+        const R=4/3,ir=img.naturalWidth/img.naturalHeight;
+        let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
+        if(ir>R){sw=Math.round(sh*R);sx=Math.round((img.naturalWidth-sw)/2);}
+        else if(ir<R){sh=Math.round(sw/R);sy=Math.round((img.naturalHeight-sh)/2);}
+        const W=Math.min(sw,1280),H=Math.round(W/R);
+        const c=document.createElement('canvas');c.width=W;c.height=H;
+        const ctx=c.getContext('2d');
+        ctx.drawImage(img,sx,sy,sw,sh,0,0,W,H);
+        if(comTimestamp)aplicarTimestampCamera(ctx,W,H);
+        res(c.toDataURL('image/jpeg',.88));
+      }catch(e){rej(e);}
+    };
+    img.onerror=()=>rej(new Error('Não foi possível processar a imagem'));
+    img.src=dataURL;
   });
 }
 function aplicarTimestampCamera(ctx,W,H,d=new Date()){
@@ -1152,7 +1158,35 @@ function setNota(tpId,val){estado[tpId].nota=val;changed();}
 
 /* ══════════ UPLOAD / CÂMERA NATIVA ══════════ */
 function triggerUp(tpId,idx){document.getElementById(`up-${tpId}-${idx}`)?.click();}
-function triggerCap(tpId,idx){abrirCam(tpId,idx);}
+function triggerCap(tpId,idx){
+  // Abre a câmera NATIVA do celular. A captura recebe data/hora; Upload fica limpo.
+  const inp=document.createElement('input');
+  inp.type='file';
+  inp.accept='image/*';
+  inp.capture='environment';
+  inp.style.display='none';
+  inp.onchange=async e=>{
+    const file=e.target.files?.[0];
+    inp.remove();
+    if(!file)return;
+    try{
+      toast('⏳ Processando foto...',2500);
+      const raw=await readFile(file);
+      const foto=await processImg(raw,true);
+      estado[tpId].fotos[idx].push(foto);
+      estado[tpId].checked[idx]=true;
+      renderItemFotos(tpId,idx);atualizarContador();
+      if(window.innerWidth>=860||previewShown)atualizar();
+      await salvarCache(true);
+      toast('Foto salva! ✓');
+    }catch(err){
+      console.warn('Falha ao capturar foto:',err);
+      toast('⚠️ Não foi possível processar a foto',3200);
+    }
+  };
+  document.body.appendChild(inp);
+  inp.click();
+}
 async function onUp(event,tpId,idx){
   const files=[...event.target.files];event.target.value='';if(!files.length)return;
   const validas=files.filter(f=>f.type.startsWith('image/'));if(!validas.length){toast('Nenhuma imagem válida selecionada');return;}
@@ -1185,7 +1219,7 @@ function verFoto(tpId,idx,fi){
   document.getElementById('viewer-modal').classList.add('active');
 }
 
-/* ══════════ CÂMERA ══════════ */
+/* ══════════ CÂMERA INTERNA LEGADA — não utilizada; o botão usa a câmera nativa ══════════ */
 function onCamResize(){ setTimeout(atualizarOverlay,200); }
 function onOrientChange(){
   // Dispara várias vezes para pegar quando o browser terminar de reposicionar
