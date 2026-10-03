@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
 <title>Vistoria Veicular Tradimaq</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--brand:#ff6b00;--brand-dim:rgba(255,107,0,.13);--brand-glow:rgba(255,107,0,.25);--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--r:6px;--r2:10px;--r3:14px;}
+:root{color-scheme:light only;--brand:#ff6b00;--brand-dim:rgba(255,107,0,.13);--brand-glow:rgba(255,107,0,.25);--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--blue:#3b82f6;--r:6px;--r2:10px;--r3:14px;}
 body{--bg:#f0f2f5;--bg2:#ffffff;--bg3:#f7f8fa;--bg4:#eceef1;--line:rgba(0,0,0,.08);--line2:rgba(0,0,0,.14);--txt:#111827;--txt2:#4b5563;--txt3:#9ca3af;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;-webkit-tap-highlight-color:transparent;overflow-x:hidden;}
+html,body{height:100%;-webkit-tap-highlight-color:transparent;overflow-x:hidden;color-scheme:light only;forced-color-adjust:none;}
 body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-size:14px;}
 
 /* ═══ HEADER ═══ */
@@ -329,6 +331,14 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .doc-footer-site{font-size:7.5px;color:#9ca3af;}
 .doc-footer-logo{height:12px;object-fit:contain;opacity:.3;}
 
+/* Cabeçalho funcional do PDF: repetição nativa em todas as páginas */
+.doc-print-table{width:100%;table-layout:fixed;border-collapse:collapse;border-spacing:0;}
+.doc-print-table td{vertical-align:top;}
+.doc-print-table thead{display:table-header-group;}
+.doc-table-hdr,.doc-table-body{padding:0;}
+.doc-head-spacer{height:0;display:block;}
+.doc-footer-preview-row td{padding:0;}
+
 /* ═══ MOBILE BOTTOM BAR ═══ */
 .mobile-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--line2);padding:8px 10px;padding-bottom:max(8px,env(safe-area-inset-bottom));display:flex;gap:7px;z-index:500;}
 @media(min-width:860px){.mobile-bar{display:none;}}
@@ -347,11 +357,25 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   @page{
     size:A4 portrait;
-    margin:10mm 10mm 18mm;
-    @bottom-center{
+    margin:11mm 10mm 14mm 10mm;
+    @top-right{
       content:"Página " counter(page) " de " counter(pages);
       font-family:'Barlow',sans-serif;
       font-size:8px;
+      color:#9ca3af;
+    }
+    @bottom-left{
+      content:"www.tradimaq.com.br";
+      font-family:'Barlow',sans-serif;
+      font-size:7.5px;
+      color:#9ca3af;
+    }
+    @bottom-right{
+      content:"TRADIMAQ";
+      font-family:'Barlow',sans-serif;
+      font-size:8px;
+      font-weight:700;
+      letter-spacing:.05em;
       color:#9ca3af;
     }
   }
@@ -363,6 +387,14 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   .main-wrap{display:block!important;height:auto!important;}
   .preview-panel{display:block!important;padding:0!important;background:white!important;height:auto!important;overflow:visible!important;min-height:unset!important;}
   #documento{box-shadow:none!important;max-width:100%!important;width:100%!important;height:auto!important;min-height:unset!important;}
+  .doc-print-table{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;}
+  .doc-print-table thead{display:table-header-group!important;}
+  .doc-table-hdr,.doc-table-body{padding:0!important;}
+  /* 4 mm de respiro abaixo do cabeçalho nas páginas seguintes;
+     compensado na primeira página para não criar vão desnecessário. */
+  .doc-head-spacer{display:block!important;height:4mm!important;}
+  .doc-body{margin-top:-4mm!important;}
+  .doc-footer-preview-row{display:none!important;}
 
   /* Cabeçalho escuro impresso corretamente */
   .doc-masthead{background:#0d0f12!important;-webkit-print-color-adjust:exact!important;}
@@ -426,7 +458,6 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
   .doc-sec{page-break-inside:avoid!important;break-inside:avoid!important;}
   .doc-info-grid{page-break-inside:avoid!important;break-inside:avoid!important;}
   .doc-sig-grid{page-break-inside:avoid!important;break-inside:avoid!important;}
-  .doc-footer{page-break-inside:avoid!important;break-inside:avoid!important;}
 
   /* Correção crítica para iOS/Safari: aspect-ratio não funciona em print.
      Usar padding-bottom trick para manter proporção 4:3 sem cortar */
@@ -828,7 +859,7 @@ function toggleMobilePreview(){
 /* ══════════ TOAST / BADGE ══════════ */
 function toast(msg,dur=2400){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 function badge(txt,cls){const b=document.getElementById('status-pill');b.textContent=txt;b.className='status-pill'+(cls?' '+cls:'');}
-function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();atualizarTitulo();}
+function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();atualizarTitulo();if(window.innerWidth>=860||previewShown)agendarPreview();}
 function atualizarTitulo(){
   const equip=(v('f-tag')||v('f-serie')||'').trim();
   const cliente=(v('f-cliente')||'').trim();
@@ -838,6 +869,7 @@ function atualizarTitulo(){
   document.title=partes.join(' ');
 }
 function v(id){return document.getElementById(id)?.value||'';}
+function escHTML(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
 function dataLocalISO(d=new Date()){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -852,6 +884,7 @@ async function initApp(){
   await carregarCache();
   if(!v('f-descricao'))document.getElementById('f-descricao').value='Veículo sem avarias visuais aparentes no momento da vistoria.';
   atualizarContador();atualizarTitulo();badge('—','');
+  if(window.innerWidth>=860)atualizar();
   atualizarContadorRascunhos().catch(()=>{});
 }
 initApp();
@@ -1026,22 +1059,45 @@ async function excluirRascunho(id){
 }
 
 /* ══════════ IMAGE PROCESSING (força 4:3 horizontal) ══════════ */
-function processImg(dataURL){
-  return new Promise(res=>{
+function processImg(dataURL,comTimestamp=false){
+  return new Promise((res,rej)=>{
     const img=new Image();
     img.onload=()=>{
-      const R=4/3,ir=img.naturalWidth/img.naturalHeight;
-      let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
-      if(ir>R){sw=Math.round(sh*R);sx=Math.round((img.naturalWidth-sw)/2);}
-      else if(ir<R){sh=Math.round(sw/R);sy=Math.round((img.naturalHeight-sh)/2);}
-      const W=Math.min(sw,1280),H=Math.round(W/R);
-      const c=document.createElement('canvas');c.width=W;c.height=H;
-      c.getContext('2d').drawImage(img,sx,sy,sw,sh,0,0,W,H);
-      res(c.toDataURL('image/jpeg',.88));
-    };img.src=dataURL;
+      try{
+        const R=4/3,ir=img.naturalWidth/img.naturalHeight;
+        let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
+        if(ir>R){sw=Math.round(sh*R);sx=Math.round((img.naturalWidth-sw)/2);}
+        else if(ir<R){sh=Math.round(sw/R);sy=Math.round((img.naturalHeight-sh)/2);}
+        const W=Math.min(sw,1280),H=Math.round(W/R);
+        const c=document.createElement('canvas');c.width=W;c.height=H;
+        const ctx=c.getContext('2d');
+        ctx.drawImage(img,sx,sy,sw,sh,0,0,W,H);
+        if(comTimestamp)aplicarTimestampCamera(ctx,W,H);
+        res(c.toDataURL('image/jpeg',.88));
+      }catch(e){rej(e);}
+    };
+    img.onerror=()=>rej(new Error('Não foi possível processar a imagem'));
+    img.src=dataURL;
   });
 }
-function readFile(f){return new Promise(res=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.readAsDataURL(f);});}
+function aplicarTimestampCamera(ctx,W,H,d=new Date()){
+  const ts=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+  const margin=Math.max(8,Math.round(W*.012));
+  const padX=Math.max(8,Math.round(W*.009)),padY=Math.max(5,Math.round(W*.0055));
+  let fs=Math.max(11,Math.round(W*.022));
+  ctx.font=`600 ${fs}px monospace`;
+  let tw=ctx.measureText(ts).width;
+  const maxTextW=Math.max(40,W-margin*2-padX*2);
+  while(tw>maxTextW&&fs>9){fs--;ctx.font=`600 ${fs}px monospace`;tw=ctx.measureText(ts).width;}
+  const boxW=Math.min(W-margin*2,Math.ceil(tw+padX*2));
+  const boxH=Math.ceil(fs+padY*2);
+  const x=Math.max(margin,W-margin-boxW),y=Math.max(margin,H-margin-boxH);
+  ctx.fillStyle='rgba(0,0,0,.58)';
+  if(ctx.roundRect){ctx.beginPath();ctx.roundRect(x,y,boxW,boxH,Math.max(3,Math.round(fs*.22)));ctx.fill();}
+  else{ctx.fillRect(x,y,boxW,boxH);}
+  ctx.fillStyle='#fff';ctx.textBaseline='middle';ctx.fillText(ts,x+padX,y+boxH/2);ctx.textBaseline='alphabetic';
+}
+function readFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej(r.error||new Error('Falha ao ler imagem'));r.readAsDataURL(f);});}
 
 /* ══════════ RENDER TÓPICOS ══════════ */
 function renderTopicos(){
@@ -1064,7 +1120,6 @@ function renderTopicos(){
           <button class="fi-btn primary" onclick="triggerCap('${t.id}',${idx})">📸 Câmera</button>
           <button class="fi-btn" onclick="triggerUp('${t.id}',${idx})">📁 Upload</button>
         </div>
-        <input type="file" accept="image/*" capture="environment" id="cap-${t.id}-${idx}" style="display:none;" onchange="onUp(event,'${t.id}',${idx})">
         <input type="file" accept="image/*" id="up-${t.id}-${idx}" style="display:none;" multiple onchange="onUp(event,'${t.id}',${idx})">
       </div>`;
     });
@@ -1103,7 +1158,35 @@ function setNota(tpId,val){estado[tpId].nota=val;changed();}
 
 /* ══════════ UPLOAD / CÂMERA NATIVA ══════════ */
 function triggerUp(tpId,idx){document.getElementById(`up-${tpId}-${idx}`)?.click();}
-function triggerCap(tpId,idx){document.getElementById(`cap-${tpId}-${idx}`)?.click();}
+function triggerCap(tpId,idx){
+  // Abre a câmera NATIVA do celular. A captura recebe data/hora; Upload fica limpo.
+  const inp=document.createElement('input');
+  inp.type='file';
+  inp.accept='image/*';
+  inp.capture='environment';
+  inp.style.display='none';
+  inp.onchange=async e=>{
+    const file=e.target.files?.[0];
+    inp.remove();
+    if(!file)return;
+    try{
+      toast('⏳ Processando foto...',2500);
+      const raw=await readFile(file);
+      const foto=await processImg(raw,true);
+      estado[tpId].fotos[idx].push(foto);
+      estado[tpId].checked[idx]=true;
+      renderItemFotos(tpId,idx);atualizarContador();
+      if(window.innerWidth>=860||previewShown)atualizar();
+      await salvarCache(true);
+      toast('Foto salva! ✓');
+    }catch(err){
+      console.warn('Falha ao capturar foto:',err);
+      toast('⚠️ Não foi possível processar a foto',3200);
+    }
+  };
+  document.body.appendChild(inp);
+  inp.click();
+}
 async function onUp(event,tpId,idx){
   const files=[...event.target.files];event.target.value='';if(!files.length)return;
   const validas=files.filter(f=>f.type.startsWith('image/'));if(!validas.length){toast('Nenhuma imagem válida selecionada');return;}
@@ -1136,7 +1219,7 @@ function verFoto(tpId,idx,fi){
   document.getElementById('viewer-modal').classList.add('active');
 }
 
-/* ══════════ CÂMERA ══════════ */
+/* ══════════ CÂMERA INTERNA LEGADA — não utilizada; o botão usa a câmera nativa ══════════ */
 function onCamResize(){ setTimeout(atualizarOverlay,200); }
 function onOrientChange(){
   // Dispara várias vezes para pegar quando o browser terminar de reposicionar
@@ -1163,7 +1246,7 @@ async function abrirCam(tpId,idx){
     vEl.srcObject=camStream;
     vEl.onloadedmetadata=()=>{ setTimeout(atualizarOverlay,200); };
     window.addEventListener('resize',onCamResize);
-    screen.orientation.addEventListener('change',onOrientChange);
+    try{screen.orientation?.addEventListener('change',onOrientChange);}catch(e){}
   }catch(e){
     console.warn("Erro câmera:",e);
     fecharCam();
@@ -1231,7 +1314,10 @@ async function capturar(){
   const {sx,sy,sw,sh}=calcCrop43(vw,vh);
   const outW=Math.min(sw,1280), outH=Math.round(outW/(4/3));
   c.width=outW; c.height=outH;
-  c.getContext('2d').drawImage(vid,sx,sy,sw,sh,0,0,outW,outH);
+  const ctx=c.getContext('2d');
+  ctx.drawImage(vid,sx,sy,sw,sh,0,0,outW,outH);
+  // Data/hora somente em foto realmente capturada pela câmera. Upload/Galeria fica limpo.
+  aplicarTimestampCamera(ctx,outW,outH);
   const dataURL=c.toDataURL('image/jpeg',.92);
   fecharCam();
   estado[camTp].fotos[camIdx].push(dataURL);estado[camTp].checked[camIdx]=true;
@@ -1269,15 +1355,16 @@ function condClass(v){return{leve:'leve',moderado:'moderado',grave:'grave'}[v]||
 function condLabel(v){return{leve:'🟢 Dano Leve',moderado:'🟡 Dano Moderado',grave:'🔴 Dano Grave'}[v]||'Sem avaria aparente';}
 
 function atualizar(){
-  const modelo=v('f-modelo')||'—',serie=v('f-serie')||'—',data=v('f-data');
-  const local=v('f-local')||'—',tag=v('f-tag')||'—',cliente=v('f-cliente')||'—',setor=v('f-setor')||'—';
-  const horimetro=v('f-horimetro')||'—';
+  const modelo=escHTML(v('f-modelo')||'—'),serie=escHTML(v('f-serie')||'—'),data=v('f-data');
+  const local=escHTML(v('f-local')||'—'),tag=escHTML(v('f-tag')||'—'),cliente=escHTML(v('f-cliente')||'—'),setor=escHTML(v('f-setor')||'—');
+  const horimetro=escHTML(v('f-horimetro')||'—');
   const combMap={reserva:'Reserva',['1/4']:'1/4',['1/2']:'1/2',['3/4']:'3/4',cheio:'Cheio'};
   const combustivel=combMap[v('f-combustivel')]||'—';
-  const desc=v('f-descricao')||'—',resp1=v('f-resp1')||'—',resp2=v('f-resp2')||'—';
+  const desc=escHTML(v('f-descricao')||'—').replace(/\n/g,'<br>'),resp1=escHTML(v('f-resp1')||'—'),resp2=escHTML(v('f-resp2')||'—');
   const cond=v('f-condicao'),remessa=v('f-remessa')||'emprestimo';
   const remLabel=remessa==='transferencia'?'TRANSFERÊNCIA':'EMPRÉSTIMO';
-  const reportId=`VV-${(serie||tag).replace(/[^a-z0-9]/gi,'').toUpperCase()||'XXXX'}-${new Date().getFullYear()}`;
+  const reportBase=(v('f-serie')||v('f-tag')||'').replace(/[^a-z0-9]/gi,'').toUpperCase()||'XXXX';
+  const reportId=`VV-${reportBase}-${new Date().getFullYear()}`;
 
   // Tópicos com fotos
   let topicosHTML='';
@@ -1291,13 +1378,15 @@ function atualizar(){
     topicosHTML+=`<div class="doc-topico">
       <div class="doc-tp-title"><span>${t.icon}</span>${t.nome}</div>
       ${nFotos?`<div class="doc-foto-grid ${cls}">${gridItems}</div>`:''}
-      ${s.nota?`<div class="doc-tp-nota">${s.nota}</div>`:''}
+      ${s.nota?`<div class="doc-tp-nota">${escHTML(s.nota).replace(/\n/g,'<br>')}</div>`:''}
     </div>`;
   });
   if(!topicosHTML)topicosHTML=`<div style="text-align:center;padding:26px;color:#9ca3af;font-size:12px;border:1px dashed #e5e7eb;border-radius:5px;margin-bottom:13px;">Nenhuma foto registrada ainda</div>`;
 
 
   document.getElementById('documento').innerHTML=`
+  <table class="doc-print-table">
+    <thead><tr><td class="doc-table-hdr">
   <div class="doc-masthead">
     <div class="doc-mast-left">
       <img class="doc-logo-img" src="${LOGO}" alt="Tradimaq">
@@ -1313,6 +1402,9 @@ function atualizar(){
     </div>
   </div>
   <div class="doc-bar"></div>
+  <div class="doc-head-spacer" aria-hidden="true"></div>
+    </td></tr></thead>
+    <tbody><tr><td class="doc-table-body">
   <div class="doc-body">
     <div class="doc-info-grid">
       <div class="doc-info-cell"><div class="doc-info-key">Marca / Modelo</div><div class="doc-info-val">${modelo}</div></div>
@@ -1338,18 +1430,23 @@ function atualizar(){
       </div>
     </div>
   </div>
-  <div class="doc-footer">
-    <div class="doc-footer-grid">
-      <div class="doc-footer-col"><strong>Tradimaq — Frota Interna</strong>Vistoria de veículos utilizados por colaboradores</div>
-      <div class="doc-footer-col"><strong>Validade</strong>Registra o estado visual no ${remLabel.toLowerCase()}. Avarias não registradas não serão aceitas na transferência.</div>
-      <div class="doc-footer-col"><strong>Relatório</strong>${reportId}<br>Tipo: ${remLabel}<br>${fmtDate(data)}</div>
-      <div class="doc-footer-col"><strong>Contato</strong>www.tradimaq.com.br</div>
-    </div>
-    <div class="doc-footer-brand">
-      <div class="doc-footer-site">www.tradimaq.com.br</div>
-      <img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">
-    </div>
-  </div>`;
+    </td></tr>
+    <tr class="doc-footer-preview-row"><td>
+      <div class="doc-footer">
+        <div class="doc-footer-grid">
+          <div class="doc-footer-col"><strong>Tradimaq — Frota Interna</strong>Vistoria de veículos utilizados por colaboradores</div>
+          <div class="doc-footer-col"><strong>Validade</strong>Registra o estado visual no ${remLabel.toLowerCase()}. Avarias não registradas não serão aceitas na transferência.</div>
+          <div class="doc-footer-col"><strong>Relatório</strong>${reportId}<br>Tipo: ${remLabel}<br>${fmtDate(data)}</div>
+          <div class="doc-footer-col"><strong>Contato</strong>www.tradimaq.com.br</div>
+        </div>
+        <div class="doc-footer-brand">
+          <div class="doc-footer-site">www.tradimaq.com.br</div>
+          <img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">
+        </div>
+      </div>
+    </td></tr>
+    </tbody>
+  </table>`;
 }
 
 /* ══════════ PDF (IMPRESSÃO) ══════════ */
@@ -1399,12 +1496,11 @@ async function gerarPDF(){
   }
 }
 
-// Atualiza preview em desktop
+// Atualiza a pré-visualização sem recalcular o documento a cada tecla imediatamente.
 let previewTimer=null;
-document.addEventListener('input',()=>{
-  if(window.innerWidth>=860){clearTimeout(previewTimer);previewTimer=setTimeout(atualizar,300);}
-});
-if(window.innerWidth>=860)setTimeout(atualizar,500);
+function agendarPreview(){clearTimeout(previewTimer);previewTimer=setTimeout(atualizar,220);}
+document.addEventListener('input',()=>{if(window.innerWidth>=860||previewShown)agendarPreview();});
+if(window.innerWidth>=860)setTimeout(atualizar,350);
 
 /* ══════════ EXPORTAR ZIP ══════════ */
 async function exportarZIP(){
