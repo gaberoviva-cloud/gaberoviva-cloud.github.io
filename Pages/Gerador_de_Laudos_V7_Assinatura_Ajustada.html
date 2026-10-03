@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gerador de Laudo Técnico - TRADIMAQ</title>
+<style>
+    :root{
+        --orange:#4b4b4b;
+        --orange-dark:#2f2f2f;
+        --ink:#1f1f1f;
+        --muted:#666;
+        --line:#b9b9b9;
+        --soft:#f1f1ef;
+        --soft-orange:#f7f7f4;
+        --paper:#fff;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+        margin:0;
+        padding:28px 18px;
+        font-family:Arial, Helvetica, sans-serif;
+        background:#e7e7e4;
+        color:var(--ink);
+    }
+
+    .form-container{
+        max-width:820px;
+        margin:0 auto 28px;
+        padding:24px;
+        background:#fff;
+        border-radius:14px;
+        box-shadow:0 10px 30px rgba(0,0,0,.08);
+        border-top:3px solid #555;
+    }
+
+    .form-container h2{
+        margin:0 0 6px;
+        text-align:left;
+        font-size:21px;
+        color:var(--ink);
+    }
+
+    .form-subtitle{
+        margin:0 0 22px;
+        color:var(--muted);
+        font-size:13px;
+        line-height:1.45;
+    }
+
+    .fields-grid{
+        display:grid;
+        grid-template-columns:1.35fr 1fr 1fr;
+        gap:14px;
+    }
+
+    .field-wrap{
+        position:relative;
+    }
+
+    .lookup-note{
+        min-height:17px;
+        margin-top:5px;
+        font-size:11px;
+        line-height:1.35;
+        color:#666;
+    }
+
+    .lookup-note.ok{color:#333;font-weight:700}
+    .lookup-note.error{color:#7a2626}
+
+    .tpe-suggestions{
+        display:none;
+        position:absolute;
+        z-index:50;
+        top:calc(100% - 16px);
+        left:0;
+        right:0;
+        margin-top:4px;
+        max-height:250px;
+        overflow:auto;
+        background:#fff;
+        border:1px solid #b8b8b8;
+        border-radius:7px;
+        box-shadow:0 12px 28px rgba(0,0,0,.16);
+    }
+
+    .tpe-suggestions.show{display:block}
+
+    .tpe-option{
+        width:100%;
+        display:grid;
+        grid-template-columns:76px 1fr;
+        gap:10px;
+        padding:10px 11px;
+        border:0;
+        border-bottom:1px solid #ececec;
+        background:#fff;
+        color:#222;
+        text-align:left;
+        cursor:pointer;
+        font:inherit;
+    }
+
+    .tpe-option:last-child{border-bottom:0}
+    .tpe-option:hover,.tpe-option.active{background:#f1f1ef}
+    .tpe-option strong{font-size:12px}
+    .tpe-option span{font-size:11px;color:#555;line-height:1.35}
+
+    .form-container label{
+        display:block;
+        margin-bottom:6px;
+        font-weight:700;
+        font-size:12px;
+        color:#34383b;
+    }
+
+    .form-container input[type="text"]{
+        width:100%;
+        padding:11px 12px;
+        border:1px solid #cfd3d6;
+        border-radius:7px;
+        font-size:14px;
+        color:var(--ink);
+        outline:none;
+        transition:.2s ease;
+        background:#fff;
+    }
+
+    .form-container input[type="text"]:focus{
+        border-color:#666;
+        box-shadow:0 0 0 2px rgba(0,0,0,.08);
+    }
+
+    .buttons-row{
+        display:flex;
+        gap:10px;
+        margin-top:18px;
+        flex-wrap:wrap;
+    }
+
+    .form-container button,
+    #download-btn{
+        padding:12px 18px;
+        border:0;
+        border-radius:7px;
+        font-size:13px;
+        font-weight:700;
+        cursor:pointer;
+        transition:.2s ease;
+    }
+
+    #btn-pdf,
+    #download-btn{
+        background:#4a4a4a;
+        color:#fff;
+    }
+
+    #btn-pdf:hover,
+    #download-btn:hover{background:#2f2f2f}
+
+    #btn-preview{
+        background:#4e5357;
+        color:#fff;
+    }
+
+    #btn-preview:hover{background:#383c3f}
+
+    /* =========================
+       DOCUMENTO / LAUDO A4
+       ========================= */
+    #laudo-container{
+        display:none;
+        position:relative;
+        width:210mm;
+        min-height:297mm;
+        margin:0 auto;
+        padding:12mm 16mm 11mm;
+        background:var(--paper);
+        color:#111;
+        font-family:"Times New Roman", Times, serif;
+        font-size:10.5pt;
+        line-height:1.48;
+        box-shadow:0 14px 40px rgba(0,0,0,.12);
+        overflow:hidden;
+    }
+
+    #laudo-container::after,
+    #modal-laudo::after{
+        content:"";
+        position:absolute;
+        inset:7mm;
+        border:1px solid #d5d5d0;
+        pointer-events:none;
+    }
+
+    #laudo-container::before,
+    #modal-laudo::before{
+        content:"";
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        height:2px;
+        background:#333;
+    }
+
+    .doc-header{
+        position:relative;
+        z-index:1;
+        display:grid;
+        grid-template-columns:55mm 1fr;
+        gap:10mm;
+        align-items:center;
+        padding-bottom:4mm;
+        border-bottom:1px solid #555;
+    }
+
+    #laudo-logo{
+        display:block;
+        max-width:48mm;
+        max-height:19mm;
+        width:auto;
+        height:auto;
+        margin:0;
+    }
+
+    .doc-title-wrap{
+        text-align:right;
+        font-family:"Times New Roman", Times, serif;
+    }
+
+    .doc-kicker{
+        margin:0 0 2px;
+        font-size:8.2pt;
+        font-weight:700;
+        letter-spacing:1.5px;
+        color:#555;
+        text-transform:uppercase;
+    }
+
+    .doc-title{
+        margin:0;
+        font-size:16.5pt;
+        line-height:1.1;
+        color:#111;
+        font-weight:700;
+        text-transform:uppercase;
+        letter-spacing:.5px;
+    }
+
+    .doc-subtitle{
+        margin:4px 0 0;
+        font-size:8.8pt;
+        color:#555;
+        font-weight:600;
+    }
+
+    .document-meta{
+        display:grid;
+        grid-template-columns:1.15fr .9fr .82fr 1fr;
+        border:1px solid #777;
+        margin-top:4.5mm;
+    }
+
+    .meta-cell{
+        padding:2.2mm 3.6mm;
+        min-height:12mm;
+    }
+
+    .meta-cell + .meta-cell{border-left:1px solid #777}
+
+    .meta-label{
+        display:block;
+        margin-bottom:1.2mm;
+        font-size:7.4pt;
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.65px;
+        color:#555;
+    }
+
+    .meta-value{
+        display:block;
+        font-size:10.4pt;
+        font-weight:700;
+        color:#111;
+    }
+
+    .date-line{
+        margin:3mm 0 0;
+        font-size:9.6pt;
+        color:#444;
+        text-align:right;
+    }
+
+    .section-title{
+        display:flex;
+        align-items:center;
+        gap:7px;
+        margin:4mm 0 2mm;
+        font-size:9pt;
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.8px;
+        color:#111;
+    }
+
+    .section-title::before{
+        content:"";
+        width:18px;
+        height:1px;
+        background:#444;
+        display:inline-block;
+    }
+
+    .content p{
+        margin:0 0 2mm;
+        text-align:justify;
+    }
+
+    .inspection-table{
+        width:100%;
+        border-collapse:collapse;
+        margin-top:2mm;
+        border:1px solid #777;
+        font-size:9.4pt;
+    }
+
+    .inspection-table thead th{
+        padding:1.8mm 3mm;
+        background:#efefec;
+        border-bottom:1px solid #777;
+        text-align:left;
+        font-size:8pt;
+        text-transform:uppercase;
+        letter-spacing:.45px;
+        color:#222;
+    }
+
+    .inspection-table th:first-child,
+    .inspection-table td:first-child{
+        width:12mm;
+        text-align:center;
+    }
+
+    .inspection-table td{
+        padding:1.45mm 3mm;
+        border-bottom:1px solid #c6c6c3;
+        vertical-align:middle;
+    }
+
+    .inspection-table tbody tr:last-child td{border-bottom:0}
+
+    .item-number{
+        font-weight:800;
+        color:#222;
+    }
+
+    .conclusion-box{
+        margin-top:3.5mm;
+        padding:3mm 4.5mm;
+        border:1px solid #777;
+        background:#f8f8f5;
+    }
+
+    .conclusion-box strong{
+        display:block;
+        margin-bottom:1.4mm;
+        font-size:9pt;
+        text-transform:uppercase;
+        letter-spacing:.55px;
+        color:#222;
+    }
+
+    .conclusion-box p{
+        margin:0;
+        font-size:9.3pt;
+        line-height:1.4;
+        text-align:left;
+    }
+
+    .validity-note{
+        margin-top:2.5mm;
+        padding-top:2mm;
+        border-top:1px solid #999;
+        font-size:8.5pt;
+        line-height:1.42;
+        color:#444;
+    }
+
+    .signature-area{
+        margin-top:4mm;
+        break-inside:avoid;
+        page-break-inside:avoid;
+        display:grid;
+        grid-template-columns:1fr 76mm;
+        align-items:end;
+        gap:8mm;
+    }
+
+    .signature-text{
+        align-self:center;
+        color:#444;
+        font-size:8.7pt;
+        line-height:1.45;
+    }
+
+    .signature-block{
+        position:relative;
+        text-align:center;
+        min-height:34mm;
+        display:flex;
+        flex-direction:column;
+        justify-content:flex-end;
+        align-items:center;
+        padding-top:5mm;
+    }
+
+    .signature-image{
+        position:absolute;
+        top:0mm;
+        left:50%;
+        transform:translateX(-50%);
+        max-width:37mm;
+        max-height:17mm;
+        width:auto;
+        height:auto;
+        z-index:2;
+        object-fit:contain;
+    }
+
+    .stamp-image{
+        position:absolute;
+        top:-8mm;
+        right:-16mm;
+        width:39mm;
+        height:auto;
+        opacity:.88;
+        transform:rotate(7deg);
+        transform-origin:center;
+        z-index:3;
+        mix-blend-mode:multiply;
+        filter:grayscale(100%) contrast(1.3) brightness(.78);
+    }
+
+    .signature-line{
+        width:68mm;
+        border-top:1px solid #111;
+        margin:0 auto 1.2mm;
+    }
+
+    .engineer-name{
+        margin:0;
+        font-size:9.5pt;
+        font-weight:800;
+        color:#111;
+        line-height:1.25;
+    }
+
+    .engineer-role{
+        margin:.55mm 0 0;
+        font-size:8.4pt;
+        line-height:1.35;
+        color:#333;
+    }
+
+    .engineer-crea{
+        margin:.55mm 0 0;
+        font-size:8.5pt;
+        font-weight:700;
+        color:#222;
+    }
+
+    .doc-footer{
+        z-index:1;
+        position:absolute;
+        left:16mm;
+        right:16mm;
+        bottom:6.5mm;
+        display:flex;
+        justify-content:space-between;
+        gap:8mm;
+        padding-top:2.2mm;
+        border-top:1px solid #999;
+        font-size:7.2pt;
+        color:#666;
+        letter-spacing:.2px;
+    }
+
+    /* MODAL */
+    #preview-modal{
+        display:none;
+        position:fixed;
+        z-index:999;
+        inset:0;
+        overflow:auto;
+        background:rgba(22,25,27,.72);
+        padding:28px 14px 45px;
+    }
+
+    .modal-content{
+        width:min(980px, 100%);
+        margin:0 auto;
+        position:relative;
+    }
+
+    .close{
+        position:fixed;
+        top:16px;
+        right:22px;
+        width:38px;
+        height:38px;
+        display:grid;
+        place-items:center;
+        border-radius:50%;
+        background:#fff;
+        color:#333;
+        font-size:28px;
+        line-height:1;
+        cursor:pointer;
+        box-shadow:0 5px 18px rgba(0,0,0,.2);
+        z-index:1001;
+    }
+
+    #modal-laudo{
+        position:relative;
+        width:210mm;
+        min-height:297mm;
+        margin:0 auto;
+        padding:12mm 16mm 11mm;
+        background:#fff;
+        color:#111;
+        font-family:"Times New Roman", Times, serif;
+        font-size:10.5pt;
+        line-height:1.48;
+        box-shadow:0 18px 60px rgba(0,0,0,.3);
+        overflow:hidden;
+    }
+
+    #download-btn{
+        display:block;
+        margin:18px auto 0;
+        min-width:220px;
+    }
+
+    @media (max-width: 768px){
+        body{padding:12px}
+        .form-container{padding:18px}
+        .fields-grid{grid-template-columns:1fr}
+        .buttons-row{display:grid;grid-template-columns:1fr}
+        .form-container button{width:100%}
+        #preview-modal{padding:64px 8px 28px}
+        .modal-content{width:max-content;min-width:100%}
+        #modal-laudo{transform-origin:top left}
+    }
+
+    @page{
+        size:A4;
+        margin:0;
+    }
+
+    @media print{
+        *{
+            -webkit-print-color-adjust:exact !important;
+            print-color-adjust:exact !important;
+        }
+
+        html,body{
+            width:210mm;
+            min-height:297mm;
+            margin:0 !important;
+            padding:0 !important;
+            background:#fff !important;
+        }
+
+        .form-container,
+        #preview-modal,
+        #download-btn{
+            display:none !important;
+        }
+
+        #laudo-container{
+            display:block !important;
+            width:210mm !important;
+            height:297mm !important;
+            min-height:0 !important;
+            margin:0 !important;
+            padding:12mm 16mm 11mm !important;
+            box-shadow:none !important;
+            border:0 !important;
+            page-break-after:avoid;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Gerador de Laudo Técnico</h2>
+    <p class="form-subtitle">Preencha somente as informações essenciais. O documento será formatado automaticamente em padrão técnico A4.</p>
+
+    <div class="fields-grid">
+        <div>
+            <label for="input-data">Data</label>
+            <input type="text" id="input-data">
+        </div>
+        <div class="field-wrap">
+            <label for="input-frota">Frota / TPE</label>
+            <input type="text" id="input-frota" placeholder="Digite apenas números" inputmode="numeric" autocomplete="off">
+            <div id="tpe-suggestions" class="tpe-suggestions"></div>
+            <div id="raiox-status" class="lookup-note">Carregando Raio-X da frota…</div>
+        </div>
+        <div>
+            <label for="input-modelo">Modelo</label>
+            <input type="text" id="input-modelo" placeholder="Preenchido pelo Raio-X">
+        </div>
+    </div>
+
+    <div class="buttons-row">
+        <button id="btn-pdf">Gerar / Imprimir PDF</button>
+        <button id="btn-preview">Visualizar Laudo</button>
+    </div>
+</div>
+
+<div id="laudo-container">
+    <header class="doc-header">
+        <div>
+            <img id="laudo-logo" src="https://gaberoviva-cloud.github.io/LOGO_tradimaq.png" alt="Logo TRADIMAQ">
+        </div>
+        <div class="doc-title-wrap">
+            <p class="doc-kicker">Engenharia e Manutenção</p>
+            <h1 class="doc-title">Laudo Técnico de Inspeção e Liberação</h1>
+            <p class="doc-subtitle">Plataforma Elevatória de Trabalho</p>
+        </div>
+    </header>
+
+    <div class="document-meta">
+        <div class="meta-cell">
+            <span class="meta-label">Equipamento / Fabricante</span>
+            <span class="meta-value">Plataforma Elevatória · GENIE</span>
+        </div>
+        <div class="meta-cell">
+            <span class="meta-label">Identificação / Frota</span>
+            <span class="meta-value" id="output-frota">[FROTA]</span>
+        </div>
+        <div class="meta-cell">
+            <span class="meta-label">Modelo</span>
+            <span class="meta-value" id="output-modelo">[MODELO]</span>
+        </div>
+        <div class="meta-cell">
+            <span class="meta-label">Número de Série</span>
+            <span class="meta-value" id="output-serie">[SÉRIE]</span>
+        </div>
+    </div>
+
+    <p class="date-line" id="output-data">[DATA]</p>
+
+    <main class="content">
+        <div class="section-title">Declaração Técnica</div>
+        <p>
+            Atestamos, para os devidos fins, que o equipamento acima identificado encontra-se devidamente liberado para a utilização a que se destina, considerando a verificação dos principais conjuntos e requisitos de segurança aplicáveis à operação e manutenção.
+        </p>
+
+        <div class="section-title">Itens Considerados na Inspeção</div>
+        <table class="inspection-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Escopo de verificação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="item-number">01</td><td>Parte estrutural</td></tr>
+                <tr><td class="item-number">02</td><td>Componentes hidráulicos</td></tr>
+                <tr><td class="item-number">03</td><td>Componentes elétricos</td></tr>
+                <tr><td class="item-number">04</td><td>Pneus</td></tr>
+                <tr><td class="item-number">05</td><td>Motores de propulsão, elétricos e/ou a combustão</td></tr>
+                <tr><td class="item-number">06</td><td>Pintura e sinalização de segurança para operação</td></tr>
+                <tr><td class="item-number">07</td><td>Manuais de operação e manutenção</td></tr>
+                <tr><td class="item-number">08</td><td>Cumprimento dos requisitos aplicáveis da NR-18</td></tr>
+                <tr><td class="item-number">09</td><td>Manutenções preventivas em dia</td></tr>
+            </tbody>
+        </table>
+
+        <div class="conclusion-box">
+            <strong>Conclusão</strong>
+            <p>Com base nos itens acima relacionados, o equipamento identificado neste documento está liberado para uso dentro de sua finalidade operacional, observadas as orientações do fabricante e os procedimentos de segurança aplicáveis.</p>
+        </div>
+
+        <div class="validity-note">
+            <strong>Validade do documento:</strong> 3 (três) meses a partir da data de emissão.<br>
+            Este documento é individual e intransferível, válido exclusivamente para o equipamento e identificação de frota descritos neste laudo.
+        </div>
+
+        <div class="signature-area">
+            <div class="signature-text">
+                Por ser expressão da verificação realizada, firma-se o presente documento para os devidos fins.
+            </div>
+
+            <div class="signature-block">
+                <img class="stamp-image" src="https://gaberoviva-cloud.github.io/Carimbo-Lucas.png" alt="Carimbo Lucas Aguiar">
+                <img class="signature-image" src="https://gaberoviva-cloud.github.io/Assinatura%20Lucas%20Aguiar.png" alt="Assinatura Lucas Aguiar">
+                <div class="signature-line"></div>
+                <p class="engineer-name">Lucas de Aguiar</p>
+                <p class="engineer-role">Gerente de Manutenção · Engenheiro Mecânico</p>
+                <p class="engineer-crea">CREA-MG 292707</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="doc-footer">
+        <span>TRADIMAQ LTDA · Laudo Técnico de Inspeção e Liberação</span>
+        <span>Página 1 de 1</span>
+    </footer>
+</div>
+
+<div id="preview-modal">
+    <div class="modal-content">
+        <span class="close" title="Fechar">&times;</span>
+        <div id="modal-laudo"></div>
+        <button id="download-btn">Gerar / Imprimir PDF</button>
+    </div>
+</div>
+
+<script>
+    const RAIOX_URL = 'https://gaberoviva-cloud.github.io/Data/raiox-frota.json';
+    let equipamentosRaioX = [];
+    let equipamentoSelecionado = null;
+    let sugestaoAtiva = -1;
+
+    const inputFrota = document.getElementById('input-frota');
+    const inputModelo = document.getElementById('input-modelo');
+    const sugestoesEl = document.getElementById('tpe-suggestions');
+    const statusRaioX = document.getElementById('raiox-status');
+
+    function somenteNumeros(valor) {
+        return String(valor || '').replace(/\D/g, '');
+    }
+
+    function formatarTPE(valor) {
+        const numeros = somenteNumeros(valor);
+        return numeros ? `TPE-${numeros.padStart(4, '0')}` : '';
+    }
+
+    function numerosDoTPE(tpe) {
+        return somenteNumeros(tpe);
+    }
+
+    function getFileNameDate() {
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const year = today.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
+    function preencherDataAutomatica() {
+        const today = new Date();
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        let dateString = today.toLocaleString('pt-BR', options);
+        dateString = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+        document.getElementById('input-data').value = `Contagem, ${dateString}`;
+    }
+
+    async function carregarRaioX() {
+        try {
+            statusRaioX.textContent = 'Carregando Raio-X da frota…';
+            statusRaioX.className = 'lookup-note';
+            const resposta = await fetch(RAIOX_URL, { cache: 'no-store' });
+            if (!resposta.ok) throw new Error(`HTTP ${resposta.status}`);
+            const dados = await resposta.json();
+            equipamentosRaioX = Array.isArray(dados.equipamentos) ? dados.equipamentos : [];
+            statusRaioX.textContent = `Raio-X conectado · ${equipamentosRaioX.length} equipamentos`;
+            statusRaioX.className = 'lookup-note ok';
+        } catch (erro) {
+            console.error('Falha ao carregar Raio-X:', erro);
+            equipamentosRaioX = [];
+            statusRaioX.textContent = 'Raio-X indisponível. O laudo continua funcionando manualmente.';
+            statusRaioX.className = 'lookup-note error';
+        }
+    }
+
+    function localizarCorrespondencias(consulta) {
+        const q = somenteNumeros(consulta);
+        if (!q || equipamentosRaioX.length === 0) return [];
+
+        return equipamentosRaioX
+            .filter(eq => numerosDoTPE(eq.tpe).includes(q))
+            .sort((a, b) => {
+                const an = numerosDoTPE(a.tpe);
+                const bn = numerosDoTPE(b.tpe);
+                const aComeca = an.startsWith(q) ? 0 : 1;
+                const bComeca = bn.startsWith(q) ? 0 : 1;
+                return aComeca - bComeca || an.localeCompare(bn, 'pt-BR', { numeric: true });
+            })
+            .slice(0, 10);
+    }
+
+    function esconderSugestoes() {
+        sugestoesEl.classList.remove('show');
+        sugestoesEl.innerHTML = '';
+        sugestaoAtiva = -1;
+    }
+
+    function selecionarEquipamento(eq) {
+        equipamentoSelecionado = eq;
+        inputFrota.value = numerosDoTPE(eq.tpe);
+        inputModelo.value = eq.modelo || '';
+        statusRaioX.textContent = `${eq.tpe} · Série ${eq.serie || 'não informada'}${eq.filial ? ` · ${eq.filial}` : ''}`;
+        statusRaioX.className = 'lookup-note ok';
+        esconderSugestoes();
+        atualizarLaudo();
+    }
+
+    function renderizarSugestoes(lista) {
+        sugestoesEl.innerHTML = '';
+        sugestaoAtiva = -1;
+        if (!lista.length) {
+            esconderSugestoes();
+            return;
+        }
+
+        lista.forEach((eq, index) => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'tpe-option';
+            btn.dataset.index = index;
+            btn.innerHTML = `<strong>${eq.tpe}</strong><span>${eq.modelo || 'Sem modelo'} · Série ${eq.serie || 'não informada'}${eq.filial ? ` · ${eq.filial}` : ''}</span>`;
+            btn.addEventListener('mousedown', (event) => {
+                event.preventDefault();
+                selecionarEquipamento(eq);
+            });
+            sugestoesEl.appendChild(btn);
+        });
+        sugestoesEl.classList.add('show');
+    }
+
+    function atualizarSugestaoAtiva(novoIndice) {
+        const opcoes = [...sugestoesEl.querySelectorAll('.tpe-option')];
+        if (!opcoes.length) return;
+        sugestaoAtiva = Math.max(0, Math.min(novoIndice, opcoes.length - 1));
+        opcoes.forEach((el, i) => el.classList.toggle('active', i === sugestaoAtiva));
+        opcoes[sugestaoAtiva].scrollIntoView({ block: 'nearest' });
+    }
+
+    inputFrota.addEventListener('input', () => {
+        const limpo = somenteNumeros(inputFrota.value);
+        if (inputFrota.value !== limpo) inputFrota.value = limpo;
+        equipamentoSelecionado = null;
+
+        if (!limpo) {
+            inputModelo.value = '';
+            esconderSugestoes();
+            statusRaioX.textContent = equipamentosRaioX.length
+                ? `Raio-X conectado · ${equipamentosRaioX.length} equipamentos`
+                : 'Raio-X indisponível.';
+            statusRaioX.className = equipamentosRaioX.length ? 'lookup-note ok' : 'lookup-note error';
+            atualizarLaudo();
+            return;
+        }
+
+        const correspondencias = localizarCorrespondencias(limpo);
+        const exato = correspondencias.find(eq => numerosDoTPE(eq.tpe) === limpo);
+
+        if (exato) {
+            selecionarEquipamento(exato);
+            return;
+        }
+
+        if (correspondencias.length === 1 && limpo.length >= 3) {
+            selecionarEquipamento(correspondencias[0]);
+            return;
+        }
+
+        inputModelo.value = '';
+        statusRaioX.textContent = correspondencias.length
+            ? `${correspondencias.length} correspondências · escolha o equipamento`
+            : 'Nenhum TPE localizado no Raio-X';
+        statusRaioX.className = correspondencias.length ? 'lookup-note' : 'lookup-note error';
+        renderizarSugestoes(correspondencias);
+        atualizarLaudo();
+    });
+
+    inputFrota.addEventListener('keydown', (event) => {
+        const opcoes = [...sugestoesEl.querySelectorAll('.tpe-option')];
+        if (!opcoes.length) return;
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            atualizarSugestaoAtiva(sugestaoAtiva + 1);
+        } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            atualizarSugestaoAtiva(sugestaoAtiva <= 0 ? opcoes.length - 1 : sugestaoAtiva - 1);
+        } else if (event.key === 'Enter' && sugestaoAtiva >= 0) {
+            event.preventDefault();
+            const lista = localizarCorrespondencias(inputFrota.value);
+            if (lista[sugestaoAtiva]) selecionarEquipamento(lista[sugestaoAtiva]);
+        } else if (event.key === 'Escape') {
+            esconderSugestoes();
+        }
+    });
+
+    inputFrota.addEventListener('blur', () => {
+        setTimeout(esconderSugestoes, 120);
+    });
+
+    function atualizarLaudo() {
+        const data = document.getElementById('input-data').value;
+        const modelo = inputModelo.value;
+        const frotaDigitada = inputFrota.value;
+        const frota = equipamentoSelecionado?.tpe || formatarTPE(frotaDigitada);
+        const serie = equipamentoSelecionado?.serie || '';
+
+        document.getElementById('output-data').textContent = data || '[DATA]';
+        document.getElementById('output-modelo').textContent = modelo || '[MODELO]';
+        document.getElementById('output-frota').textContent = frota || '[FROTA]';
+        document.getElementById('output-serie').textContent = serie || '[SÉRIE]';
+    }
+
+    function imprimirLaudoNativo() {
+        atualizarLaudo();
+
+        const frotaDigitada = document.getElementById('input-frota').value;
+        const frota = equipamentoSelecionado?.tpe || formatarTPE(frotaDigitada);
+        const dataFormatada = getFileNameDate();
+        const frotaDisplay = frota ? frota.toUpperCase() : 'SEM-FROTA';
+        const fileName = `LAUDO TECNICO - ${frotaDisplay} - ${dataFormatada}`;
+        const laudoHTML = document.getElementById('laudo-container').outerHTML;
+        const styleContent = document.querySelector('style').innerHTML;
+
+        const printContent = `
+            <!DOCTYPE html>
+            <html lang="pt-BR">
+            <head>
+                <meta charset="UTF-8">
+                <title>${fileName}</title>
+                <style>
+                    ${styleContent}
+                    body{margin:0!important;padding:0!important;background:#fff!important;}
+                    .form-container,#preview-modal,#download-btn{display:none!important;}
+                    #laudo-container{
+                        display:block!important;
+                        width:210mm!important;
+                        height:297mm!important;
+                        min-height:0!important;
+                        margin:0!important;
+                        padding:12mm 16mm 11mm!important;
+                        box-shadow:none!important;
+                    }
+                </style>
+            </head>
+            <body>
+                ${laudoHTML}
+                <script>
+                    window.onload = function(){
+                        setTimeout(function(){ window.print(); }, 250);
+                    };
+                <\/script>
+            </body>
+            </html>
+        `;
+
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            alert('O navegador bloqueou a janela de impressão. Permita pop-ups para este site e tente novamente.');
+            return;
+        }
+        printWindow.document.open();
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.document.title = fileName;
+    }
+
+    const modal = document.getElementById('preview-modal');
+    const btnPreview = document.getElementById('btn-preview');
+    const spanClose = document.getElementsByClassName('close')[0];
+    const downloadBtn = document.getElementById('download-btn');
+
+    btnPreview.addEventListener('click', () => {
+        atualizarLaudo();
+        document.getElementById('modal-laudo').innerHTML = document.getElementById('laudo-container').innerHTML;
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    });
+
+    function fecharModal(){
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    spanClose.addEventListener('click', fecharModal);
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) fecharModal();
+    });
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal.style.display === 'block') fecharModal();
+    });
+
+    downloadBtn.addEventListener('click', imprimirLaudoNativo);
+    document.getElementById('btn-pdf').addEventListener('click', imprimirLaudoNativo);
+
+    window.addEventListener('DOMContentLoaded', async () => {
+        preencherDataAutomatica();
+        atualizarLaudo();
+        await carregarRaioX();
+    });
+</script>
+</body>
+</html>
