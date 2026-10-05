@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Status Diário - Genie</title>
+  <title>Tradimaq · Status Diário</title>
 
   <link rel="icon" type="image/png" href="https://gaberoviva-cloud.github.io/Data/5202113.png" />
   <link rel="apple-touch-icon" href="https://gaberoviva-cloud.github.io/Data/5202113.png" />
 
-  <meta name="theme-color" content="#d4834a" />
+  <meta name="theme-color" content="#17191b" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -18,7 +18,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
@@ -647,6 +648,278 @@
       thead { display: table-header-group; }
       tr { page-break-inside: avoid; break-inside: avoid; }
     }
+
+
+    /* ══════════════════════════════════════════════
+       TRADIMAQ · GLOW UP CORPORATIVO / COMPACTO
+       Mantém a densidade e o fluxo operacional da versão original.
+       ══════════════════════════════════════════════ */
+    :root{
+      --brand:#ef8b2c;
+      --brand-dark:#d87418;
+      --ink:#17191b;
+      --ink-2:#25292e;
+      --line:#dfe3e8;
+      --paper:#ffffff;
+      --surface:#f4f5f6;
+      --c-disponivel:#dff1e4;
+      --c-preventiva:#dcecf8;
+      --c-corretiva:#f5dfe1;
+      --c-checklist:#e8eaed;
+    }
+    body{background:#eef0f2;color:var(--ink);font-size:12px;padding-bottom:76px}
+    .container{max-width:1500px;margin:0 auto;background:#fff;box-shadow:0 0 0 1px rgba(17,24,39,.05)}
+    #loading-screen{background:#17191b}
+    .loading-logo{font-size:0;width:148px;height:44px;background:url('https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png') center/contain no-repeat;animation:none}
+    .spinner{border-top-color:var(--brand)}
+
+    .page-header{
+      min-height:58px;background:#17191b;color:#fff;padding:8px 14px 8px 16px;
+      border-top:4px solid var(--brand);box-shadow:0 2px 10px rgba(0,0,0,.16)
+    }
+    .page-header-left{display:flex;align-items:center;gap:14px;min-width:0}
+    .tradimaq-mark{width:112px;height:34px;object-fit:contain;object-position:left center;flex:none}
+    .header-copy{min-width:0;border-left:1px solid rgba(255,255,255,.18);padding-left:13px}
+    .page-header h1{font-size:15px;font-weight:650;letter-spacing:.01em;white-space:nowrap}
+    .page-header .subtitle{font-size:9px;color:#c8cdd3;opacity:1;letter-spacing:.12em;margin-top:1px}
+    .header-right{flex-direction:row;align-items:center;gap:7px}
+    .save-indicator,.loc-chip,#kpi-paradas{background:#272b30!important;border:1px solid #393e44;border-radius:6px!important;padding:5px 8px!important;font-size:10px!important}
+    .loc-chip{color:#fff}
+
+    .dashboard{grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--line);background:#fff}
+    .stat-card{padding:7px 8px 6px;border-right:1px solid var(--line);text-align:left;display:flex;align-items:baseline;justify-content:center;gap:7px}
+    .stat-label{font-size:9px;margin:0;color:#6f7782;letter-spacing:.07em}
+    .stat-value{font-size:18px;font-weight:600}
+    .stat-card.s-alugada .stat-value{color:#6b7280}
+
+    .form-section{padding:8px 12px;gap:7px;border-bottom:1px solid var(--line)}
+    .form-group label,.obs-label{font-size:9px;margin-bottom:3px;letter-spacing:.07em}
+    .form-group input[type="text"],.form-group input[type="date"],.form-group select{width:100%;height:32px;padding:5px 8px;border:1px solid #cfd4da;border-radius:4px;font:inherit;background:#fff;color:var(--ink);outline:none}
+    .form-group select:focus,.form-group input:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(239,139,44,.12)}
+    .obs{min-height:48px;padding:6px 8px;border-radius:4px;font-size:12px}
+
+    .toolbar{padding:6px 10px;background:#f7f8f9;border-bottom:1px solid var(--line);gap:6px;position:sticky;top:0;z-index:25}
+    .search-wrap{flex:1 1 100%;min-width:0;max-width:none;width:100%}
+    .search-wrap input{height:30px;padding:5px 8px 5px 28px;border-radius:4px;font-size:11px}
+    .model-select{height:30px;min-width:170px;max-width:220px;padding:4px 26px 4px 8px;border:1px solid #d3d8de;border-radius:4px;background:#fff;font:600 10px 'IBM Plex Sans',sans-serif;color:#374151;outline:none}
+    .model-select:focus{border-color:var(--brand)}
+    .filter-pills{flex:1 1 auto;min-width:0;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.filter-pills::-webkit-scrollbar{display:none}
+    .pill{padding:4px 9px;border-radius:4px;font-size:10px;white-space:nowrap}
+    .pill.active,.pill:hover{background:#25292e;border-color:#25292e;color:#fff}
+    .pill.p-disponivel.active{background:#2d7a3f;border-color:#2d7a3f}.pill.p-preventiva.active{background:#1565c0;border-color:#1565c0}.pill.p-corretiva.active{background:#b4232d;border-color:#b4232d}.pill.p-checklist.active{background:#555b63;border-color:#555b63}.pill.p-alugada.active{background:#6b7280;border-color:#6b7280}
+
+    .legend{padding:5px 10px;gap:5px 12px;font-size:9px;color:#5c6470;background:#fff;border-bottom:1px solid var(--line)}
+    .legend-dot{width:10px;height:10px}
+
+    .table-container{max-height:58vh;border-bottom:1px solid var(--line);background:#fff}
+    table{min-width:660px;font-size:10.5px;table-layout:fixed}
+    th,td{padding:4px 4px;height:31px;border-right:1px solid #e6e9ed;border-bottom:1px solid #e6e9ed}
+    th{background:#333a45;font-size:7.9px;letter-spacing:.045em}
+    th:nth-child(1),td:nth-child(1){min-width:92px;width:92px;text-align:left;padding-left:8px;font-weight:500}
+    th:nth-child(2),td:nth-child(2){min-width:72px;width:72px;text-align:left}
+    th:nth-child(1){left:0} td:nth-child(1){left:0}
+    th:nth-child(2){left:92px} td:nth-child(2){left:92px}
+    th:nth-child(3),td:nth-child(3){min-width:92px;width:92px;text-align:left;font-size:9.6px}
+    th:nth-child(4),td:nth-child(4){min-width:86px;width:86px}
+    th:nth-child(5),td:nth-child(5){min-width:58px;width:58px}
+    th:nth-child(n+6),td:nth-child(n+6){min-width:55px;width:55px}
+    tr.group-start td{border-top:2px solid #aeb5bd}
+    tr.group-start td:first-child{box-shadow:inset 3px 0 0 var(--brand)}
+    tr:not(.disponivel):not(.preventiva):not(.corretiva):not(.checklist) td{background:#fff}
+    tr:hover td{filter:none;box-shadow:inset 0 0 0 999px rgba(17,24,39,.025)}
+    .status-radio{width:17px;height:17px;accent-color:#20252a}
+    .horimetro-input{width:62px;font-size:11px;padding:2px 3px}
+    .carga-badge,.comb-badge{font-size:9.5px;padding:2px 6px;gap:3px;white-space:nowrap}
+    .energia-cell{font-size:10px}
+
+    .chart-section{padding:15px 16px}.chart-title{font-size:11px}.chart-container{height:255px;max-width:760px}
+    .page-footer{padding:8px 12px;font-size:10px}
+
+    .fab-container{bottom:14px;right:14px;gap:7px}
+    .fab-main{width:48px;height:48px;font-size:18px;background:var(--brand)!important;border-radius:12px;color:#17191b;box-shadow:0 5px 16px rgba(0,0,0,.22)}
+    .fab-action-btn{width:40px;height:40px;border-radius:10px;font-size:16px}.fab-action-label{font-size:10px;border-radius:5px;padding:5px 8px}
+    .fab-action-btn.pdf-btn{background:#25292e}.fab-action-btn.excel-btn{background:#25292e}.fab-action-btn.whats-btn{background:#25292e}
+
+    .modal-content{border-radius:8px;border-top:3px solid var(--brand)}
+    .modal-buttons button{border-radius:5px}.modal-buttons button.selected{background:#25292e;border-color:#25292e;color:#fff}
+
+    body.pdf-generating .container{max-width:760px!important;box-shadow:none!important}
+    body.pdf-generating .page-header{background:#17191b!important;border-top:4px solid #ef8b2c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    body.pdf-generating .toolbar,body.pdf-generating .fab-container{display:none!important}
+    body.pdf-generating .table-container{max-height:none!important}
+    body.pdf-generating table{font-size:8px;min-width:0!important;table-layout:fixed}
+    body.pdf-generating th,body.pdf-generating td{height:22px;padding:2px 4px;font-size:7.5px}
+    body.pdf-generating .status-radio{width:12px;height:12px}
+    body.pdf-generating .horimetro-input{font-size:7.5px;width:46px}
+    body.pdf-generating .carga-badge,body.pdf-generating .comb-badge{font-size:7px;padding:1px 3px}
+    body.pdf-generating .chart-container{height:210px}
+
+    @media(max-width:700px){
+      body{padding-bottom:68px;background:#fff}
+      .container{box-shadow:none}
+      .page-header{padding:7px 9px 7px 10px;min-height:52px}
+      .tradimaq-mark{width:84px;height:28px}.header-copy{padding-left:8px}.page-header h1{font-size:12px}.page-header .subtitle{font-size:7.5px}
+      .save-indicator{display:none}.header-right{gap:5px}.loc-chip,#kpi-paradas{font-size:9px!important;padding:4px 6px!important}
+      .dashboard{grid-template-columns:repeat(5,1fr)}.stat-card{padding:6px 2px;display:block;text-align:center}.stat-label{font-size:7px;letter-spacing:.035em}.stat-value{font-size:16px;margin-top:1px}
+      .form-section{padding:6px 8px}.form-section>div:first-child{gap:6px!important}.form-group{min-width:0!important}.form-group:first-child{flex:1 1 58%!important}.form-group:nth-child(2){flex:0 0 38%!important}.form-group label{font-size:8px}.form-group select,.form-group input[type="date"]{height:30px;font-size:10px;padding:4px 5px}.obs-label{font-size:8px}.obs{min-height:38px;font-size:10px}
+      .toolbar{padding:5px 6px;top:0;flex-wrap:wrap;overflow:visible;gap:5px}.search-wrap{flex:1 1 100%;min-width:100%;max-width:none}.search-wrap input{height:30px;font-size:10.5px}.model-select{height:29px;flex:0 0 142px;min-width:142px;max-width:142px;font-size:9px}.filter-pills{flex:1 1 0;min-width:0}.pill{font-size:9px;padding:4px 7px}
+      .legend{padding:4px 7px;gap:4px 9px;font-size:8px;white-space:nowrap;overflow-x:auto;flex-wrap:nowrap}
+      .table-container{max-height:62vh}
+      table{min-width:660px;font-size:9.7px}
+      th,td{height:29px;padding:3px 3px}
+      th{font-size:7.1px;letter-spacing:.03em}
+      th:nth-child(1),td:nth-child(1){min-width:88px;width:88px;padding-left:6px}
+      th:nth-child(2),td:nth-child(2){min-width:68px;width:68px}
+      th:nth-child(2){left:88px}td:nth-child(2){left:88px}
+      th:nth-child(3),td:nth-child(3){min-width:88px;width:88px;font-size:9px}
+      th:nth-child(4),td:nth-child(4){min-width:82px;width:82px}
+      th:nth-child(5),td:nth-child(5){min-width:55px;width:55px}
+      th:nth-child(n+6),td:nth-child(n+6){min-width:54px}
+      .status-radio{width:18px;height:18px}.horimetro-input{width:54px;font-size:10px}.carga-badge,.comb-badge{font-size:8.5px;padding:2px 4px}
+      .chart-container{height:350px}.chart-section{padding:12px 8px 16px}
+      .fab-main{width:46px;height:46px}.fab-action-btn{width:38px;height:38px}
+    }
+
+    /* Técnico: busca + lista, no mesmo estilo dos relatórios Tradimaq */
+    .tech-combo{position:relative;width:100%}
+    #mantenedor{width:100%;min-width:0;max-width:100%;height:32px;padding:6px 9px;border:1px solid #cfd4da;border-radius:4px;background:#fff;color:var(--ink);font:inherit;outline:none;text-overflow:ellipsis}
+    #mantenedor:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(239,139,44,.12)}
+    .tech-combo-list{position:absolute;top:calc(100% + 3px);left:0;right:0;background:#fff;border:1px solid #cfd4da;border-radius:5px;max-height:210px;overflow-y:auto;z-index:120;display:none;box-shadow:0 7px 20px rgba(0,0,0,.17);overscroll-behavior:contain}
+    .tech-combo-list.show{display:block}
+    .tech-combo-item{padding:9px 11px;cursor:pointer;border-bottom:1px solid #eceff2;background:#fff;line-height:1.18;touch-action:manipulation}
+    .tech-combo-item:last-child{border-bottom:none}
+    .tech-combo-item:hover,.tech-combo-item:active{background:#fff4ea}
+    .tech-combo-name{display:block;font-size:12px;font-weight:600;color:#25292e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tech-combo-meta{display:block;margin-top:2px;font-size:9px;color:#7a818a;letter-spacing:.025em}
+    .tech-combo-empty{padding:10px 11px;font-size:11px;color:#7a818a}
+
+    /* PDF textual é gerado por jsPDF/AutoTable; estes estilos ficam apenas para impressão do navegador */
+    @media(max-width:700px){
+      .form-section>div:first-child{align-items:stretch!important}
+      .form-section>div:first-child>.form-group:first-child{min-width:100%!important;flex:1 1 100%!important}
+      .form-section>div:first-child>.form-group:nth-child(2){flex:0 0 142px!important;min-width:142px!important}
+      #mantenedor{height:38px;font-size:16px;padding:7px 9px}
+      .tech-combo-list{max-height:245px;border-radius:6px}
+      .tech-combo-item{padding:11px 12px}
+      .tech-combo-name{font-size:13px}
+      .tech-combo-meta{font-size:10px}
+      .form-group input[type="date"]{height:32px;font-size:10.5px}
+      .chart-container{height:350px;max-width:none;width:100%}
+      .chart-section{padding:12px 8px 16px}
+      .chart-title{font-size:10px;margin-bottom:8px}
+    }
+
+    /* ── REVISÃO FINAL MOBILE ─────────────────────────────────────
+       Nº de série permanece no DOM para PDF/Excel, mas não ocupa
+       espaço no status em tela. */
+    #equipamentos-table .serie-status-only{display:none!important}
+
+    @media(max-width:700px){
+      /* Volta a densidade/legibilidade do status antigo, mantendo a skin nova */
+      .toolbar{padding:7px 7px 6px;gap:6px}
+      .search-wrap input{
+        height:38px;
+        font-size:14px;
+        padding:7px 10px 7px 34px;
+      }
+      .search-icon{left:10px;font-size:15px}
+      .model-select{
+        height:36px;
+        flex:0 0 158px;
+        min-width:158px;
+        max-width:158px;
+        font-size:11.5px;
+        padding-left:9px;
+      }
+      .pill{
+        min-height:36px;
+        padding:7px 11px;
+        font-size:11.5px;
+        font-weight:650;
+      }
+      .legend{
+        padding:6px 8px;
+        gap:6px 12px;
+        font-size:10.5px;
+      }
+      .legend-dot{width:12px;height:12px}
+
+      .table-container{max-height:64vh}
+      #equipamentos-table{
+        min-width:600px;
+        font-size:12.4px;
+        table-layout:fixed;
+      }
+      #equipamentos-table th,
+      #equipamentos-table td{
+        height:39px;
+        padding:5px 6px;
+      }
+      #equipamentos-table th{
+        font-size:8.5px;
+        letter-spacing:.04em;
+      }
+
+      #equipamentos-table th:nth-child(1),
+      #equipamentos-table td:nth-child(1){
+        min-width:102px;
+        width:102px;
+        padding-left:8px;
+        font-size:12.6px;
+        font-weight:600;
+      }
+      #equipamentos-table th:nth-child(2),
+      #equipamentos-table td:nth-child(2){
+        min-width:82px;
+        width:82px;
+        font-size:12.4px;
+      }
+      #equipamentos-table th:nth-child(2){left:102px}
+      #equipamentos-table td:nth-child(2){left:102px}
+
+      /* Série continua escondida apenas na interface */
+      #equipamentos-table th:nth-child(3),
+      #equipamentos-table td:nth-child(3){display:none!important}
+
+      #equipamentos-table th:nth-child(4),
+      #equipamentos-table td:nth-child(4){
+        min-width:112px;
+        width:112px;
+      }
+      #equipamentos-table th:nth-child(5),
+      #equipamentos-table td:nth-child(5){
+        min-width:72px;
+        width:72px;
+      }
+      #equipamentos-table th:nth-child(n+6),
+      #equipamentos-table td:nth-child(n+6){
+        min-width:64px;
+        width:64px;
+      }
+
+      .energia-cell{font-size:12px}
+      .carga-badge,.comb-badge{
+        font-size:10.8px;
+        padding:4px 8px;
+        gap:4px;
+      }
+      .horimetro-input{
+        width:62px;
+        min-height:30px;
+        font-size:12px;
+        padding:4px;
+      }
+      .status-radio{
+        width:21px;
+        height:21px;
+      }
+
+      /* A informação superior também respira um pouco mais */
+      .form-section{padding:8px 9px}
+      .form-group label,.obs-label{font-size:9.5px}
+      .obs{font-size:13px;min-height:54px}
+    }
+
   </style>
 </head>
 <body>
@@ -703,8 +976,11 @@
   <!-- Header -->
   <div class="page-header">
     <div class="page-header-left">
-      <h1 id="header-title">TRADIMAQ</h1>
-      <div class="subtitle">Status Diário — Plataformas Genie</div>
+      <img class="tradimaq-mark" src="https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png" alt="Tradimaq">
+      <div class="header-copy">
+        <h1 id="header-title">Status Diário</h1>
+        <div class="subtitle">Controle operacional de frota</div>
+      </div>
     </div>
     <div class="header-right">
       <div class="save-indicator" id="saveIndicator">💾 Cache ativo</div>
@@ -753,7 +1029,11 @@
     <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; width: 100%;">
       <div class="form-group" style="flex: 1; min-width: 160px;">
         <label>Mantenedor</label>
-        <input type="text" id="mantenedor" placeholder="Nome..." />
+        <div class="tech-combo">
+          <input id="mantenedor" type="text" placeholder="Digite o nome..." autocomplete="off" autocapitalize="words"
+                 oninput="filtrarTecnicos(this)" onfocus="filtrarTecnicos(this)" onblur="validarTecnico(this)" aria-label="Selecionar técnico">
+          <div class="tech-combo-list" id="mantenedor-list"></div>
+        </div>
       </div>
       <div class="form-group" style="flex: 0 0 160px;">
         <label>Data</label>
@@ -771,15 +1051,16 @@
   <div class="toolbar">
     <div class="search-wrap">
       <span class="search-icon">🔎</span>
-      <input type="text" id="busca" placeholder="Buscar modelo ou TAG...">
+      <input type="text" id="busca" placeholder="Buscar TPE, modelo ou série...">
     </div>
+    <select id="modeloFiltro" class="model-select" onchange="setModelFilter(this.value)"><option value="all">Todos os modelos</option></select>
     <div class="filter-pills">
       <button class="pill" data-filter="all" onclick="setFilter('all', this)">Todos</button>
       <button class="pill p-disponivel" data-filter="disponivel" onclick="setFilter('disponivel', this)">Disponível</button>
       <button class="pill p-preventiva" data-filter="preventiva" onclick="setFilter('preventiva', this)">Preventiva</button>
       <button class="pill p-corretiva"  data-filter="corretiva"  onclick="setFilter('corretiva', this)">Corretiva</button>
       <button class="pill p-checklist"  data-filter="checklist"  onclick="setFilter('checklist', this)">Checklist</button>
-      <button class="pill p-alugada"    data-filter="alugada"    onclick="setFilter('alugada', this)">Alugada</button>
+      <button class="pill p-alugada" data-filter="alugada" onclick="setFilter('alugada', this)">Alugada</button>
     </div>
   </div>
 
@@ -789,7 +1070,7 @@
     <div class="legend-item"><span class="legend-dot" style="background:var(--c-preventiva)"></span>Preventiva</div>
     <div class="legend-item"><span class="legend-dot" style="background:var(--c-corretiva)"></span>Corretiva</div>
     <div class="legend-item"><span class="legend-dot" style="background:var(--c-checklist)"></span>Checklist</div>
-    <div class="legend-item"><span class="legend-dot" style="background:#eee; border:1px solid #ccc;"></span>Alugada</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#fff;border:1px solid #cfd4da"></span>Alugada (sem marcação)</div>
     <div class="legend-item"><span style="font-size:12px;">🔋</span> Pronta</div>
     <div class="legend-item"><span style="font-size:12px;">⚠️</span> Carga baixa</div>
     <div class="legend-item"><span style="font-size:12px;">🔌</span> Carregando</div>
@@ -802,7 +1083,8 @@
       <thead>
         <tr>
           <th>Modelo</th>
-          <th>TAG</th>
+          <th>TPE</th>
+          <th class="serie-status-only">Nº Série</th>
           <th>Carga / Combust.</th>
           <th>Horímetro</th>
           <th>Disponível</th>
@@ -855,242 +1137,279 @@
   </div>
 </div>
 
-<!-- FABs -->
+<!-- Ações essenciais -->
 <div class="fab-container" id="fab-container">
   <div class="fab-group" id="fab-group">
-    <div class="fab-action">
-      <span class="fab-action-label">Exportar Excel</span>
-      <button class="fab-action-btn excel-btn" onclick="gerarExcel()" title="Excel">📊</button>
-    </div>
-    <div class="fab-action">
-      <span class="fab-action-label">Exportar PDF</span>
-      <button class="fab-action-btn pdf-btn" onclick="gerarPDF()" title="PDF">📄</button>
-    </div>
-    <div class="fab-action">
-      <span class="fab-action-label">Enviar WhatsApp</span>
-      <button class="fab-action-btn whats-btn" onclick="enviarWhatsApp()" title="WhatsApp">💬</button>
-    </div>
-    <div class="fab-action">
-      <span class="fab-action-label">Limpar Tudo</span>
-      <button class="fab-action-btn clear-btn" onclick="limparTudo()" title="Limpar">🗑️</button>
-    </div>
+    <div class="fab-action"><span class="fab-action-label">Gerar PDF</span><button class="fab-action-btn pdf-btn" onclick="gerarPDF()" title="PDF">▤</button></div>
+    <div class="fab-action"><span class="fab-action-label">Gerar Excel</span><button class="fab-action-btn excel-btn" onclick="gerarExcel()" title="Excel">▦</button></div>
+    <div class="fab-action"><span class="fab-action-label">WhatsApp</span><button class="fab-action-btn whats-btn" onclick="enviarWhatsApp()" title="WhatsApp">↗</button></div>
+    <div class="fab-action"><span class="fab-action-label">Novo status / Limpar</span><button class="fab-action-btn clear-btn" onclick="limparTudo()" title="Limpar preenchimento desta filial">↺</button></div>
   </div>
-  <button class="fab-main fab-toggle-btn" id="fab-toggle" onclick="toggleFab()" title="Ações">⚡</button>
+  <button class="fab-main fab-toggle-btn" id="fab-toggle" onclick="toggleFab()" title="Ações">＋</button>
 </div>
 
 <div id="toast"></div>
 
 <script>
 /* ══════════════════════════════════════════════
-   CONFIGURAÇÃO — altere só esta seção se precisar
-   adicionar novas localidades ou renomear
+   CONFIGURAÇÃO · BANCO ÚNICO RAIO-X DA FROTA
    ══════════════════════════════════════════════ */
-const BASE_URL = 'https://gaberoviva-cloud.github.io/Data/';
+const DB_URL   = 'https://gaberoviva-cloud.github.io/Data/raiox-frota.json';
+const TECH_URL = 'https://gaberoviva-cloud.github.io/Data/tecnicos.json';
+const DB_CACHE = 'tradimaq_raiox_frota_status_cache_v1';
+const TECH_CACHE = 'tradimaq_tecnicos_status_cache_v1';
 
 const LOCAIS = {
-  mg: { sigla: 'MG', nome: 'Minas Gerais',   arquivo: 'equipamentos_mg.json' },
-  sp: { sigla: 'SP', nome: 'São Paulo',       arquivo: 'equipamentos_sp.json' },
-  go: { sigla: 'GO', nome: 'Goiás',           arquivo: 'equipamentos_go.json' },
-  es: { sigla: 'ES', nome: 'Espírito Santo',  arquivo: 'equipamentos_es.json' },
-  pa: { sigla: 'PA', nome: 'Pará',            arquivo: 'equipamentos_pa.json' },
+  mg: { sigla:'MG', nome:'TRADIMAQ MATRIZ' },
+  sp: { sigla:'SP', nome:'TRADIMAQ TAUBATÉ' },
+  go: { sigla:'GO', nome:'TRADIMAQ GOIÂNIA' },
+  es: { sigla:'ES', nome:'TRADIMAQ CARIACICA' },
+  pa: { sigla:'PA', nome:'TRADIMAQ PARAUAPEBAS' }
 };
 
-/* ══════════════════════════════════════════════
-   CONSTANTES DE TIPO DE EQUIPAMENTO
-   ══════════════════════════════════════════════ */
-const ELETRICOS    = ['AWP 30S-DC','GS-1930','GS-2646','GS-3246','GS-4046','GS-4047','Z-34','Z-45 DC'];
-const COMBUSTIVEIS = ['Z-45 RT','Z-60','Z-62','Z-80','S-80J'];
 const CARGA_ESTADOS = {
-  pronta:     { label: '🔋 Pronta',    pct:100, cls:'pronta',     icon:'🔋' },
-  baixa:      { label: '⚠ Baixa',     pct:30,  cls:'baixa',      icon:'⚠️' },
-  carregando: { label: '🔌 Carregando',pct:60,  cls:'carregando', icon:'🔌' },
-  sem:        { label: '⚪ Sem info',  pct:0,   cls:'sem',        icon:'⚪' }
+  pronta:{label:'🔋 Pronta',pct:100,cls:'pronta'},
+  baixa:{label:'⚠ Carga baixa',pct:30,cls:'baixa'},
+  carregando:{label:'🔌 Carregando',pct:60,cls:'carregando'},
+  sem:{label:'⚪ Sem info',pct:0,cls:'sem'}
 };
 const COMB_ESTADOS = {
-  cheio: { label:'⛽ Cheio', pct:100, cls:'cheio' },
-  meio:  { label:'🟡 Meio',  pct:50,  cls:'meio'  },
-  baixo: { label:'🔴 Baixo', pct:20,  cls:'baixo' },
-  sem:   { label:'⚪ Sem info', pct:0, cls:'sem'  }
+  cheio:{label:'⛽ Cheio',pct:100,cls:'cheio'},
+  meio:{label:'🟡 Meio',pct:50,cls:'meio'},
+  baixo:{label:'🔴 Baixo',pct:20,cls:'baixo'},
+  sem:{label:'⚪ Sem info',pct:0,cls:'sem'}
 };
 
-/* ══════════════════════════════════════════════
-   ESTADO GLOBAL
-   ══════════════════════════════════════════════ */
-let equipamentos = [];
-let localAtual   = null;
-let activeFilter = 'all';
-let searchTerm   = '';
-let myStatusChart = null, myModeloChart = null, myCorretivaChart = null;
-let currentCargaTag = null, currentCombTag = null;
-let fabOpen = false;
-let selectedLocInModal = null;
+let equipamentos=[];
+let tecnicos=[];
+let tecnicosAtivos=[];
+let bancoFrota=null;
+let localAtual=null;
+let activeFilter='all';
+let activeModel='all';
+let searchTerm='';
+let myStatusChart=null,myModeloChart=null,myCorretivaChart=null;
+let currentCargaTag=null,currentCombTag=null;
+let fabOpen=false;
+let selectedLocInModal=null;
 
-/* ══════════════════════════════════════════════
-   SELETOR DE LOCALIDADE
-   ══════════════════════════════════════════════ */
-function selectLoc(btn) {
-  document.querySelectorAll('.loc-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  selectedLocInModal = btn.dataset.loc;
-  document.getElementById('loc-confirm').disabled = false;
+function normalizeText(v){return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
+function inferEnergy(modelo){
+  const m=String(modelo||'').toUpperCase().replace(/\s+/g,' ');
+  if(/\bDC\b/.test(m)||/^GS[- ]/.test(m)||/^AWP/.test(m)) return 'eletrico';
+  if(/\bIC\b/.test(m)||/^S[- ]?80/.test(m)||/^Z[- ]?(60|62|80)/.test(m)) return 'combustao';
+  return '';
+}
+function modelGroupKey(modelo){
+  const original=String(modelo||'').trim();
+  const upper=original.toUpperCase().replace(/\s+/g,' ');
+  if(/^Z-?45\/25J?\s*DC$/.test(upper)) return 'Z-45/25 DC';
+  if(/^Z-?45\/25J?\s*IC$/.test(upper)) return 'Z-45/25 IC';
+  return original;
+}
+function naturalCompare(a,b){return String(a).localeCompare(String(b),'pt-BR',{numeric:true,sensitivity:'base'});}
+
+// Ordem física do pátio / leitura operacional
+// AWP → 1930 → 2646 → 3246 → 4046 → 4047 → Z34 → Z45 DC → Z45 IC → Z60 → Z62 → Z80 → S80
+function modelOrderIndex(modelo){
+  const m=String(modelGroupKey(modelo)||'').toUpperCase().replace(/\s+/g,' ').trim();
+  if(/^AWP/.test(m)) return 0;
+  if(/^GS[- ]?1930/.test(m)) return 1;
+  if(/^GS[- ]?2646/.test(m)) return 2;
+  if(/^GS[- ]?3246/.test(m)) return 3;
+  if(/^GS[- ]?4046/.test(m)) return 4;
+  if(/^GS[- ]?4047/.test(m)) return 5;
+  if(/^Z[- ]?34/.test(m)) return 6;
+  if(/^Z[- ]?45\/25\s*DC$/.test(m)) return 7;
+  if(/^Z[- ]?45\/25\s*IC$/.test(m)) return 8;
+  if(/^Z[- ]?60/.test(m)) return 9;
+  if(/^Z[- ]?62/.test(m)) return 10;
+  if(/^Z[- ]?80/.test(m)) return 11;
+  if(/^S[- ]?80/.test(m)) return 12;
+  return 999;
+}
+function compareModelOrder(a,b){
+  const ia=modelOrderIndex(a), ib=modelOrderIndex(b);
+  if(ia!==ib) return ia-ib;
+  // Dentro do mesmo grupo operacional (ex.: Z-45 DC), o modelo J/sem J
+  // NÃO decide a ordem. Assim o TPE numérico é quem organiza as máquinas.
+  return naturalCompare(modelGroupKey(a),modelGroupKey(b));
 }
 
-function confirmLoc() {
-  if (!selectedLocInModal) return;
+function selectLoc(btn){
+  document.querySelectorAll('.loc-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected'); selectedLocInModal=btn.dataset.loc;
+  document.getElementById('loc-confirm').disabled=false;
+}
+function confirmLoc(){
+  if(!selectedLocInModal)return;
   document.getElementById('loc-modal').classList.remove('show');
-  localStorage.setItem('status_local', selectedLocInModal);
+  localStorage.setItem('status_local',selectedLocInModal);
   iniciarComLocal(selectedLocInModal);
 }
-
-function trocarFilial() {
-  selectedLocInModal = localAtual;
-  // pré-seleciona o atual
-  document.querySelectorAll('.loc-btn').forEach(b => {
-    b.classList.toggle('selected', b.dataset.loc === localAtual);
-  });
-  document.getElementById('loc-confirm').disabled = false;
+function trocarFilial(){
+  selectedLocInModal=localAtual;
+  document.querySelectorAll('.loc-btn').forEach(b=>b.classList.toggle('selected',b.dataset.loc===localAtual));
+  document.getElementById('loc-confirm').disabled=false;
   document.getElementById('loc-modal').classList.add('show');
 }
 
-/* ══════════════════════════════════════════════
-   CARREGAMENTO DO JSON
-   ══════════════════════════════════════════════ */
-async function iniciarComLocal(loc) {
-  localAtual = loc;
-  const cfg = LOCAIS[loc];
+async function carregarBancos(force=false){
+  let frotaOk=false;
+  try{
+    const r=await fetch(DB_URL+(force?'?v='+Date.now():''),{cache:'no-cache'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    if(!data||!Array.isArray(data.equipamentos))throw new Error('Formato inválido');
+    bancoFrota=data; localStorage.setItem(DB_CACHE,JSON.stringify(data)); frotaOk=true;
+  }catch(err){
+    const c=localStorage.getItem(DB_CACHE); if(c){bancoFrota=JSON.parse(c);frotaOk=true;} else throw err;
+  }
+  try{
+    const r=await fetch(TECH_URL+(force?'?v='+Date.now():''),{cache:'no-cache'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const data=await r.json();
+    tecnicos=Array.isArray(data.tecnicos)?data.tecnicos:[];
+    localStorage.setItem(TECH_CACHE,JSON.stringify(tecnicos));
+  }catch(err){
+    try{tecnicos=JSON.parse(localStorage.getItem(TECH_CACHE)||'[]')}catch{tecnicos=[]}
+  }
+  return frotaOk;
+}
 
-  // Loading
-  const ls = document.getElementById('loading-screen');
-  const lsub = document.getElementById('loading-sub');
-  ls.classList.remove('hidden');
-  ls.style.display = 'flex';
-  lsub.textContent = `Buscando ${cfg.sigla} — ${cfg.arquivo}`;
-
-  document.getElementById('main-container').style.display = 'none';
-  document.getElementById('error-banner').style.display = 'none';
-
-  try {
-    const url = BASE_URL + cfg.arquivo;
-    const resp = await fetch(url, { cache: 'no-cache' });
-    if (!resp.ok) throw new Error(`HTTP ${resp.status} ao buscar ${url}`);
-    const data = await resp.json();
-
-    // Suporta tanto array direto quanto { equipamentos: [...] }
-    if (Array.isArray(data)) {
-      equipamentos = data;
-    } else if (Array.isArray(data.equipamentos)) {
-      equipamentos = data.equipamentos;
-    } else {
-      throw new Error('Formato JSON inválido — esperado array ou { equipamentos: [] }');
-    }
-
+async function iniciarComLocal(loc){
+  localAtual=loc; const cfg=LOCAIS[loc];
+  const ls=document.getElementById('loading-screen'),lsub=document.getElementById('loading-sub');
+  ls.classList.remove('hidden');ls.style.display='flex';lsub.textContent=`Buscando ${cfg.sigla} no Raio-X da Frota`;
+  document.getElementById('main-container').style.display='none';document.getElementById('error-banner').style.display='none';
+  try{
+    if(!bancoFrota) await carregarBancos();
+    equipamentos=bancoFrota.equipamentos
+      .filter(e=>String(e.filial||'').toUpperCase()===cfg.sigla)
+      .map(e=>({tag:String(e.tpe||''),modelo:String(e.modelo||''),serie:String(e.serie||''),filial:String(e.filial||'')}))
+      .sort((a,b)=>compareModelOrder(a.modelo,b.modelo)||naturalCompare(a.tag,b.tag)||naturalCompare(a.modelo,b.modelo));
     construirApp(cfg);
-    ls.classList.add('hidden');
-    setTimeout(() => { ls.style.display = 'none'; }, 420);
-
-  } catch (err) {
-    ls.style.display = 'none';
-    document.getElementById('main-container').style.display = 'block';
-    const eb = document.getElementById('error-banner');
-    eb.style.display = 'block';
-    eb.innerHTML = `⚠️ <strong>Erro ao carregar ${cfg.sigla}:</strong> ${err.message} — <a href="#" onclick="trocarFilial();return false;">Trocar filial</a>`;
+    ls.classList.add('hidden');setTimeout(()=>{ls.style.display='none'},300);
+  }catch(err){
+    ls.style.display='none';document.getElementById('main-container').style.display='block';
+    const eb=document.getElementById('error-banner');eb.style.display='block';
+    eb.innerHTML=`⚠️ <strong>Erro ao carregar ${cfg.sigla}:</strong> ${err.message} — <a href="#" onclick="location.reload();return false;">tentar novamente</a>`;
     console.error(err);
   }
 }
 
-/* ══════════════════════════════════════════════
-   MONTAR TODA A INTERFACE COM OS DADOS
-   ══════════════════════════════════════════════ */
-function construirApp(cfg) {
-  // Destruir gráficos anteriores se existirem
-  [myStatusChart, myModeloChart, myCorretivaChart].forEach(c => { if(c) c.destroy(); });
-  myStatusChart = myModeloChart = myCorretivaChart = null;
-
-  // Atualizar textos da UI
-  document.getElementById('header-title').textContent = `TRADIMAQ ${cfg.sigla}`;
-  document.getElementById('loc-label').textContent = cfg.sigla;
-  document.getElementById('footer-total').textContent = `Total: ${equipamentos.length} equipamentos`;
-  document.getElementById('footer-loc').textContent = `TRADIMAQ ${cfg.nome} — Status Diário`;
-
-  // Resetar filtro/busca
-  activeFilter = 'all';
-  searchTerm = '';
-  document.getElementById('busca').value = '';
-  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+function construirApp(cfg){
+  [myStatusChart,myModeloChart,myCorretivaChart].forEach(c=>{if(c)c.destroy()});
+  myStatusChart=myModeloChart=myCorretivaChart=null;
+  document.getElementById('header-title').textContent=`Status Diário · ${cfg.sigla}`;
+  document.getElementById('loc-label').textContent=cfg.sigla;
+  document.getElementById('footer-total').textContent=`Total: ${equipamentos.length} equipamentos`;
+  document.getElementById('footer-loc').textContent=`${cfg.nome} — Status Diário`;
+  activeFilter='all';activeModel='all';searchTerm='';
+  document.getElementById('busca').value='';
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
   document.querySelector('.pill[data-filter="all"]').classList.add('active');
-
-  // Construir tabela
-  buildTable();
-
-  // Restaurar cache
-  loadFromCache();
-
-  document.getElementById('main-container').style.display = 'block';
+  buildModelFilter();buildTable();populateTechnicians();loadFromCache();
+  document.getElementById('main-container').style.display='block';
 }
 
-function buildTable() {
-  const tbody = document.querySelector('#equipamentos-table tbody');
-  tbody.innerHTML = '';
+function buildModelFilter(){
+  const counts={};
+  equipamentos.forEach(eq=>{const k=modelGroupKey(eq.modelo);counts[k]=(counts[k]||0)+1});
+  const opts=Object.keys(counts).sort(compareModelOrder).map(k=>`<option value="${k.replace(/"/g,'&quot;')}">${k} · ${counts[k]}</option>`).join('');
+  document.getElementById('modeloFiltro').innerHTML='<option value="all">Todos os modelos</option>'+opts;
+  document.getElementById('modeloFiltro').value='all';
+}
+function setModelFilter(v){activeModel=v||'all';applyVisibility();}
 
-  const fragment = document.createDocumentFragment();
-  equipamentos.forEach(eq => {
-    const tr = document.createElement('tr');
-    tr.dataset.modelo = eq.modelo.toLowerCase();
-    tr.dataset.tag    = eq.tag.toLowerCase();
-    const isEletrico  = ELETRICOS.includes(eq.modelo);
-    const isCombustao = COMBUSTIVEIS.includes(eq.modelo);
-    tr.innerHTML = `
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function updateTechLabel(){}
+function populateTechnicians(){
+  const input=document.getElementById('mantenedor');if(!input)return;
+  const sigla=LOCAIS[localAtual].sigla;
+  const saved=localStorage.getItem(cacheKey('mantenedor'))||'';
+  const filial=tecnicos.filter(t=>String(t.filial||'').toUpperCase()===sigla).sort((a,b)=>naturalCompare(a.nome,b.nome));
+  const pcm=tecnicos.filter(t=>String(t.filial||'').toUpperCase()==='PCM').sort((a,b)=>naturalCompare(a.nome,b.nome));
+  const seen=new Set();
+  tecnicosAtivos=[...filial,...pcm].filter(t=>{
+    const k=normalizeText(t.nome);if(!k||seen.has(k))return false;seen.add(k);return true;
+  });
+  input.value=saved;
+  const list=document.getElementById('mantenedor-list');if(list){list.classList.remove('show');list.innerHTML='';}
+}
+function filtrarTecnicos(el){
+  const list=document.getElementById('mantenedor-list');if(!list)return;
+  const q=normalizeText(el.value);
+  const base=q?tecnicosAtivos.filter(t=>normalizeText(t.nome).includes(q)):tecnicosAtivos;
+  const matches=base.slice(0,9);
+  if(!matches.length){list.innerHTML='<div class="tech-combo-empty">Nenhum técnico encontrado</div>';list.classList.add('show');return;}
+  list.innerHTML=matches.map(t=>{
+    const nome=escapeHtml(String(t.nome||''));
+    const meta=[t.matricula?`Matrícula ${escapeHtml(t.matricula)}`:'',t.filial?escapeHtml(String(t.filial).toUpperCase()):''].filter(Boolean).join(' · ');
+    return `<div class="tech-combo-item" data-nome="${nome}" onpointerdown="event.preventDefault();selecionarTecnico(this.dataset.nome)"><span class="tech-combo-name">${nome.toUpperCase()}</span><span class="tech-combo-meta">${meta}</span></div>`;
+  }).join('');
+  list.classList.add('show');
+}
+function selecionarTecnico(nome){
+  const input=document.getElementById('mantenedor');if(!input)return;
+  input.value=nome||'';saveCacheField('mantenedor',input.value);
+  const list=document.getElementById('mantenedor-list');if(list){list.classList.remove('show');list.innerHTML='';}
+  input.blur();
+}
+function validarTecnico(el){
+  setTimeout(()=>{
+    const list=document.getElementById('mantenedor-list');if(list)list.classList.remove('show');
+    const q=normalizeText(el.value);if(!q)return;
+    const match=tecnicosAtivos.find(t=>normalizeText(t.nome)===q);
+    if(match){el.value=String(match.nome||'');saveCacheField('mantenedor',el.value);}
+    else{el.value='';localStorage.removeItem(cacheKey('mantenedor'));showToast('Selecione um técnico da lista');}
+  },180);
+}
+function openTechModal(){document.getElementById('mantenedor')?.focus();}
+function closeTechModal(){document.getElementById('mantenedor-list')?.classList.remove('show');}
+function selectTechnician(nome){selecionarTecnico(nome);}
+
+function buildTable(){
+  const tbody=document.querySelector('#equipamentos-table tbody');tbody.innerHTML='';
+  const fragment=document.createDocumentFragment();
+  equipamentos.forEach((eq,i)=>{
+    const tr=document.createElement('tr');
+    const groupKey=modelGroupKey(eq.modelo);
+    if(i===0||modelGroupKey(equipamentos[i-1].modelo)!==groupKey)tr.classList.add('group-start');
+    tr.dataset.modelo=normalizeText(eq.modelo);tr.dataset.grupo=groupKey;tr.dataset.tag=normalizeText(eq.tag);tr.dataset.serie=normalizeText(eq.serie);
+    const tipo=inferEnergy(eq.modelo);
+    tr.innerHTML=`
       <td>${eq.modelo}</td>
-      <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;">${eq.tag}</td>
-      <td class="energia-cell" data-tag="${eq.tag}" data-tipo="${isEletrico?'eletrico':isCombustao?'combustao':''}" style="${(isEletrico||isCombustao)?'cursor:pointer;':'color:#ccc;font-size:11px;'}">—</td>
+      <td>${eq.tag}</td>
+      <td class="serie-status-only" title="Número de série">${eq.serie || '—'}</td>
+      <td class="energia-cell" data-tag="${eq.tag}" data-tipo="${tipo}" style="${tipo?'cursor:pointer;':'color:#bbb;font-size:10px;'}">—</td>
       <td><input type="text" class="horimetro-input" data-tag="${eq.tag}" placeholder="—" inputmode="numeric"></td>
-      <td><input type="checkbox" class="status-radio" data-status="disponivel" data-tag="${eq.tag}"></td>
-      <td><input type="checkbox" class="status-radio" data-status="preventiva" data-tag="${eq.tag}"></td>
-      <td><input type="checkbox" class="status-radio" data-status="corretiva"  data-tag="${eq.tag}"></td>
-      <td><input type="checkbox" class="status-radio" data-status="checklist"  data-tag="${eq.tag}"></td>
-    `;
+      <td><input type="checkbox" class="status-radio" data-status="disponivel" data-tag="${eq.tag}" title="Disponível"></td>
+      <td><input type="checkbox" class="status-radio" data-status="preventiva" data-tag="${eq.tag}" title="Preventiva"></td>
+      <td><input type="checkbox" class="status-radio" data-status="corretiva" data-tag="${eq.tag}" title="Corretiva"></td>
+      <td><input type="checkbox" class="status-radio" data-status="checklist" data-tag="${eq.tag}" title="Checklist"></td>`;
     fragment.appendChild(tr);
   });
-  tbody.appendChild(fragment);
-
-  // Re-bind eventos dinâmicos
-  bindTableEvents();
+  tbody.appendChild(fragment);bindTableEvents();
 }
 
-function bindTableEvents() {
-  document.querySelectorAll('.status-radio').forEach(cb => {
-    cb.addEventListener('change', function() {
-      const tag = this.dataset.tag;
-      const row = this.closest('tr');
-      row.classList.remove('disponivel','preventiva','corretiva','checklist','alugada');
-      localStorage.removeItem(cacheKey('status_' + tag));
-      if (this.checked) {
-        row.querySelectorAll('.status-radio').forEach(o => { if(o !== this) o.checked = false; });
-        row.classList.add(this.dataset.status);
-        localStorage.setItem(cacheKey('status_' + tag), this.dataset.status);
-      } else {
-        row.classList.add('alugada');
+function bindTableEvents(){
+  document.querySelectorAll('.status-radio').forEach(cb=>{
+    cb.addEventListener('change',function(){
+      const tag=this.dataset.tag,row=this.closest('tr');
+      row.classList.remove('disponivel','preventiva','corretiva','checklist');
+      localStorage.removeItem(cacheKey('status_'+tag));
+      if(this.checked){
+        row.querySelectorAll('.status-radio').forEach(o=>{if(o!==this)o.checked=false});
+        row.classList.add(this.dataset.status);localStorage.setItem(cacheKey('status_'+tag),this.dataset.status);
       }
-      updateDashboard(); updateChart(); updateModeloChart(); updateCorretivaChart(); markSaved();
+      updateDashboard();updateChart();updateModeloChart();updateCorretivaChart();markSaved();applyVisibility();
     });
   });
-
-  document.querySelectorAll('.horimetro-input').forEach(inp => {
-    inp.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9]/g,'');
-      localStorage.setItem(cacheKey('horimetro_' + this.dataset.tag), this.value);
-      markSaved();
-    });
-  });
-
-  document.querySelector('#equipamentos-table tbody').addEventListener('click', function(e) {
-    const cell = e.target.closest('td.energia-cell');
-    if (!cell) return;
-    e.stopPropagation();
-    const tag  = cell.dataset.tag;
-    const tipo = cell.dataset.tipo;
-    if (tipo === 'eletrico') openCargaModal(tag);
-    else if (tipo === 'combustao') openCombModal(tag);
+  document.querySelectorAll('.horimetro-input').forEach(inp=>inp.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');localStorage.setItem(cacheKey('horimetro_'+this.dataset.tag),this.value);markSaved()}));
+  document.querySelector('#equipamentos-table tbody').addEventListener('click',function(e){
+    const cell=e.target.closest('td.energia-cell');if(!cell)return;e.stopPropagation();
+    if(cell.dataset.tipo==='eletrico')openCargaModal(cell.dataset.tag);else if(cell.dataset.tipo==='combustao')openCombModal(cell.dataset.tag);
   });
 }
 
@@ -1101,8 +1420,7 @@ function bindTableEvents() {
 function cacheKey(k) { return `${localAtual}_${k}`; }
 
 function loadFromCache() {
-  const loc = localAtual;
-  mantenedorInput.value = localStorage.getItem(cacheKey('mantenedor')) || '';
+  mantenedorInput.value = localStorage.getItem(cacheKey('mantenedor')) || ''; updateTechLabel();
   let savedData = localStorage.getItem(cacheKey('data'));
   if (!savedData) { savedData = new Date().toISOString().split('T')[0]; localStorage.setItem(cacheKey('data'), savedData); }
   dataInput.value = savedData;
@@ -1110,22 +1428,20 @@ function loadFromCache() {
   obsInput.value = savedObs; obsPrint.textContent = savedObs;
 
   document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
-    const tag = tr.cells[1].textContent;
+    const tag = tr.cells[1].textContent.trim();
     const hi = tr.querySelector('.horimetro-input');
     if (hi) hi.value = localStorage.getItem(cacheKey('horimetro_' + tag)) || '';
-    const savedStatus = localStorage.getItem(cacheKey('status_' + tag));
+    let savedStatus = localStorage.getItem(cacheKey('status_' + tag));
+    if(savedStatus==='alugada'){ localStorage.removeItem(cacheKey('status_' + tag)); savedStatus=''; }
     tr.classList.remove('disponivel','preventiva','corretiva','checklist','alugada');
+    tr.querySelectorAll('.status-radio').forEach(cb=>cb.checked=false);
     if (savedStatus) {
       const cb = tr.querySelector(`[data-status="${savedStatus}"]`);
       if (cb) { cb.checked = true; tr.classList.add(savedStatus); }
-      else tr.classList.add('alugada');
-    } else {
-      tr.classList.add('alugada');
     }
-    refreshCargaCell(tag);
-    refreshCombCell(tag);
+    refreshCargaCell(tag); refreshCombCell(tag);
   });
-  updateChart(); updateModeloChart(); updateCorretivaChart();
+  updateChart(); updateModeloChart(); updateCorretivaChart(); applyVisibility();
 }
 
 function saveCacheField(key, value) {
@@ -1148,7 +1464,7 @@ function markSaved() {
 function toggleFab() {
   fabOpen = !fabOpen;
   document.getElementById('fab-group').classList.toggle('open', fabOpen);
-  document.getElementById('fab-toggle').textContent = fabOpen ? '✕' : '⚡';
+  document.getElementById('fab-toggle').textContent = fabOpen ? '×' : '＋';
 }
 
 /* ══════════════════════════════════════════════
@@ -1158,7 +1474,7 @@ function refreshCargaCell(tag) {
   const cell = document.querySelector(`.energia-cell[data-tag="${tag}"]`);
   if (!cell) return;
   const eq = equipamentos.find(e => e.tag === tag);
-  if (!eq || !ELETRICOS.includes(eq.modelo)) return;
+  if (!eq || inferEnergy(eq.modelo)!=='eletrico') return;
   const saved  = localStorage.getItem(cacheKey('carga_' + tag)) || 'sem';
   const estado = CARGA_ESTADOS[saved] || CARGA_ESTADOS.sem;
   cell.innerHTML = `<span class="carga-badge ${estado.cls}">${estado.label}</span>`;
@@ -1167,7 +1483,7 @@ function refreshCombCell(tag) {
   const cell = document.querySelector(`.energia-cell[data-tag="${tag}"]`);
   if (!cell) return;
   const eq = equipamentos.find(e => e.tag === tag);
-  if (!eq || !COMBUSTIVEIS.includes(eq.modelo)) return;
+  if (!eq || inferEnergy(eq.modelo)!=='combustao') return;
   const saved  = localStorage.getItem(cacheKey('comb_' + tag)) || 'sem';
   const estado = COMB_ESTADOS[saved] || COMB_ESTADOS.sem;
   cell.innerHTML = `<span class="comb-badge ${estado.cls}">${estado.label}</span>`;
@@ -1218,78 +1534,68 @@ window.addEventListener('click', e => {
 /* ══════════════════════════════════════════════
    FILTROS E BUSCA
    ══════════════════════════════════════════════ */
-function applyVisibility() {
-  const term = searchTerm.toLowerCase();
-  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
-    const matchSearch  = !term || tr.dataset.modelo.includes(term) || tr.dataset.tag.includes(term);
-    const matchFilter  = activeFilter === 'all' || tr.classList.contains(activeFilter);
-    tr.classList.toggle('hidden-row', !(matchSearch && matchFilter));
+function applyVisibility(){
+  const term=normalizeText(searchTerm);
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{
+    const matchSearch=!term||tr.dataset.modelo.includes(term)||tr.dataset.tag.includes(term)||tr.dataset.serie.includes(term);
+    const semMarcacao=!tr.classList.contains('disponivel')&&!tr.classList.contains('preventiva')&&!tr.classList.contains('corretiva')&&!tr.classList.contains('checklist');
+    const matchFilter=activeFilter==='all'||(activeFilter==='alugada'?semMarcacao:tr.classList.contains(activeFilter));
+    const matchModel=activeModel==='all'||tr.dataset.grupo===activeModel;
+    tr.classList.toggle('hidden-row',!(matchSearch&&matchFilter&&matchModel));
   });
 }
-function setFilter(f, btn) {
-  activeFilter = f;
-  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  applyVisibility();
-}
-document.getElementById('busca').addEventListener('input', function() {
-  searchTerm = this.value; applyVisibility();
-});
+function setFilter(f,btn){activeFilter=f;document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));btn.classList.add('active');applyVisibility();}
+document.getElementById('busca').addEventListener('input',function(){searchTerm=this.value;applyVisibility();});
 
 /* ══════════════════════════════════════════════
    DASHBOARD & CHARTS
    ══════════════════════════════════════════════ */
-function updateDashboard() {
-  const counts = { disponivel:0, preventiva:0, corretiva:0, checklist:0, alugada:0 };
-  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr => {
-    if(tr.classList.contains('disponivel')) counts.disponivel++;
-    else if(tr.classList.contains('preventiva')) counts.preventiva++;
-    else if(tr.classList.contains('corretiva')) counts.corretiva++;
-    else if(tr.classList.contains('checklist')) counts.checklist++;
+function getCorrectiveMeta(){
+  const total=equipamentos.length;
+  let corretivas=0;
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{if(tr.classList.contains('corretiva'))corretivas++;});
+  const taxa=total?(corretivas/total*100):0;
+  const ok=taxa<=10;
+  const label=(Math.abs(taxa-Math.round(taxa))<0.05?String(Math.round(taxa)):taxa.toFixed(1)).replace('.',',');
+  return {total,corretivas,taxa,ok,label};
+}
+
+function updateDashboard(){
+  const counts={disponivel:0,preventiva:0,corretiva:0,checklist:0,alugada:0};
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{
+    if(tr.classList.contains('disponivel'))counts.disponivel++;
+    else if(tr.classList.contains('preventiva'))counts.preventiva++;
+    else if(tr.classList.contains('corretiva'))counts.corretiva++;
+    else if(tr.classList.contains('checklist'))counts.checklist++;
     else counts.alugada++;
   });
-  for(let k in counts) document.getElementById('cnt-'+k).textContent = counts[k];
-
-  const total   = Object.values(counts).reduce((a,b)=>a+b,0);
-  const paradas = counts.corretiva;
-  const pct     = total > 0 ? Math.round(paradas/total*100) : 0;
-  const ok      = pct <= 10;
-  document.getElementById('kpi-icon').textContent      = ok ? '✅' : '🔴';
-  document.getElementById('kpi-text-full').textContent = `${paradas}/${total} paradas (${pct}%) — meta ≤10%`;
-  document.getElementById('kpi-text-short').textContent= `${pct}% paradas`;
-  document.getElementById('kpi-paradas').style.background = ok
-    ? 'rgba(45,122,63,0.55)' : 'rgba(198,40,40,0.60)';
-
+  Object.keys(counts).forEach(k=>{const el=document.getElementById('cnt-'+k);if(el)el.textContent=counts[k]});
+  const meta=getCorrectiveMeta();
+  document.getElementById('kpi-icon').textContent=meta.ok?'✓':'▲';
+  document.getElementById('kpi-text-full').textContent=`${meta.ok?'DENTRO DA META':'FORA DA META'} · ${meta.label}% corretiva (${meta.corretivas}/${meta.total})`;
+  document.getElementById('kpi-text-short').textContent=`${meta.ok?'✓':'▲'} ${meta.label}%`;
+  const kpi=document.getElementById('kpi-paradas');
+  kpi.title='Meta de corretivas: até 10% da frota';
+  kpi.style.background=meta.ok?'#214c35':'#6b242b';
+  kpi.style.borderColor=meta.ok?'#347551':'#9a3a44';
   return counts;
 }
-
-function updateChart() {
-  const c = updateDashboard();
-  const d = [c.disponivel, c.preventiva, c.corretiva, c.checklist, c.alugada];
-  if (myStatusChart) { myStatusChart.data.datasets[0].data = d; myStatusChart.update('none'); return; }
-  const ctx = document.getElementById('statusChart').getContext('2d');
-  myStatusChart = new Chart(ctx,{type:'bar',data:{labels:['Disponível','Preventiva','Corretiva','Checklist','Alugada'],datasets:[{data:d,backgroundColor:['#c3e6cb','#bbdefb','#f5c6cb','#d6d6d6','#ebebeb'],borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw} equipamentos`}},datalabels:{anchor:'end',align:'end',offset:2,font:{size:13,weight:'600'},color:'#374151',formatter:v=>v>0?v:''}},scales:{y:{beginAtZero:true,grace:'15%',ticks:{stepSize:1}},x:{ticks:{font:{size:11}},grid:{display:false}}}},plugins:[ChartDataLabels]});
+function updateChart(){
+  const c=updateDashboard(),d=[c.disponivel,c.preventiva,c.corretiva,c.checklist,c.alugada];
+  if(myStatusChart){myStatusChart.data.datasets[0].data=d;myStatusChart.update('none');return;}
+  myStatusChart=new Chart(document.getElementById('statusChart').getContext('2d'),{type:'bar',data:{labels:['Disponível','Preventiva','Corretiva','Checklist','Alugada'],datasets:[{data:d,backgroundColor:['#a9d7b5','#a9cfea','#e6afb5','#c9cdd2','#e7e9ec'],borderColor:['#5e9b6d','#5b8fb7','#b85f68','#858c94','#a8adb4'],borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'end',offset:3,font:{size:13,weight:'600'},color:'#374151',formatter:v=>v>0?v:''}},scales:{y:{beginAtZero:true,grace:'15%',ticks:{stepSize:1,font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}},plugins:[ChartDataLabels]});
 }
-function updateModeloChart() {
-  const m = {};
-  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{
-    if(tr.classList.contains('disponivel')){ const mod=tr.cells[0].textContent.trim(); m[mod]=(m[mod]||0)+1; }
-  });
-  const labels=Object.keys(m).sort(), data=labels.map(l=>m[l]);
-  const colors=labels.map((_,i)=>['#a8d5a2','#90caf9','#ffcc80','#ce93d8','#80deea','#f48fb1','#bcaaa4','#ffe082'][i%8]);
-  if(myModeloChart){ myModeloChart.data.labels=labels; myModeloChart.data.datasets[0].data=data; myModeloChart.data.datasets[0].backgroundColor=colors; myModeloChart.update('none'); return; }
-  const ctx=document.getElementById('modeloChart').getContext('2d');
-  myModeloChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Disponíveis',data,backgroundColor:colors,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw} disponível(is)`}},datalabels:{anchor:'end',align:'end',offset:2,font:{size:12,weight:'600'},formatter:v=>v>0?v:''}},scales:{y:{beginAtZero:true,grace:'15%',ticks:{stepSize:1}},x:{ticks:{font:{size:11}}}}},plugins:[ChartDataLabels]});
+function updateModeloChart(){
+  const m={};document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{if(tr.classList.contains('disponivel')){const mod=modelGroupKey(tr.cells[0].textContent.trim());m[mod]=(m[mod]||0)+1}});
+  const labels=Object.keys(m).sort(compareModelOrder),data=labels.map(l=>m[l]);
+  if(myModeloChart){myModeloChart.data.labels=labels;myModeloChart.data.datasets[0].data=data;myModeloChart.update('none');return;}
+  myModeloChart=new Chart(document.getElementById('modeloChart').getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Disponíveis',data,backgroundColor:'#9fc8aa',borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'end',offset:3,font:{size:12,weight:'600'},formatter:v=>v>0?v:''}},scales:{y:{beginAtZero:true,grace:'15%',ticks:{stepSize:1,font:{size:10}}},x:{ticks:{font:{size:10}}}}},plugins:[ChartDataLabels]});
 }
-function updateCorretivaChart() {
-  const m = {};
-  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{
-    if(tr.classList.contains('corretiva')){ const mod=tr.cells[0].textContent.trim(); m[mod]=(m[mod]||0)+1; }
-  });
-  const labels=Object.keys(m).sort(), data=labels.map(l=>m[l]);
-  if(myCorretivaChart){ myCorretivaChart.data.labels=labels; myCorretivaChart.data.datasets[0].data=data; myCorretivaChart.update('none'); return; }
-  const ctx=document.getElementById('corretivaChart').getContext('2d');
-  myCorretivaChart=new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:'Corretivas',data,backgroundColor:'#f5c6cb',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.raw} em corretiva`}},datalabels:{anchor:'end',align:'end',offset:2,font:{size:12,weight:'600'},formatter:v=>v>0?v:''}},scales:{y:{beginAtZero:true,grace:'15%',ticks:{stepSize:1}},x:{ticks:{font:{size:11}}}}},plugins:[ChartDataLabels]});
+function updateCorretivaChart(){
+  const m={};document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{if(tr.classList.contains('corretiva')){const mod=modelGroupKey(tr.cells[0].textContent.trim());m[mod]=(m[mod]||0)+1}});
+  const labels=Object.keys(m).sort(compareModelOrder),data=labels.map(l=>m[l]);
+  if(myCorretivaChart){myCorretivaChart.data.labels=labels;myCorretivaChart.data.datasets[0].data=data;myCorretivaChart.update('none');return;}
+  myCorretivaChart=new Chart(document.getElementById('corretivaChart').getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Corretivas',data,backgroundColor:'#dca2a8',borderWidth:0,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'end',offset:3,font:{size:12,weight:'600'},formatter:v=>v>0?v:''}},scales:{y:{beginAtZero:true,grace:'15%',ticks:{stepSize:1,font:{size:10}}},x:{ticks:{font:{size:10}}}}},plugins:[ChartDataLabels]});
 }
 
 /* ══════════════════════════════════════════════
@@ -1304,17 +1610,20 @@ obsInput.addEventListener('input', () => {
   obsPrint.textContent = obsInput.value;
   saveCacheField('observacoes', obsInput.value);
 });
-mantenedorInput.addEventListener('input', () => saveCacheField('mantenedor', mantenedorInput.value));
 dataInput.addEventListener('input', () => saveCacheField('data', dataInput.value));
+mantenedorInput.addEventListener('change', () => saveCacheField('mantenedor', mantenedorInput.value));
 
 /* ══════════════════════════════════════════════
    EXPORTAÇÕES
    ══════════════════════════════════════════════ */
 function limparTudo() {
-  if (confirm('Limpar TODOS os dados salvos desta filial?')) {
+  if(fabOpen) toggleFab();
+  const cfg=LOCAIS[localAtual];
+  if (confirm(`Iniciar um NOVO status de ${cfg.sigla}?\n\nIsso apaga somente o preenchimento salvo desta filial (status, horímetros, carga/combustível, técnico e observações). O banco Raio-X e a lista de técnicos não são apagados.`)) {
     const prefix = localAtual + '_';
     Object.keys(localStorage).filter(k => k.startsWith(prefix)).forEach(k => localStorage.removeItem(k));
-    location.reload();
+    showToast('Preenchimento limpo. Iniciando novo status…');
+    setTimeout(()=>location.reload(),350);
   }
 }
 
@@ -1333,11 +1642,11 @@ function gerarResumoTexto() {
     else if(tr.classList.contains('checklist')){ counts.checklist++; checklist.push(`${modelo} ${tag}`); }
     else counts.alugada++;
   });
-  const total = Object.values(counts).reduce((a,b)=>a+b,0);
+  const total = equipamentos.length;
   let txt = `*TRADIMAQ ${cfg.sigla} — Status Diário*\n`;
   txt += `📅 Data: ${data}\n👷 Mantenedor: ${mantenedor}\n\n`;
   txt += `*Resumo (${total} equipamentos):*\n`;
-  txt += `✅ Disponível: ${counts.disponivel}\n🔧 Preventiva: ${counts.preventiva}\n🔴 Corretiva: ${counts.corretiva}\n📋 Checklist: ${counts.checklist}\n🏗️ Alugada: ${counts.alugada}\n`;
+  txt += `✅ Disponível: ${counts.disponivel}\n🔧 Preventiva: ${counts.preventiva}\n🔴 Corretiva: ${counts.corretiva}\n📋 Checklist: ${counts.checklist}\n⚪ Alugada: ${counts.alugada}\n`;
   if(corretivas.length){ txt+=`\n*Em corretiva:*\n`; corretivas.forEach(c=>txt+=`• ${c}\n`); }
   if(preventivas.length){ txt+=`\n*Em preventiva:*\n`; preventivas.forEach(p=>txt+=`• ${p}\n`); }
   if(checklist.length){ txt+=`\n*Checklist pendente:*\n`; checklist.forEach(c=>txt+=`• ${c}\n`); }
@@ -1346,10 +1655,12 @@ function gerarResumoTexto() {
 }
 
 function enviarWhatsApp() {
+  if(fabOpen) toggleFab();
   window.open(`https://wa.me/?text=${encodeURIComponent(gerarResumoTexto())}`, '_blank');
 }
 
 function gerarExcel() {
+  if(fabOpen) toggleFab();
   const cfg = LOCAIS[localAtual];
   const wb = XLSX.utils.book_new();
   let ws_data = [
@@ -1358,56 +1669,246 @@ function gerarExcel() {
     [`Data: ${dataInput.value||''}`],
     [`Observações: ${obsInput.value||''}`],
     [],
-    ["MODELO","TAG","CARGA / COMBUST.","HORÍMETRO","DISPONÍVEL","PREVENTIVA","CORRETIVA","CHECKLIST"]
+    ["MODELO","TPE","Nº SÉRIE","CARGA / COMBUST.","HORÍMETRO","DISPONÍVEL","PREVENTIVA","CORRETIVA","CHECKLIST"]
   ];
   document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{
-    const tag=tr.cells[1].textContent, modelo=tr.cells[0].textContent;
+    const tag=tr.cells[1].textContent, modelo=tr.cells[0].textContent, serie=tr.cells[2].textContent;
     const horimetro=tr.querySelector('.horimetro-input')?.value||'';
     const disp=tr.querySelector(`[data-status="disponivel"][data-tag="${tag}"]`)?.checked?"OK":"";
     const prev=tr.querySelector(`[data-status="preventiva"][data-tag="${tag}"]`)?.checked?"OK":"";
     const corr=tr.querySelector(`[data-status="corretiva"][data-tag="${tag}"]`)?.checked?"OK":"";
     const chk=tr.querySelector(`[data-status="checklist"][data-tag="${tag}"]`)?.checked?"OK":"";
     let energiaLabel='';
-    if(ELETRICOS.includes(modelo)){ const c=localStorage.getItem(cacheKey('carga_'+tag))||'sem'; energiaLabel=({pronta:'Pronta',baixa:'Baixa',carregando:'Carregando',sem:'Sem info'})[c]||''; }
-    else if(COMBUSTIVEIS.includes(modelo)){ const c=localStorage.getItem(cacheKey('comb_'+tag))||'sem'; energiaLabel=({cheio:'Cheio',meio:'Meio',baixo:'Baixo',sem:'Sem info'})[c]||''; }
-    ws_data.push([modelo,tag,energiaLabel,horimetro,disp,prev,corr,chk]);
+    if(inferEnergy(modelo)==='eletrico'){ const c=localStorage.getItem(cacheKey('carga_'+tag))||'sem'; energiaLabel=({pronta:'Pronta',baixa:'Baixa',carregando:'Carregando',sem:'Sem info'})[c]||''; }
+    else if(inferEnergy(modelo)==='combustao'){ const c=localStorage.getItem(cacheKey('comb_'+tag))||'sem'; energiaLabel=({cheio:'Cheio',meio:'Meio',baixo:'Baixo',sem:'Sem info'})[c]||''; }
+    ws_data.push([modelo,tag,serie,energiaLabel,horimetro,disp,prev,corr,chk]);
   });
   const ws=XLSX.utils.aoa_to_sheet(ws_data);
-  ws['!cols']=[{wch:12},{wch:12},{wch:14},{wch:10},{wch:12},{wch:12},{wch:12},{wch:12}];
+  ws['!cols']=[{wch:12},{wch:11},{wch:16},{wch:14},{wch:10},{wch:11},{wch:11},{wch:11},{wch:11}];
   XLSX.utils.book_append_sheet(wb,ws,"Status Diário");
   XLSX.writeFile(wb,`Status_${cfg.sigla}_${(dataInput.value||new Date().toISOString().split('T')[0]).replace(/-/g,'')}.xlsx`);
   showToast("Excel gerado!");
 }
 
-function gerarPDF() {
-  obsPrint.textContent = obsInput.value;
-  window.scrollTo(0,0);
-  const cfg = LOCAIS[localAtual];
-  const opt = {
-    margin:[0.4,0.4,0.4,0.4],
-    filename:`Status_${cfg.sigla}_${(dataInput.value||new Date().toISOString().split('T')[0]).replace(/-/g,'')}.pdf`,
-    image:{type:'jpeg',quality:0.97},
-    html2canvas:{scale:2,scrollY:0},
-    jsPDF:{unit:'in',format:'a4',orientation:'portrait'}
-  };
-  document.body.classList.add('pdf-generating');
-  html2pdf().from(document.getElementById('main-container')).set(opt).save()
-    .then(()=>{ document.body.classList.remove('pdf-generating'); showToast("PDF gerado!"); })
-    .catch(()=>{ document.body.classList.remove('pdf-generating'); showToast("Erro ao gerar PDF"); });
+function pdfSafeText(v){return String(v??'').replace(/\u00a0/g,' ').trim();}
+function formatDateBR(iso){if(!iso)return '—';const p=String(iso).split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:iso;}
+async function fetchImageDataUrl(url){
+  try{
+    const r=await fetch(url,{cache:'force-cache'});if(!r.ok)throw new Error('logo');
+    const blob=await r.blob();
+    return await new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(fr.result);fr.onerror=reject;fr.readAsDataURL(blob)});
+  }catch{return null;}
+}
+function drawPdfHeader(doc,cfg,pageNo,logoData){
+  const W=doc.internal.pageSize.getWidth();
+  doc.setFillColor(23,25,27);doc.rect(0,0,W,25,'F');
+  doc.setFillColor(239,139,44);doc.rect(0,0,W,2.4,'F');
+  if(logoData){try{doc.addImage(logoData,'PNG',11,6.1,34,12.2,undefined,'FAST')}catch{}}
+  if(!logoData){doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(15);doc.text('TRADIMAQ',11,14);}
+  doc.setDrawColor(75,79,84);doc.line(50,6,50,20);
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(10.5);doc.text('STATUS DIÁRIO',55,10.2);
+  doc.setTextColor(198,204,211);doc.setFont('helvetica','normal');doc.setFontSize(7.2);doc.text('CONTROLE OPERACIONAL DE FROTA',55,14.2);
+  doc.setTextColor(255,255,255);doc.setFontSize(7.6);doc.text(`${cfg.nome}  ·  ${formatDateBR(dataInput.value)}`,55,18.4);
+
+  const meta=getCorrectiveMeta();
+  const badgeW=49,badgeX=W-11-badgeW;
+  if(meta.ok)doc.setFillColor(33,76,53);else doc.setFillColor(107,36,43);
+  doc.roundedRect(badgeX,5.7,badgeW,7.1,1.5,1.5,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(6.4);
+  doc.text(`${meta.ok?'META OK':'FORA DA META'} · ${meta.label}%`,badgeX+badgeW/2,10.15,{align:'center'});
+  doc.setTextColor(185,191,198);doc.setFont('helvetica','normal');doc.setFontSize(6.2);
+  doc.text('META: ATE 10% CORRETIVA',W-11,18.3,{align:'right'});
+}
+
+function drawPdfFooter(doc,cfg,descricao='Status Diário'){
+  const W=doc.internal.pageSize.getWidth();
+  const H=doc.internal.pageSize.getHeight();
+  const n=doc.internal.getCurrentPageInfo().pageNumber;
+  doc.setDrawColor(239,139,44);doc.setLineWidth(.45);doc.line(11,H-10, W-11,H-10);
+  doc.setTextColor(112,119,128);doc.setFont('helvetica','normal');doc.setFontSize(6.6);
+  doc.text(`${cfg.nome} · ${descricao}`,11,H-5.7);
+  doc.text(`Página ${n}`,W-11,H-5.7,{align:'right'});
+}
+
+function getPdfRows(){
+  const rows=[],statuses=[];
+  document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{
+    const modelo=tr.cells[0].textContent.trim(),tag=tr.cells[1].textContent.trim(),serie=tr.cells[2].textContent.trim();
+    const h=tr.querySelector('.horimetro-input')?.value||'—';
+    const tipo=inferEnergy(modelo);let energia='—';
+    if(tipo==='eletrico'){const v=localStorage.getItem(cacheKey('carga_'+tag))||'sem';energia=({pronta:'Pronta',baixa:'Baixa',carregando:'Carregando',sem:'Sem info'})[v]||'Sem info';}
+    else if(tipo==='combustao'){const v=localStorage.getItem(cacheKey('comb_'+tag))||'sem';energia=({cheio:'Cheio',meio:'Meio',baixo:'Baixo',sem:'Sem info'})[v]||'Sem info';}
+    const disp=tr.classList.contains('disponivel')?'X':'';
+    const prev=tr.classList.contains('preventiva')?'X':'';
+    const corr=tr.classList.contains('corretiva')?'X':'';
+    const chk=tr.classList.contains('checklist')?'X':'';
+    let status='alugada';
+    if(disp)status='disponivel';else if(prev)status='preventiva';else if(corr)status='corretiva';else if(chk)status='checklist';
+    rows.push([modelo,tag,serie,energia,h,disp,prev,corr,chk]);statuses.push(status);
+  });
+  return {rows,statuses};
+}
+function pdfChartData(status){
+  const m={};document.querySelectorAll('#equipamentos-table tbody tr').forEach(tr=>{if(tr.classList.contains(status)){const k=modelGroupKey(tr.cells[0].textContent.trim());m[k]=(m[k]||0)+1;}});
+  const labels=Object.keys(m).sort(compareModelOrder);return {labels,values:labels.map(k=>m[k])};
+}
+function pdfPanel(doc,x,y,w,h,title,accent=[239,139,44]){
+  doc.setFillColor(249,250,251);doc.setDrawColor(220,224,228);doc.setLineWidth(.25);doc.roundedRect(x,y,w,h,2,2,'FD');
+  doc.setFillColor(...accent);doc.roundedRect(x,y,2.2,h,1,1,'F');
+  doc.setTextColor(42,46,51);doc.setFont('helvetica','bold');doc.setFontSize(9.2);doc.text(title.toUpperCase(),x+6,y+7.2);
+}
+function drawVectorBarChart(doc,title,labels,values,x,y,w,h,fills){
+  pdfPanel(doc,x,y,w,h,title);
+  const top=y+14,left=x+15,right=x+w-6,bottom=y+h-12,plotW=right-left,plotH=bottom-top;
+  const max=Math.max(1,...values);const count=Math.max(1,labels.length);const slot=plotW/count;const barW=Math.max(7,Math.min(18,slot*.56));
+  doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(99,106,116);
+  for(let i=0;i<=4;i++){const v=Math.round(max*i/4);const yy=bottom-(plotH*i/4);doc.setDrawColor(231,234,237);doc.line(left,yy,right,yy);doc.text(String(v),left-2,yy+2,{align:'right'});}
+  labels.forEach((lab,i)=>{const v=values[i]||0,cx=left+slot*i+slot/2,bh=max?plotH*(v/max):0;const color=Array.isArray(fills?.[0])?(fills[i]||fills[0]):(fills||[96,139,109]);doc.setFillColor(...color);if(v>0)doc.roundedRect(cx-barW/2,bottom-bh,barW,bh,1.2,1.2,'F');doc.setTextColor(45,50,56);doc.setFont('helvetica','bold');doc.setFontSize(7.6);if(v>0)doc.text(String(v),cx,bottom-bh-1.7,{align:'center'});doc.setFont('helvetica','normal');doc.setFontSize(6.2);doc.text(doc.splitTextToSize(lab,Math.max(17,slot-1)),cx,bottom+4,{align:'center'});});
+}
+function drawVectorHorizontalChart(doc,title,labels,values,x,y,w,h,fill=[95,147,108]){
+  pdfPanel(doc,x,y,w,h,title,fill);
+  const top=y+13,bottom=y+h-5,labelW=33,left=x+labelW,right=x+w-9,plotW=right-left;
+  const n=Math.max(1,labels.length),rowH=(bottom-top)/n,max=Math.max(1,...values);
+  labels.forEach((lab,i)=>{const v=values[i]||0,cy=top+i*rowH+rowH/2;doc.setTextColor(67,73,82);doc.setFont('helvetica','normal');doc.setFontSize(n>11?5.8:6.4);doc.text(String(lab),left-3,cy+1.7,{align:'right'});doc.setFillColor(233,236,239);doc.roundedRect(left,cy-1.8,plotW,3.6,1.4,1.4,'F');if(v>0){const bw=Math.max(2.3,plotW*(v/max));doc.setFillColor(...fill);doc.roundedRect(left,cy-1.8,bw,3.6,1.4,1.4,'F');doc.setTextColor(41,46,52);doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.text(String(v),Math.min(right+1,left+bw+2.2),cy+1.6);}});
+}
+async function gerarPDF() {
+  if(fabOpen) toggleFab();
+  showToast('Gerando PDF textual…');
+  try{
+    const {jsPDF}=window.jspdf;
+    const cfg=LOCAIS[localAtual];
+    const logoData=await fetchImageDataUrl('https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png');
+    const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+    const counts=updateDashboard();
+    const pdfData=getPdfRows();
+    const rows=[],rowStatuses=[],rowKinds=[];
+    let prevPdfGroup=null;
+    pdfData.rows.forEach((r,i)=>{
+      const group=modelGroupKey(r[0]);
+      if(i>0&&group!==prevPdfGroup){
+        rows.push(['','','','','','','','','']);
+        rowStatuses.push('spacer');
+        rowKinds.push('spacer');
+      }
+      rows.push(r);rowStatuses.push(pdfData.statuses[i]);rowKinds.push('data');prevPdfGroup=group;
+    });
+    const maint=pdfSafeText(mantenedorInput.value)||'—';
+    const obs=pdfSafeText(obsInput.value)||'—';
+    const total=equipamentos.length;
+    drawPdfHeader(doc,cfg,1,logoData);
+
+    // Identificação do documento
+    doc.setTextColor(92,100,110);doc.setFont('helvetica','bold');doc.setFontSize(6.6);doc.text('MANTENEDOR',11,31);
+    doc.setTextColor(35,39,43);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text(maint,11,35.5);
+    doc.setTextColor(92,100,110);doc.setFont('helvetica','bold');doc.setFontSize(6.6);doc.text('DATA',116,31);
+    doc.setTextColor(35,39,43);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text(formatDateBR(dataInput.value),116,35.5);
+    doc.setTextColor(92,100,110);doc.setFont('helvetica','bold');doc.setFontSize(6.6);doc.text('FROTA',163,31);
+    doc.setTextColor(35,39,43);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.text(`${total} equipamentos`,163,35.5);
+
+    // Cards coloridos iguais à leitura do Status
+    const cards=[
+      ['Disponível',counts.disponivel,[223,241,228],[45,122,63]],
+      ['Preventiva',counts.preventiva,[220,236,248],[21,101,192]],
+      ['Corretiva',counts.corretiva,[245,223,225],[180,35,45]],
+      ['Checklist',counts.checklist,[232,234,237],[85,91,99]],
+      ['Alugada',counts.alugada,[245,246,247],[107,114,128]]
+    ];
+    const gap=2.2,cardW=(188-gap*4)/5;
+    cards.forEach((c,i)=>{const xx=11+i*(cardW+gap);doc.setFillColor(...c[2]);doc.setDrawColor(216,220,224);doc.roundedRect(xx,39,cardW,14,1.4,1.4,'FD');doc.setTextColor(...c[3]);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(String(c[1]),xx+3.2,47.4);doc.setFontSize(5.8);doc.text(c[0].toUpperCase(),xx+3.2,51);});
+
+    const statusFill={disponivel:[230,245,234],preventiva:[230,241,249],corretiva:[250,232,234],checklist:[239,241,243],alugada:[255,255,255]};
+    const statusText={disponivel:[45,122,63],preventiva:[21,101,192],corretiva:[180,35,45],checklist:[85,91,99],alugada:[107,114,128]};
+
+    doc.setTextColor(64,70,78);doc.setFont('helvetica','bold');doc.setFontSize(7.2);doc.text('POSIÇÃO DA FROTA',11,59);
+    doc.setFillColor(239,139,44);doc.rect(11,60.5,188,0.7,'F');
+
+    doc.autoTable({
+      startY:63,
+      head:[['MODELO','TPE','Nº SÉRIE','CARGA / COMB.','HORÍMETRO','DISP.','PREV.','CORR.','CHECK.']],
+      body:rows,
+      theme:'grid',
+      styles:{font:'helvetica',fontSize:7.15,cellPadding:1.25,textColor:[35,39,43],lineColor:[218,222,226],lineWidth:.18,valign:'middle'},
+      headStyles:{fillColor:[51,58,69],textColor:255,fontStyle:'bold',fontSize:5.9,cellPadding:1.45,halign:'center'},
+      columnStyles:{0:{cellWidth:24,halign:'left'},1:{cellWidth:18,halign:'left'},2:{cellWidth:25,halign:'left'},3:{cellWidth:22},4:{cellWidth:17,halign:'center'},5:{cellWidth:20.5,halign:'center'},6:{cellWidth:20.5,halign:'center'},7:{cellWidth:20.5,halign:'center'},8:{cellWidth:20.5,halign:'center'}},
+      margin:{left:11,right:11,top:30,bottom:13},
+      rowPageBreak:'avoid',
+      didParseCell(data){
+        if(data.section==='body'){
+          if(rowKinds[data.row.index]==='spacer'){
+            data.cell.styles.fillColor=[255,255,255];
+            data.cell.styles.textColor=[255,255,255];
+            data.cell.styles.lineColor=[255,255,255];
+            data.cell.styles.lineWidth=0;
+            data.cell.styles.cellPadding=0;
+            data.cell.styles.minCellHeight=1.65;
+            data.cell.styles.fontSize=.1;
+          }else{
+            const st=rowStatuses[data.row.index]||'alugada';data.cell.styles.fillColor=statusFill[st];
+            if(data.column.index>=5 && String(data.cell.raw||'')==='X'){data.cell.styles.textColor=statusText[st];data.cell.styles.fontStyle='bold';data.cell.styles.fontSize=8.2;}
+          }
+        }
+      },
+      didDrawPage(){
+        const n=doc.internal.getCurrentPageInfo().pageNumber;
+        if(n>1)drawPdfHeader(doc,cfg,n,logoData);
+        drawPdfFooter(doc,cfg,'Status Diário · Posição da Frota');
+      }
+    });
+
+    // Observações — sempre começam na página imediatamente após a posição da frota
+    doc.addPage();
+    const obsBoxX=11,obsBoxW=188,obsTextX=16,obsTextW=174;
+    const obsTop=33,obsBottom=274,lineH=3.55;
+    const allObsLines=doc.splitTextToSize(obs,obsTextW);
+    const maxLinesFirst=Math.max(1,Math.floor((obsBottom-obsTop-13)/lineH));
+    let obsOffset=0,obsPart=0;
+    do{
+      if(obsPart>0)doc.addPage();
+      const obsPageNo=doc.internal.getCurrentPageInfo().pageNumber;
+      drawPdfHeader(doc,cfg,obsPageNo,logoData);
+      const remaining=allObsLines.length-obsOffset;
+      const take=Math.min(maxLinesFirst,Math.max(1,remaining));
+      const partLines=allObsLines.slice(obsOffset,obsOffset+take);
+      const obsH=Math.min(obsBottom-obsTop,Math.max(18,13+partLines.length*lineH));
+      doc.setFillColor(249,250,251);doc.setDrawColor(220,224,228);doc.roundedRect(obsBoxX,obsTop,obsBoxW,obsH,1.5,1.5,'FD');
+      doc.setFillColor(239,139,44);doc.rect(obsBoxX,obsTop,2,obsH,'F');
+      doc.setTextColor(76,83,92);doc.setFont('helvetica','bold');doc.setFontSize(7.2);
+      doc.text(obsPart===0?'OBSERVAÇÕES':'OBSERVAÇÕES · CONTINUAÇÃO',obsTextX,obsTop+5.4);
+      doc.setFont('helvetica','normal');doc.setFontSize(8.2);doc.setTextColor(42,46,51);
+      doc.text(partLines,obsTextX,obsTop+10.2,{lineHeightFactor:1.18});
+      drawPdfFooter(doc,cfg,'Status Diário · Observações');
+      obsOffset+=take;obsPart++;
+    }while(obsOffset<allObsLines.length);
+
+    // Indicadores vetoriais — continuam 100% selecionáveis
+    doc.addPage();const graphPage=doc.internal.getCurrentPageInfo().pageNumber;drawPdfHeader(doc,cfg,graphPage,logoData);
+    doc.setTextColor(37,42,48);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text('Indicadores da frota',11,32);
+    doc.setTextColor(104,111,120);doc.setFont('helvetica','normal');doc.setFontSize(7.2);doc.text('Resumo visual do status diário por situação e modelo',11,36.5);
+    const summaryLabels=['Disponível','Preventiva','Corretiva','Checklist','Alugada'];
+    const summaryValues=[counts.disponivel,counts.preventiva,counts.corretiva,counts.checklist,counts.alugada];
+    const summaryColors=[[89,154,105],[80,139,181],[188,84,95],[117,124,133],[166,172,179]];
+    drawVectorBarChart(doc,'Resumo de status',summaryLabels,summaryValues,11,41,188,58,summaryColors);
+    const disp=pdfChartData('disponivel');drawVectorHorizontalChart(doc,'Disponíveis por modelo',disp.labels,disp.values,11,105,188,77,[83,145,99]);
+    const corr=pdfChartData('corretiva');drawVectorHorizontalChart(doc,'Corretivas por modelo',corr.labels,corr.values,11,188,188,77,[184,78,89]);
+    drawPdfFooter(doc,cfg,'Status Diário · Indicadores');
+
+    const name=`Status_${cfg.sigla}_${(dataInput.value||new Date().toISOString().split('T')[0]).replace(/-/g,'')}.pdf`;
+    doc.save(name);showToast('PDF textual gerado!');
+  }catch(err){console.error(err);showToast('Erro ao gerar PDF');}
 }
 
 /* ══════════════════════════════════════════════
    INICIALIZAÇÃO
    ══════════════════════════════════════════════ */
-(function init() {
-  const savedLocal = localStorage.getItem('status_local');
-  if (savedLocal && LOCAIS[savedLocal]) {
-    iniciarComLocal(savedLocal);
-  } else {
-    // Esconde loading, mostra seletor
-    document.getElementById('loading-screen').style.display = 'none';
-    document.getElementById('loc-modal').classList.add('show');
+(async function init() {
+  try{ await carregarBancos(); }catch(err){
+    document.getElementById('loading-screen').style.display='none';
+    document.getElementById('main-container').style.display='block';
+    const eb=document.getElementById('error-banner');eb.style.display='block';eb.textContent='Não foi possível carregar o Raio-X da Frota.';return;
   }
+  const savedLocal=localStorage.getItem('status_local');
+  if(savedLocal&&LOCAIS[savedLocal]) iniciarComLocal(savedLocal);
+  else{document.getElementById('loading-screen').style.display='none';document.getElementById('loc-modal').classList.add('show');}
 })();
 </script>
 
@@ -1415,7 +1916,7 @@ function gerarPDF() {
 // ── PWA Manifest dinâmico ──
 (function(){
   const icon = 'https://gaberoviva-cloud.github.io/Data/5202113.png';
-  const m = { name:'Status Diário – Genie', short_name:'Genie Status', start_url:'./', display:'standalone', background_color:'#f3f4f6', theme_color:'#d4834a', icons:[{src:icon,sizes:'192x192',type:'image/png'},{src:icon,sizes:'512x512',type:'image/png'}] };
+  const m = { name:'Tradimaq – Status Diário', short_name:'Status Tradimaq', start_url:'./', display:'standalone', background_color:'#f3f4f6', theme_color:'#17191b', icons:[{src:icon,sizes:'192x192',type:'image/png'},{src:icon,sizes:'512x512',type:'image/png'}] };
   const blob = new Blob([JSON.stringify(m)],{type:'application/manifest+json'});
   document.getElementById('pwa-manifest').href = URL.createObjectURL(blob);
 })();
