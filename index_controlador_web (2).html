@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>Central do Controlador | Tradimaq</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand:#ff7a00;
+  --bg:#0f1012;
+  --panel:#17191c;
+  --panel-2:#1d2024;
+  --text:#f5f6f7;
+  --muted:#969da6;
+  --line:#2a2e33;
+  --line-strong:#383d44;
+  --shadow:0 18px 50px rgba(0,0,0,.28);
+  --radius:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{
+  font-family:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 8% 0%,rgba(255,122,0,.10),transparent 28%),
+    radial-gradient(circle at 92% 100%,rgba(255,122,0,.055),transparent 28%),
+    var(--bg);
+  -webkit-font-smoothing:antialiased;
+}
+button,a{font:inherit}
+.app{
+  width:100%;height:100dvh;min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:14px;
+  padding:18px 22px 14px;
+}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  min-height:52px;
+}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.logo-wrap{
+  width:128px;height:34px;display:flex;align-items:center;justify-content:flex-start;flex:0 0 auto;
+}
+.logo-wrap img{max-width:100%;max-height:30px;object-fit:contain;display:block}
+.logo-fallback{display:none;font-weight:700;letter-spacing:-.03em;font-size:22px}.logo-fallback span{color:var(--brand)}
+.divider{width:1px;height:28px;background:var(--line);flex:0 0 auto}
+.title-block{min-width:0}
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin-bottom:2px}
+.title{font-size:18px;line-height:1.15;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-meta{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.meta-chip{
+  display:flex;align-items:center;gap:7px;height:32px;padding:0 11px;border:1px solid var(--line);border-radius:999px;
+  color:var(--muted);background:rgba(255,255,255,.025);font-size:11px;font-weight:600;
+}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 4px rgba(255,122,0,.10)}
+.clock{font-family:'IBM Plex Mono',monospace;color:#d8dbe0}
+
+.hero-row{
+  display:flex;align-items:end;justify-content:space-between;gap:20px;
+  padding:2px 1px 1px;
+}
+.hero h1{font-size:clamp(22px,2.1vw,32px);line-height:1.08;letter-spacing:-.035em;font-weight:650;margin-bottom:5px}
+.hero p{font-size:12px;color:var(--muted);line-height:1.45;max-width:760px}
+.quick-note{font-size:10px;color:#727983;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+.quick-note kbd{font-family:'IBM Plex Mono';font-size:9px;color:#c7cbd1;border:1px solid var(--line-strong);background:#1a1c20;border-radius:5px;padding:2px 5px;margin:0 2px}
+
+.content{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);gap:12px}
+.tools-grid{
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.tool-card{
+  position:relative;min-width:0;min-height:0;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:17px 17px 15px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:linear-gradient(145deg,rgba(255,255,255,.042),rgba(255,255,255,.018));
+  color:inherit;text-decoration:none;
+  overflow:hidden;
+  transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
+  isolation:isolate;
+}
+.tool-card::before{
+  content:'';position:absolute;inset:0 auto 0 0;width:3px;background:transparent;transition:background .18s ease;
+}
+.tool-card::after{
+  content:'';position:absolute;width:120px;height:120px;border-radius:50%;right:-58px;bottom:-70px;
+  background:radial-gradient(circle,rgba(255,122,0,.12),transparent 68%);opacity:.25;transition:opacity .18s ease,transform .18s ease;z-index:-1;
+}
+.tool-card:hover,.tool-card:focus-visible{
+  transform:translateY(-2px);border-color:#494f56;background:linear-gradient(145deg,rgba(255,255,255,.06),rgba(255,255,255,.027));box-shadow:var(--shadow);outline:none;
+}
+.tool-card:hover::before,.tool-card:focus-visible::before{background:var(--brand)}
+.tool-card:hover::after,.tool-card:focus-visible::after{opacity:1;transform:scale(1.15)}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.icon-box{
+  width:39px;height:39px;border:1px solid #353a40;border-radius:11px;display:grid;place-items:center;
+  color:#f1f2f4;background:#202328;flex:0 0 auto;
+}
+.icon-box svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.key{
+  font:600 10px/1 'IBM Plex Mono',monospace;color:#686f78;border:1px solid #30343a;border-radius:7px;padding:5px 7px;background:#16181b;
+}
+.card-main{padding:12px 0 10px;min-height:0}
+.card-kicker{font-size:9px;line-height:1;text-transform:uppercase;letter-spacing:.12em;color:var(--brand);font-weight:700;margin-bottom:7px}
+.card-title{font-size:clamp(15px,1.35vw,19px);line-height:1.13;letter-spacing:-.02em;font-weight:650;margin-bottom:6px}
+.card-desc{font-size:10.5px;line-height:1.38;color:var(--muted);max-width:31ch}
+.card-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.055)}
+.card-path{min-width:0;font:500 9px/1.2 'IBM Plex Mono',monospace;color:#666d76;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.open-label{display:flex;align-items:center;gap:6px;color:#c8ccd1;font-size:10px;font-weight:600;white-space:nowrap}
+.open-label svg{width:13px;height:13px;stroke:var(--brand);fill:none;stroke-width:2;transition:transform .18s ease}
+.tool-card:hover .open-label svg{transform:translateX(2px)}
+
+.tool-card.primary{border-color:#42301f;background:linear-gradient(145deg,rgba(255,122,0,.085),rgba(255,255,255,.02))}
+.tool-card.primary .icon-box{border-color:#5a3a20;background:#271e17;color:#ff9a3d}
+.tool-card.primary .card-title{color:#fff}
+
+.footer{
+  min-height:24px;display:flex;align-items:center;justify-content:space-between;gap:14px;color:#6e757e;font-size:10px;
+  border-top:1px solid rgba(255,255,255,.045);padding-top:10px;
+}
+.footer strong{font-weight:600;color:#969ca4}
+.footer .right{display:flex;align-items:center;gap:14px;white-space:nowrap}
+.footer .accent{color:var(--brand)}
+
+@media (max-width:1280px) and (min-width:900px){
+  .app{padding-left:14px;padding-right:14px}
+  .tools-grid{gap:9px}
+  .tool-card{padding:14px 13px 12px;border-radius:15px}
+  .icon-box{width:35px;height:35px}.icon-box svg{width:18px;height:18px}
+  .card-main{padding:9px 0 7px}.card-title{font-size:14px}.card-desc{font-size:9.7px;line-height:1.3}
+  .card-path{font-size:8px}.open-label{font-size:9px}
+}
+
+@media (max-height:760px) and (min-width:900px){
+  .app{padding:12px 18px 10px;gap:9px}
+  .topbar{min-height:42px}.logo-wrap{height:27px;width:116px}.logo-wrap img{max-height:25px}.divider{height:23px}
+  .title{font-size:16px}.meta-chip{height:28px}
+  .hero h1{font-size:24px;margin-bottom:3px}.hero p{font-size:11px}.hero-row{padding:0}
+  .content{gap:8px}.tools-grid{gap:9px}
+  .tool-card{padding:13px 14px 11px;border-radius:14px}
+  .icon-box{width:34px;height:34px;border-radius:9px}.icon-box svg{width:18px;height:18px}
+  .card-main{padding:9px 0 7px}.card-kicker{margin-bottom:5px}.card-title{font-size:15px;margin-bottom:4px}.card-desc{font-size:10px;line-height:1.32}
+  .card-bottom{padding-top:7px}.footer{padding-top:7px}
+}
+
+@media (max-width:899px){
+  .tools-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr))}
+  .card-desc{max-width:none}
+  .quick-note{display:none}
+}
+
+@media (max-width:720px){
+  html,body{overflow:auto;height:auto;min-height:100%}
+  body{min-height:100dvh}
+  .app{height:auto;min-height:100dvh;padding:14px 12px 16px;display:block}
+  .topbar{min-height:44px}.divider,.top-meta .meta-chip:first-child{display:none}
+  .logo-wrap{width:105px}.title{font-size:14px}.eyebrow{font-size:9px}
+  .hero-row{margin:22px 0 14px;align-items:flex-start}.hero h1{font-size:24px}.hero p{font-size:11px}
+  .tools-grid{display:grid;grid-template-columns:1fr;grid-template-rows:none;gap:9px}
+  .tool-card{min-height:150px;padding:15px}
+  .card-title{font-size:18px}.card-desc{font-size:11px}
+  .footer{margin-top:14px;flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-wrap">
+        <img src="https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png" alt="Tradimaq" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div class="logo-fallback">TRADI<span>MAQ</span></div>
+      </div>
+      <span class="divider" aria-hidden="true"></span>
+      <div class="title-block">
+        <div class="eyebrow">Apoio operacional</div>
+        <div class="title">Central do Controlador</div>
+      </div>
+    </div>
+    <div class="top-meta">
+      <div class="meta-chip"><span class="meta-dot"></span><span>10 ferramentas</span></div>
+      <div class="meta-chip clock" id="clock">--:--</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="hero-row">
+      <div class="hero">
+        <h1>Seu posto de trabalho em uma única tela.</h1>
+        <p>Acesso direto às rotinas de frota, manutenção, inspeção e documentação. Sem menus escondidos e sem rolagem no desktop.</p>
+      </div>
+      <div class="quick-note">Atalhos <kbd>1</kbd> a <kbd>9</kbd> + <kbd>0</kbd></div>
+    </div>
+
+    <section class="tools-grid" aria-label="Ferramentas do controlador">
+      <a class="tool-card primary" data-key="1" href="https://gaberoviva-cloud.github.io/Pages/status_tradimaq_final.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="M3 9h2M9 5h2M15 12h2"/></svg></div><span class="key">01</span></div>
+        <div class="card-main"><div class="card-kicker">Operação diária</div><h2 class="card-title">Status Diário</h2><p class="card-desc">Visão operacional da frota e situação dos equipamentos por filial.</p></div>
+        <div class="card-bottom"><span class="card-path">status_tradimaq_final.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="2" href="https://gaberoviva-cloud.github.io/Pages/Gerador_de_Laudos_V7_Assinatura_Ajustada.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h5M9 12h6M9 16h6"/></svg></div><span class="key">02</span></div>
+        <div class="card-main"><div class="card-kicker">Documentação</div><h2 class="card-title">Laudo de Manutenção</h2><p class="card-desc">Emissão de laudos técnicos com identificação, assinatura e apresentação padronizada.</p></div>
+        <div class="card-bottom"><span class="card-path">Gerador_de_Laudos_V7...</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card" data-key="3" href="https://gaberoviva-cloud.github.io/Pages/central_preventivas_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2M7 3 4 6M17 3l3 3"/></svg></div><span class="key">03</span></div>
+        <div class="card-main"><div class="card-kicker">Planejamento</div><h2 class="card-title">Preventivas</h2><p class="card-desc">Programação, planos e projeção de manutenções preventivas da frota.</p></div>
+        <div class="card-bottom"><span class="card-path">central_preventivas_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card" data-key="4" href="https://gaberoviva-cloud.github.io/Pages/comparador_terex.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M8 7h11M15 3l4 4-4 4M16 17H5M9 13l-4 4 4 4"/></svg></div><span class="key">04</span></div>
+        <div class="card-main"><div class="card-kicker">Consulta técnica</div><h2 class="card-title">Comparador Terex</h2><p class="card-desc">Comparação rápida de informações e referências dos equipamentos Terex.</p></div>
+        <div class="card-bottom"><span class="card-path">comparador_terex.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card" data-key="5" href="https://gaberoviva-cloud.github.io/Pages/controle_ferramentas_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-3-3z"/></svg></div><span class="key">05</span></div>
+        <div class="card-main"><div class="card-kicker">Controle interno</div><h2 class="card-title">Ferramentas</h2><p class="card-desc">Controle e consulta do ferramental utilizado pela equipe de manutenção.</p></div>
+        <div class="card-bottom"><span class="card-path">controle_ferramentas_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card" data-key="6" href="https://gaberoviva-cloud.github.io/Pages/relatorio_tecnico_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><span class="key">06</span></div>
+        <div class="card-main"><div class="card-kicker">Registro técnico</div><h2 class="card-title">Relatório Técnico</h2><p class="card-desc">Registro técnico do controlador com evidências, descrição e documentação do atendimento.</p></div>
+        <div class="card-bottom"><span class="card-path">relatorio_tecnico_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="7" href="https://gaberoviva-cloud.github.io/Pages/vistoria_tradimaq_final.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4"/><path d="M5 4h14v16H5z"/><path d="M8 4V2M16 4V2"/></svg></div><span class="key">07</span></div>
+        <div class="card-main"><div class="card-kicker">Inspeção</div><h2 class="card-title">Vistoria de Plataformas</h2><p class="card-desc">Checklist de saída e retorno para inspeção visual e condição das plataformas.</p></div>
+        <div class="card-bottom"><span class="card-path">vistoria_tradimaq_final.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="8" href="https://gaberoviva-cloud.github.io/Pages/vistoria_veicular_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 14l2-5h14l2 5v5h-2v-2H5v2H3z"/><circle cx="7" cy="14" r="1"/><circle cx="17" cy="14" r="1"/></svg></div><span class="key">08</span></div>
+        <div class="card-main"><div class="card-kicker">Inspeção</div><h2 class="card-title">Vistoria Veicular</h2><p class="card-desc">Checklist dedicado à conferência de veículos, saída, retorno e registro de condições.</p></div>
+        <div class="card-bottom"><span class="card-path">vistoria_veicular_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="9" href="https://gaberoviva-cloud.github.io/Pages/dashboard_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><span class="key">09</span></div>
+        <div class="card-main"><div class="card-kicker">Gestão da frota</div><h2 class="card-title">Dashboard Tradimaq</h2><p class="card-desc">Painel consolidado para leitura rápida dos principais dados e indicadores da operação.</p></div>
+        <div class="card-bottom"><span class="card-path">dashboard_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="0" href="https://gaberoviva-cloud.github.io/Pages/conciliacao_frota.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 7h10M10 3l4 4-4 4"/><path d="M20 17H10M14 13l-4 4 4 4"/></svg></div><span class="key">10</span></div>
+        <div class="card-main"><div class="card-kicker">Conferência</div><h2 class="card-title">Conciliação de Frota</h2><p class="card-desc">Comparação entre bases para localizar divergências de status, cliente e movimentação da frota.</p></div>
+        <div class="card-bottom"><span class="card-path">conciliacao_frota.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div><strong>TRADIMAQ</strong> · Central interna de apoio ao controlador</div>
+    <div class="right"><span><span class="accent">●</span> Links conferidos no GitHub</span><span id="today">—</span></div>
+  </footer>
+</div>
+<script>
+(function(){
+  const cards=[...document.querySelectorAll('.tool-card[data-key]')];
+  document.addEventListener('keydown',e=>{
+    if(e.ctrlKey||e.altKey||e.metaKey||e.shiftKey)return;
+    const card=cards.find(c=>c.dataset.key===e.key);
+    if(card) card.click();
+  });
+  function tick(){
+    const d=new Date();
+    document.getElementById('clock').textContent=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('today').textContent=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  }
+  tick(); setInterval(tick,30000);
+})();
+</script>
+</body>
+</html>
