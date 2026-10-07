@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tradimaq · Conciliação de Frota</title>
+<meta name="theme-color" content="#17191b">
+<link rel="icon" href="https://gaberoviva-cloud.github.io/Data/5202113.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --orange:#ee8732;--orange2:#ff9a45;--ink:#17191b;--ink2:#24282d;--slate:#343c49;
+  --bg:#f3f4f6;--card:#fff;--line:#dfe3e8;--muted:#69717d;--text:#20242a;
+  --green:#238552;--green-bg:#e7f5ec;--red:#b92d3d;--red-bg:#fbe8eb;--amber:#a86611;--amber-bg:#fff3dc;
+  --blue:#2467a8;--blue-bg:#e8f1fb;--gray-bg:#f0f1f3;--r:10px;
+}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Barlow,Arial,sans-serif}
+button,input,select{font:inherit}.hidden{display:none!important}
+.header{height:68px;background:var(--ink);border-top:5px solid var(--orange);display:flex;align-items:center;justify-content:space-between;padding:0 22px;color:#fff;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.brand{display:flex;align-items:center;gap:15px;min-width:0}.brand img{height:27px;max-width:155px;object-fit:contain}.sep{width:1px;height:32px;background:#42474d}.titles{min-width:0}.title{font:800 18px 'Barlow Condensed';letter-spacing:.055em;text-transform:uppercase;white-space:nowrap}.subtitle{font-size:10px;color:#aeb4bc;letter-spacing:.1em;text-transform:uppercase;margin-top:2px}.header-status{font:700 11px 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase;color:#aeb4bc;text-align:right}.header-status strong{display:block;color:#fff;font-size:13px}
+.wrap{max-width:1500px;margin:0 auto;padding:18px}
+.intro{display:flex;justify-content:space-between;align-items:flex-end;gap:15px;margin-bottom:13px}.intro h1{font:800 22px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.04em;margin:0}.intro p{margin:4px 0 0;color:var(--muted);font-size:13px}.privacy{font-size:11px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:7px 10px;border-radius:99px;white-space:nowrap}
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:13px}.upload{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px;display:flex;align-items:center;gap:13px;min-width:0;box-shadow:0 1px 3px rgba(0,0,0,.04)}.upload.ready{border-color:#a7d4ba;background:#fbfffc}.upload-icon{width:42px;height:42px;border-radius:9px;background:#f5f6f7;display:grid;place-items:center;font-size:20px;flex:0 0 auto}.upload-info{flex:1;min-width:0}.upload-title{font:800 14px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.055em}.upload-file{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}.upload-meta{font-size:11px;color:var(--green);margin-top:4px;font-weight:600}.file-btn{background:var(--ink2);color:#fff;border:0;border-radius:7px;padding:9px 12px;font:700 11px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em;cursor:pointer;white-space:nowrap}.file-btn:hover{background:#111}.upload input{display:none}
+.actions{display:flex;gap:8px;align-items:center;margin-bottom:13px}.run{background:var(--orange);color:#151515;border:0;border-radius:7px;padding:10px 18px;font:800 12px 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.run:disabled{opacity:.45;cursor:not-allowed}.ghost{background:#fff;border:1px solid var(--line);border-radius:7px;padding:9px 13px;color:#4a515a;font:700 11px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.055em;cursor:pointer}.ghost:hover{border-color:var(--orange);color:#9a5016}.load-msg{font-size:12px;color:var(--muted);margin-left:auto}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}.kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0}.kpi-label{font:700 9px 'Barlow Condensed';letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.kpi-value{font:800 25px 'Barlow Condensed';margin-top:2px;line-height:1}.kpi-sub{font-size:10px;color:var(--muted);margin-top:3px}.kpi.ok .kpi-value{color:var(--green)}.kpi.warn .kpi-value{color:var(--amber)}.kpi.bad .kpi-value{color:var(--red)}.kpi.blue .kpi-value{color:var(--blue)}
+.summary-strip{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 13px;margin-bottom:12px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}.summary-strip strong{font:800 12px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em}.client-chips{display:flex;gap:6px;flex-wrap:wrap}.client-chip{background:#f5f6f7;border:1px solid var(--line);border-radius:99px;padding:4px 8px;font-size:10px;color:#525a64}.client-chip b{color:#222}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px;display:grid;grid-template-columns:minmax(220px,1fr) 180px auto;gap:8px;margin-bottom:9px}.search{width:100%;border:1px solid #ccd1d7;border-radius:6px;padding:9px 11px;outline:none}.search:focus{border-color:var(--orange)}.model-filter{border:1px solid #ccd1d7;border-radius:6px;padding:8px;background:#fff;min-width:0}.pills{display:flex;gap:5px;flex-wrap:wrap}.pill{border:1px solid #ccd1d7;background:#fff;border-radius:6px;padding:7px 10px;font:700 10px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.045em;cursor:pointer;color:#505760}.pill.active{background:var(--ink2);border-color:var(--ink2);color:#fff}.pill.crit.active{background:var(--red);border-color:var(--red)}.pill.div.active{background:#c98218;border-color:#c98218}
+.table-card{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.03)}.table-wrap{overflow:auto;max-height:63vh}table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;min-width:1120px}thead th{position:sticky;top:0;z-index:4;background:var(--slate);color:#fff;text-align:left;padding:8px 8px;font:700 10px 'Barlow Condensed';letter-spacing:.055em;text-transform:uppercase;border-right:1px solid #68717d;white-space:nowrap}tbody td{padding:8px;border-right:1px solid #edf0f2;border-bottom:1px solid #e5e8eb;vertical-align:middle}tbody tr:hover td{background:#fafbfc}.tpe{font-weight:700}.mono{font-family:'JetBrains Mono',monospace;font-size:10px}.status{display:inline-flex;align-items:center;border-radius:99px;padding:3px 7px;font-weight:700;font-size:10px;white-space:nowrap}.st-disponivel{background:var(--green-bg);color:#1e7448}.st-preventiva{background:var(--blue-bg);color:#1f609d}.st-corretiva{background:var(--red-bg);color:#a32d3c}.st-checklist{background:#eceef0;color:#555d66}.st-alugada{background:#f0f1f3;color:#616872}.sev{display:inline-flex;align-items:center;gap:5px;border-radius:5px;padding:4px 7px;font:800 10px 'Barlow Condensed';letter-spacing:.045em;text-transform:uppercase;white-space:nowrap}.sev-ok{background:var(--green-bg);color:var(--green)}.sev-div{background:var(--amber-bg);color:#98600e}.sev-crit{background:var(--red-bg);color:var(--red)}.sev-missing{background:#eceef0;color:#5f6770}.diag{min-width:280px;line-height:1.28}.diag strong{display:block;font-size:11px;margin-bottom:2px}.diag span{color:#6b737c;font-size:10px}.client{font-weight:600;min-width:190px}.contract{font-family:'JetBrains Mono',monospace;font-size:10px}.osflag{font:600 10px 'JetBrains Mono';color:#5d6570;white-space:nowrap}.empty{padding:42px 20px;text-align:center;color:#737b85}.empty strong{display:block;font:800 17px 'Barlow Condensed';color:#3e454e;margin-bottom:4px;text-transform:uppercase}.footer{font-size:10px;color:#828a94;text-align:center;padding:14px}.toast{position:fixed;right:18px;bottom:18px;background:#17191b;color:#fff;border-left:4px solid var(--orange);padding:10px 14px;border-radius:7px;box-shadow:0 6px 24px rgba(0,0,0,.22);font-size:12px;opacity:0;transform:translateY(12px);pointer-events:none;transition:.2s;z-index:100}.toast.show{opacity:1;transform:none}
+@media(max-width:900px){.wrap{padding:10px}.header{height:62px;padding:0 12px}.brand img{height:22px}.title{font-size:15px}.subtitle{font-size:8px}.header-status{display:none}.intro{align-items:flex-start;flex-direction:column}.privacy{white-space:normal}.upload-grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.toolbar{grid-template-columns:1fr}.pills{overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.pill{flex:0 0 auto}.table-wrap{max-height:none}table{font-size:13px}tbody td{padding:9px 8px}.diag{min-width:250px}}
+@media(max-width:520px){.brand{gap:9px}.sep{height:27px}.intro h1{font-size:19px}.upload{padding:12px}.upload-icon{width:37px;height:37px}.file-btn{padding:9px 10px}.actions{flex-wrap:wrap}.load-msg{width:100%;margin-left:0}.kpis{grid-template-columns:repeat(2,1fr)}.kpi-value{font-size:23px}.summary-strip{align-items:flex-start;flex-direction:column;gap:7px}.client-chips{max-height:88px;overflow:auto}}
+
+/* ── PREMIUM POLISH ───────────────────────────────────────── */
+body{background:linear-gradient(180deg,#eef1f4 0,#f7f8fa 260px,#f3f4f6 100%)}
+.header{height:72px;background:linear-gradient(110deg,#101214 0%,#191d21 58%,#20252a 100%);border-top:4px solid var(--orange);box-shadow:0 8px 28px rgba(15,18,22,.22)}
+.header:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent)}
+.brand img{filter:drop-shadow(0 2px 5px rgba(0,0,0,.28))}.title{font-size:19px}.subtitle{color:#8f99a5}
+.wrap{padding-top:22px}.intro{margin-bottom:16px}.intro h1{font-size:24px;color:#171b20}.intro p{font-size:13px;max-width:760px;line-height:1.45}
+.privacy{background:rgba(255,255,255,.78);backdrop-filter:blur(8px);box-shadow:0 5px 18px rgba(33,42,52,.05)}
+.upload{position:relative;border-color:#d9dee4;border-radius:14px;padding:17px;box-shadow:0 8px 24px rgba(35,44,54,.065);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;overflow:hidden}
+.upload:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#c7cdd4}.upload:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(35,44,54,.09);border-color:#cfd5dc}.upload.ready{border-color:#a8d8bb;background:linear-gradient(135deg,#fff 0,#f6fcf8 100%)}.upload.ready:before{background:var(--green)}
+.upload-icon{width:46px;height:46px;border-radius:12px;background:linear-gradient(145deg,#f7f8f9,#eceff2);border:1px solid #e2e6ea;box-shadow:inset 0 1px 0 #fff}.upload-title{font-size:15px}.file-btn{border-radius:9px;padding:10px 14px;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.run{border-radius:9px;padding:11px 20px;background:linear-gradient(135deg,var(--orange),#f79a48);box-shadow:0 6px 16px rgba(238,135,50,.25);transition:.18s}.run:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 20px rgba(238,135,50,.32)}
+.ghost{border-radius:9px;background:rgba(255,255,255,.9)}
+.kpis{gap:10px}.kpi{position:relative;border:1px solid #dde2e7;border-radius:12px;padding:13px 14px;background:linear-gradient(145deg,#fff,#fbfcfd);box-shadow:0 6px 18px rgba(32,42,52,.055);overflow:hidden}.kpi:after{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:#cbd1d7}.kpi.ok:after{background:var(--green)}.kpi.warn:after{background:#d98b1d}.kpi.bad:after{background:var(--red)}.kpi.blue:after{background:var(--blue)}.kpi-value{font-size:29px}.kpi-label{font-size:10px}.kpi-sub{font-size:10px}
+.summary-strip{border-radius:12px;padding:12px 14px;box-shadow:0 5px 16px rgba(32,42,52,.045);background:linear-gradient(100deg,#fff,#fafbfc)}
+.client-chip{background:#f3f5f7;border-color:#e0e4e8;padding:5px 9px}.client-chip b{font-weight:700}
+.rule-note{display:flex;align-items:center;gap:9px;margin:-3px 0 12px;padding:9px 12px;border:1px solid #dce3e8;border-left:3px solid var(--blue);border-radius:9px;background:rgba(255,255,255,.78);font-size:11px;color:#5b6570;box-shadow:0 4px 13px rgba(32,42,52,.035)}.rule-note b{color:#25313d}.rule-icon{width:24px;height:24px;border-radius:7px;background:var(--blue-bg);color:var(--blue);display:grid;place-items:center;font-weight:800;flex:0 0 auto}
+.toolbar{border-radius:12px;padding:10px;background:rgba(255,255,255,.9);box-shadow:0 6px 18px rgba(32,42,52,.05);backdrop-filter:blur(8px)}.search,.model-filter{border-radius:8px;background:#fbfcfd}.pill{border-radius:8px;padding:8px 11px;transition:.15s}.pill:hover{border-color:#99a3ae;background:#fafbfc}.pill.active{box-shadow:0 4px 10px rgba(20,24,28,.14)}
+.table-card{border-radius:13px;border-color:#d9dee4;box-shadow:0 10px 30px rgba(30,39,49,.07)}thead th{background:linear-gradient(180deg,#394352,#303946);padding:10px 9px;border-right-color:#536070}tbody td{padding:9px 9px}tbody tr{position:relative}tbody tr[data-level="critico"] td:first-child{box-shadow:inset 3px 0 0 var(--red)}tbody tr[data-level="divergencia"] td:first-child{box-shadow:inset 3px 0 0 #d28a20}tbody tr[data-level="conforme"] td:first-child{box-shadow:inset 3px 0 0 var(--green)}tbody tr:hover td{background:#f8fafb}
+.status{padding:4px 8px;border:1px solid transparent}.st-disponivel{border-color:#c7e7d3}.st-preventiva{border-color:#cbdff3}.st-corretiva{border-color:#f1cbd1}.st-checklist{background:#eef2f6;color:#4b5b6b;border-color:#d8e0e7}.st-alugada{border-color:#e0e3e7}
+.patio-status-wrap{display:flex;align-items:center;gap:5px;white-space:nowrap}.equiv{font:700 9px 'Barlow Condensed';letter-spacing:.035em;text-transform:uppercase;color:#2f6697;background:#eef6fd;border:1px solid #d4e6f6;border-radius:99px;padding:3px 6px}
+.sev{border-radius:7px;padding:5px 8px}.diag strong{font-size:12px;color:#2b333c}.diag span{font-size:10.5px;line-height:1.38}.client{font-weight:700;color:#303842}
+@media(max-width:900px){.header{height:64px}.kpi-value{font-size:26px}.rule-note{align-items:flex-start}.table-card{border-radius:10px}}
+@media(max-width:520px){.wrap{padding:10px}.intro h1{font-size:21px}.upload{border-radius:11px}.kpi{border-radius:10px;padding:11px}.toolbar{border-radius:10px}.rule-note{font-size:10.5px}}
+
+/* ── COMPACT OPERATIONAL LAYOUT + QUICK SHARE ───────────────── */
+.quick-share{display:flex;gap:7px;align-items:center;margin-left:2px}
+.share-btn{border:1px solid #cfd6dc;background:#fff;color:#343b43;border-radius:9px;padding:9px 12px;font:800 10px 'Barlow Condensed';letter-spacing:.055em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:.15s}
+.share-btn:hover{border-color:#929da8;background:#f8fafb}
+.share-btn.wa{border-color:#b9d9c5;background:#f4fbf6;color:#1c6e43}
+.share-btn.wa:hover{background:#eaf7ee;border-color:#8fc9a4}
+.diag-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.copy-row{flex:0 0 auto;border:1px solid #d7dce1;background:#fff;color:#59626c;border-radius:6px;padding:3px 6px;font:800 8px 'Barlow Condensed';letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+.copy-row:hover{border-color:#9ea8b2;color:#252b31;background:#f7f8f9}
+.quick-summary{display:flex;align-items:center;gap:10px;min-width:0;margin:0 0 7px;padding:7px 10px;border:1px solid #e0e4e8;border-left:3px solid var(--orange);border-radius:9px;background:#fff;box-shadow:0 3px 10px rgba(32,42,52,.035);font-size:11px;color:#59616a}
+.quick-summary strong{font:800 11px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.05em;color:#252b31;white-space:nowrap}
+.quick-summary span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+@media(min-width:901px){
+  html,body{height:100%;overflow:hidden}
+  body{display:flex;flex-direction:column}
+  .wrap{width:100%;max-width:none;height:calc(100vh - 72px);padding:10px 14px;display:flex;flex-direction:column;overflow:hidden}
+  .intro{margin-bottom:8px;flex:0 0 auto}
+  .intro h1{font-size:20px}.intro p{font-size:11px;margin-top:2px}.privacy{font-size:10px;padding:5px 8px}
+  .upload-grid{gap:8px;margin-bottom:7px;flex:0 0 auto}
+  .upload{padding:9px 11px;border-radius:10px;gap:9px}.upload-icon{width:35px;height:35px;border-radius:8px;font-size:17px}.upload-title{font-size:13px}.upload-file{font-size:10px}.upload-meta{font-size:9px;margin-top:2px}.file-btn{padding:7px 10px;border-radius:7px;font-size:10px}
+  .actions{margin-bottom:7px;gap:6px;flex:0 0 auto}.run{padding:8px 13px;border-radius:7px}.ghost{padding:7px 10px;border-radius:7px}.share-btn{padding:7px 10px;border-radius:7px}.load-msg{font-size:10px}
+  #results{min-height:0;flex:1;display:flex;flex-direction:column}
+  #results.hidden{display:none!important}
+  .kpis{gap:6px;margin-bottom:7px;flex:0 0 auto}.kpi{padding:7px 9px;border-radius:8px}.kpi-value{font-size:21px}.kpi-label{font-size:8px}.kpi-sub{font-size:8.5px;margin-top:1px}
+  .summary-strip{padding:6px 9px;margin-bottom:7px;border-radius:8px;gap:8px;flex-wrap:nowrap;overflow:hidden;min-height:32px;flex:0 0 auto}.summary-strip strong{font-size:10px;white-space:nowrap}.client-chips{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden}.client-chip{padding:3px 7px;font-size:9px;white-space:nowrap}
+  .rule-note{margin:0 0 7px;padding:6px 9px;border-radius:8px;font-size:9.5px;flex:0 0 auto}.rule-icon{width:20px;height:20px;border-radius:6px}
+  .quick-summary{flex:0 0 auto}
+  .toolbar{padding:6px;border-radius:8px;grid-template-columns:minmax(260px,1fr) 155px auto;gap:6px;margin-bottom:7px;flex:0 0 auto}.search{padding:7px 9px}.model-filter{padding:6px}.pill{padding:6px 8px;font-size:9px}
+  .table-card{flex:1;min-height:0;border-radius:9px;overflow:hidden}.table-wrap{height:100%;max-height:none}table{font-size:11px;min-width:1060px}thead th{padding:7px 7px;font-size:9px}tbody td{padding:6px 7px}.status{padding:3px 6px;font-size:9px}.sev{padding:4px 6px;font-size:9px}.diag{min-width:255px}.diag strong{font-size:10.5px}.diag span{font-size:9.5px}.client{min-width:160px}.contract,.osflag,.mono{font-size:9px}
+  .footer{display:none}
+  body.analyzed .intro{display:none}
+}
+@media(max-width:900px){.quick-share{width:100%;margin-left:0}.share-btn{flex:1}.quick-summary{align-items:flex-start}.quick-summary span{white-space:normal}.diag-top{align-items:flex-start}}
+
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="brand">
+    <img src="https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png" alt="TRADIMAQ">
+    <div class="sep"></div>
+    <div class="titles"><div class="title">Conciliação de Frota</div><div class="subtitle">Pátio físico × sistema administrativo</div></div>
+  </div>
+  <div class="header-status"><strong id="hdrBranch">Auditoria operacional</strong><span id="hdrDate">Aguardando arquivos</span></div>
+</header>
+
+<main class="wrap">
+  <div class="intro">
+    <div><h1>Auditoria de Status</h1><p>Compare o PDF do Status do Pátio com o Excel do sistema e encontre divergências por TPE.</p></div>
+    <div class="privacy">🔒 Processamento local no navegador · os arquivos não são enviados</div>
+  </div>
+
+  <section class="upload-grid">
+    <label class="upload" id="pdfBox">
+      <div class="upload-icon">📄</div>
+      <div class="upload-info"><div class="upload-title">1 · Status do Pátio</div><div class="upload-file" id="pdfName">Selecione o PDF gerado pelo Status Diário</div><div class="upload-meta" id="pdfMeta"></div></div>
+      <span class="file-btn">Escolher PDF</span><input type="file" id="pdfInput" accept="application/pdf,.pdf">
+    </label>
+    <label class="upload" id="xlsBox">
+      <div class="upload-icon">▦</div>
+      <div class="upload-info"><div class="upload-title">2 · Status do Sistema</div><div class="upload-file" id="xlsName">Selecione o Excel recebido do sistema</div><div class="upload-meta" id="xlsMeta"></div></div>
+      <span class="file-btn">Escolher Excel</span><input type="file" id="xlsInput" accept=".xlsx,.xls,.xlsm">
+    </label>
+  </section>
+
+  <div class="actions">
+    <button class="run" id="runBtn" disabled>▶ Analisar divergências</button>
+    <button class="ghost hidden" id="exportBtn">▦ Exportar auditoria</button>
+    <div class="quick-share">
+      <button class="share-btn hidden" id="copySummaryBtn">⧉ Copiar resumo</button>
+      <button class="share-btn wa hidden" id="whatsAppBtn">WhatsApp</button>
+    </div>
+    <button class="ghost hidden" id="resetBtn">↻ Nova análise</button>
+    <div class="load-msg" id="loadMsg">Carregue os dois arquivos para iniciar.</div>
+  </div>
+
+  <section id="results" class="hidden">
+    <div class="kpis">
+      <div class="kpi blue"><div class="kpi-label">Analisados</div><div class="kpi-value" id="kTotal">0</div><div class="kpi-sub">TPEs cruzadas</div></div>
+      <div class="kpi ok"><div class="kpi-label">Conformes</div><div class="kpi-value" id="kOk">0</div><div class="kpi-sub" id="kAder">—% de aderência</div></div>
+      <div class="kpi warn"><div class="kpi-label">Divergências</div><div class="kpi-value" id="kDiv">0</div><div class="kpi-sub">requerem validação</div></div>
+      <div class="kpi bad"><div class="kpi-label">Críticas</div><div class="kpi-value" id="kCrit">0</div><div class="kpi-sub">risco operacional</div></div>
+      <div class="kpi"><div class="kpi-label">Contratos</div><div class="kpi-value" id="kContracts">0</div><div class="kpi-sub">abertos no sistema</div></div>
+      <div class="kpi"><div class="kpi-label">Clientes</div><div class="kpi-value" id="kClients">0</div><div class="kpi-sub">clientes com contrato</div></div>
+    </div>
+
+    <div class="summary-strip"><strong>Clientes com equipamentos alugados</strong><div class="client-chips" id="clientChips"></div></div>
+
+    <div class="rule-note"><span class="rule-icon">↔</span><span><b>Regra operacional:</b> equipamento em <b>Checklist</b> no Status do Pátio é considerado <b>Disponível</b> para a conciliação, pois Checklist não existe como status no sistema digital.</span></div>
+
+    <div class="quick-summary"><strong>Resumo rápido</strong><span id="quickSummaryText">Aguardando análise.</span></div>
+
+    <div class="toolbar">
+      <input class="search" id="search" placeholder="Buscar TPE, modelo, série, cliente ou contrato...">
+      <select class="model-filter" id="modelFilter"><option value="">Todos os modelos</option></select>
+      <div class="pills">
+        <button class="pill active" data-filter="all">Todos</button>
+        <button class="pill crit" data-filter="critico">Críticos</button>
+        <button class="pill div" data-filter="divergencia">Divergências</button>
+        <button class="pill" data-filter="conforme">Conformes</button>
+        <button class="pill" data-filter="contrato">Contrato aberto</button>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Resultado</th><th>TPE</th><th>Modelo</th><th>Pátio</th><th>Sistema</th><th>Cliente</th><th>Contrato</th><th>OS</th><th>Diagnóstico / ação sugerida</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div class="empty hidden" id="empty"><strong>Nenhum resultado</strong>Não há registros para os filtros selecionados.</div>
+      </div>
+    </div>
+  </section>
+  <div class="footer">TRADIMAQ · Conciliação de Frota · Ferramenta de apoio à validação operacional</div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}
+
+const state={pdfFile:null,xlsFile:null,patio:[],sistema:[],audit:[],filter:'all',branch:'',date:''};
+const $=id=>document.getElementById(id);
+const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim().toUpperCase();
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const cleanClient=s=>String(s??'').trim().replace(/[.\s]+$/,'').replace(/\s+/g,' ');
+const tpeNum=t=>{const m=String(t).match(/(\d+)/);return m?+m[1]:999999};
+function toast(msg){const e=$('toast');e.textContent=msg;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),2600)}
+function enableRun(){ $('runBtn').disabled=!(state.pdfFile&&state.xlsFile); $('loadMsg').textContent=state.pdfFile&&state.xlsFile?'Arquivos prontos. Clique em Analisar divergências.':'Carregue os dois arquivos para iniciar.'; }
+
+$('pdfInput').addEventListener('change',e=>{state.pdfFile=e.target.files[0]||null;if(state.pdfFile){$('pdfName').textContent=state.pdfFile.name;$('pdfMeta').textContent='PDF selecionado';$('pdfBox').classList.add('ready')}enableRun()});
+$('xlsInput').addEventListener('change',e=>{state.xlsFile=e.target.files[0]||null;if(state.xlsFile){$('xlsName').textContent=state.xlsFile.name;$('xlsMeta').textContent='Planilha selecionada';$('xlsBox').classList.add('ready')}enableRun()});
+
+function normalizeStatus(s){const n=norm(s);if(n.includes('DISPON'))return'Disponível';if(n.includes('PREVENT'))return'Preventiva';if(n.includes('CORRET'))return'Corretiva';if(n.includes('CHECK'))return'Checklist';if(n.includes('ALUG'))return'Alugada';return s?String(s).trim():'—'}
+function statusClass(s){const n=norm(s);if(n.includes('DISPON'))return'st-disponivel';if(n.includes('PREVENT'))return'st-preventiva';if(n.includes('CORRET'))return'st-corretiva';if(n.includes('CHECK'))return'st-checklist';return'st-alugada'}
+function statusBadge(s){return `<span class="status ${statusClass(s)}">${esc(s||'—')}</span>`}
+function patioBadge(s){if(norm(s)==='CHECKLIST')return `<span class="patio-status-wrap"><span class="status st-checklist">Checklist</span><span class="equiv">→ Disponível</span></span>`;return statusBadge(s)}
+
+async function parsePatioPdf(file){
+  const ab=await file.arrayBuffer();const pdf=await pdfjsLib.getDocument({data:ab}).promise;const rows=[];let branch='',date='';
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);const tc=await page.getTextContent();
+    const items=tc.items.filter(i=>String(i.str||'').trim()).map(i=>({s:String(i.str).trim(),x:i.transform[4],y:i.transform[5],w:i.width||0,c:i.transform[4]+(i.width||0)/2}));
+    const allText=items.map(i=>i.s).join(' ');
+    if(!branch){const m=allText.match(/TRADIMAQ\s+([A-ZÁÉÍÓÚÃÕÇ ]+?)\s*[·\-]\s*(\d{2}\/\d{2}\/\d{4})/i);if(m){branch=m[1].trim();date=m[2]}}
+    const headers={};['MODELO','TPE','Nº SÉRIE','CARGA / COMB.','HORÍMETRO','DISP.','PREV.','CORR.','CHECK.'].forEach(h=>{const it=items.find(x=>norm(x.s)===norm(h));if(it)headers[h]=it.c});
+    if(!headers['TPE']||!headers['DISP.'])continue;
+    const tpes=items.filter(i=>/^TPE-\d+$/i.test(i.s));
+    for(const ti of tpes){
+      const same=items.filter(i=>Math.abs(i.y-ti.y)<=1.5).sort((a,b)=>a.c-b.c);
+      const modelCandidates=same.filter(i=>i.c<headers['TPE']-6 && !/^\d+$/.test(i.s));
+      const model=modelCandidates.length?modelCandidates[modelCandidates.length-1].s:'—';
+      let serie='';
+      if(headers['Nº SÉRIE']){const cand=same.filter(i=>Math.abs(i.c-headers['Nº SÉRIE'])<65 && i.s!==ti.s && norm(i.s)!==norm(model));if(cand.length)serie=cand.sort((a,b)=>Math.abs(a.c-headers['Nº SÉRIE'])-Math.abs(b.c-headers['Nº SÉRIE']))[0].s;}
+      const xs=same.filter(i=>norm(i.s)==='X');let status='Alugada';
+      if(xs.length){const x=xs[0];const opts=[['Disponível',headers['DISP.']],['Preventiva',headers['PREV.']],['Corretiva',headers['CORR.']],['Checklist',headers['CHECK.']]].filter(o=>Number.isFinite(o[1]));opts.sort((a,b)=>Math.abs(x.c-a[1])-Math.abs(x.c-b[1]));if(opts.length)status=opts[0][0];}
+      rows.push({tpe:ti.s.toUpperCase(),modelo:model,serie,status});
+    }
+  }
+  const dedup=new Map();rows.forEach(r=>dedup.set(r.tpe,r));
+  return {rows:[...dedup.values()],branch,date};
+}
+
+function findHeaderIndex(header, names){for(let i=0;i<header.length;i++){const h=norm(header[i]);if(names.some(n=>h===norm(n)))return i;}return -1}
+async function parseSystemExcel(file){
+  const ab=await file.arrayBuffer();const wb=XLSX.read(ab,{type:'array'});let best=[];
+  for(const sn of wb.SheetNames){const arr=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:false,defval:''});if(arr.length>best.length)best=arr;}
+  let hr=-1;for(let r=0;r<Math.min(best.length,25);r++){const row=best[r];if(row.some(v=>norm(v)==='TPE')&&row.some(v=>norm(v)==='STATUS')){hr=r;break}}
+  if(hr<0)throw new Error('Não encontrei as colunas TPE e Status no Excel.');
+  const h=best[hr];const ix={
+    modelo:findHeaderIndex(h,['Modelo']),tpe:findHeaderIndex(h,['TPE']),serie:findHeaderIndex(h,['Nº de Série','N° de Série','Numero de Serie']),status:findHeaderIndex(h,['Status']),contrato:findHeaderIndex(h,['Contrato']),cliente:findHeaderIndex(h,['Nome Cli/For','Cliente','Nome Cliente']),osCorr:findHeaderIndex(h,['OS Corretiva']),osPrev:findHeaderIndex(h,['OS Preventiva']),vendedor:findHeaderIndex(h,['Vendedor'])
+  };
+  if(ix.tpe<0||ix.status<0)throw new Error('Estrutura do Excel não reconhecida.');
+  const rows=[];for(let r=hr+1;r<best.length;r++){const row=best[r];const tpe=String(row[ix.tpe]||'').trim().toUpperCase();if(!/^TPE-\d+$/i.test(tpe))continue;rows.push({tpe,modelo:row[ix.modelo]||'',serie:row[ix.serie]||'',status:normalizeStatus(row[ix.status]),contrato:ix.contrato>=0?String(row[ix.contrato]||'').trim():'',cliente:ix.cliente>=0?String(row[ix.cliente]||'').trim():'',osCorr:ix.osCorr>=0?String(row[ix.osCorr]||'').trim():'',osPrev:ix.osPrev>=0?String(row[ix.osPrev]||'').trim():'',vendedor:ix.vendedor>=0?String(row[ix.vendedor]||'').trim():''});}
+  return rows;
+}
+
+function classify(p,s){
+  if(!p)return{level:'divergencia',title:'Não consta no Status do Pátio',detail:'O equipamento aparece no sistema, mas não foi encontrado no PDF do pátio.',action:'Validar localização e base da filial.'};
+  if(!s)return{level:'divergencia',title:'Não consta no sistema',detail:'O equipamento aparece no Status do Pátio, mas não foi encontrado na planilha do sistema.',action:'Validar cadastro, transferência ou filtro do relatório.'};
+  const patioOriginal=norm(p.status),b=norm(s.status),hasContract=!!String(s.contrato||'').trim();
+  // Regra operacional: Checklist é um estado interno do pátio e equivale a Disponível no sistema digital.
+  const a=patioOriginal==='CHECKLIST'?'DISPONIVEL':patioOriginal;
+  if(a===b){
+    if(patioOriginal==='CHECKLIST'&&b==='DISPONIVEL')return{level:'conforme',title:'Checklist compatível com disponível',detail:'No pátio a máquina está em Checklist; para a conciliação esse estado equivale a Disponível no sistema.',action:'Nenhuma ação necessária.'};
+    return{level:'conforme',title:'Status conforme',detail:hasContract&&b==='ALUGADA'?`Contrato ${s.contrato} · ${s.cliente||'cliente não informado'}`:'As duas fontes apresentam a mesma situação.',action:'Nenhuma ação necessária.'};
+  }
+  if(a==='DISPONIVEL'&&b==='ALUGADA')return{level:'critico',title:hasContract?'No pátio com contrato aberto':'Pátio disponível × sistema alugado',detail:hasContract?`O pátio indica máquina disponível${patioOriginal==='CHECKLIST'?' (em Checklist)':''}, mas o sistema mantém contrato ${s.contrato}${s.cliente?' com '+s.cliente:''}.`:`O pátio indica disponível${patioOriginal==='CHECKLIST'?' (em Checklist)':''} e o sistema indica alugada.`,action:'Confirmar devolução e encerramento do contrato antes de nova locação.'};
+  if(a==='DISPONIVEL'&&b==='CORRETIVA')return{level:'critico',title:'Pátio liberou × sistema em corretiva',detail:`A máquina está disponível fisicamente${patioOriginal==='CHECKLIST'?' (em Checklist)':''}, mas o sistema ainda a mantém em corretiva.`,action:'Validar conclusão da corretiva e encerrar/liberar no sistema.'};
+  if(a==='CORRETIVA'&&b==='DISPONIVEL')return{level:'critico',title:'Sistema liberou × pátio em corretiva',detail:'O sistema considera a máquina disponível, mas o pátio a mantém bloqueada em corretiva.',action:'Bloquear/ajustar o sistema e validar a condição técnica antes de locar.'};
+  if(a==='DISPONIVEL'&&b==='PREVENTIVA')return{level:'divergencia',title:'Pátio disponível × sistema em preventiva',detail:`A máquina foi liberada no pátio${patioOriginal==='CHECKLIST'?' (em Checklist)':''}, mas o sistema ainda registra preventiva.`,action:'Validar se a preventiva foi concluída e liberar o equipamento no sistema.'};
+  if(a==='PREVENTIVA'&&b==='DISPONIVEL')return{level:'divergencia',title:'Sistema disponível × pátio em preventiva',detail:'O sistema liberou a máquina, mas o pátio registra preventiva.',action:'Validar execução da preventiva antes de considerar disponível.'};
+  if(a==='ALUGADA'&&b==='DISPONIVEL')return{level:'divergencia',title:'Sistema disponível × máquina fora do pátio',detail:'No Status do Pátio a máquina está sem marcação (tratada como alugada/fora do pátio), porém o sistema indica disponível.',action:'Confirmar presença física, devolução ou localização do equipamento.'};
+  return{level:'divergencia',title:'Status divergente',detail:`Pátio: ${p.status} · Sistema: ${s.status}.`,action:'Validar qual fonte representa a condição atual e corrigir a outra.'};
+}
+
+function buildAudit(){
+  const pm=new Map(state.patio.map(r=>[r.tpe,r])),sm=new Map(state.sistema.map(r=>[r.tpe,r]));const keys=[...new Set([...pm.keys(),...sm.keys()])];
+  state.audit=keys.map(tpe=>{const p=pm.get(tpe),s=sm.get(tpe),c=classify(p,s);return{tpe,modelo:(p&&p.modelo)||(s&&s.modelo)||'—',serie:(s&&s.serie)||(p&&p.serie)||'—',patio:p?p.status:'—',sistema:s?s.status:'—',cliente:s?s.cliente:'',contrato:s?s.contrato:'',osCorr:s?s.osCorr:'',osPrev:s?s.osPrev:'',vendedor:s?s.vendedor:'',...c}}).sort((a,b)=>{const sev={critico:0,divergencia:1,conforme:2};return sev[a.level]-sev[b.level]||a.modelo.localeCompare(b.modelo,'pt-BR')||tpeNum(a.tpe)-tpeNum(b.tpe)});
+}
+function renderSummary(){
+  const total=state.audit.length,ok=state.audit.filter(x=>x.level==='conforme').length,crit=state.audit.filter(x=>x.level==='critico').length,div=state.audit.filter(x=>x.level!=='conforme').length,contracts=state.sistema.filter(x=>x.contrato).length;
+  const cm=new Map();state.sistema.filter(x=>x.contrato&&x.cliente).forEach(x=>{const k=norm(cleanClient(x.cliente));if(!cm.has(k))cm.set(k,{name:cleanClient(x.cliente),count:0});cm.get(k).count++});
+  $('kTotal').textContent=total;$('kOk').textContent=ok;$('kDiv').textContent=div;$('kCrit').textContent=crit;$('kContracts').textContent=contracts;$('kClients').textContent=cm.size;$('kAder').textContent=(total?((ok/total)*100).toFixed(1).replace('.',','):'0')+'% de aderência';
+  $('quickSummaryText').textContent=div?`${div} divergência(s) encontrada(s) · ${crit} crítica(s) · ${ok} conforme(s)`:`Nenhuma divergência · ${ok} equipamento(s) conforme(s)`;
+  $('clientChips').innerHTML=[...cm.values()].sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'pt-BR')).map(x=>`<span class="client-chip"><b>${esc(x.name)}</b> · ${x.count}</span>`).join('')||'<span class="client-chip">Nenhum contrato com cliente identificado</span>';
+  const models=[...new Set(state.audit.map(x=>x.modelo).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));$('modelFilter').innerHTML='<option value="">Todos os modelos</option>'+models.map(m=>`<option>${esc(m)}</option>`).join('');
+}
+function rowHtml(r){
+  const sev=r.level==='critico'?'<span class="sev sev-crit">● Crítico</span>':r.level==='divergencia'?'<span class="sev sev-div">▲ Divergência</span>':'<span class="sev sev-ok">✓ Conforme</span>';
+  const os=[];if(r.osCorr&&r.osCorr!=='0')os.push('CORR '+r.osCorr);if(r.osPrev&&r.osPrev!=='0')os.push('PREV '+r.osPrev);
+  return `<tr data-level="${r.level}" data-model="${esc(r.modelo)}"><td>${sev}</td><td class="tpe">${esc(r.tpe)}</td><td>${esc(r.modelo)}</td><td>${patioBadge(r.patio)}</td><td>${statusBadge(r.sistema)}</td><td class="client">${esc(r.cliente||'—')}</td><td class="contract">${esc(r.contrato||'—')}</td><td class="osflag">${esc(os.join(' · ')||'—')}</td><td class="diag"><div class="diag-top"><strong>${esc(r.title)}</strong><button class="copy-row" data-tpe="${esc(r.tpe)}" title="Copiar informação rápida">Copiar</button></div><span>${esc(r.detail)}<br><b>Ação:</b> ${esc(r.action)}</span></td></tr>`;
+}
+function renderTable(){
+  const q=norm($('search').value),model=$('modelFilter').value;let arr=state.audit.filter(r=>{if(model&&r.modelo!==model)return false;if(state.filter==='critico'&&r.level!=='critico')return false;if(state.filter==='divergencia'&&r.level==='conforme')return false;if(state.filter==='conforme'&&r.level!=='conforme')return false;if(state.filter==='contrato'&&!r.contrato)return false;if(q&&!norm([r.tpe,r.modelo,r.serie,r.patio,r.sistema,r.cliente,r.contrato,r.title,r.detail].join(' ')).includes(q))return false;return true});
+  $('tbody').innerHTML=arr.map(rowHtml).join('');$('empty').classList.toggle('hidden',arr.length>0);
+}
+
+function quickLine(r){
+  let line=`${r.tpe}: Pátio ${r.patio||'—'} × Sistema ${r.sistema||'—'}`;
+  if(r.cliente&&r.contrato)line+=` · ${cleanClient(r.cliente)}`;
+  return line;
+}
+function buildQuickSummary(){
+  const rows=state.audit.filter(r=>r.level!=='conforme');
+  const crit=rows.filter(r=>r.level==='critico').length;
+  const head=`TRADIMAQ${state.branch?' '+state.branch:''}${state.date?' · '+state.date:''}`;
+  if(!rows.length)return `${head}\nNenhuma divergência encontrada.`;
+  return [head,`${rows.length} divergência(s) · ${crit} crítica(s)`,...rows.map(quickLine)].join('\n');
+}
+async function copyText(text){
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true;}
+    const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();const ok=document.execCommand('copy');ta.remove();return ok;
+  }catch(e){return false;}
+}
+$('copySummaryBtn').addEventListener('click',async()=>{const ok=await copyText(buildQuickSummary());toast(ok?'Resumo copiado':'Não foi possível copiar');});
+$('whatsAppBtn').addEventListener('click',()=>{window.open(`https://wa.me/?text=${encodeURIComponent(buildQuickSummary())}`,'_blank','noopener');});
+$('tbody').addEventListener('click',async e=>{const b=e.target.closest('.copy-row');if(!b)return;const r=state.audit.find(x=>x.tpe===b.dataset.tpe);if(!r)return;const ok=await copyText(quickLine(r));toast(ok?`${r.tpe} copiado`:'Não foi possível copiar');});
+
+$('runBtn').addEventListener('click',async()=>{
+  try{$('runBtn').disabled=true;$('loadMsg').textContent='Lendo PDF do pátio...';const p=await parsePatioPdf(state.pdfFile);state.patio=p.rows;state.branch=p.branch;state.date=p.date;$('pdfMeta').textContent=`${state.patio.length} equipamentos reconhecidos${p.branch?' · '+p.branch:''}`;
+    $('loadMsg').textContent='Lendo Excel do sistema...';state.sistema=await parseSystemExcel(state.xlsFile);$('xlsMeta').textContent=`${state.sistema.length} equipamentos reconhecidos`;
+    if(!state.patio.length)throw new Error('Não consegui reconhecer a tabela de equipamentos no PDF. Use o PDF gerado pelo Status Diário Tradimaq.');if(!state.sistema.length)throw new Error('Não encontrei equipamentos no Excel.');
+    buildAudit();renderSummary();renderTable();$('results').classList.remove('hidden');$('exportBtn').classList.remove('hidden');$('copySummaryBtn').classList.remove('hidden');$('whatsAppBtn').classList.remove('hidden');$('resetBtn').classList.remove('hidden');document.body.classList.add('analyzed');$('hdrBranch').textContent=state.branch?`TRADIMAQ ${state.branch}`:'Auditoria operacional';$('hdrDate').textContent=state.date||'Arquivos conciliados';$('loadMsg').textContent=`Conciliação concluída · ${state.audit.filter(x=>x.level!=='conforme').length} divergência(s) encontrada(s).`;toast('Auditoria concluída');
+  }catch(err){console.error(err);$('loadMsg').textContent='Erro: '+err.message;toast(err.message)}finally{$('runBtn').disabled=false}
+});
+$('search').addEventListener('input',renderTable);$('modelFilter').addEventListener('change',renderTable);document.querySelectorAll('.pill').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.filter=b.dataset.filter;renderTable()}));
+$('resetBtn').addEventListener('click',()=>location.reload());
+$('exportBtn').addEventListener('click',()=>{
+  const rows=state.audit.map(r=>({'Resultado':r.level==='critico'?'CRÍTICO':r.level==='divergencia'?'DIVERGÊNCIA':'CONFORME','TPE':r.tpe,'Modelo':r.modelo,'Nº Série':r.serie,'Status Pátio':r.patio,'Status Sistema':r.sistema,'Cliente':r.cliente,'Contrato':r.contrato,'OS Corretiva':r.osCorr,'OS Preventiva':r.osPrev,'Diagnóstico':r.title,'Ação sugerida':r.action}));const ws=XLSX.utils.json_to_sheet(rows);ws['!cols']=[{wch:14},{wch:13},{wch:18},{wch:18},{wch:16},{wch:16},{wch:35},{wch:14},{wch:14},{wch:14},{wch:42},{wch:48}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Auditoria');XLSX.writeFile(wb,`Auditoria_Frota_${(state.branch||'Tradimaq').replace(/\s+/g,'_')}_${(state.date||'').replace(/\//g,'')}.xlsx`);toast('Auditoria exportada para Excel');
+});
+})();
+</script>
+</body>
+</html>
