@@ -2268,8 +2268,8 @@ body { overflow-x:hidden; }
 const FROTA = {
   'ESPÍRITO SANTO - PLATAFORMAS':52,
   'GOIÁS RENTAL PLATAFORMAS':61,
-  'TAUBATÉ - PLATAFORMAS':91,
-  'RENTAL PLATAFORMAS':154,
+  'TAUBATÉ - PLATAFORMAS':89,
+  'RENTAL PLATAFORMAS':158,
   'PARÁ - PLATAFORMAS':22
 };
 const NM = {
@@ -5161,7 +5161,7 @@ function gerarSlides(){
   var d=window._dashData;
   // Usa NM e FROTA do escopo global
   var _NM=window.NM||{'RENTAL PLATAFORMAS':'MG','TAUBATÉ - PLATAFORMAS':'SP','GOIÁS RENTAL PLATAFORMAS':'GO','ESPÍRITO SANTO - PLATAFORMAS':'ES','PARÁ - PLATAFORMAS':'PA'};
-  var _FROTA=window.FROTA||{MG:154,SP:93,GO:63,ES:52,PA:22};
+  var _FROTA=window.FROTA||{MG:158,SP:89,GO:63,ES:52,PA:22};
   var META=10;
   var sc=function(p){return p>12?'danger':p>=9?'warn':'ok';};
   var fmt=function(n){return new Intl.NumberFormat('pt-BR').format(n);};
