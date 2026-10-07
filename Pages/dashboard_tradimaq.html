@@ -1412,6 +1412,120 @@ body { overflow-x:hidden; }
 .apres-rbg{fill:none;stroke:rgba(var(--sl-fg),.1);stroke-width:3;}
 .apres-rprog{fill:none;stroke:var(--brand);stroke-width:3;stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .1s linear;}
 
+/* ══ EXPERIÊNCIA GERENCIAL · CLEAN / PROGRESSIVE DISCLOSURE ══ */
+/* Entrada: uma janela, sem rolagem no desktop */
+#upload-screen{
+  height:100svh;min-height:620px;padding:18px;background:#050505;overflow:hidden;
+  justify-content:flex-start;align-items:stretch;
+}
+.up-orb{opacity:.32;filter:blur(6px);animation:none;}
+.up-orb-1{width:520px;height:520px;top:-290px;left:12%;background:radial-gradient(circle,rgba(249,115,22,.13),transparent 68%);}
+.up-orb-2{width:420px;height:420px;right:-180px;bottom:-240px;background:radial-gradient(circle,rgba(249,115,22,.08),transparent 70%);}
+.up-line{display:none;}
+.up-shell{
+  width:min(1180px,100%);height:100%;margin:0 auto;position:relative;z-index:2;
+  border:1px solid rgba(255,255,255,.075);border-radius:22px;background:rgba(8,8,8,.88);
+  box-shadow:0 24px 80px rgba(0,0,0,.42);overflow:hidden;display:grid;grid-template-rows:58px 1fr;
+}
+.up-topline{display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid rgba(255,255,255,.065);}
+.up-brand{display:flex;align-items:center;gap:12px;min-width:0;}
+.up-brand img{height:24px;width:auto;object-fit:contain;}
+.up-brand>span:first-of-type{font-size:14px;font-weight:800;color:#fff;letter-spacing:-.03em}.up-brand>span:first-of-type em{font-style:normal;color:var(--brand)}
+.up-product{padding-left:12px;border-left:1px solid rgba(255,255,255,.1);font-size:10px;font-weight:650;color:rgba(255,255,255,.38);letter-spacing:.035em;white-space:nowrap;}
+.up-json-pill{display:flex;align-items:center;gap:8px;min-width:0;padding:5px 6px 5px 9px;border:1px solid rgba(255,255,255,.08);border-radius:9px;background:rgba(255,255,255,.025);font-size:9.5px;color:rgba(255,255,255,.48);}
+.up-json-dot{width:6px;height:6px;border-radius:50%;background:#eab308;box-shadow:0 0 0 3px rgba(234,179,8,.08);flex:0 0 auto;}
+.up-json-pill button{border:0;border-left:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.72);padding:2px 7px;font:700 9px 'Space Grotesk',sans-serif;cursor:pointer;}
+.up-json-pill button:hover{color:#fff}.up-json-pill .up-json-refresh{font-size:13px;padding-right:4px;}
+.up-workspace{min-height:0;display:grid;grid-template-columns:minmax(280px,.72fr) minmax(520px,1.28fr);gap:34px;padding:34px 38px 30px;align-items:center;}
+.up-intro{align-self:center;padding:8px 2px;}
+.up-eyebrow{font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--brand);margin-bottom:14px;}
+.up-intro h1{font-size:clamp(34px,4.2vw,58px);line-height:.98;letter-spacing:-.055em;color:#f6f6f7;font-weight:760;max-width:500px;}
+.up-intro h1 em{font-style:normal;color:rgba(255,255,255,.42);}
+.up-intro>p{font-size:11.5px;line-height:1.65;color:rgba(255,255,255,.36);max-width:430px;margin-top:20px;}
+.up-mini-list{display:grid;gap:7px;margin-top:26px;max-width:410px;}
+.up-mini-list>div{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:9px;padding:7px 0;border-top:1px solid rgba(255,255,255,.06);}
+.up-mini-list span{font:600 9px 'JetBrains Mono',monospace;color:rgba(249,115,22,.72)}
+.up-mini-list b{font-size:10px;color:rgba(255,255,255,.78)}
+.up-mini-list small{font-size:9px;color:rgba(255,255,255,.24)}
+.up-import-panel{min-width:0;border:1px solid rgba(255,255,255,.075);border-radius:18px;background:#0b0b0b;padding:16px;box-shadow:0 18px 45px rgba(0,0,0,.2);}
+.up-smart{width:100%;max-width:none;margin:0 0 12px;padding:16px;border-radius:12px;border:1px dashed rgba(249,115,22,.34);background:rgba(249,115,22,.035);animation:none;opacity:1;transform:none;}
+.up-smart:hover,.up-smart.drag{transform:none;background:rgba(249,115,22,.065);box-shadow:none;border-color:rgba(249,115,22,.55)}
+.up-smart-icon{width:38px;height:38px;border-radius:10px;font-size:17px;background:rgba(249,115,22,.09)}
+.up-smart-title{font-size:12px;color:#fff}.up-smart-sub{font-size:9.5px;max-width:430px;}
+.up-smart-btn{padding:7px 10px;border-radius:7px;font-size:9px;}
+.up-batch-note{display:none;}
+.up-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;max-width:none;margin:0;}
+.up-card{min-width:0;min-height:108px;padding:12px;display:flex;align-items:flex-start;gap:10px;border-radius:11px;background:rgba(255,255,255,.022);animation:none!important;opacity:1;transform:none!important;}
+.up-card:hover{border-color:rgba(249,115,22,.25);background:rgba(255,255,255,.035);box-shadow:none;}
+.up-card::before{top:auto;left:10px;right:10px;bottom:0;width:auto;height:0;border-radius:6px 6px 0 0;transition:height .2s;}
+.up-card:hover::before,.up-card.drag::before{width:auto;height:2px}.up-card.loaded::before{width:auto;height:2px;}
+.up-card-badge{width:30px;height:30px;min-width:30px;border-radius:8px;font:800 9px 'JetBrains Mono',monospace;letter-spacing:-.02em;background:rgba(255,255,255,.045);}
+.up-card.loaded .up-card-badge::after{font-size:13px;}
+.up-card-text{width:100%;}.up-card-top{display:flex;justify-content:space-between;gap:6px;align-items:flex-start;}
+.up-card h3{font-size:11px;margin:1px 0 5px;color:#f0f0f2}.up-card p{font-size:8.7px;line-height:1.45;color:rgba(255,255,255,.28)}
+.up-status{font-size:8px;margin-top:6px;max-width:100%;white-space:normal;line-height:1.3;}
+.up-card-right{display:none;}.up-tag-obrig,.up-tag-opc{font-size:6.8px;padding:2px 5px;letter-spacing:.06em;}
+.up-actions{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:14px;padding-top:13px;border-top:1px solid rgba(255,255,255,.06)}
+.up-actions-note{display:flex;flex-direction:column;gap:2px;font-size:8.5px;color:rgba(255,255,255,.25)}.up-actions-note b{font-size:9.5px;color:rgba(255,255,255,.55)}
+.up-btn{min-width:176px;padding:10px 16px;border-radius:9px;font-size:11px;animation:none!important;opacity:1;box-shadow:none;}
+.up-btn.active{animation:none!important}.up-btn.active:hover{box-shadow:0 8px 22px rgba(249,115,22,.16);}
+.up-hint,.up-logo{display:none!important;}
+
+/* Shell do dashboard */
+.top-bar{height:50px;padding:0 22px;background:rgba(8,8,8,.96)!important;backdrop-filter:blur(18px);}
+.tb-logo img{height:22px!important}.tb-center{gap:2px;padding:3px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;}
+.tab-btn{padding:6px 10px;border-radius:6px;font-size:10.5px;font-weight:650;color:var(--muted)}
+.tab-btn.active{background:var(--surface3);box-shadow:inset 0 0 0 1px var(--border);}
+.tab-count{height:14px;min-width:14px;font-size:8px;padding:0 4px;margin-left:4px;}
+.tb-right{gap:6px}.tb-date{display:none}.global-search-wrap{max-width:210px}.global-search{padding-top:5px;padding-bottom:5px;font-size:10px;border-radius:7px;}
+.icon-btn{height:30px;min-width:30px;border-radius:7px;font-size:12px;}
+.live-bar{padding:4px 22px;gap:12px;min-height:28px;flex-wrap:nowrap;overflow:hidden;font-size:8.5px;letter-spacing:.015em;background:var(--bg2)!important;}
+.lb-pulse{width:5px;height:5px}.lb-sep{height:11px}.lb-sources{margin-left:auto;max-width:270px;}
+.dash-body{max-width:1500px;padding:16px 24px 52px;}
+.sec-label{font-size:8.5px;letter-spacing:.1em;margin-top:18px;margin-bottom:10px;color:var(--muted)}
+.sec-label::after{opacity:.65}.kpi-grid{gap:8px;margin-bottom:14px}.kpi{border-radius:10px;padding:11px 12px}.kpi-val{font-size:24px}.kpi-lbl{font-size:8.5px;margin-bottom:6px}.kpi-sub{font-size:8.5px}
+.chart-row{gap:10px;margin-bottom:14px}.chart-card{border-radius:10px;padding:13px}.chart-card h3{font-size:8.5px;margin-bottom:10px}.chart-wrap{height:188px}
+.filter-bar{padding:8px 10px;gap:10px;border-radius:9px;margin-bottom:8px}.filter-label{font-size:8px}.filter-select,.filter-date{font-size:9.5px;padding:5px 7px}.filter-count{font-size:9px}
+.pipeline-table{border-radius:10px;margin-bottom:14px}.pipeline-table thead th{font-size:8px;padding:8px 10px}.pipeline-table tbody td{font-size:9.5px;padding:7px 10px}.pipeline-table.scrollable{max-height:380px}
+
+/* Navegação interna: mostra uma camada por vez */
+.manager-nav{display:flex;align-items:center;gap:4px;margin:0 0 14px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:10px;position:relative;}
+.manager-nav::after{content:attr(data-context);margin-left:auto;padding:0 8px;font-size:8.5px;color:var(--muted);white-space:nowrap;}
+.manager-tab{border:0;background:transparent;color:var(--muted);padding:7px 10px;border-radius:7px;font:650 10px 'Space Grotesk',sans-serif;cursor:pointer;transition:.16s;white-space:nowrap;}
+.manager-tab:hover{color:var(--text);background:var(--surface2)}.manager-tab.active{background:var(--surface3);color:var(--text);box-shadow:inset 0 0 0 1px var(--border)}
+.manager-group{display:none;animation:managerIn .18s ease both}.manager-group.active{display:block}
+@keyframes managerIn{from{opacity:.25;transform:translateY(3px)}to{opacity:1;transform:none}}
+.manager-group>.sec-label:first-child{margin-top:4px}
+.manager-empty-note{font-size:9px;color:var(--muted)}
+
+/* Resumo executivo: 1 tela, mas sem esmagar tipografia */
+@media (min-width:1101px){
+  .dash-body:has(#tab-resumo.active){max-width:1500px;padding:12px 24px 12px;}
+  #tab-resumo.active{height:calc(100svh - 90px);min-height:575px;display:grid;grid-template-rows:auto auto minmax(0,.8fr) minmax(0,1.05fr);gap:10px;overflow:hidden;}
+}
+.resumo-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:0 2px;}
+.resumo-kicker{font-size:8px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);margin-bottom:2px}.resumo-title{font-size:19px;font-weight:740;letter-spacing:-.025em;line-height:1.05}.resumo-head-note{font-size:9px;color:var(--muted);}
+#tab-resumo .resumo-hero{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:0}
+#tab-resumo .rh-card{border-radius:11px;padding:11px 12px;min-height:78px;display:flex;flex-direction:column;justify-content:center;transition:.16s;}
+#tab-resumo .rh-card.is-action:hover{transform:translateY(-1px);border-color:var(--border2);background:var(--surface2)}
+#tab-resumo .rh-card.is-action{cursor:pointer}.rh-card::after{height:2px}.rh-icon{position:absolute;right:10px;top:9px;font-size:12px;margin:0;opacity:.34}.rh-val{font-size:26px}.rh-lbl{font-size:8px;margin-top:4px}.rh-sub{font-size:8.5px;margin-top:2px}.rh-trend{display:none}
+.resumo-mid-grid{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.25fr);gap:10px;min-height:0}.resumo-panel{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:10px 11px;min-height:0;overflow:hidden}.resumo-panel-head{height:23px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;font-size:8.5px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.resumo-panel-head small{font-size:8px;font-weight:600;text-transform:none;letter-spacing:0}.resumo-count{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 6px;border-radius:20px;background:rgba(249,115,22,.1);color:var(--brand);font:700 9px 'JetBrains Mono',monospace}
+#tab-resumo .alertas-list{display:flex;flex-direction:column;gap:5px;margin:0;min-height:0}#tab-resumo .alerta-item{border-radius:7px;padding:6px 8px;gap:7px;align-items:center;cursor:pointer}#tab-resumo .al-icon{font-size:10px;margin:0}#tab-resumo .al-title{font-size:9px;margin:0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#tab-resumo .al-desc{display:none}.alerta-more{font-size:8px;color:var(--muted);text-align:right}
+#tab-resumo .ranking-list{gap:4px}#tab-resumo .rank-row{border-radius:7px;padding:5px 8px;gap:7px;min-height:27px}#tab-resumo .rank-medal{display:none}#tab-resumo .rank-pos{font-size:8px;width:15px}#tab-resumo .rank-name{font-size:9.5px;min-width:26px}#tab-resumo .rank-bar-wrap{height:4px}#tab-resumo .rank-pct{font-size:9px;width:37px}#tab-resumo .rank-stats{gap:6px}#tab-resumo .rank-stat{font-size:7.8px}
+.resumo-charts-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:10px;min-height:0}#tab-resumo .resumo-chart-card{padding:9px 11px;border-radius:11px;min-height:0;display:flex;flex-direction:column}#tab-resumo .resumo-chart-card h3{font-size:8.5px;margin:0 0 5px}#tab-resumo .resumo-chart-card .pie-wrap,#tab-resumo .resumo-chart-card .chart-wrap{height:auto;min-height:0;flex:1}
+
+/* Seções operacionais recolhidas por padrão */
+.manager-group .collapsible.collapsed{max-height:0!important;overflow:hidden;margin:0!important}.manager-group .sec-label[onclick]{border-radius:8px;padding:8px 9px;margin:7px 0 4px;background:var(--surface);border:1px solid var(--border)}.manager-group .sec-label[onclick]::after{display:none}
+
+@media(max-width:1100px){
+  #upload-screen{height:auto;min-height:100svh;overflow:auto;padding:12px}.up-shell{height:auto;min-height:calc(100svh - 24px)}.up-workspace{grid-template-columns:1fr;padding:24px;gap:18px}.up-intro>p{max-width:640px}.up-mini-list{display:none}.up-intro h1{font-size:38px}.up-grid{grid-template-columns:repeat(3,1fr)}
+  #tab-resumo.active{display:block;height:auto;overflow:visible}.resumo-mid-grid,.resumo-charts-grid{grid-template-columns:1fr}#tab-resumo .resumo-hero{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:10px}.resumo-head{margin-bottom:10px}.resumo-panel,#tab-resumo .resumo-chart-card{margin-bottom:10px;min-height:230px}.manager-nav{overflow-x:auto;scrollbar-width:none}.manager-nav::after{display:none}
+}
+@media(max-width:720px){
+  #upload-screen{padding:0;background:#050505}.up-shell{border-radius:0;border-left:0;border-right:0;min-height:100svh}.up-topline{padding:0 14px}.up-product{display:none}.up-json-pill{max-width:58%;overflow:hidden}.up-json-pill>span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.up-json-pill button:first-of-type{display:none}.up-workspace{padding:20px 14px 16px}.up-intro h1{font-size:32px}.up-intro>p{margin-top:12px}.up-import-panel{padding:10px}.up-grid{grid-template-columns:1fr}.up-card{min-height:72px}.up-actions{align-items:stretch;flex-direction:column}.up-btn{width:100%}
+  .top-bar{padding:7px 10px;height:auto;min-height:48px}.tb-center{order:3;width:100%;overflow-x:auto}.tb-right{margin-left:auto}.live-bar{padding:4px 10px}.dash-body{padding:12px 10px 40px}.manager-tab{padding:7px 9px}#tab-resumo .resumo-hero{grid-template-columns:repeat(2,minmax(0,1fr))}.global-search-wrap{max-width:150px}.lb-sources{display:none}
+}
+
 /* Sparklines */
 .fc-spark{display:flex;align-items:center;margin-left:auto;opacity:.85;}
 .fc-spark svg{display:block;}
@@ -1429,76 +1543,87 @@ body { overflow-x:hidden; }
 
 <!-- ══ UPLOAD SCREEN ══ -->
 <div id="upload-screen">
-  <!-- Orbs de fundo -->
   <div class="up-orb up-orb-1"></div>
   <div class="up-orb up-orb-2"></div>
-  <div class="up-line"></div>
 
-  <!-- Header -->
-  <div class="up-logo">
-    <img id="up-logo-img" src="https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png" alt="Tradimaq"
-      onerror="this.style.display='none';document.getElementById('up-logo-txt').style.display='block'">
-    <h1 id="up-logo-txt" style="display:none">TRADI<em>MAQ</em></h1>
-    <h1>Seja bem-vindo,<br><em>Gabriel.</em></h1>
-    <p class="up-sub">Dashboard de Manutenção · Tradimaq · V2</p>
+  <div class="up-shell">
+    <header class="up-topline">
+      <div class="up-brand">
+        <img id="up-logo-img" src="https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png" alt="Tradimaq"
+          onerror="this.style.display='none';document.getElementById('up-logo-txt').style.display='inline'">
+        <span id="up-logo-txt" style="display:none">TRADI<em>MAQ</em></span>
+        <span class="up-product">Gestão de Manutenção</span>
+      </div>
+      <div class="up-json-pill" title="O histórico permanece somente no arquivo JSON do seu computador">
+        <span class="up-json-dot"></span>
+        <span id="upload-json-state">JSON local · verificando…</span>
+        <button type="button" onclick="vincularHistoricoJSON()">Vincular</button>
+        <button type="button" class="up-json-refresh" onclick="recarregarHistoricoLocal(true)" title="Reler JSON">↻</button>
+      </div>
+    </header>
+
+    <main class="up-workspace">
+      <section class="up-intro">
+        <div class="up-eyebrow">Central gerencial · Rental</div>
+        <h1>Dados do dia.<br><em>Decisão sem ruído.</em></h1>
+        <p>Atualize as fontes e entre no painel. O dashboard cruza OS, materiais, custos e histórico sem misturar o detalhe operacional com a visão gerencial.</p>
+        <div class="up-mini-list">
+          <div><span>01</span><b>OS Corretivas</b><small>base principal</small></div>
+          <div><span>02</span><b>Materiais</b><small>pipeline de compras</small></div>
+          <div><span>03</span><b>Custos</b><small>visão financeira</small></div>
+        </div>
+      </section>
+
+      <section class="up-import-panel">
+        <div class="up-smart" id="smart-drop">
+          <div class="up-smart-icon">↥</div>
+          <div class="up-smart-copy">
+            <div class="up-smart-title">Importação inteligente</div>
+            <div class="up-smart-sub">Arraste as planilhas juntas aqui. O tipo de cada arquivo é identificado automaticamente.</div>
+          </div>
+          <input type="file" id="file-batch" accept=".xlsx,.xls" multiple style="display:none">
+          <button type="button" class="up-smart-btn" onclick="document.getElementById('file-batch').click()">Selecionar arquivos</button>
+        </div>
+
+        <div class="up-grid">
+          <label class="up-card" id="zone-os">
+            <input type="file" id="file-os" accept=".xlsx,.xls">
+            <div class="up-card-badge"><span class="up-icon-default">OS</span></div>
+            <div class="up-card-text">
+              <div class="up-card-top"><h3>OS Corretivas</h3><span class="up-tag-obrig">Obrigatório</span></div>
+              <p>Status, datas, classificação e equipamentos</p>
+              <div class="up-status" id="status-os"></div>
+            </div>
+          </label>
+
+          <label class="up-card" id="zone-mat">
+            <input type="file" id="file-mat" accept=".xlsx,.xls">
+            <div class="up-card-badge"><span class="up-icon-default">RM</span></div>
+            <div class="up-card-text">
+              <div class="up-card-top"><h3>Materiais</h3><span class="up-tag-opc">Opcional</span></div>
+              <p>RM, OC, NF, baixas e prazos</p>
+              <div class="up-status" id="status-mat"></div>
+            </div>
+          </label>
+
+          <label class="up-card" id="zone-custo">
+            <input type="file" id="file-custo" accept=".xlsx,.xls">
+            <div class="up-card-badge"><span class="up-icon-default">R$</span></div>
+            <div class="up-card-text">
+              <div class="up-card-top"><h3>Custos</h3><span class="up-tag-opc">Opcional</span></div>
+              <p>Itens, natureza, filial e equipamento</p>
+              <div class="up-status" id="status-custo"></div>
+            </div>
+          </label>
+        </div>
+
+        <div class="up-actions">
+          <div class="up-actions-note"><b>OS é a única fonte obrigatória.</b><span>Materiais e custos enriquecem a análise.</span></div>
+          <button class="up-btn" id="go-btn" onclick="launchDash()">Carregue a planilha de OS</button>
+        </div>
+      </section>
+    </main>
   </div>
-
-  <!-- V2: importação inteligente em lote -->
-  <div class="up-smart" id="smart-drop">
-    <div class="up-smart-icon">⚡</div>
-    <div class="up-smart-copy">
-      <div class="up-smart-title">Carga rápida</div>
-      <div class="up-smart-sub">Arraste as planilhas juntas. O dashboard identifica OS, materiais e custos automaticamente.</div>
-    </div>
-    <input type="file" id="file-batch" accept=".xlsx,.xls" multiple style="display:none">
-    <button type="button" class="up-smart-btn" onclick="document.getElementById('file-batch').click()">Selecionar arquivos</button>
-  </div>
-  <div class="up-batch-note">Você também pode carregar ou substituir cada fonte individualmente abaixo.</div>
-
-  <!-- Cards coluna única -->
-  <div class="up-grid">
-    <label class="up-card" id="zone-os">
-      <input type="file" id="file-os" accept=".xlsx,.xls">
-      <div class="up-card-badge"><span class="up-icon-default">🔧</span></div>
-      <div class="up-card-text">
-        <h3>OS Corretivas</h3>
-        <p>Ordens de serviço com status, datas e classificação</p>
-        <div class="up-status" id="status-os"></div>
-      </div>
-      <div class="up-card-right">
-        <span class="up-tag-obrig">Obrigatório</span>
-      </div>
-    </label>
-
-    <label class="up-card" id="zone-mat">
-      <input type="file" id="file-mat" accept=".xlsx,.xls">
-      <div class="up-card-badge"><span class="up-icon-default">📦</span></div>
-      <div class="up-card-text">
-        <h3>Materiais / Compras</h3>
-        <p>Pipeline de compras com RMs e prazos</p>
-        <div class="up-status" id="status-mat"></div>
-      </div>
-      <div class="up-card-right">
-        <span class="up-tag-opc">Opcional</span>
-      </div>
-    </label>
-
-    <label class="up-card" id="zone-custo">
-      <input type="file" id="file-custo" accept=".xlsx,.xls">
-      <div class="up-card-badge"><span class="up-icon-default">💰</span></div>
-      <div class="up-card-text">
-        <h3>Custo por Equipamento</h3>
-        <p>Export TOTVS de custos por centro de custo / equipamento</p>
-        <div class="up-status" id="status-custo"></div>
-      </div>
-      <div class="up-card-right">
-        <span class="up-tag-opc">Opcional</span>
-      </div>
-    </label>
-  </div>
-
-  <button class="up-btn" id="go-btn" onclick="launchDash()">Carregue a planilha de OS</button>
-  <p class="up-hint">OS Corretivas é obrigatória · Materiais e Custos são opcionais · Atalho de busca no painel: Ctrl + K</p>
 </div>
 
 <!-- ══ DASHBOARD ══ -->
@@ -1509,16 +1634,16 @@ body { overflow-x:hidden; }
       <span id="tb-logo-txt" style="display:none">TRADI<em>MAQ</em></span>
     </div>
     <div class="tb-center">
-      <button class="tab-btn" onclick="switchTab('resumo',this)">📊 Resumo</button>
-      <button class="tab-btn active" id="tab-os-btn" onclick="switchTab('os',this)">🛠️ OS Corretivas<span class="tab-count" id="tc-os"></span></button>
-      <button class="tab-btn" id="tab-mat-btn" onclick="switchTab('mat',this)">📦 Materiais<span class="tab-count" id="tc-mat"></span></button>
-      <button class="tab-btn" id="tab-custo-btn" onclick="switchTab('custo',this)">💰 Custos<span class="tab-count" id="tc-custo"></span></button>
-      <button class="tab-btn" onclick="switchTab('tendencia',this)">📈 Tendência<span class="tab-count" id="tc-tend"></span></button>
+      <button class="tab-btn active" id="tab-resumo-btn" onclick="switchTab('resumo',this)">Resumo</button>
+      <button class="tab-btn" id="tab-os-btn" onclick="switchTab('os',this)">OS<span class="tab-count" id="tc-os"></span></button>
+      <button class="tab-btn" id="tab-mat-btn" onclick="switchTab('mat',this)">Materiais<span class="tab-count" id="tc-mat"></span></button>
+      <button class="tab-btn" id="tab-custo-btn" onclick="switchTab('custo',this)">Custos<span class="tab-count" id="tc-custo"></span></button>
+      <button class="tab-btn" onclick="switchTab('tendencia',this)">Tendência<span class="tab-count" id="tc-tend"></span></button>
     </div>
     <div class="tb-right">
       <div class="global-search-wrap">
         <span class="global-search-icon">🔍</span>
-        <input type="text" class="global-search" id="global-search" placeholder="Buscar TAG / OS…" oninput="globalSearch(this.value)">
+        <input type="text" class="global-search" id="global-search" placeholder="Buscar TAG ou OS…" oninput="globalSearch(this.value)">
       </div>
       <span class="tb-date" id="dash-date">—</span>
       <button class="icon-btn" title="Alternar tema" onclick="toggleTheme()">◑</button>
@@ -1546,31 +1671,53 @@ body { overflow-x:hidden; }
   <div class="dash-body">
 
     <!-- ══ TAB: RESUMO ══ -->
-    <div id="tab-resumo" class="tab-pane">
-      <div class="sec-label">📊 Painel Resumo · Visão Executiva</div>
+    <div id="tab-resumo" class="tab-pane active">
+      <div class="resumo-head">
+        <div>
+          <div class="resumo-kicker">Visão executiva</div>
+          <div class="resumo-title">Resumo operacional</div>
+        </div>
+        <div class="resumo-head-note">Indicadores essenciais do dia</div>
+      </div>
+
       <div class="resumo-hero" id="resumo-hero">
         <div class="empty-state" style="grid-column:1/-1"><div class="ei">📊</div>Carregue a planilha de OS para ver o resumo</div>
       </div>
-      <div class="sec-label">🚨 Alertas Críticos</div>
-      <div class="alertas-list" id="alertas-list">
-        <div class="empty-state"><div class="ei">✅</div>Sem alertas até o momento</div>
+
+      <div class="resumo-mid-grid">
+        <section class="resumo-panel resumo-alert-panel">
+          <div class="resumo-panel-head">
+            <span>Alertas críticos</span>
+            <span class="resumo-count" id="alertas-count">0</span>
+          </div>
+          <div class="alertas-list" id="alertas-list">
+            <div class="empty-state"><div class="ei">✅</div>Sem alertas até o momento</div>
+          </div>
+        </section>
+
+        <section class="resumo-panel resumo-rank-panel">
+          <div class="resumo-panel-head">
+            <span>Ranking de filiais</span>
+            <small>% paradas / frota</small>
+          </div>
+          <div id="resumo-ranking"></div>
+        </section>
       </div>
-      <div class="sec-label">🏆 Ranking de Filiais · % Paradas/Frota</div>
-      <div id="resumo-ranking" style="margin-bottom:20px"></div>
-      <div class="chart-row">
-        <div class="chart-card">
-          <h3>Classificação das OS · Distribuição por Tipo</h3>
+
+      <div class="resumo-charts-grid">
+        <div class="chart-card resumo-chart-card">
+          <h3>OS por classificação</h3>
           <div class="pie-wrap"><canvas id="chart-cls-pie"></canvas></div>
         </div>
-        <div class="chart-card">
-          <h3>Paradas vs Meta por Filial</h3>
+        <div class="chart-card resumo-chart-card">
+          <h3>Paradas / frota por filial · meta ≤ 10%</h3>
           <div class="chart-wrap"><canvas id="chart-resumo-meta"></canvas></div>
         </div>
       </div>
     </div>
 
     <!-- ══ TAB: OS ══ -->
-    <div id="tab-os" class="tab-pane active">
+    <div id="tab-os" class="tab-pane">
       <!-- RESUMO EXECUTIVO -->
       <div id="exec-summary" style="display:none;margin-bottom:20px">
         <div class="exec-bar" id="exec-bar"></div>
@@ -2017,7 +2164,7 @@ body { overflow-x:hidden; }
 
     <!-- ══ TAB: TENDÊNCIA ══ -->
     <div id="tab-tendencia" class="tab-pane">
-      <div class="sec-label">📈 Tendência Histórica · Evolução Diária · JSON em nuvem</div>
+      <div class="sec-label">Tendência histórica · evolução diária · JSON local</div>
 
       <!-- KPIs variação + MTBF/MTTR -->
       <div class="kpi-grid" id="tend-kpis" style="margin-bottom:20px"></div>
@@ -2833,6 +2980,8 @@ function launchDash(){
   window._dashData=_osData.dados;
   window._matDataGlobal=_matLoaded?_matData:null;
   const _apresBtn=document.getElementById('apres-btn');if(_apresBtn)_apresBtn.style.display='';
+  const _resumoBtn=document.getElementById('tab-resumo-btn');
+  if(_resumoBtn) switchTab('resumo',_resumoBtn);
 }
 
 /* ══ RENDER OS ══ */
@@ -3558,11 +3707,20 @@ function parseHistoricoPayload(raw){
 }
 
 function setHistoricoCloudStatus(tipo,msg){
-  const el=document.getElementById('tend-cloud-status');
-  if(!el) return;
   const cores={ok:'var(--ok)',warn:'var(--warn)',danger:'var(--danger)',info:'var(--info)'};
-  el.style.color=cores[tipo]||'var(--muted)';
-  el.textContent=msg;
+  const el=document.getElementById('tend-cloud-status');
+  if(el){ el.style.color=cores[tipo]||'var(--muted)'; el.textContent=msg; }
+  const up=document.getElementById('upload-json-state');
+  if(up){
+    up.style.color=cores[tipo]||'rgba(255,255,255,.48)';
+    const short=msg.replace(/^📁\s*|^🔐\s*|^⚠\s*|^🔄\s*/,'');
+    up.textContent=short.length>54?short.slice(0,51)+'…':short;
+    const dot=up.parentElement?.querySelector('.up-json-dot');
+    if(dot){
+      const c=tipo==='ok'?'#22c55e':tipo==='danger'?'#ef4444':tipo==='info'?'#3b82f6':'#eab308';
+      dot.style.background=c; dot.style.boxShadow='0 0 0 3px '+c+'18';
+    }
+  }
 }
 
 function abrirHistoricoDB(){
@@ -4282,6 +4440,94 @@ function exportarHistoricoCSV(){
   a.download='historico_tradimaq.csv';a.click();
 }
 
+
+/* ══ CAMADAS GERENCIAIS · progressive disclosure ══ */
+const _managerState={};
+function _wrapManagerRange(tab,start,end,key){
+  if(!tab||!start) return null;
+  const g=document.createElement('div');
+  g.className='manager-group';g.dataset.view=key;
+  tab.insertBefore(g,start);
+  let n=start;
+  while(n&&n!==end){ const next=n.nextSibling; g.appendChild(n); n=next; }
+  return g;
+}
+function _makeManagerNav(tab,defs,context){
+  const nav=document.createElement('div');nav.className='manager-nav';nav.dataset.context=context||'';
+  defs.forEach((d,i)=>{ const b=document.createElement('button');b.type='button';b.className='manager-tab'+(i===0?' active':'');b.textContent=d.label;b.dataset.view=d.key;b.onclick=()=>managerSwitch(tab.id,d.key,b);nav.appendChild(b); });
+  tab.insertBefore(nav,tab.firstChild);
+  _managerState[tab.id]=defs[0]?.key||'';
+}
+function managerSwitch(tabId,key,btn){
+  const tab=document.getElementById(tabId);if(!tab)return;
+  _managerState[tabId]=key;
+  tab.querySelectorAll(':scope > .manager-group').forEach(g=>g.classList.toggle('active',g.dataset.view===key));
+  tab.querySelectorAll(':scope > .manager-nav .manager-tab').forEach(b=>b.classList.toggle('active',b.dataset.view===key));
+  if(btn) btn.classList.add('active');
+  requestAnimationFrame(()=>{ tab.querySelectorAll('canvas').forEach(c=>{try{Chart.getChart(c)?.resize();}catch(e){}}); });
+}
+function _collapseManagerBody(id){
+  const body=document.getElementById(id);if(!body)return;body.classList.add('collapsed');
+  const lab=body.previousElementSibling;const arr=lab?.querySelector('span[id$="-arr"]');if(arr)arr.textContent='▼';
+}
+function setupManagerialViews(){
+  // OS
+  const os=document.getElementById('tab-os');
+  if(os&&!os.querySelector('.manager-nav')){
+    const filialStart=document.getElementById('filial-cards')?.previousElementSibling;
+    const exStart=document.getElementById('dup-body')?.previousElementSibling;
+    _wrapManagerRange(os,os.firstElementChild,filialStart,'indicadores');
+    _wrapManagerRange(os,filialStart,exStart,'filiais');
+    _wrapManagerRange(os,exStart,null,'excecoes');
+    _makeManagerNav(os,[{key:'indicadores',label:'Indicadores'},{key:'filiais',label:'Filiais'},{key:'excecoes',label:'Exceções'}],'OS · escolha o nível de detalhe');
+  }
+  // Materiais
+  const mat=document.getElementById('tab-mat');
+  if(mat&&!mat.querySelector('.manager-nav')){
+    const pend=document.getElementById('mat-pend-body')?.previousElementSibling;
+    const bx=document.getElementById('bx-body')?.previousElementSibling;
+    const tipo=document.getElementById('tipo-body')?.previousElementSibling;
+    _wrapManagerRange(mat,mat.firstElementChild,pend,'pipeline');
+    _wrapManagerRange(mat,pend,bx,'pendencias');
+    _wrapManagerRange(mat,bx,tipo,'baixas');
+    _wrapManagerRange(mat,tipo,null,'tipos');
+    _makeManagerNav(mat,[{key:'pipeline',label:'Pipeline'},{key:'pendencias',label:'Pendências'},{key:'baixas',label:'Baixas'},{key:'tipos',label:'Tipos'}],'Materiais · do resumo à investigação');
+  }
+  // Custos
+  const custo=document.getElementById('tab-custo');
+  if(custo&&!custo.querySelector('.manager-nav')){
+    const detStart=document.getElementById('tbl-custo-fil')?.previousElementSibling;
+    const histStart=document.getElementById('custo-hist-filter-bar')?.previousElementSibling;
+    _wrapManagerRange(custo,custo.firstElementChild,detStart,'visao');
+    _wrapManagerRange(custo,detStart,histStart,'detalhes');
+    _wrapManagerRange(custo,histStart,null,'historico');
+    _makeManagerNav(custo,[{key:'visao',label:'Visão geral'},{key:'detalhes',label:'Detalhamento'},{key:'historico',label:'Itens / TPE'}],'Custos · contexto primeiro, linha a linha depois');
+  }
+  // Tendência
+  const tend=document.getElementById('tab-tendencia');
+  if(tend&&!tend.querySelector('.manager-nav')){
+    const mtbf=document.getElementById('tend-mtbf-kpis')?.previousElementSibling?.previousElementSibling?.previousElementSibling;
+    // localiza pelo texto para não depender da quantidade de filtros antes do KPI
+    const mtbfStart=[...tend.children].find(e=>e.classList?.contains('sec-label')&&e.textContent.includes('MTBF'));
+    const histStart=document.getElementById('tend-historico-table')?.previousElementSibling;
+    _wrapManagerRange(tend,tend.firstElementChild,mtbfStart,'evolucao');
+    _wrapManagerRange(tend,mtbfStart,histStart,'confiabilidade');
+    _wrapManagerRange(tend,histStart,null,'historico');
+    _makeManagerNav(tend,[{key:'evolucao',label:'Evolução'},{key:'confiabilidade',label:'Confiabilidade'},{key:'historico',label:'Histórico JSON'}],'Tendência · leitura temporal e confiabilidade');
+  }
+  ['dup-body','os45-body','orc-body','enc-body','zero-body','mat-pend-body','bx-body','tipo-body'].forEach(_collapseManagerBody);
+  Object.entries(_managerState).forEach(([id,key])=>managerSwitch(id,key));
+}
+function openManagerTarget(tabName,view,targetId,expandBodyId){
+  const topBtn=document.getElementById('tab-'+tabName+'-btn')||[...document.querySelectorAll('.tab-btn')].find(b=>b.getAttribute('onclick')?.includes("'"+tabName+"'"));
+  if(topBtn) switchTab(tabName,topBtn);
+  const tab=document.getElementById('tab-'+tabName);if(tab) managerSwitch(tab.id,view);
+  if(expandBodyId){ const body=document.getElementById(expandBodyId);if(body){body.classList.remove('collapsed');const arr=body.previousElementSibling?.querySelector('span[id$="-arr"]');if(arr)arr.textContent='▲';} }
+  const target=document.getElementById(targetId)||document.getElementById(expandBodyId);
+  if(target) setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'start'}),60);
+}
+setupManagerialViews();
+
 initHistorico();
 
 function switchTab(id,btn){
@@ -4403,51 +4649,23 @@ function renderResumo(osData, matData){
   const sg=pctP>META?'danger':pctP>META*.8?'warn':'ok';
 
   const hero=document.getElementById('resumo-hero');
+  const matPend=matData?matData.items.filter(i=>i.isPending).length:0;
+  const matLate=matData?matData.items.filter(i=>i.isPending&&i.isOverdue).length:0;
   hero.innerHTML=`
-    <div class="rh-card ${sg}">
-      <div class="rh-icon">🛑</div>
-      <div class="rh-val">${tP}</div>
-      <div class="rh-lbl">Máquinas Paradas</div>
-      <div class="rh-sub">${pctP}% da frota · Meta ≤${META}%</div>
-      <div class="rh-trend">${sg==='danger'?'🔴':sg==='warn'?'🟡':'🟢'}</div>
+    <div class="rh-card ${sg} is-action" onclick="openManagerTarget('os','filiais','filial-cards')" title="Abrir visão por filial">
+      <div class="rh-icon">●</div><div class="rh-val">${tP}</div><div class="rh-lbl">Máquinas paradas</div><div class="rh-sub">${pctP}% da frota · meta ≤${META}%</div>
     </div>
-    <div class="rh-card brand">
-      <div class="rh-icon">🔧</div>
-      <div class="rh-val">${tOS}</div>
-      <div class="rh-lbl">Total OS Abertas</div>
-      <div class="rh-sub">Em todas as filiais</div>
+    <div class="rh-card brand is-action" onclick="openManagerTarget('os','indicadores','exec-summary')" title="Abrir indicadores de OS">
+      <div class="rh-icon">OS</div><div class="rh-val">${tOS}</div><div class="rh-lbl">OS abertas</div><div class="rh-sub">${tNI} não iniciadas · ${tOrc} em orçamento</div>
     </div>
-    <div class="rh-card ${t45>0?'danger':'ok'}">
-      <div class="rh-icon">⏱</div>
-      <div class="rh-val">${t45}</div>
-      <div class="rh-lbl">OS acima 45 dias</div>
-      <div class="rh-sub">${t45>0?'Requerem atenção':'Dentro do prazo'}</div>
-      <div class="rh-trend">${t45>0?'⚠️':'✅'}</div>
+    <div class="rh-card ${t45>0?'danger':'ok'} is-action" onclick="openManagerTarget('os','excecoes','os45-body','os45-body')" title="Abrir OS acima de 45 dias">
+      <div class="rh-icon">45+</div><div class="rh-val">${t45}</div><div class="rh-lbl">Acima de 45 dias</div><div class="rh-sub">${t45>0?'Prioridade de tratativa':'Nenhuma pendência crítica'}</div>
     </div>
-    <div class="rh-card ${tNI>0?'warn':'ok'}">
-      <div class="rh-icon">🚫</div>
-      <div class="rh-val">${tNI}</div>
-      <div class="rh-lbl">Não Iniciadas</div>
-      <div class="rh-sub">Aguardando atendimento</div>
+    <div class="rh-card ${matData?(matLate>0?'danger':matPend>0?'warn':'ok'):''} ${matData?'is-action':''}" ${matData?`onclick="openManagerTarget('mat','pendencias','mat-pend-body','mat-pend-body')" title="Abrir pendências de materiais"`:''}>
+      <div class="rh-icon">RM</div><div class="rh-val">${matData?matPend:'—'}</div><div class="rh-lbl">Materiais pendentes</div><div class="rh-sub">${matData?`${matLate} em atraso`:'Fonte não carregada'}</div>
     </div>
-    <div class="rh-card ${tOrc>0?'warn':'ok'}">
-      <div class="rh-icon">📋</div>
-      <div class="rh-val">${tOrc}</div>
-      <div class="rh-lbl">Em Orçamento</div>
-      <div class="rh-sub">Sem tratativa definida</div>
-    </div>
-    ${matData?`<div class="rh-card ${matData.items.filter(i=>i.isPending&&i.isOverdue).length>0?'danger':'warn'}">
-      <div class="rh-icon">📦</div>
-      <div class="rh-val">${matData.items.filter(i=>i.isPending).length}</div>
-      <div class="rh-lbl">Mat. Pendentes</div>
-      <div class="rh-sub">${matData.items.filter(i=>i.isPending&&i.isOverdue).length} em atraso</div>
-      <div class="rh-trend">${matData.items.filter(i=>i.isPending&&i.isOverdue).length>0?'⚠️':'📦'}</div>
-    </div>`:''}
-    <div class="rh-card ok">
-      <div class="rh-icon">✂️</div>
-      <div class="rh-val">${tE}</div>
-      <div class="rh-lbl">Possíveis Encerrar</div>
-      <div class="rh-sub">Prog. zeradas + duplicatas</div>
+    <div class="rh-card ok is-action" onclick="openManagerTarget('os','excecoes','enc-body','enc-body')" title="Abrir possíveis encerramentos">
+      <div class="rh-icon">✓</div><div class="rh-val">${tE}</div><div class="rh-lbl">Possíveis encerrar</div><div class="rh-sub">Programadas zeradas + duplicatas</div>
     </div>
   `;
 
@@ -4456,32 +4674,32 @@ function renderResumo(osData, matData){
   // Filiais acima da meta
   Object.entries(d).forEach(([fil,f])=>{
     if(f.pct_paradas>META){
-      alertas.push({cls:'al-danger',icon:'🔴',title:`${NM[fil]||fil}: ${f.pct_paradas}% de paradas (meta ${META}%)`,desc:`${f.paradas} máquinas paradas em frota de ${f.frota} unidades. Excede meta em ${(f.pct_paradas-META).toFixed(1)} pontos.`});
+      alertas.push({cls:'al-danger',icon:'●',title:`${NM[fil]||fil}: ${f.pct_paradas}% de paradas (meta ${META}%)`,desc:`${f.paradas} máquinas paradas em frota de ${f.frota} unidades. Excede meta em ${(f.pct_paradas-META).toFixed(1)} pontos.`,go:['os','filiais','filial-cards']});
     }
   });
   // OS muito antigas
-  if(t45>0) alertas.push({cls:'al-danger',icon:'⏱',title:`${t45} OS com mais de 45 dias sem encerramento`,desc:`Verifique tratativas e acione gestores responsáveis.`});
+  if(t45>0) alertas.push({cls:'al-danger',icon:'45+',title:`${t45} OS com mais de 45 dias sem encerramento`,desc:`Verifique tratativas e acione gestores responsáveis.`,go:['os','excecoes','os45-body','os45-body']});
   // Não iniciadas
-  if(tNI>5) alertas.push({cls:'al-warn',icon:'🚫',title:`${tNI} OS não iniciadas`,desc:`Grande volume de OS aguardando atribuição ou início de atendimento.`});
+  if(tNI>5) alertas.push({cls:'al-warn',icon:'NI',title:`${tNI} OS não iniciadas`,desc:`Grande volume de OS aguardando atribuição ou início de atendimento.`,go:['os','indicadores','kpi-os']});
   // Orçamento parado
-  if(tOrc>0) alertas.push({cls:'al-warn',icon:'📋',title:`${tOrc} OS em orçamento sem tratativa`,desc:`OS aguardando aprovação ou encaminhamento de orçamento.`});
+  if(tOrc>0) alertas.push({cls:'al-warn',icon:'ORC',title:`${tOrc} OS em orçamento sem tratativa`,desc:`OS aguardando aprovação ou encaminhamento de orçamento.`,go:['os','excecoes','orc-body','orc-body']});
   // Materiais atrasados
   if(matData){
     const overdue=matData.items.filter(i=>i.isPending&&i.isOverdue).length;
-    if(overdue>0) alertas.push({cls:'al-danger',icon:'📦',title:`${overdue} itens de material em atraso de prazo`,desc:`Materiais com 1º prazo vencido que ainda não receberam NF.`});
+    if(overdue>0) alertas.push({cls:'al-danger',icon:'RM',title:`${overdue} itens de material em atraso de prazo`,desc:`Materiais com 1º prazo vencido que ainda não receberam NF.`,go:['mat','pendencias','mat-pend-body','mat-pend-body']});
   }
   // Positivo se tudo ok
   if(alertas.length===0) alertas.push({cls:'al-ok',icon:'✅',title:'Nenhum alerta crítico',desc:'Todos os indicadores estão dentro dos parâmetros esperados.'});
 
-  document.getElementById('alertas-list').innerHTML=alertas.map(a=>`
-    <div class="alerta-item ${a.cls}">
+  const alertasVisiveis=alertas.slice(0,5);
+  const alertCount=document.getElementById('alertas-count');
+  if(alertCount) alertCount.textContent=alertas.length;
+  document.getElementById('alertas-list').innerHTML=alertasVisiveis.map((a,i)=>`
+    <div class="alerta-item ${a.cls}" title="${a.desc.replace(/"/g,'&quot;')}" ${a.go?`onclick="openManagerTarget('${a.go[0]}','${a.go[1]}','${a.go[2]||''}','${a.go[3]||''}')"`:''}>
       <div class="al-icon">${a.icon}</div>
-      <div class="al-body">
-        <div class="al-title">${a.title}</div>
-        <div class="al-desc">${a.desc}</div>
-      </div>
+      <div class="al-body"><div class="al-title">${a.title}</div><div class="al-desc">${a.desc}</div></div>
     </div>
-  `).join('');
+  `).join('')+(alertas.length>5?`<div class="alerta-more">+${alertas.length-5} alerta(s) adicional(is)</div>`:'');
 
   // Ranking
   const entries=Object.entries(d).sort((a,b)=>a[1].pct_paradas-b[1].pct_paradas);
@@ -4509,16 +4727,17 @@ function renderResumo(osData, matData){
   const tc=dark?'rgba(255,255,255,.75)':'rgba(0,0,0,.75)';
   const gc=dark?'rgba(255,255,255,.07)':'rgba(0,0,0,.07)';
 
-  // Pie chart - classificação OS
+  // Classificação OS — barra horizontal: comparação mais rápida que gráfico circular
   if(_chartPie)_chartPie.destroy();
   const clsData=osData.clsOSCount||{};
-  const pieLabels=Object.keys(clsData);
-  const pieVals=Object.values(clsData);
-  const pieColors=['rgba(249,115,22,.8)','rgba(239,68,68,.8)','rgba(34,197,94,.8)','rgba(59,130,246,.8)','rgba(168,85,247,.8)','rgba(234,179,8,.8)','rgba(20,184,166,.8)'];
+  const clsSorted=Object.entries(clsData).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  const pieLabels=clsSorted.map(([k])=>k);
+  const pieVals=clsSorted.map(([,v])=>v);
   _chartPie=new Chart(document.getElementById('chart-cls-pie'),{
-    type:'doughnut',
-    data:{labels:pieLabels,datasets:[{data:pieVals,backgroundColor:pieColors.slice(0,pieLabels.length),borderWidth:1,borderColor:dark?'rgba(0,0,0,.3)':'rgba(255,255,255,.5)'}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:tc,font:{size:10,family:'Space Grotesk'},boxWidth:12,padding:8}}}}
+    type:'bar',
+    data:{labels:pieLabels,datasets:[{label:'OS',data:pieVals,backgroundColor:'rgba(249,115,22,.62)',borderRadius:5,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},
+      scales:{x:{beginAtZero:true,ticks:{color:tc,font:{size:9}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:9,family:'Space Grotesk'}},grid:{display:false}}}}
   });
 
   // Meta bar chart
