@@ -1816,8 +1816,20 @@ async function gerarPDF() {
     const gap=2.2,cardW=(188-gap*4)/5;
     cards.forEach((c,i)=>{const xx=11+i*(cardW+gap);doc.setFillColor(...c[2]);doc.setDrawColor(216,220,224);doc.roundedRect(xx,39,cardW,14,1.4,1.4,'FD');doc.setTextColor(...c[3]);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(String(c[1]),xx+3.2,47.4);doc.setFontSize(5.8);doc.text(c[0].toUpperCase(),xx+3.2,51);});
 
-    const statusFill={disponivel:[230,245,234],preventiva:[230,241,249],corretiva:[250,232,234],checklist:[239,241,243],alugada:[255,255,255]};
-    const statusText={disponivel:[45,122,63],preventiva:[21,101,192],corretiva:[180,35,45],checklist:[85,91,99],alugada:[107,114,128]};
+    const statusFill={
+      disponivel:[198,232,207],
+      preventiva:[194,222,245],
+      corretiva:[239,194,199],
+      checklist:[215,220,225],
+      alugada:[255,255,255]
+    };
+    const statusText={
+      disponivel:[30,103,50],
+      preventiva:[13,82,157],
+      corretiva:[158,29,40],
+      checklist:[63,70,78],
+      alugada:[107,114,128]
+    };
 
     doc.setTextColor(64,70,78);doc.setFont('helvetica','bold');doc.setFontSize(7.2);doc.text('POSIÇÃO DA FROTA',11,59);
     doc.setFillColor(239,139,44);doc.rect(11,60.5,188,0.7,'F');
