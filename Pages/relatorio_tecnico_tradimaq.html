@@ -340,7 +340,6 @@ body.pdf-mode #documento{box-shadow:none!important;max-width:100%!important}
   .doc-page{padding:0!important}
   .doc-table-hdr,.doc-table-ftr{padding:0!important}
   .doc-td,.doc-td-first,.doc-td-last{padding:0!important}
-  .doc-footer-preview-row{display:none!important}
   .doc-table{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important}
   .doc-table thead{display:table-header-group!important}
   .doc-table tbody{display:table-row-group!important}
@@ -1269,12 +1268,6 @@ function resetFoto(par, lado) {
 }
 
 /* ════════ RENDER DOCUMENTO ════════ */
-function rodape(){
-  const logoFooter = LOGO ? `<img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">` : '';
-  const ref=safeFile(v('f-tag')||'SEM-TAG');
-  return`<div class="doc-footer"><div class="doc-footer-left"><span class="doc-footer-site">www.tradimaq.com.br</span><span class="doc-footer-ref">RT · ${escHTML(ref)} · ${new Date().getFullYear()}</span></div>${logoFooter}</div>`;
-}
-
 function hdr(dataFmt, cliente, tag){
   const logoHtml = LOGO ? `<img class="doc-logo" src="${LOGO}" alt="Tradimaq">` : `<div class="doc-logo-txt">TRADI<span>MAQ</span></div>`;
   const reportId=`RT-${safeFile(tag==='—'?'XXXX':tag)}-${new Date().getFullYear()}`;
@@ -1383,7 +1376,6 @@ function atualizarCore(){
           </div>
         </div>
       </td></tr>
-      <tr class="doc-footer-preview-row"><td class="doc-td doc-td-last">${rodape()}</td></tr>
       </tbody>
     </table>`;
 
