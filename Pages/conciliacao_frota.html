@@ -27,7 +27,20 @@ button,input,select{font:inherit}.hidden{display:none!important}
 .actions{display:flex;gap:8px;align-items:center;margin-bottom:13px}.run{background:var(--orange);color:#151515;border:0;border-radius:7px;padding:10px 18px;font:800 12px 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.run:disabled{opacity:.45;cursor:not-allowed}.ghost{background:#fff;border:1px solid var(--line);border-radius:7px;padding:9px 13px;color:#4a515a;font:700 11px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.055em;cursor:pointer}.ghost:hover{border-color:var(--orange);color:#9a5016}.load-msg{font-size:12px;color:var(--muted);margin-left:auto}
 .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px}.kpi{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 12px;min-width:0}.kpi-label{font:700 9px 'Barlow Condensed';letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.kpi-value{font:800 25px 'Barlow Condensed';margin-top:2px;line-height:1}.kpi-sub{font-size:10px;color:var(--muted);margin-top:3px}.kpi.ok .kpi-value{color:var(--green)}.kpi.warn .kpi-value{color:var(--amber)}.kpi.bad .kpi-value{color:var(--red)}.kpi.blue .kpi-value{color:var(--blue)}
 .summary-strip{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 13px;margin-bottom:12px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}.summary-strip strong{font:800 12px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em}.client-chips{display:flex;gap:6px;flex-wrap:wrap}.client-chip{background:#f5f6f7;border:1px solid var(--line);border-radius:99px;padding:4px 8px;font-size:10px;color:#525a64}.client-chip b{color:#222}
-.toolbar{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px;display:grid;grid-template-columns:minmax(220px,1fr) 180px auto;gap:8px;margin-bottom:9px}.search{width:100%;border:1px solid #ccd1d7;border-radius:6px;padding:9px 11px;outline:none}.search:focus{border-color:var(--orange)}.model-filter{border:1px solid #ccd1d7;border-radius:6px;padding:8px;background:#fff;min-width:0}.pills{display:flex;gap:5px;flex-wrap:wrap}.pill{border:1px solid #ccd1d7;background:#fff;border-radius:6px;padding:7px 10px;font:700 10px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.045em;cursor:pointer;color:#505760}.pill.active{background:var(--ink2);border-color:var(--ink2);color:#fff}.pill.crit.active{background:var(--red);border-color:var(--red)}.pill.div.active{background:#c98218;border-color:#c98218}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px;display:grid;grid-template-columns:minmax(220px,1fr) 180px minmax(230px,300px) auto;gap:8px;margin-bottom:9px}.search{width:100%;border:1px solid #ccd1d7;border-radius:6px;padding:9px 11px;outline:none}.search:focus{border-color:var(--orange)}.model-filter{border:1px solid #ccd1d7;border-radius:6px;padding:8px;background:#fff;min-width:0}.pills{display:flex;gap:5px;flex-wrap:wrap}.pill{border:1px solid #ccd1d7;background:#fff;border-radius:6px;padding:7px 10px;font:700 10px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.045em;cursor:pointer;color:#505760}.pill.active{background:var(--ink2);border-color:var(--ink2);color:#fff}.pill.crit.active{background:var(--red);border-color:var(--red)}.pill.div.active{background:#c98218;border-color:#c98218}
+.toolbar{position:relative;z-index:30}
+.ms{position:relative;min-width:0}
+.ms-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #e3c48f;border-radius:8px;padding:8px 10px;background:#fffaf0;color:#6d4a10;font-weight:600;cursor:pointer;text-align:left}
+.ms-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ms-btn i{font-style:normal;flex:0 0 auto}
+.ms.on .ms-btn{border-color:var(--orange);background:#fff3e3;box-shadow:0 0 0 2px rgba(238,135,50,.18)}
+.ms-panel{position:absolute;top:calc(100% + 5px);left:0;min-width:100%;width:max-content;max-width:min(420px,90vw);background:#fff;opacity:1;border:1px solid #e3c48f;border-radius:10px;box-shadow:0 14px 34px rgba(30,39,49,.2);z-index:60;overflow:hidden;backdrop-filter:none}
+.ms-list,.ms-opt{background:#fff}.ms-opt:hover{background:#fff3e3}
+.ms-head{display:flex;justify-content:space-between;gap:10px;padding:7px 11px;background:#fff7e8;border-bottom:1px solid #f0dfbd}
+.ms-link{border:0;background:none;color:#9a5016;font:800 10px 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase;cursor:pointer;padding:2px 0}.ms-link:hover{text-decoration:underline}
+.ms-list{max-height:260px;overflow:auto}
+.ms-opt{display:flex;align-items:center;gap:9px;padding:9px 11px;cursor:pointer;font-size:12px;color:#3a2f1e;border-bottom:1px solid #f6efe0}.ms-opt:last-child{border-bottom:0}.ms-opt:hover{background:#fff3e3}
+.ms-opt input{accent-color:var(--orange);width:15px;height:15px;flex:0 0 auto;margin:0}.ms-opt span{flex:1;min-width:0}.ms-opt b{font:800 11px 'Barlow Condensed';color:#9a5016}
+.ms-empty{padding:12px;font-size:12px;color:var(--muted)}
 .table-card{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.03)}.table-wrap{overflow:auto;max-height:63vh}table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;min-width:1120px}thead th{position:sticky;top:0;z-index:4;background:var(--slate);color:#fff;text-align:left;padding:8px 8px;font:700 10px 'Barlow Condensed';letter-spacing:.055em;text-transform:uppercase;border-right:1px solid #68717d;white-space:nowrap}tbody td{padding:8px;border-right:1px solid #edf0f2;border-bottom:1px solid #e5e8eb;vertical-align:middle}tbody tr:hover td{background:#fafbfc}.tpe{font-weight:700}.mono{font-family:'JetBrains Mono',monospace;font-size:10px}.status{display:inline-flex;align-items:center;border-radius:99px;padding:3px 7px;font-weight:700;font-size:10px;white-space:nowrap}.st-disponivel{background:var(--green-bg);color:#1e7448}.st-preventiva{background:var(--blue-bg);color:#1f609d}.st-corretiva{background:var(--red-bg);color:#a32d3c}.st-checklist{background:#eceef0;color:#555d66}.st-alugada{background:#f0f1f3;color:#616872}.sev{display:inline-flex;align-items:center;gap:5px;border-radius:5px;padding:4px 7px;font:800 10px 'Barlow Condensed';letter-spacing:.045em;text-transform:uppercase;white-space:nowrap}.sev-ok{background:var(--green-bg);color:var(--green)}.sev-div{background:var(--amber-bg);color:#98600e}.sev-crit{background:var(--red-bg);color:var(--red)}.sev-missing{background:#eceef0;color:#5f6770}.diag{min-width:280px;line-height:1.28}.diag strong{display:block;font-size:11px;margin-bottom:2px}.diag span{color:#6b737c;font-size:10px}.client{font-weight:600;min-width:190px}.contract{font-family:'JetBrains Mono',monospace;font-size:10px}.osflag{font:600 10px 'JetBrains Mono';color:#5d6570;white-space:nowrap}.empty{padding:42px 20px;text-align:center;color:#737b85}.empty strong{display:block;font:800 17px 'Barlow Condensed';color:#3e454e;margin-bottom:4px;text-transform:uppercase}.footer{font-size:10px;color:#828a94;text-align:center;padding:14px}.toast{position:fixed;right:18px;bottom:18px;background:#17191b;color:#fff;border-left:4px solid var(--orange);padding:10px 14px;border-radius:7px;box-shadow:0 6px 24px rgba(0,0,0,.22);font-size:12px;opacity:0;transform:translateY(12px);pointer-events:none;transition:.2s;z-index:100}.toast.show{opacity:1;transform:none}
 @media(max-width:900px){.wrap{padding:10px}.header{height:62px;padding:0 12px}.brand img{height:22px}.title{font-size:15px}.subtitle{font-size:8px}.header-status{display:none}.intro{align-items:flex-start;flex-direction:column}.privacy{white-space:normal}.upload-grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,1fr)}.toolbar{grid-template-columns:1fr}.pills{overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}.pill{flex:0 0 auto}.table-wrap{max-height:none}table{font-size:13px}tbody td{padding:9px 8px}.diag{min-width:250px}}
 @media(max-width:520px){.brand{gap:9px}.sep{height:27px}.intro h1{font-size:19px}.upload{padding:12px}.upload-icon{width:37px;height:37px}.file-btn{padding:9px 10px}.actions{flex-wrap:wrap}.load-msg{width:100%;margin-left:0}.kpis{grid-template-columns:repeat(2,1fr)}.kpi-value{font-size:23px}.summary-strip{align-items:flex-start;flex-direction:column;gap:7px}.client-chips{max-height:88px;overflow:auto}}
@@ -60,8 +73,6 @@ body{background:linear-gradient(180deg,#eef1f4 0,#f7f8fa 260px,#f3f4f6 100%)}
 .quick-share{display:flex;gap:7px;align-items:center;margin-left:2px}
 .share-btn{border:1px solid #cfd6dc;background:#fff;color:#343b43;border-radius:9px;padding:9px 12px;font:800 10px 'Barlow Condensed';letter-spacing:.055em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:.15s}
 .share-btn:hover{border-color:#929da8;background:#f8fafb}
-.share-btn.wa{border-color:#b9d9c5;background:#f4fbf6;color:#1c6e43}
-.share-btn.wa:hover{background:#eaf7ee;border-color:#8fc9a4}
 .diag-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .copy-row{flex:0 0 auto;border:1px solid #d7dce1;background:#fff;color:#59626c;border-radius:6px;padding:3px 6px;font:800 8px 'Barlow Condensed';letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
 .copy-row:hover{border-color:#9ea8b2;color:#252b31;background:#f7f8f9}
@@ -84,7 +95,7 @@ body{background:linear-gradient(180deg,#eef1f4 0,#f7f8fa 260px,#f3f4f6 100%)}
   .summary-strip{padding:6px 9px;margin-bottom:7px;border-radius:8px;gap:8px;flex-wrap:nowrap;overflow:hidden;min-height:32px;flex:0 0 auto}.summary-strip strong{font-size:10px;white-space:nowrap}.client-chips{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden}.client-chip{padding:3px 7px;font-size:9px;white-space:nowrap}
   .rule-note{margin:0 0 7px;padding:6px 9px;border-radius:8px;font-size:9.5px;flex:0 0 auto}.rule-icon{width:20px;height:20px;border-radius:6px}
   .quick-summary{flex:0 0 auto}
-  .toolbar{padding:6px;border-radius:8px;grid-template-columns:minmax(260px,1fr) 155px auto;gap:6px;margin-bottom:7px;flex:0 0 auto}.search{padding:7px 9px}.model-filter{padding:6px}.pill{padding:6px 8px;font-size:9px}
+  .toolbar{padding:6px;border-radius:8px;grid-template-columns:minmax(220px,1fr) 155px minmax(220px,280px) auto;gap:6px;margin-bottom:7px;flex:0 0 auto}.search{padding:7px 9px}.model-filter{padding:6px}.pill{padding:6px 8px;font-size:9px}
   .table-card{flex:1;min-height:0;border-radius:9px;overflow:hidden}.table-wrap{height:100%;max-height:none}table{font-size:11px;min-width:1060px}thead th{padding:7px 7px;font-size:9px}tbody td{padding:6px 7px}.status{padding:3px 6px;font-size:9px}.sev{padding:4px 6px;font-size:9px}.diag{min-width:255px}.diag strong{font-size:10.5px}.diag span{font-size:9.5px}.client{min-width:160px}.contract,.osflag,.mono{font-size:9px}
   .footer{display:none}
   body.analyzed .intro{display:none}
@@ -205,7 +216,6 @@ html,body{max-width:100%;overflow-x:hidden}
     <button class="ghost hidden" id="exportBtn">▦ Exportar auditoria</button>
     <div class="quick-share">
       <button class="share-btn hidden" id="copySummaryBtn">⧉ Copiar resumo</button>
-      <button class="share-btn wa hidden" id="whatsAppBtn">WhatsApp</button>
     </div>
     <button class="ghost hidden" id="resetBtn">↻ Nova análise</button>
     <div class="load-msg" id="loadMsg">Carregue os dois arquivos para iniciar.</div>
@@ -230,6 +240,13 @@ html,body{max-width:100%;overflow-x:hidden}
     <div class="toolbar">
       <input class="search" id="search" placeholder="Buscar TPE, modelo, série, cliente ou contrato...">
       <select class="model-filter" id="modelFilter"><option value="">Todos os modelos</option></select>
+      <div class="ms" id="typeMs">
+        <button type="button" class="ms-btn" id="typeBtn"><span id="typeLabel">Todos os tipos de divergência</span><i>▾</i></button>
+        <div class="ms-panel hidden" id="typePanel">
+          <div class="ms-head"><button type="button" class="ms-link" id="typeAll">Selecionar todos</button><button type="button" class="ms-link" id="typeClear">Limpar</button></div>
+          <div class="ms-list" id="typeList"></div>
+        </div>
+      </div>
       <div class="pills">
         <button class="pill active" data-filter="all">Todos</button>
         <button class="pill crit" data-filter="critico">Críticos</button>
@@ -258,7 +275,7 @@ html,body{max-width:100%;overflow-x:hidden}
 'use strict';
 if(window.pdfjsLib){pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';}
 
-const state={pdfFile:null,xlsFile:null,patio:[],sistema:[],audit:[],filter:'all',branch:'',date:''};
+const state={types:new Set(),pdfFile:null,xlsFile:null,patio:[],sistema:[],audit:[],filter:'all',branch:'',date:''};
 const $=id=>document.getElementById(id);
 const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim().toUpperCase();
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -335,7 +352,7 @@ function classify(p,s){
 
 function buildAudit(){
   const pm=new Map(state.patio.map(r=>[r.tpe,r])),sm=new Map(state.sistema.map(r=>[r.tpe,r]));const keys=[...new Set([...pm.keys(),...sm.keys()])];
-  state.audit=keys.map(tpe=>{const p=pm.get(tpe),s=sm.get(tpe),c=classify(p,s);return{tpe,modelo:(p&&p.modelo)||(s&&s.modelo)||'—',serie:(s&&s.serie)||(p&&p.serie)||'—',patio:p?p.status:'—',sistema:s?s.status:'—',cliente:s?s.cliente:'',contrato:s?s.contrato:'',osCorr:s?s.osCorr:'',osPrev:s?s.osPrev:'',vendedor:s?s.vendedor:'',...c}}).sort((a,b)=>{const sev={critico:0,divergencia:1,conforme:2};return sev[a.level]-sev[b.level]||a.modelo.localeCompare(b.modelo,'pt-BR')||tpeNum(a.tpe)-tpeNum(b.tpe)});
+  state.audit=keys.map(tpe=>{const p=pm.get(tpe),s=sm.get(tpe),c=classify(p,s);return{tipo:c.level==='conforme'?'':(c.title==='Status divergente'?`Status divergente: Pátio ${p.status} × Sistema ${s.status}`:c.title),tpe,modelo:(p&&p.modelo)||(s&&s.modelo)||'—',serie:(s&&s.serie)||(p&&p.serie)||'—',patio:p?p.status:'—',sistema:s?s.status:'—',cliente:s?s.cliente:'',contrato:s?s.contrato:'',osCorr:s?s.osCorr:'',osPrev:s?s.osPrev:'',vendedor:s?s.vendedor:'',...c}}).sort((a,b)=>{const sev={critico:0,divergencia:1,conforme:2};return sev[a.level]-sev[b.level]||a.modelo.localeCompare(b.modelo,'pt-BR')||tpeNum(a.tpe)-tpeNum(b.tpe)});
 }
 function renderSummary(){
   const total=state.audit.length,ok=state.audit.filter(x=>x.level==='conforme').length,crit=state.audit.filter(x=>x.level==='critico').length,div=state.audit.filter(x=>x.level!=='conforme').length,contracts=state.sistema.filter(x=>x.contrato).length;
@@ -344,14 +361,26 @@ function renderSummary(){
   $('quickSummaryText').textContent=div?`${div} divergência(s) encontrada(s) · ${crit} crítica(s) · ${ok} conforme(s)`:`Nenhuma divergência · ${ok} equipamento(s) conforme(s)`;
   $('clientChips').innerHTML=[...cm.values()].sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'pt-BR')).map(x=>`<span class="client-chip"><b>${esc(x.name)}</b> · ${x.count}</span>`).join('')||'<span class="client-chip">Nenhum contrato com cliente identificado</span>';
   const models=[...new Set(state.audit.map(x=>x.modelo).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));$('modelFilter').innerHTML='<option value="">Todos os modelos</option>'+models.map(m=>`<option>${esc(m)}</option>`).join('');
+  const tm=new Map();state.audit.filter(x=>x.tipo).forEach(x=>tm.set(x.tipo,(tm.get(x.tipo)||0)+1));
+  state.types=new Set();state.typeOpts=[...tm.entries()].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'pt-BR'));renderTypeFilter();
 }
 function rowHtml(r){
   const sev=r.level==='critico'?'<span class="sev sev-crit">● Crítico</span>':r.level==='divergencia'?'<span class="sev sev-div">▲ Divergência</span>':'<span class="sev sev-ok">✓ Conforme</span>';
   const os=[];if(r.osCorr&&r.osCorr!=='0')os.push('CORR '+r.osCorr);if(r.osPrev&&r.osPrev!=='0')os.push('PREV '+r.osPrev);
   return `<tr data-level="${r.level}" data-model="${esc(r.modelo)}"><td>${sev}</td><td class="tpe">${esc(r.tpe)}</td><td>${esc(r.modelo)}</td><td>${patioBadge(r.patio)}</td><td>${statusBadge(r.sistema)}</td><td class="client">${esc(r.cliente||'—')}</td><td class="contract">${esc(r.contrato||'—')}</td><td class="osflag">${esc(os.join(' · ')||'—')}</td><td class="diag"><div class="diag-top"><strong>${esc(r.title)}</strong><button class="copy-row" data-tpe="${esc(r.tpe)}" title="Copiar informação rápida">Copiar</button></div><span>${esc(r.detail)}<br><b>Ação:</b> ${esc(r.action)}</span></td></tr>`;
 }
+function renderTypeFilter(){
+  const opts=state.typeOpts||[];
+  $('typeList').innerHTML=opts.length?opts.map(([t,n])=>`<label class="ms-opt"><input type="checkbox" value="${esc(t)}"${state.types.has(t)?' checked':''}><span>${esc(t)}</span><b>${n}</b></label>`).join(''):'<div class="ms-empty">Nenhuma divergência encontrada.</div>';
+  const k=state.types.size;
+  $('typeLabel').textContent=!k?'Todos os tipos de divergência':k===1?[...state.types][0]:`${k} tipos selecionados`;
+  $('typeMs').classList.toggle('on',k>0);
+}
+function getFiltered(){
+  const q=norm($('search').value),model=$('modelFilter').value;return state.audit.filter(r=>{if(model&&r.modelo!==model)return false;if(state.types.size&&!state.types.has(r.tipo))return false;if(state.filter==='critico'&&r.level!=='critico')return false;if(state.filter==='divergencia'&&r.level==='conforme')return false;if(state.filter==='conforme'&&r.level!=='conforme')return false;if(state.filter==='contrato'&&!r.contrato)return false;if(q&&!norm([r.tpe,r.modelo,r.serie,r.patio,r.sistema,r.cliente,r.contrato,r.title,r.detail].join(' ')).includes(q))return false;return true});
+}
 function renderTable(){
-  const q=norm($('search').value),model=$('modelFilter').value;let arr=state.audit.filter(r=>{if(model&&r.modelo!==model)return false;if(state.filter==='critico'&&r.level!=='critico')return false;if(state.filter==='divergencia'&&r.level==='conforme')return false;if(state.filter==='conforme'&&r.level!=='conforme')return false;if(state.filter==='contrato'&&!r.contrato)return false;if(q&&!norm([r.tpe,r.modelo,r.serie,r.patio,r.sistema,r.cliente,r.contrato,r.title,r.detail].join(' ')).includes(q))return false;return true});
+  const arr=getFiltered();
   $('tbody').innerHTML=arr.map(rowHtml).join('');$('empty').classList.toggle('hidden',arr.length>0);
 }
 
@@ -361,11 +390,12 @@ function quickLine(r){
   return line;
 }
 function buildQuickSummary(){
-  const rows=state.audit.filter(r=>r.level!=='conforme');
+  const rows=getFiltered().filter(r=>r.level!=='conforme');
+  const tipo=[...state.types].join(' | ');
   const crit=rows.filter(r=>r.level==='critico').length;
   const head=`TRADIMAQ${state.branch?' '+state.branch:''}${state.date?' · '+state.date:''}`;
   if(!rows.length)return `${head}\nNenhuma divergência encontrada.`;
-  return [head,`${rows.length} divergência(s) · ${crit} crítica(s)`,...rows.map(quickLine)].join('\n');
+  return [head,tipo?`Tipo: ${tipo}`:'',`${rows.length} divergência(s) · ${crit} crítica(s)`,...rows.map(quickLine)].filter(Boolean).join('\n');
 }
 async function copyText(text){
   try{
@@ -374,17 +404,21 @@ async function copyText(text){
   }catch(e){return false;}
 }
 $('copySummaryBtn').addEventListener('click',async()=>{const ok=await copyText(buildQuickSummary());toast(ok?'Resumo copiado':'Não foi possível copiar');});
-$('whatsAppBtn').addEventListener('click',()=>{window.open(`https://wa.me/?text=${encodeURIComponent(buildQuickSummary())}`,'_blank','noopener');});
 $('tbody').addEventListener('click',async e=>{const b=e.target.closest('.copy-row');if(!b)return;const r=state.audit.find(x=>x.tpe===b.dataset.tpe);if(!r)return;const ok=await copyText(quickLine(r));toast(ok?`${r.tpe} copiado`:'Não foi possível copiar');});
 
 $('runBtn').addEventListener('click',async()=>{
   try{$('runBtn').disabled=true;$('loadMsg').textContent='Lendo PDF do pátio...';const p=await parsePatioPdf(state.pdfFile);state.patio=p.rows;state.branch=p.branch;state.date=p.date;$('pdfMeta').textContent=`${state.patio.length} equipamentos reconhecidos${p.branch?' · '+p.branch:''}`;
     $('loadMsg').textContent='Lendo Excel do sistema...';state.sistema=await parseSystemExcel(state.xlsFile);$('xlsMeta').textContent=`${state.sistema.length} equipamentos reconhecidos`;
     if(!state.patio.length)throw new Error('Não consegui reconhecer a tabela de equipamentos no PDF. Use o PDF gerado pelo Status Diário Tradimaq.');if(!state.sistema.length)throw new Error('Não encontrei equipamentos no Excel.');
-    buildAudit();renderSummary();renderTable();$('results').classList.remove('hidden');$('exportBtn').classList.remove('hidden');$('copySummaryBtn').classList.remove('hidden');$('whatsAppBtn').classList.remove('hidden');$('resetBtn').classList.remove('hidden');document.body.classList.add('analyzed');$('hdrBranch').textContent=state.branch?`TRADIMAQ ${state.branch}`:'Auditoria operacional';$('hdrDate').textContent=state.date||'Arquivos conciliados';$('loadMsg').textContent=`Conciliação concluída · ${state.audit.filter(x=>x.level!=='conforme').length} divergência(s) encontrada(s).`;toast('Auditoria concluída');
+    buildAudit();renderSummary();renderTable();$('results').classList.remove('hidden');$('exportBtn').classList.remove('hidden');$('copySummaryBtn').classList.remove('hidden');$('resetBtn').classList.remove('hidden');document.body.classList.add('analyzed');$('hdrBranch').textContent=state.branch?`TRADIMAQ ${state.branch}`:'Auditoria operacional';$('hdrDate').textContent=state.date||'Arquivos conciliados';$('loadMsg').textContent=`Conciliação concluída · ${state.audit.filter(x=>x.level!=='conforme').length} divergência(s) encontrada(s).`;toast('Auditoria concluída');
   }catch(err){console.error(err);$('loadMsg').textContent='Erro: '+err.message;toast(err.message)}finally{$('runBtn').disabled=false}
 });
-$('search').addEventListener('input',renderTable);$('modelFilter').addEventListener('change',renderTable);document.querySelectorAll('.pill').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.filter=b.dataset.filter;renderTable()}));
+$('search').addEventListener('input',renderTable);$('modelFilter').addEventListener('change',renderTable);$('typeBtn').addEventListener('click',e=>{e.stopPropagation();$('typePanel').classList.toggle('hidden')});
+$('typePanel').addEventListener('click',e=>e.stopPropagation());
+$('typeList').addEventListener('change',e=>{const c=e.target.closest('input');if(!c)return;c.checked?state.types.add(c.value):state.types.delete(c.value);renderTypeFilter();renderTable()});
+$('typeAll').addEventListener('click',()=>{state.types=new Set((state.typeOpts||[]).map(x=>x[0]));renderTypeFilter();renderTable()});
+$('typeClear').addEventListener('click',()=>{state.types.clear();renderTypeFilter();renderTable()});
+document.addEventListener('click',()=>$('typePanel').classList.add('hidden'));document.querySelectorAll('.pill').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.filter=b.dataset.filter;renderTable()}));
 $('resetBtn').addEventListener('click',()=>location.reload());
 $('exportBtn').addEventListener('click',()=>{
   const rows=state.audit.map(r=>({'Resultado':r.level==='critico'?'CRÍTICO':r.level==='divergencia'?'DIVERGÊNCIA':'CONFORME','TPE':r.tpe,'Modelo':r.modelo,'Nº Série':r.serie,'Status Pátio':r.patio,'Status Sistema':r.sistema,'Cliente':r.cliente,'Contrato':r.contrato,'OS Corretiva':r.osCorr,'OS Preventiva':r.osPrev,'Diagnóstico':r.title,'Ação sugerida':r.action}));const ws=XLSX.utils.json_to_sheet(rows);ws['!cols']=[{wch:14},{wch:13},{wch:18},{wch:18},{wch:16},{wch:16},{wch:35},{wch:14},{wch:14},{wch:14},{wch:42},{wch:48}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Auditoria');XLSX.writeFile(wb,`Auditoria_Frota_${(state.branch||'Tradimaq').replace(/\s+/g,'_')}_${(state.date||'').replace(/\//g,'')}.xlsx`);toast('Auditoria exportada para Excel');
