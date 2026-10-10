@@ -13,9 +13,6 @@
 <link rel="icon" href="https://gaberoviva-cloud.github.io/Data/5202113.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
     <style>
         :root {
@@ -250,6 +247,7 @@
         @media (max-width: 900px) { .fields-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
         @media (max-width: 640px) {
             body { background:#f4f5f7; }
+            tbody tr:not(:has(.empty-state)) { content-visibility:auto; contain-intrinsic-size:72px; }
             header { height:56px; padding:0 12px; }
             header img { height:24px; max-width:125px; }
             header .title { font-size:10px; }
@@ -291,6 +289,16 @@
         }
 
 
+
+        .load-more-row { display:table-row; }
+        .load-more-cell { text-align:center; padding:12px !important; background:transparent !important; }
+        .load-more-btn { min-height:42px; padding:9px 18px; border:1px solid var(--gray-300); border-radius:8px; background:white; color:var(--gray-700); font:600 12px 'IBM Plex Sans',sans-serif; cursor:pointer; }
+        .load-more-note { display:block; margin-top:5px; font-size:10px; color:var(--gray-500); }
+        @media (max-width:640px){
+            .load-more-row { display:block !important; border:none !important; box-shadow:none !important; background:transparent !important; padding:2px 0 10px !important; }
+            .load-more-row td { display:block !important; text-align:center; }
+            .load-more-btn { width:100%; background:#fff; }
+        }
 
         /* PDF BACKUP / COMPARAÇÃO */
         .pdf-backup-box { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; background:white; border:1px solid var(--gray-300); border-radius:var(--radius); }
@@ -405,7 +413,7 @@
     <div class="search-toolbar">
         <div class="search-wrap">
             <span class="search-icon">⌕</span>
-            <input id="busca" name="ferramenta_busca" type="text" inputmode="text" placeholder="Buscar ferramenta por código ou descrição" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" oninput="filtrarFerramentas(this.value)" onkeyup="filtrarFerramentas(this.value)" onchange="filtrarFerramentas(this.value)">
+            <input id="busca" name="ferramenta_busca" type="text" inputmode="text" placeholder="Buscar ferramenta por código ou descrição" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true">
         </div>
         <div class="draft-state" id="draftState"><span class="draft-dot"></span><span>Rascunho local</span></div>
     </div>
@@ -501,6 +509,41 @@
     const PDF_BACKUP_PREFIX = 'TRADIMAQ_BACKUP_V4_';
     let pdfBackupCarregado = null;
 
+    // Performance mobile-first
+    const IS_MOBILE = window.matchMedia('(max-width: 640px)').matches;
+    const RENDER_CHUNK = IS_MOBILE ? 55 : 140;
+    let renderLimit = RENDER_CHUNK;
+    let searchTimer = null;
+    let draftTimer = null;
+    const SCRIPT_PROMISES = new Map();
+
+    function debounceDraft(){
+        clearTimeout(draftTimer);
+        draftTimer = setTimeout(salvarRascunhoAgora, 220);
+    }
+    function salvarRascunhoAgora(){
+        const payload = { data: data.value, mecanico: mecanico.value, responsavel: responsavel.value, unidade: unidade.value, referencia: referencia.value, itens: Array.from(selectedCodes.entries()) };
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
+        const el=document.getElementById('draftState'); if(el) el.title='Rascunho salvo neste dispositivo';
+    }
+    function loadScriptOnce(src, test){
+        if (test && test()) return Promise.resolve();
+        if (SCRIPT_PROMISES.has(src)) return SCRIPT_PROMISES.get(src);
+        const pr = new Promise((resolve,reject)=>{
+            const sc=document.createElement('script'); sc.src=src; sc.async=true;
+            sc.onload=()=>resolve(); sc.onerror=()=>reject(new Error('Falha ao carregar recurso'));
+            document.head.appendChild(sc);
+        });
+        SCRIPT_PROMISES.set(src,pr); return pr;
+    }
+    async function garantirPDF(){
+        await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',()=>!!window.jspdf);
+        await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js',()=>!!(window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API && window.jspdf.jsPDF.API.autoTable));
+    }
+    async function garantirExcel(){
+        await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',()=>!!window.XLSX);
+    }
+
     const PRESETS = {
         ajudante: new Set(["4.09.000026610","4.09.000029125","4.09.000029487","4.09.000029205","4.09.000029220","4.09.000029200","4.09.000029210","4.09.000029240","4.09.000029230","4.09.000029010","4.09.000029400","4.09.000001007","4.09.000002553","4.09.000002562","4.09.000002563","4.09.000002564","4.09.000002566","4.09.000002572","4.09.000003553","4.09.000003502","4.09.000003504","4.09.000003505","4.09.000003506","4.09.000036320","4.09.000036310","4.09.000036330","4.09.000036410","4.09.000036130","4.09.000036100","4.09.000036030","4.09.000036070","4.09.000036250","4.09.000004551","4.09.000004505","4.09.000004559","4.09.000004509","4.09.000004552","4.09.000025053","4.09.000025051","4.09.000025050","4.09.000006052","4.09.00000006051","4.09.000000057","4.09.00986450778","4.09.00D19TPZ","4.09.000206340","4.09.000000439","4.09.00000050145","4.09.000037030","4.09.000038210","4.09.000038220","4.09.000038230","4.09.000038240","4.09.000038250","4.09.000038260","4.09.00000038104","4.09.0L516CME"]),
         campo: new Set(["4.09.000026610","4.09.000029125","4.09.000029487","4.09.000029205","4.09.000029220","4.09.000029200","4.09.000029210","4.09.000029240","4.09.000029230","4.09.000029010","4.09.000029400","4.09.000039001","4.09.000017110","4.09.000006925","4.09.000000007","4.09.000001002","4.09.000028006","4.09.000028202","4.09.000012061","4.09.000012057","4.09.000012053","4.09.000012055","4.09.000012054","4.09.000012056","4.09.000012058","4.09.000012059","4.09.000012060","4.09.000012062","4.09.000012004","4.09.000012005","4.09.000012006","4.09.000012007","4.09.000012009","4.09.000012011","4.09.000012013","4.09.000012014","4.09.000012012","4.09.00000012016","4.09.000012017","4.09.000012002","4.09.000012052","4.09.000012065","4.09.000012008","4.09.000012010","4.09.000012209","4.09.000002501","4.09.000002502","4.09.000002503","4.09.000002504","4.09.000002505","4.09.000002506","4.09.000002507","4.09.000002508","4.09.000002509","4.09.000002510","4.09.000002511","4.09.000002512","4.09.000002513","4.09.000002514","4.09.000067915","4.09.000002516","4.09.000002517","4.09.000002518","4.09.000002519","4.09.000002520","4.09.000002521","4.09.000002522","4.09.00000000496","4.09.00000002539","4.09.000002524","4.09.000002525","4.09.000002551","4.09.000002552","4.09.000002553","4.09.000002554","4.09.000002555","4.09.000002556","4.09.000002557","4.09.000002558","4.09.000002559","4.09.000002561","4.09.000002562","4.09.000002563","4.09.000002564","4.09.000002565","4.09.000002566","4.09.000002568","4.09.000002572","4.09.000002569","4.09.000002560","4.09.000002526","4.09.000026280","4.09.000026270","4.09.000003553","4.09.000003502","4.09.000003504","4.09.000003505","4.09.000003506","4.09.000036320","4.09.000036290","4.09.000036324","4.09.000036308","4.09.000036310","4.09.000036330","4.09.000036410","4.09.000036130","4.09.000036100","4.09.000036030","4.09.000036070","4.09.000036250","4.09.000004562","4.09.000004553","4.09.000004551","4.09.000004504","4.09.000004505","4.09.000004559","4.09.000004507","4.09.000004560","4.09.000004509","4.09.000004511","4.09.000004513","4.09.000004514","4.09.000004515","4.09.000004516","4.09.000004517","4.09.000004518","4.09.000004558","4.09.000004552","4.09.000004555","4.09.000004501","4.09.000004502","4.09.000024603","4.09.000024604","4.09.000024605","4.09.000024606","4.09.000024607","4.09.000024608","4.09.000024609","4.09.000024610","4.09.000032295","4.09.000032210","4.09.000006001","4.09.00000006003","4.09.000006004","4.09.00000006051","4.09.000006052","4.09.000025052","4.09.000025001","4.09.000025002","4.09.000025003","4.09.000025004","4.09.000025005","4.09.000025006","4.09.000025008","4.09.000025010","4.09.000025051","4.09.000025053","4.09.000000470","4.09.000206340","4.09.000017120","4.09.000000439","4.09.000015230","4.09.00000015240","4.09.00000015250","4.09.00000015300","4.09.00000015270","4.09.00000015005","4.09.00000015006","4.09.00000015007","4.09.000019008","4.09.000019009","4.09.000019010","4.09.000019011","4.09.000019012","4.09.000019013","4.09.000019014","4.09.000017467","4.09.000015016","4.09.00000015017","4.09.00000015018","4.09.000021006","4.09.00000015020","4.09.000019022","4.09.00000015022","4.09.000019025","4.09.000019027","4.09.00000001938","4.09.00000019716","4.09.00000001912","4.09.00000019916","4.09.00000191932","4.09.00000001958","4.09.00000191116","4.09.00000001934","4.09.00000192532","4.09.00000191316","4.09.00000001978","4.09.00000192932","4.09.00000191516","4.09.00000000191","4.09.00000015067","4.09.00000015068","4.09.00000015069","4.09.00000015070","4.09.00000013200","4.09.00000013220","4.09.00000013250","4.09.00000013270","4.09.00000013230","4.09.00000013001","4.09.00000013002","4.09.00000013003","4.09.00000013004","4.09.00000013005","4.09.00000013006","4.09.00000013007","4.09.00000013008","4.09.00000013009","4.09.00000013010","4.09.00000013011","4.09.00000100000","4.09.000000319","4.09.000000424","4.09.00000031996","4.09.000000016","4.09.000000014","4.09.0000M3005","4.09.0000M4007","4.09.0000M5008","4.09.00000M601","4.09.000M80125","4.09.00000015220","4.09.00000050145","4.09.000037030","4.09.000000425","4.09.0530109B1","4.09.000000107","4.09.000038001","4.09.000038002","4.09.000038210","4.09.000038220","4.09.000038230","4.09.000038240","4.09.000038250","4.09.000038260","4.09.00000015755","4.09.000015156","4.09.000000699","4.09.00000017458","4.09.00000017402","4.09.00000017009","4.09.000017407","4.09.00000017418","4.09.00000038104","4.09.0L516CME","4.09.00000000343","4.09.00000000344","4.09.00000000345","4.09.00000000346","4.09.00000000347","4.09.00000000348","4.09.00000000349","4.09.00000000350","4.09.00000000351","4.09.00000079452","4.09.00000079453","4.09.00000012500","4.09.000003219"])
@@ -519,11 +562,7 @@
         const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
         return local.toISOString().split('-').slice(0,3).join('-').split('T')[0];
     }
-    function salvarRascunho() {
-        const payload = { data: data.value, mecanico: mecanico.value, responsavel: responsavel.value, unidade: unidade.value, referencia: referencia.value, itens: Array.from(selectedCodes.entries()) };
-        localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
-        const el=document.getElementById('draftState'); if(el) el.title='Rascunho salvo neste dispositivo';
-    }
+    function salvarRascunho() { debounceDraft(); }
     function restaurarRascunho() {
         if (rascunhoRestaurado) return; rascunhoRestaurado = true;
         try {
@@ -535,7 +574,7 @@
     }
     function novoChecklist() {
         if(!confirm('Iniciar um novo checklist? O rascunho atual será apagado.')) return;
-        selectedCodes.clear(); data.value=getTodayISO(); ['mecanico','responsavel','unidade','referencia','busca'].forEach(id=>document.getElementById(id).value='');
+        clearTimeout(draftTimer); selectedCodes.clear(); data.value=getTodayISO(); ['mecanico','responsavel','unidade','referencia','busca'].forEach(id=>document.getElementById(id).value='');
         filtroStatus='todos'; document.querySelectorAll('.filter-chip').forEach(b=>b.classList.toggle('active',b.dataset.filter==='todos'));
         ferramentas=[...bancoBase]; filtrado=[...bancoBase]; setActivePreset(document.getElementById('preset-geral')); localStorage.removeItem(DRAFT_KEY); render(); showToast('Novo checklist iniciado.');
     }
@@ -764,7 +803,8 @@
         if (cached) {
             try {
                 const data = JSON.parse(cached);
-                ferramentas = data; bancoBase = [...data]; filtrado = [...data];
+                const preparado = data.map(i => ({...i, _search: normalizeStr(`${i.codigo || ''} ${i.descricao || ''}`)}));
+                ferramentas = preparado; bancoBase = [...preparado]; filtrado = [...preparado];
                 render(); restaurarRascunho(); showLoading(false);
                 fetchJSON().catch(() => document.getElementById("offlineBadge").style.display = "inline");
                 return;
@@ -772,7 +812,8 @@
         }
         try {
             const data = await fetchJSON();
-            ferramentas = data; bancoBase = [...data]; filtrado = [...data];
+            const preparado = data.map(i => ({...i, _search: normalizeStr(`${i.codigo || ''} ${i.descricao || ''}`)}));
+            ferramentas = preparado; bancoBase = [...preparado]; filtrado = [...preparado];
             render(); restaurarRascunho();
         } catch(e) {
             document.getElementById("tabela").innerHTML = `<tr><td colspan="6"><div class="empty-state"><div class="icon">⚠️</div><p>Sem conexão e sem cache. Conecte-se uma vez para ativar o modo offline.</p></div></td></tr>`;
@@ -784,7 +825,7 @@
         const r = await fetch('https://gaberoviva-cloud.github.io/Data/ferramentas.json');
         if (!r.ok) throw new Error();
         const data = await r.json();
-        const lista = data.map(i => ({ codigo: String(i.codigo).trim(), descricao: String(i.descricao).trim() }));
+        const lista = data.map(i => ({ codigo: String(i.codigo).trim(), descricao: String(i.descricao).trim(), _search: normalizeStr(`${String(i.codigo).trim()} ${String(i.descricao).trim()}`) }));
         localStorage.setItem(CACHE_KEY, JSON.stringify(lista));
         return lista;
     }
@@ -823,11 +864,7 @@
         const termo = normalizeStr(valorBusca == null ? '' : valorBusca).trim();
         const origem = Array.isArray(ferramentas) ? ferramentas : [];
 
-        let base = origem.filter(f => {
-            const codigo = normalizeStr(f && f.codigo != null ? f.codigo : '');
-            const descricao = normalizeStr(f && f.descricao != null ? f.descricao : '');
-            return termo === '' || codigo.includes(termo) || descricao.includes(termo);
-        });
+        let base = origem.filter(f => termo === '' || (f._search || normalizeStr(`${f.codigo || ''} ${f.descricao || ''}`)).includes(termo));
 
         if (filtroStatus === 'selecionados') {
             base = base.filter(f => selectedCodes.has(f.codigo));
@@ -844,6 +881,7 @@
         }
 
         filtrado = base;
+        renderLimit = RENDER_CHUNK;
         render();
     }
 
@@ -862,7 +900,8 @@
             atualizarDashboard(); return;
         }
         const fragment = document.createDocumentFragment();
-        filtrado.forEach(f => {
+        const itensRender = filtrado.slice(0, renderLimit);
+        itensRender.forEach(f => {
             const tr = document.createElement("tr");
             const entry = selectedCodes.get(f.codigo);
             const isSelected = !!entry;
@@ -882,10 +921,20 @@
             fragment.appendChild(tr);
         });
         tabela.appendChild(fragment);
+        if (filtrado.length > renderLimit) {
+            const trMore=document.createElement('tr'); trMore.className='load-more-row';
+            trMore.innerHTML=`<td colspan="6" class="load-more-cell"><button class="load-more-btn" type="button" onclick="carregarMaisItens()">Mostrar mais ${Math.min(RENDER_CHUNK, filtrado.length-renderLimit)} itens</button><span class="load-more-note">${renderLimit} de ${filtrado.length} exibidos</span></td>`;
+            tabela.appendChild(trMore);
+        }
         atualizarDashboard();
         const allChecked = filtrado.length > 0 && filtrado.every(f => selectedCodes.has(f.codigo));
         const sa = document.getElementById("selectAll");
         if (sa) sa.checked = allChecked;
+    }
+
+    function carregarMaisItens(){
+        renderLimit += RENDER_CHUNK;
+        render();
     }
 
     function toggleSelect(checkbox, code) {
@@ -1007,6 +1056,7 @@
     }
     async function gerarPDF() {
         if (!validarCampos()) return;
+        try { showToast('Preparando PDF...'); await garantirPDF(); } catch(e) { showToast('Não foi possível carregar o gerador de PDF.'); return; }
         const { jsPDF } = window.jspdf; const doc=new jsPDF({unit:'mm',format:'a4',compress:false});
         const backupPayload=montarBackupPDF();
         const backupMarcador=PDF_BACKUP_PREFIX+encodeBackupPDF(backupPayload);
@@ -1059,8 +1109,9 @@
         showToast('PDF gerado com backup restaurável.');
     }
 
-    function gerarExcel() {
+    async function gerarExcel() {
         if (!validarCampos()) return;
+        try { showToast('Preparando Excel...'); await garantirExcel(); } catch(e) { showToast('Não foi possível carregar o gerador de Excel.'); return; }
         const mecanico = document.getElementById("mecanico").value.trim();
         const lista = [];
         selectedCodes.forEach((entry, code) => {
@@ -1078,10 +1129,14 @@
 
     const campoBusca = document.getElementById("busca");
     if (campoBusca) {
-        campoBusca.addEventListener("input", () => filtrarFerramentas(campoBusca.value));
-        campoBusca.addEventListener("search", () => filtrarFerramentas(campoBusca.value));
+        const executarBusca=()=>{
+            clearTimeout(searchTimer);
+            searchTimer=setTimeout(()=>filtrarFerramentas(campoBusca.value), IS_MOBILE ? 90 : 45);
+        };
+        campoBusca.addEventListener("input", executarBusca, {passive:true});
+        campoBusca.addEventListener("search", executarBusca, {passive:true});
     }
-    ['data','mecanico','responsavel','unidade','referencia'].forEach(id => document.getElementById(id).addEventListener('input', salvarRascunho));
+    ['data','mecanico','responsavel','unidade','referencia'].forEach(id => document.getElementById(id).addEventListener('input', debounceDraft, {passive:true}));
 
     // PWA Manifest inline
     const manifest = { name:"Controle de Ferramentas — Tradimaq", short_name:"Ferramentas", start_url:"./", display:"standalone", background_color:"#f3f4f6", theme_color:"#ff7a00", icons:[{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"192x192",type:"image/png"},{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"512x512",type:"image/png"}] };
@@ -1090,11 +1145,8 @@
     // Service Worker para PWA offline
     if ('serviceWorker' in navigator) {
         const swCode = `
-const CACHE='tradimaq-v1';
+const CACHE='tradimaq-v2-mobile';
 const ASSETS=['./',
-'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
-'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
-'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js',
 'https://gaberoviva-cloud.github.io/LOGO_tradimaq_branca.png',
 'https://gaberoviva-cloud.github.io/Data/ferramentas.json'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>{})));self.skipWaiting();});
@@ -1104,6 +1156,7 @@ self.addEventListener('fetch',e=>{e.respondWith(fetch(e.request).then(r=>{const 
         navigator.serviceWorker.register(swUrl).catch(()=>{});
     }
 
+    window.addEventListener('pagehide', salvarRascunhoAgora);
     carregarCSV();
 </script>
 </body>
