@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-title" content="Ferramentas">
     <link rel="manifest" id="pwa-manifest">
     <title>Controle de Ferramentas - Tradimaq</title>
-    <link rel="icon" href="https://gaberoviva-cloud.github.io/Data/5202113.png">
+<link rel="icon" href="https://gaberoviva-cloud.github.io/Data/5202113.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -165,6 +165,12 @@
         input[type="checkbox"] { accent-color: var(--brand); width: 20px; height: 20px; cursor: pointer; }
         input.qty-input { width: 58px; padding: 5px 6px; font-size: 14px; font-family: 'IBM Plex Mono', monospace; border: 1px solid var(--gray-300); border-radius: var(--radius); text-align: center; outline: none; }
         input.qty-input:focus { border-color: var(--brand); }
+        .mobile-qty { display:none; align-items:center; gap:6px; margin-top:7px; }
+        .mobile-qty-label { font-size:10px; font-weight:700; color:var(--gray-500); text-transform:uppercase; letter-spacing:.04em; }
+        .qty-stepper { display:inline-flex; align-items:center; border:1px solid var(--gray-300); border-radius:8px; overflow:hidden; background:white; }
+        .qty-stepper button { width:32px; height:32px; border:0; background:var(--gray-50); color:var(--gray-900); font-size:18px; cursor:pointer; }
+        .qty-stepper input { width:42px; height:32px; border:0; border-left:1px solid var(--gray-300); border-right:1px solid var(--gray-300); border-radius:0; text-align:center; font-family:'IBM Plex Mono',monospace; font-size:13px; outline:none; }
+        @media (max-width:540px) { .mobile-qty { display:flex; } }
 
         .empty-state { text-align: center; padding: 40px; color: var(--gray-500); }
         .empty-state .icon { font-size: 32px; margin-bottom: 8px; }
@@ -223,7 +229,7 @@
         .draft-state { font-size:11px; color:var(--gray-500); white-space:nowrap; display:flex; align-items:center; gap:6px; }
         .draft-dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; }
         .table-wrap { border:1px solid var(--line); }
-        thead { position:sticky; top:60px; z-index:20; }
+        thead { position:static; } /* evita o deslocamento branco do cabeçalho da tabela no desktop */
         th { padding:11px 10px; background:#2f343a; }
         td { padding:12px 10px; }
         .tool-name { font-size:13px; font-weight:500; color:var(--gray-900); }
@@ -284,6 +290,53 @@
             #toast { font-size:12px; max-width:94vw; white-space:normal; text-align:center; }
         }
 
+
+
+        /* PDF BACKUP / COMPARAÇÃO */
+        .pdf-backup-box { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px; background:white; border:1px solid var(--gray-300); border-radius:var(--radius); }
+        .pdf-backup-copy { min-width:0; }
+        .pdf-backup-title { font-size:12px; font-weight:700; color:var(--gray-900); margin-bottom:2px; }
+        .pdf-backup-desc { font-size:11px; color:var(--gray-500); line-height:1.35; }
+        .pdf-backup-actions { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+        .modal-backdrop { display:none; position:fixed; inset:0; z-index:500; background:rgba(17,24,39,.58); padding:18px; align-items:center; justify-content:center; }
+        .modal-backdrop.open { display:flex; }
+        .compare-modal { width:min(980px,100%); max-height:min(86vh,760px); overflow:hidden; background:white; border-radius:14px; box-shadow:0 24px 70px rgba(0,0,0,.28); display:flex; flex-direction:column; }
+        .compare-head { padding:16px 18px 12px; border-bottom:1px solid var(--gray-300); display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+        .compare-title { font-size:16px; font-weight:700; color:var(--gray-900); }
+        .compare-subtitle { font-size:11px; color:var(--gray-500); margin-top:3px; word-break:break-word; }
+        .compare-close { border:0; background:var(--gray-100); width:36px; height:36px; border-radius:10px; cursor:pointer; font-size:20px; color:var(--gray-700); }
+        .compare-body { overflow:auto; padding:14px 18px 18px; }
+        .compare-meta { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:12px; }
+        .compare-stat { background:var(--gray-50); border:1px solid var(--gray-300); border-radius:10px; padding:10px 12px; }
+        .compare-stat span { display:block; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--gray-500); }
+        .compare-stat strong { display:block; margin-top:2px; font-size:20px; color:var(--gray-900); }
+        .compare-info { padding:10px 12px; margin-bottom:12px; border-radius:10px; background:#fff8f0; border:1px solid #fed7aa; color:#7c2d12; font-size:11px; }
+        .compare-toolbar { display:flex; align-items:center; justify-content:flex-end; gap:8px; margin:0 0 10px; }
+        .compare-filter-btn { min-height:36px; padding:0 12px; border:1px solid var(--gray-300); background:white; color:var(--gray-700); border-radius:9px; font-family:inherit; font-size:11px; font-weight:700; cursor:pointer; }
+        .compare-filter-btn.active { background:var(--gray-900); border-color:var(--gray-900); color:white; }
+        .compare-table-wrap { overflow:auto; border:1px solid var(--gray-300); border-radius:10px; }
+        .compare-table { min-width:720px; }
+        .compare-table th { position:sticky; top:0; z-index:1; }
+        .compare-table td { font-size:12px; }
+        .diff-badge { display:inline-flex; border-radius:99px; padding:4px 8px; font-size:10px; font-weight:700; white-space:nowrap; }
+        .diff-same { background:#ecfdf3; color:#166534; }
+        .diff-added { background:#eff6ff; color:#1d4ed8; }
+        .diff-removed { background:#fef2f2; color:#b91c1c; }
+        .diff-changed { background:#fff7ed; color:#c2410c; }
+        .compare-actions { padding:12px 18px; border-top:1px solid var(--gray-300); display:flex; justify-content:flex-end; gap:8px; background:var(--gray-50); }
+        .compare-actions button { min-height:42px; padding:0 15px; border-radius:9px; border:1px solid var(--gray-300); background:white; font-family:inherit; font-weight:700; cursor:pointer; }
+        .compare-actions .restore { background:var(--brand); color:white; border-color:var(--brand); }
+        @media(max-width:650px){
+            .pdf-backup-box { align-items:stretch; flex-direction:column; }
+            .pdf-backup-actions { justify-content:stretch; }
+            .pdf-backup-actions .btn-sm { flex:1; }
+            .modal-backdrop { padding:8px; align-items:flex-end; }
+            .compare-modal { max-height:92vh; border-radius:16px 16px 0 0; }
+            .compare-meta { grid-template-columns:repeat(2,1fr); }
+            .compare-actions { flex-direction:column-reverse; }
+            .compare-actions button { width:100%; }
+        }
+
     </style>
 </head>
 <body>
@@ -335,12 +388,18 @@
     </div>
 
     <div class="backup-section" id="backupSection">
-        <div class="backup-row">
-            <input id="codigoSave" placeholder="Código de backup...">
-            <button class="btn-sm primary" onclick="gerarCodigo()">Gerar</button>
-            <button class="btn-sm" onclick="carregarCodigo()">Carregar</button>
-            <button class="btn-sm" onclick="copiarCodigo()">Copiar</button>
+        <div class="pdf-backup-box">
+            <div class="pdf-backup-copy">
+                <div class="pdf-backup-title">Backup incorporado ao PDF</div>
+                <div class="pdf-backup-desc">Todo PDF gerado pela ferramenta guarda uma cópia restaurável do checklist. Importe um PDF para recuperar/comparar com a conferência atual ou selecione dois PDFs para auditoria entre períodos.</div>
+            </div>
+            <div class="pdf-backup-actions">
+                <button class="btn-sm primary" onclick="document.getElementById('pdfBackupInput').click()">Importar PDF / Comparar atual</button>
+                <button class="btn-sm" onclick="document.getElementById('pdfCrossInput').click()">Cruzar 2 PDFs</button>
+            </div>
         </div>
+        <input id="pdfBackupInput" type="file" accept="application/pdf,.pdf" hidden onchange="importarPDFBackup(this.files && this.files[0]); this.value=''">
+        <input id="pdfCrossInput" type="file" accept="application/pdf,.pdf" multiple hidden onchange="cruzarPDFs(this.files); this.value=''">
     </div>
 
     <div class="search-toolbar">
@@ -391,11 +450,41 @@
             <span class="icon">✓</span><span>Conferir itens visíveis</span>
         </button>
         <button class="sheet-btn" onclick="toggleBackup(); fecharSheet()">
-            <span class="icon">↕</span> Backup / Restaurar
+            <span class="icon">↕</span> Backup / Comparar PDF
         </button>
         <button class="sheet-btn danger" onclick="novoChecklist(); fecharSheet()">
             <span class="icon">＋</span> Novo checklist
         </button>
+    </div>
+</div>
+
+
+<div class="modal-backdrop" id="compareBackdrop" onclick="fecharComparacaoPDF(event)">
+    <div class="compare-modal" onclick="event.stopPropagation()">
+        <div class="compare-head">
+            <div>
+                <div class="compare-title">Comparação de checklist</div>
+                <div class="compare-subtitle" id="compareSubtitle">PDF importado</div>
+            </div>
+            <button class="compare-close" onclick="fecharComparacaoPDF()" aria-label="Fechar">×</button>
+        </div>
+        <div class="compare-body">
+            <div class="compare-meta" id="compareMeta"></div>
+            <div class="compare-info" id="compareInfo"></div>
+            <div class="compare-toolbar">
+                <button class="compare-filter-btn" id="compareDiffToggle" type="button" onclick="toggleSomenteDivergentes()">Somente divergentes</button>
+            </div>
+            <div class="compare-table-wrap">
+                <table class="compare-table">
+                    <thead><tr><th>Código</th><th>Descrição</th><th id="compareLeftHeader">PDF anterior</th><th id="compareRightHeader">Atual</th><th>Comparação</th></tr></thead>
+                    <tbody id="compareRows"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="compare-actions">
+            <button onclick="fecharComparacaoPDF()">Fechar</button>
+            <button class="restore" id="restorePdfButton" onclick="restaurarDoPDF()">Restaurar checklist do PDF</button>
+        </div>
     </div>
 </div>
 
@@ -409,6 +498,8 @@
     let filtroStatus = 'todos';
     let rascunhoRestaurado = false;
     const DRAFT_KEY = 'tradimaq_ferramentas_checklist_v2';
+    const PDF_BACKUP_PREFIX = 'TRADIMAQ_BACKUP_V4_';
+    let pdfBackupCarregado = null;
 
     const PRESETS = {
         ajudante: new Set(["4.09.000026610","4.09.000029125","4.09.000029487","4.09.000029205","4.09.000029220","4.09.000029200","4.09.000029210","4.09.000029240","4.09.000029230","4.09.000029010","4.09.000029400","4.09.000001007","4.09.000002553","4.09.000002562","4.09.000002563","4.09.000002564","4.09.000002566","4.09.000002572","4.09.000003553","4.09.000003502","4.09.000003504","4.09.000003505","4.09.000003506","4.09.000036320","4.09.000036310","4.09.000036330","4.09.000036410","4.09.000036130","4.09.000036100","4.09.000036030","4.09.000036070","4.09.000036250","4.09.000004551","4.09.000004505","4.09.000004559","4.09.000004509","4.09.000004552","4.09.000025053","4.09.000025051","4.09.000025050","4.09.000006052","4.09.00000006051","4.09.000000057","4.09.00986450778","4.09.00D19TPZ","4.09.000206340","4.09.000000439","4.09.00000050145","4.09.000037030","4.09.000038210","4.09.000038220","4.09.000038230","4.09.000038240","4.09.000038250","4.09.000038260","4.09.00000038104","4.09.0L516CME"]),
@@ -454,6 +545,215 @@
     function abrirSheet()  { document.getElementById("sheetBackdrop").classList.add("open"); }
     function fecharSheet() { document.getElementById("sheetBackdrop").classList.remove("open"); }
     function toggleBackup(){ document.getElementById("backupSection").classList.toggle("open"); }
+
+    function montarBackupPDF(){
+        const itens=[];
+        selectedCodes.forEach((entry,code)=>{
+            const f=bancoBase.find(x=>x.codigo===code)||ferramentas.find(x=>x.codigo===code);
+            itens.push([code, f?f.descricao:'', Number(entry.qty)||1, entry.status===1?1:0]);
+        });
+        return {
+            app:'tradimaq-ferramentas', version:5, createdAt:new Date().toISOString(),
+            meta:{
+                data:document.getElementById('data').value,
+                mecanico:document.getElementById('mecanico').value.trim(),
+                responsavel:document.getElementById('responsavel').value.trim(),
+                unidade:document.getElementById('unidade').value.trim(),
+                referencia:document.getElementById('referencia').value.trim()
+            },
+            itens
+        };
+    }
+    function encodeBackupPDF(obj){
+        return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+    }
+    function decodeBackupPDF(txt){
+        return JSON.parse(decodeURIComponent(escape(atob(txt))));
+    }
+    function bytesParaASCII(bytes){
+        // O marcador de backup é gravado em ASCII puro após o EOF do PDF.
+        // Ler byte a byte evita diferenças de encoding entre Chrome, Edge e navegadores mobile.
+        let out=''; const step=32768;
+        for(let i=0;i<bytes.length;i+=step) out += String.fromCharCode(...bytes.subarray(i,Math.min(i+step,bytes.length)));
+        return out;
+    }
+    async function lerBackupDoPDF(file){
+        if(!file) throw new Error('arquivo-ausente');
+        if(!/\.pdf$/i.test(file.name) && file.type!=='application/pdf') throw new Error('arquivo-nao-pdf');
+        const bytes=new Uint8Array(await file.arrayBuffer());
+        const raw=bytesParaASCII(bytes);
+        const idx=raw.lastIndexOf(PDF_BACKUP_PREFIX);
+        if(idx<0) throw new Error('marker-not-found');
+        const inicio=idx+PDF_BACKUP_PREFIX.length;
+        let fim=raw.indexOf('\n',inicio);
+        if(fim<0) fim=raw.length;
+        const encoded=raw.slice(inicio,fim).trim();
+        if(!encoded) throw new Error('empty-backup');
+        const payload=decodeBackupPDF(encoded);
+        if(!payload || payload.app!=='tradimaq-ferramentas' || !Array.isArray(payload.itens)) throw new Error('invalid-backup');
+        return payload;
+    }
+    async function importarPDFBackup(file){
+        if(!file) return;
+        try{
+            showToast('Lendo backup do PDF...');
+            const payload=await lerBackupDoPDF(file);
+            pdfBackupCarregado=payload;
+            abrirComparacaoPDF(payload,file.name);
+        }catch(e){
+            console.error('Falha ao importar backup PDF:',e);
+            alert('Não foi possível recuperar o backup deste PDF. Use um PDF gerado pela V4/V5 da ferramenta. PDFs antigos sem backup incorporado continuam válidos apenas como documento.');
+        }
+    }
+    async function cruzarPDFs(fileList){
+        const files=Array.from(fileList||[]);
+        if(files.length!==2){
+            alert('Selecione exatamente 2 PDFs para realizar o cruzamento.');
+            return;
+        }
+        try{
+            showToast('Lendo os dois PDFs...');
+            const [payloadA,payloadB]=await Promise.all([lerBackupDoPDF(files[0]),lerBackupDoPDF(files[1])]);
+            pdfBackupCarregado=null;
+            abrirComparacaoEntrePDFs(payloadA,files[0].name,payloadB,files[1].name);
+        }catch(e){
+            console.error('Falha ao cruzar PDFs:',e);
+            alert('Não foi possível cruzar os PDFs. Os dois arquivos precisam ter sido gerados pela V4/V5 e conter o backup incorporado.');
+        }
+    }
+    let somenteDivergentesComparacao = false;
+
+    function resetFiltroComparacao(){
+        somenteDivergentesComparacao = false;
+        const btn=document.getElementById('compareDiffToggle');
+        if(btn){ btn.classList.remove('active'); btn.textContent='Somente divergentes'; }
+        document.querySelectorAll('#compareRows tr[data-divergente]').forEach(tr=>tr.style.display='');
+    }
+    function toggleSomenteDivergentes(){
+        somenteDivergentesComparacao = !somenteDivergentesComparacao;
+        const btn=document.getElementById('compareDiffToggle');
+        if(btn){
+            btn.classList.toggle('active',somenteDivergentesComparacao);
+            btn.textContent=somenteDivergentesComparacao?'Ver todos':'Somente divergentes';
+        }
+        document.querySelectorAll('#compareRows tr[data-divergente]').forEach(tr=>{
+            tr.style.display = (somenteDivergentesComparacao && tr.dataset.divergente==='0') ? 'none' : '';
+        });
+    }
+
+    function mapaAtual(){
+        const m=new Map();
+        selectedCodes.forEach((e,c)=>{
+            const f=bancoBase.find(x=>x.codigo===c)||ferramentas.find(x=>x.codigo===c);
+            m.set(c,{descricao:f?f.descricao:'',qty:Number(e.qty)||1,status:e.status===1?1:0});
+        });
+        return m;
+    }
+    function mapaBackup(payload){
+        const m=new Map();
+        payload.itens.forEach(i=>m.set(String(i[0]),{descricao:String(i[1]||''),qty:Number(i[2])||1,status:Number(i[3])===1?1:0}));
+        return m;
+    }
+    function estadoTexto(e){ return `${e.qty} un. · ${e.status===1?'Conferido':'Pendente'}`; }
+    function escaparHTML(v){ return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
+    function abrirComparacaoPDF(payload,nomeArquivo){
+        document.getElementById('compareLeftHeader').textContent='PDF anterior';
+        document.getElementById('compareRightHeader').textContent='Atual';
+        document.getElementById('restorePdfButton').style.display='';
+        const antigo=mapaBackup(payload), atual=mapaAtual();
+        const codigos=[...new Set([...antigo.keys(),...atual.keys()])];
+        codigos.sort((a,b)=>{
+            const da=(atual.get(a)||antigo.get(a)).descricao, db=(atual.get(b)||antigo.get(b)).descricao;
+            return da.localeCompare(db,'pt-BR');
+        });
+        let iguais=0,alterados=0,soPDF=0,soAtual=0;
+        let html='';
+        codigos.forEach(code=>{
+            const a=antigo.get(code), n=atual.get(code), base=n||a;
+            let classe='diff-same', label='Sem alteração';
+            if(a&&!n){classe='diff-removed';label='Somente no PDF';soPDF++;}
+            else if(!a&&n){classe='diff-added';label='Novo no atual';soAtual++;}
+            else if(a.qty!==n.qty || a.status!==n.status){classe='diff-changed';label='Alterado';alterados++;}
+            else iguais++;
+            html += `<tr data-divergente="${classe==='diff-same'?'0':'1'}"><td style="font-family:'IBM Plex Mono',monospace;font-size:10px">${escaparHTML(code)}</td><td>${escaparHTML(base.descricao||'Item')}</td><td>${a?escaparHTML(estadoTexto(a)):'—'}</td><td>${n?escaparHTML(estadoTexto(n)):'—'}</td><td><span class="diff-badge ${classe}">${label}</span></td></tr>`;
+        });
+        document.getElementById('compareRows').innerHTML=html||'<tr><td colspan="5">Nenhum item nos checklists.</td></tr>';
+        document.getElementById('compareSubtitle').textContent=`${nomeArquivo} · ${payload.meta?.mecanico||'Técnico não informado'} · ${formatarDataBR(payload.meta?.data||'')}`;
+        document.getElementById('compareMeta').innerHTML=`
+            <div class="compare-stat"><span>Sem alteração</span><strong>${iguais}</strong></div>
+            <div class="compare-stat"><span>Alterados</span><strong>${alterados}</strong></div>
+            <div class="compare-stat"><span>Somente no PDF</span><strong>${soPDF}</strong></div>
+            <div class="compare-stat"><span>Novos no atual</span><strong>${soAtual}</strong></div>`;
+        const campos=[];
+        const p=payload.meta||{};
+        if(p.unidade) campos.push(`Unidade anterior: <b>${escaparHTML(p.unidade)}</b>`);
+        if(p.referencia) campos.push(`Referência anterior: <b>${escaparHTML(p.referencia)}</b>`);
+        document.getElementById('compareInfo').innerHTML=`O PDF contém <b>${antigo.size}</b> item(ns). O checklist atual contém <b>${atual.size}</b>. ${campos.join(' · ')}`;
+        resetFiltroComparacao();
+        document.getElementById('compareBackdrop').classList.add('open');
+    }
+    function abrirComparacaoEntrePDFs(payloadA,nomeA,payloadB,nomeB){
+        const mapaA=mapaBackup(payloadA), mapaB=mapaBackup(payloadB);
+        const codigos=[...new Set([...mapaA.keys(),...mapaB.keys()])];
+        codigos.sort((a,b)=>{
+            const da=(mapaB.get(a)||mapaA.get(a)).descricao||'';
+            const db=(mapaB.get(b)||mapaA.get(b)).descricao||'';
+            return da.localeCompare(db,'pt-BR');
+        });
+        let iguais=0,alterados=0,soA=0,soB=0;
+        let html='';
+        codigos.forEach(code=>{
+            const a=mapaA.get(code), b=mapaB.get(code), base=b||a;
+            let classe='diff-same', label='Sem alteração';
+            if(a&&!b){classe='diff-removed';label='Saiu do checklist';soA++;}
+            else if(!a&&b){classe='diff-added';label='Entrou no checklist';soB++;}
+            else if(a.qty!==b.qty || a.status!==b.status || normalizeStr(a.descricao)!==normalizeStr(b.descricao)){classe='diff-changed';label='Alterado';alterados++;}
+            else iguais++;
+            html += `<tr data-divergente="${classe==='diff-same'?'0':'1'}"><td style="font-family:'IBM Plex Mono',monospace;font-size:10px">${escaparHTML(code)}</td><td>${escaparHTML(base.descricao||'Item')}</td><td>${a?escaparHTML(estadoTexto(a)):'—'}</td><td>${b?escaparHTML(estadoTexto(b)):'—'}</td><td><span class="diff-badge ${classe}">${label}</span></td></tr>`;
+        });
+        const metaA=payloadA.meta||{}, metaB=payloadB.meta||{};
+        const diferencasMeta=[];
+        [['Data','data'],['Técnico','mecanico'],['Responsável','responsavel'],['Unidade','unidade'],['OS / Referência','referencia']].forEach(([rotulo,chave])=>{
+            const va=String(metaA[chave]||'—'), vb=String(metaB[chave]||'—');
+            if(va!==vb) diferencasMeta.push(`${rotulo}: <b>${escaparHTML(va)}</b> → <b>${escaparHTML(vb)}</b>`);
+        });
+        document.getElementById('compareRows').innerHTML=html||'<tr><td colspan="5">Nenhum item nos checklists.</td></tr>';
+        document.getElementById('compareSubtitle').textContent=`${nomeA} × ${nomeB}`;
+        document.getElementById('compareLeftHeader').textContent='PDF A';
+        document.getElementById('compareRightHeader').textContent='PDF B';
+        document.getElementById('compareMeta').innerHTML=`
+            <div class="compare-stat"><span>Sem alteração</span><strong>${iguais}</strong></div>
+            <div class="compare-stat"><span>Alterados</span><strong>${alterados}</strong></div>
+            <div class="compare-stat"><span>Só no PDF A</span><strong>${soA}</strong></div>
+            <div class="compare-stat"><span>Só no PDF B</span><strong>${soB}</strong></div>`;
+        document.getElementById('compareInfo').innerHTML=`PDF A: <b>${mapaA.size}</b> item(ns) · PDF B: <b>${mapaB.size}</b> item(ns). ${diferencasMeta.length ? '<br><br><b>Alterações no registro:</b> '+diferencasMeta.join(' · ') : '<br><br>Nenhuma alteração nos dados principais do registro.'}`;
+        document.getElementById('restorePdfButton').style.display='none';
+        resetFiltroComparacao();
+        document.getElementById('compareBackdrop').classList.add('open');
+    }
+
+    function fecharComparacaoPDF(event){
+        if(event && event.target && event.target.id!=='compareBackdrop') return;
+        document.getElementById('compareBackdrop').classList.remove('open');
+    }
+    function restaurarDoPDF(){
+        if(!pdfBackupCarregado) return;
+        if(!confirm('Restaurar este checklist? O checklist atual será substituído, mas continuará salvo no navegador até a próxima alteração.')) return;
+        const p=pdfBackupCarregado.meta||{};
+        document.getElementById('data').value=p.data||document.getElementById('data').value;
+        document.getElementById('mecanico').value=p.mecanico||'';
+        document.getElementById('responsavel').value=p.responsavel||'';
+        document.getElementById('unidade').value=p.unidade||'';
+        document.getElementById('referencia').value=p.referencia||'';
+        selectedCodes.clear();
+        pdfBackupCarregado.itens.forEach(i=>selectedCodes.set(String(i[0]),{qty:Number(i[2])||1,status:Number(i[3])===1?1:0}));
+        filtroStatus='todos';
+        document.querySelectorAll('.filter-chip').forEach(b=>b.classList.toggle('active',b.dataset.filter==='todos'));
+        document.getElementById('busca').value='';
+        filtrado=[...ferramentas];
+        salvarRascunho(); render(); fecharComparacaoPDF();
+        showToast('Checklist restaurado a partir do PDF.');
+    }
 
     // Carregar JSON com cache offline
     const CACHE_KEY = 'tradimaq_ferramentas_v1';
@@ -575,7 +875,7 @@
             tr.innerHTML = `
                 <td><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect(this, '${f.codigo}')"></td>
                 <td class="td-code" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray-500)">${f.codigo}</td>
-                <td><div class="tool-name">${f.descricao}</div><div class="tool-code-mobile">${f.codigo}${isSelected ? ` · Qtd. ${qty}` : ''}</div></td>
+                <td><div class="tool-name">${f.descricao}</div><div class="tool-code-mobile">${f.codigo}</div>${isSelected ? `<div class="mobile-qty"><span class="mobile-qty-label">Qtd.</span><div class="qty-stepper"><button type="button" onclick="alterarQty('${f.codigo}',-1)">−</button><input type="number" min="1" value="${qty}" onchange="updateQty('${f.codigo}',this.value)"><button type="button" onclick="alterarQty('${f.codigo}',1)">+</button></div></div>` : ''}</td>
                 <td class="td-qty">${qtyHtml}</td>
                 <td>${statusHtml}</td>
                 <td>${actionHtml}</td>`;
@@ -598,6 +898,14 @@
         const e = selectedCodes.get(code);
         if (e) { e.qty = Math.max(1, parseInt(value) || 1); selectedCodes.set(code, e); salvarRascunho(); }
     }
+    function alterarQty(code, delta) {
+        const e=selectedCodes.get(code);
+        if(!e) return;
+        e.qty=Math.max(1,(Number(e.qty)||1)+delta);
+        selectedCodes.set(code,e);
+        salvarRascunho();
+        render();
+    }
     function toggleStatus(code) {
         const e = selectedCodes.get(code);
         if (e) { e.status = e.status === 0 ? 1 : 0; selectedCodes.set(code, e); salvarRascunho(); }
@@ -613,6 +921,26 @@
         });
         salvarRascunho();
         if (filtroStatus !== 'todos') aplicarBusca(); else render();
+    }
+
+    function marcarVisiveisConferidos() {
+        if (!Array.isArray(filtrado) || filtrado.length === 0) {
+            showToast("Nenhum item visível para conferir.");
+            return;
+        }
+
+        let total = 0;
+        filtrado.forEach(f => {
+            const atual = selectedCodes.get(f.codigo);
+            const qty = atual && atual.qty ? atual.qty : 1;
+            selectedCodes.set(f.codigo, { status: 1, qty });
+            total++;
+        });
+
+        salvarRascunho();
+        if (filtroStatus !== 'todos') aplicarBusca();
+        else render();
+        showToast(`${total} item${total === 1 ? '' : 's'} conferido${total === 1 ? '' : 's'}.`);
     }
 
     function atualizarDashboard() {
@@ -631,28 +959,6 @@
             document.getElementById("progressText").textContent = `${ok} de ${total} conferidas (${pct}%)`;
         } else ps.classList.remove("visible");
     }
-
-    // Backup
-    function gerarCodigo() {
-        let entries = [];
-        selectedCodes.forEach((e, code) => entries.push(`${code}:${e.status}:${e.qty}`));
-        document.getElementById("codigoSave").value = btoa(unescape(encodeURIComponent(entries.join("|"))));
-        showToast("Código de backup gerado!");
-    }
-    function carregarCodigo() {
-        try {
-            const texto = decodeURIComponent(escape(atob(document.getElementById("codigoSave").value.trim())));
-            selectedCodes.clear();
-            texto.split("|").forEach(p => { const [code, status, qty] = p.split(":"); if (code) selectedCodes.set(code, { status: parseInt(status)||0, qty: parseInt(qty)||1 }); });
-            salvarRascunho(); render(); showToast("Backup carregado!");
-        } catch { showToast("Código inválido."); }
-    }
-    function copiarCodigo() {
-        const input = document.getElementById("codigoSave");
-        if (!input.value) { showToast("Gere um código primeiro."); return; }
-        navigator.clipboard.writeText(input.value).then(() => showToast("Código copiado!"));
-    }
-    function limparTudo() { if (confirm("Limpar toda a seleção atual?")) { selectedCodes.clear(); salvarRascunho(); render(); } }
 
     // Exportar
     function validarCampos() {
@@ -701,7 +1007,10 @@
     }
     async function gerarPDF() {
         if (!validarCampos()) return;
-        const { jsPDF } = window.jspdf; const doc=new jsPDF({unit:'mm',format:'a4'});
+        const { jsPDF } = window.jspdf; const doc=new jsPDF({unit:'mm',format:'a4',compress:false});
+        const backupPayload=montarBackupPDF();
+        const backupMarcador=PDF_BACKUP_PREFIX+encodeBackupPDF(backupPayload);
+        doc.setProperties({title:'Checklist de Controle de Ferramentas',author:'Tradimaq',creator:'Controle de Ferramentas Tradimaq'});
         const dataDoc=data.value, nome=mecanico.value.trim(), resp=responsavel.value.trim()||'Não informado', un=unidade.value.trim()||'Não informada', ref=referencia.value.trim()||'—';
         const logo=await obterLogoBase64(); const orange=[255,122,0], dark=[35,39,43], gray=[95,105,115], light=[244,246,248], pageW=doc.internal.pageSize.getWidth();
         desenharCabecalhoPDF(doc, logo, pageW, dark, orange);
@@ -733,7 +1042,21 @@
         doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...dark);doc.text('DECLARAÇÃO DE CONFERÊNCIA',14,y);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...gray);doc.text(doc.splitTextToSize('Declaro que os itens acima foram relacionados e conferidos conforme a situação registrada neste documento. Eventuais pendências deverão ser regularizadas e registradas pelo responsável.',pageW-28),14,y+5);
         const sy=y+24;doc.setDrawColor(130);doc.line(14,sy,88,sy);doc.line(108,sy,pageW-14,sy);doc.setFontSize(7.5);doc.text('Técnico / Mecânico',51,sy+5,{align:'center'});doc.text('Responsável pela conferência',151,sy+5,{align:'center'});
         const pages=doc.internal.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);const h=doc.internal.pageSize.getHeight();doc.setDrawColor(220);doc.line(14,h-13,pageW-14,h-13);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...gray);doc.text(`Gerado em ${new Date().toLocaleString('pt-BR')}`,14,h-8);doc.text(`Página ${i} de ${pages}`,pageW-14,h-8,{align:'right'});}
-        const safe=nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_');doc.save(`Checklist_Ferramentas_${safe}_${dataDoc.replaceAll('-','')}.pdf`);showToast('PDF profissional gerado.');
+        // O backup é anexado depois do %%EOF como comentário ASCII.
+        // Leitores de PDF ignoram esse trecho, mas a ferramenta consegue recuperá-lo sem depender
+        // de metadata/compressão interna do jsPDF. Isso funciona de forma consistente em PC e mobile.
+        const safe=nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_');
+        const nomeArquivo=`Checklist_Ferramentas_${safe}_${dataDoc.replaceAll('-','')}.pdf`;
+        const pdfBytes=new Uint8Array(doc.output('arraybuffer'));
+        const trailer=new TextEncoder().encode(`\n%${backupMarcador}\n`);
+        const combinado=new Uint8Array(pdfBytes.length+trailer.length);
+        combinado.set(pdfBytes,0); combinado.set(trailer,pdfBytes.length);
+        const blob=new Blob([combinado],{type:'application/pdf'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a'); a.href=url; a.download=nomeArquivo;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+        showToast('PDF gerado com backup restaurável.');
     }
 
     function gerarExcel() {
