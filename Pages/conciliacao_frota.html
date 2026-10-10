@@ -29,6 +29,24 @@ button,input,select{font:inherit}.hidden{display:none!important}
 .summary-strip{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px 13px;margin-bottom:12px;display:flex;align-items:center;gap:13px;flex-wrap:wrap}.summary-strip strong{font:800 12px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.06em}.client-chips{display:flex;gap:6px;flex-wrap:wrap}.client-chip{background:#f5f6f7;border:1px solid var(--line);border-radius:99px;padding:4px 8px;font-size:10px;color:#525a64}.client-chip b{color:#222}
 .toolbar{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px;display:grid;grid-template-columns:minmax(220px,1fr) 180px minmax(230px,300px) auto;gap:8px;margin-bottom:9px}.search{width:100%;border:1px solid #ccd1d7;border-radius:6px;padding:9px 11px;outline:none}.search:focus{border-color:var(--orange)}.model-filter{border:1px solid #ccd1d7;border-radius:6px;padding:8px;background:#fff;min-width:0}.pills{display:flex;gap:5px;flex-wrap:wrap}.pill{border:1px solid #ccd1d7;background:#fff;border-radius:6px;padding:7px 10px;font:700 10px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.045em;cursor:pointer;color:#505760}.pill.active{background:var(--ink2);border-color:var(--ink2);color:#fff}.pill.crit.active{background:var(--red);border-color:var(--red)}.pill.div.active{background:#c98218;border-color:#c98218}
 .toolbar{position:relative;z-index:30}
+.venc{background:#fff;border:1px solid #dde2e7;border-left:3px solid var(--blue);border-radius:12px;padding:11px 13px;margin:0 0 9px;box-shadow:0 5px 16px rgba(32,42,52,.045)}
+.venc-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 16px;margin-bottom:9px}
+.venc-title strong{display:block;font:800 14px 'Barlow Condensed';letter-spacing:.06em;text-transform:uppercase}.venc-title span{font-size:11px;color:var(--muted)}
+.venc-controls{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 12px}
+.venc-controls label{display:flex;flex-direction:column;gap:3px;font:800 9px 'Barlow Condensed';letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.venc-controls input,.venc-controls select{border:1px solid #ccd1d7;border-radius:7px;padding:7px 9px;background:#fbfcfd;font:600 12px Barlow,Arial,sans-serif;color:var(--text);outline:none}.venc-controls input:focus,.venc-controls select:focus{border-color:var(--orange)}
+.venc-controls input[type=number]{width:78px}.venc-controls select{max-width:190px}
+.venc-controls .chk{flex-direction:row;align-items:center;gap:6px;padding-bottom:9px}.venc-controls .chk input{width:auto;accent-color:var(--orange)}
+.venc-quick{display:flex;gap:4px;padding-bottom:1px}
+.vq{border:1px solid #ccd1d7;background:#fff;border-radius:8px;padding:8px 10px;font:700 10px 'Barlow Condensed';text-transform:uppercase;letter-spacing:.045em;cursor:pointer;color:#505760}.vq:hover{border-color:#99a3ae}.vq.active{background:var(--ink2);border-color:var(--ink2);color:#fff}
+.v-list{max-height:230px;overflow:auto;border:1px solid #e5e8eb;border-radius:9px}
+.v-row{display:grid;grid-template-columns:100px 120px 90px minmax(110px,1fr) minmax(160px,1.6fr) 120px;gap:8px;align-items:center;padding:7px 10px;font-size:12px;border-bottom:1px solid #edf0f2}
+.v-head{position:sticky;top:0;z-index:2;background:var(--slate);color:#fff;font:700 10px 'Barlow Condensed';letter-spacing:.055em;text-transform:uppercase;border-bottom:0}
+.v-body:hover{background:#fafbfc}.v-body:last-child{border-bottom:0}
+.v-date{font:600 11px 'JetBrains Mono',monospace}.v-tpe{font-weight:700}.v-cli{font-weight:600;min-width:0;overflow-wrap:anywhere}.v-body span{min-width:0;overflow-wrap:anywhere}
+.v-badge{display:inline-block;border-radius:99px;padding:3px 8px;font:800 10px 'Barlow Condensed';letter-spacing:.04em;text-transform:uppercase;background:var(--blue-bg);color:var(--blue)}.v-badge.soon{background:var(--amber-bg);color:#98600e}.v-badge.late{background:var(--red-bg);color:var(--red)}
+.v-empty{padding:18px;text-align:center;color:#737b85;font-size:12px}
+@media(max-width:700px){.v-head{display:none}.v-row{grid-template-columns:1fr 1fr}.v-body span:before{content:attr(data-l);display:block;font:800 8px 'Barlow Condensed';letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}.v-list{max-height:340px}.venc-controls{width:100%}}
 .ms{position:relative;min-width:0}
 .ms-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid #e3c48f;border-radius:8px;padding:8px 10px;background:#fffaf0;color:#6d4a10;font-weight:600;cursor:pointer;text-align:left}
 .ms-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ms-btn i{font-style:normal;flex:0 0 auto}
@@ -214,6 +232,7 @@ html,body{max-width:100%;overflow-x:hidden}
   <div class="actions">
     <button class="run" id="runBtn" disabled>▶ Analisar divergências</button>
     <button class="ghost hidden" id="exportBtn">▦ Exportar auditoria</button>
+    <button class="ghost hidden" id="vencBtn">📅 Vencimentos</button>
     <div class="quick-share">
       <button class="share-btn hidden" id="copySummaryBtn">⧉ Copiar resumo</button>
     </div>
@@ -236,6 +255,21 @@ html,body{max-width:100%;overflow-x:hidden}
     <div class="rule-note"><span class="rule-icon">↔</span><span><b>Regra operacional:</b> equipamento em <b>Checklist</b> no Status do Pátio é considerado <b>Disponível</b> para a conciliação, pois Checklist não existe como status no sistema digital.</span></div>
 
     <div class="quick-summary"><strong>Resumo rápido</strong><span id="quickSummaryText">Aguardando análise.</span></div>
+
+    <section class="venc hidden" id="vencPanel">
+      <div class="venc-head">
+        <div class="venc-title"><strong>Contratos a vencer</strong><span id="vencInfo"></span></div>
+        <div class="venc-controls">
+          <label>A partir de<input type="date" id="vencFrom"></label>
+          <label>Próximos (dias)<input type="number" id="vencDays" min="0" max="3650" value="15"></label>
+          <div class="venc-quick"><button type="button" class="vq" data-d="7">7d</button><button type="button" class="vq" data-d="15">15d</button><button type="button" class="vq" data-d="30">30d</button><button type="button" class="vq" data-d="60">60d</button></div>
+          <label>Coluna de vencimento<select id="vencCol"></select></label>
+          <label class="chk"><input type="checkbox" id="vencOver"> Incluir já vencidos</label>
+          <button type="button" class="ghost" id="vencCopy">⧉ Copiar lista</button>
+        </div>
+      </div>
+      <div class="v-list" id="vencList"></div>
+    </section>
 
     <div class="toolbar">
       <input class="search" id="search" placeholder="Buscar TPE, modelo, série, cliente ou contrato...">
@@ -319,15 +353,16 @@ async function parsePatioPdf(file){
 
 function findHeaderIndex(header, names){for(let i=0;i<header.length;i++){const h=norm(header[i]);if(names.some(n=>h===norm(n)))return i;}return -1}
 async function parseSystemExcel(file){
-  const ab=await file.arrayBuffer();const wb=XLSX.read(ab,{type:'array'});let best=[];
-  for(const sn of wb.SheetNames){const arr=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:false,defval:''});if(arr.length>best.length)best=arr;}
+  const ab=await file.arrayBuffer();const wb=XLSX.read(ab,{type:'array',cellDates:true});let best=[],bestName='';
+  for(const sn of wb.SheetNames){const arr=XLSX.utils.sheet_to_json(wb.Sheets[sn],{header:1,raw:false,defval:''});if(arr.length>best.length){best=arr;bestName=sn}}
   let hr=-1;for(let r=0;r<Math.min(best.length,25);r++){const row=best[r];if(row.some(v=>norm(v)==='TPE')&&row.some(v=>norm(v)==='STATUS')){hr=r;break}}
   if(hr<0)throw new Error('Não encontrei as colunas TPE e Status no Excel.');
   const h=best[hr];const ix={
     modelo:findHeaderIndex(h,['Modelo']),tpe:findHeaderIndex(h,['TPE']),serie:findHeaderIndex(h,['Nº de Série','N° de Série','Numero de Serie']),status:findHeaderIndex(h,['Status']),contrato:findHeaderIndex(h,['Contrato']),cliente:findHeaderIndex(h,['Nome Cli/For','Cliente','Nome Cliente']),osCorr:findHeaderIndex(h,['OS Corretiva']),osPrev:findHeaderIndex(h,['OS Preventiva']),vendedor:findHeaderIndex(h,['Vendedor'])
   };
   if(ix.tpe<0||ix.status<0)throw new Error('Estrutura do Excel não reconhecida.');
-  const rows=[];for(let r=hr+1;r<best.length;r++){const row=best[r];const tpe=String(row[ix.tpe]||'').trim().toUpperCase();if(!/^TPE-\d+$/i.test(tpe))continue;rows.push({tpe,modelo:row[ix.modelo]||'',serie:row[ix.serie]||'',status:normalizeStatus(row[ix.status]),contrato:ix.contrato>=0?String(row[ix.contrato]||'').trim():'',cliente:ix.cliente>=0?String(row[ix.cliente]||'').trim():'',osCorr:ix.osCorr>=0?String(row[ix.osCorr]||'').trim():'',osPrev:ix.osPrev>=0?String(row[ix.osPrev]||'').trim():'',vendedor:ix.vendedor>=0?String(row[ix.vendedor]||'').trim():''});}
+  state.xl={header:h.map(x=>String(x??'').trim()),raw:XLSX.utils.sheet_to_json(wb.Sheets[bestName],{header:1,raw:true,defval:''})};
+  const rows=[];for(let r=hr+1;r<best.length;r++){const row=best[r];const tpe=String(row[ix.tpe]||'').trim().toUpperCase();if(!/^TPE-\d+$/i.test(tpe))continue;rows.push({_r:r,tpe,modelo:row[ix.modelo]||'',serie:row[ix.serie]||'',status:normalizeStatus(row[ix.status]),contrato:ix.contrato>=0?String(row[ix.contrato]||'').trim():'',cliente:ix.cliente>=0?String(row[ix.cliente]||'').trim():'',osCorr:ix.osCorr>=0?String(row[ix.osCorr]||'').trim():'',osPrev:ix.osPrev>=0?String(row[ix.osPrev]||'').trim():'',vendedor:ix.vendedor>=0?String(row[ix.vendedor]||'').trim():''});}
   return rows;
 }
 
@@ -406,11 +441,66 @@ async function copyText(text){
 $('copySummaryBtn').addEventListener('click',async()=>{const ok=await copyText(buildQuickSummary());toast(ok?'Resumo copiado':'Não foi possível copiar');});
 $('tbody').addEventListener('click',async e=>{const b=e.target.closest('.copy-row');if(!b)return;const r=state.audit.find(x=>x.tpe===b.dataset.tpe);if(!r)return;const ok=await copyText(quickLine(r));toast(ok?`${r.tpe} copiado`:'Não foi possível copiar');});
 
+/* ── CONTRATOS A VENCER ── */
+const pad=n=>String(n).padStart(2,'0');
+const fmtD=d=>`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
+const toISO=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fromISO=v=>{const m=String(v||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?new Date(+m[1],+m[2]-1,+m[3]):null};
+const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+function toDate(v){
+  if(v instanceof Date&&!isNaN(v)){const d=new Date(v.getTime()+43200000);return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+  if(typeof v==='number'&&v>20000&&v<80000){const o=XLSX.SSF.parse_date_code(v);return o?new Date(o.y,o.m-1,o.d):null}
+  const t=String(v??'').trim();if(!t)return null;
+  let m=t.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/);
+  if(m){let y=+m[3];if(y<100)y+=2000;const d=new Date(y,+m[2]-1,+m[1]);return d.getMonth()===+m[2]-1?d:null}
+  m=t.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);
+  return null;
+}
+function detectDateCol(h){
+  const hs=h.map(norm),bad=/INICIO|SAIDA|EMISSAO|ABERT|CADASTRO|NASC|FABRIC/;
+  const tests=[/VENC/,/\bFIM\b|FINAL|TERMINO|ENCERR/,/(PREV).*(DEVOL|RETORN|ENTREGA)|(DEVOL|RETORN).*PREV/,/DEVOL|RETORN/];
+  for(const t of tests){const i=hs.findIndex(x=>x&&!bad.test(x)&&t.test(x));if(i>=0)return i}
+  return -1;
+}
+function prazoTxt(dias){return dias<0?`vencido há ${-dias} dia(s)`:dias===0?'vence no dia inicial':`em ${dias} dia(s)`}
+function vencList(){
+  const ref=fromISO($('vencFrom').value)||today(),n=Math.max(0,parseInt($('vencDays').value)||0);
+  const end=new Date(ref.getFullYear(),ref.getMonth(),ref.getDate()+n),over=$('vencOver').checked,cv=$('vencCol').value;
+  let valid=0;const all=[];
+  if(cv!==''&&state.xl)state.sistema.forEach(s=>{if(!s.contrato)return;const row=state.xl.raw[s._r];const d=toDate(row&&row[+cv]);if(!d)return;valid++;all.push({s,d,dias:Math.round((d-ref)/864e5)})});
+  const list=all.filter(x=>x.d<=end&&(over||x.d>=ref)).sort((a,b)=>a.d-b.d||tpeNum(a.s.tpe)-tpeNum(b.s.tpe));
+  return{list,ref,end,n,valid,noCol:cv===''};
+}
+function renderVenc(){
+  const {list,ref,end,n,valid,noCol}=vencList();
+  document.querySelectorAll('.vq').forEach(b=>b.classList.toggle('active',+b.dataset.d===n));
+  const contracts=new Set(list.map(x=>x.s.contrato)).size;
+  $('vencInfo').textContent=noCol?'Selecione a coluna de data de vencimento do Excel.':valid===0?'Nenhuma data válida na coluna selecionada.':`${list.length} máquina(s) · ${contracts} contrato(s) · ${fmtD(ref)} até ${fmtD(end)}`;
+  if(!list.length){$('vencList').innerHTML=`<div class="v-empty">${noCol?'Escolha em "Coluna de vencimento" qual coluna do Excel traz a data de fim do contrato.':valid===0?'Troque a coluna de vencimento ou confira o Excel.':'Nenhum contrato vence nesse período.'}</div>`;return}
+  $('vencList').innerHTML='<div class="v-row v-head"><span>Vencimento</span><span>Prazo</span><span>TPE</span><span>Modelo</span><span>Cliente</span><span>Contrato</span></div>'+list.map(({s,d,dias})=>`<div class="v-row v-body"><span class="v-date" data-l="Vencimento">${fmtD(d)}</span><span data-l="Prazo"><b class="v-badge ${dias<0?'late':dias<=7?'soon':''}">${esc(prazoTxt(dias))}</b></span><span class="v-tpe" data-l="TPE">${esc(s.tpe)}</span><span data-l="Modelo">${esc(s.modelo||'—')}</span><span class="v-cli" data-l="Cliente">${esc(cleanClient(s.cliente)||'—')}</span><span class="mono" data-l="Contrato">${esc(s.contrato)}</span></div>`).join('');
+}
+function initVenc(){
+  const h=state.xl?state.xl.header:[],det=detectDateCol(h);
+  $('vencCol').innerHTML='<option value="">— Selecione —</option>'+h.map((x,i)=>x?`<option value="${i}">${esc(x)}</option>`:'').join('');
+  $('vencCol').value=det>=0?String(det):'';
+  $('vencFrom').value=toISO(today());$('vencDays').value=15;
+  $('vencPanel').classList.remove('hidden');$('vencBtn').classList.remove('hidden');renderVenc();
+}
+['vencFrom','vencDays','vencOver','vencCol'].forEach(id=>{$(id).addEventListener(id==='vencDays'||id==='vencFrom'?'input':'change',renderVenc)});
+document.querySelectorAll('.vq').forEach(b=>b.addEventListener('click',()=>{$('vencDays').value=b.dataset.d;renderVenc()}));
+$('vencBtn').addEventListener('click',()=>$('vencPanel').classList.toggle('hidden'));
+$('vencCopy').addEventListener('click',async()=>{
+  const {list,ref,end,n}=vencList();if(!list.length){toast('Nada para copiar neste período');return}
+  const head=`TRADIMAQ${state.branch?' '+state.branch:''} · Contratos a vencer`;
+  const txt=[head,`Período: ${fmtD(ref)} a ${fmtD(end)} (${n} dia(s))`,`${list.length} máquina(s)`,...list.map(({s,d,dias})=>`${fmtD(d)} · ${s.tpe} · ${cleanClient(s.cliente)||'sem cliente'} · Contrato ${s.contrato} (${prazoTxt(dias)})`)].join('\n');
+  toast(await copyText(txt)?'Lista de vencimentos copiada':'Não foi possível copiar');
+});
+
 $('runBtn').addEventListener('click',async()=>{
   try{$('runBtn').disabled=true;$('loadMsg').textContent='Lendo PDF do pátio...';const p=await parsePatioPdf(state.pdfFile);state.patio=p.rows;state.branch=p.branch;state.date=p.date;$('pdfMeta').textContent=`${state.patio.length} equipamentos reconhecidos${p.branch?' · '+p.branch:''}`;
     $('loadMsg').textContent='Lendo Excel do sistema...';state.sistema=await parseSystemExcel(state.xlsFile);$('xlsMeta').textContent=`${state.sistema.length} equipamentos reconhecidos`;
     if(!state.patio.length)throw new Error('Não consegui reconhecer a tabela de equipamentos no PDF. Use o PDF gerado pelo Status Diário Tradimaq.');if(!state.sistema.length)throw new Error('Não encontrei equipamentos no Excel.');
-    buildAudit();renderSummary();renderTable();$('results').classList.remove('hidden');$('exportBtn').classList.remove('hidden');$('copySummaryBtn').classList.remove('hidden');$('resetBtn').classList.remove('hidden');document.body.classList.add('analyzed');$('hdrBranch').textContent=state.branch?`TRADIMAQ ${state.branch}`:'Auditoria operacional';$('hdrDate').textContent=state.date||'Arquivos conciliados';$('loadMsg').textContent=`Conciliação concluída · ${state.audit.filter(x=>x.level!=='conforme').length} divergência(s) encontrada(s).`;toast('Auditoria concluída');
+    buildAudit();renderSummary();renderTable();$('results').classList.remove('hidden');$('exportBtn').classList.remove('hidden');$('copySummaryBtn').classList.remove('hidden');$('resetBtn').classList.remove('hidden');initVenc();document.body.classList.add('analyzed');$('hdrBranch').textContent=state.branch?`TRADIMAQ ${state.branch}`:'Auditoria operacional';$('hdrDate').textContent=state.date||'Arquivos conciliados';$('loadMsg').textContent=`Conciliação concluída · ${state.audit.filter(x=>x.level!=='conforme').length} divergência(s) encontrada(s).`;toast('Auditoria concluída');
   }catch(err){console.error(err);$('loadMsg').textContent='Erro: '+err.message;toast(err.message)}finally{$('runBtn').disabled=false}
 });
 $('search').addEventListener('input',renderTable);$('modelFilter').addEventListener('change',renderTable);$('typeBtn').addEventListener('click',e=>{e.stopPropagation();$('typePanel').classList.toggle('hidden')});
