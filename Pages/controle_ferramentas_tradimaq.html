@@ -333,7 +333,34 @@
             .compare-actions button { width:100%; }
         }
 
-    </style>
+            /* Inspeção e não conformidades */
+        .field select {width:100%;min-height:44px;padding:10px;font-size:14px;font-family:inherit;border:1px solid var(--gray-300);border-radius:var(--radius);color:var(--gray-900);background:#fff;outline:none}
+        .field select:focus {border-color:var(--brand)}
+        .fields-grid {grid-template-columns:repeat(3,minmax(0,1fr))}
+        .badge-nao-avaliado {background:#f1f3f5;color:#596375}
+        .badge-nao-conforme {background:#fff0ee;color:#b42318}
+        .tool-actions {display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end}
+        .btn-action.nao-conforme {color:#b42318;border-color:#f1b7b2;background:#fff}
+        tr.row-nc td {background:#fff7f6 !important}
+        .nc-detail {margin-top:5px;color:#a53629;font-size:10px;line-height:1.4}
+        .nc-detail .nc-note {color:#657184;font-size:10px;white-space:normal;overflow-wrap:anywhere}
+        .nc-backdrop {display:none;position:fixed;inset:0;z-index:650;background:rgba(16,24,40,.65);padding:16px;align-items:center;justify-content:center}
+        .nc-backdrop.open {display:flex}
+        .nc-dialog {width:min(520px,100%);max-height:92vh;overflow:auto;background:white;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 18px 60px rgba(0,0,0,.2)}
+        .nc-top {display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:18px 18px 12px;border-bottom:1px solid #e5e7eb}
+        .nc-top h2 {font-size:17px;margin:0;color:#222e3c}
+        .nc-top p {font-size:11px;color:#667085;margin:5px 0 0;line-height:1.4;overflow-wrap:anywhere}
+        .nc-fechar {border:0;border-radius:8px;background:#f1f3f5;font-size:23px;width:34px;height:34px;cursor:pointer;color:#344054}
+        .nc-form {display:grid;gap:12px;padding:16px 18px}
+        .nc-form label {display:grid;gap:5px;color:#374151;font-size:12px;font-weight:650}
+        .nc-form select,.nc-form input,.nc-form textarea {box-sizing:border-box;width:100%;min-height:42px;padding:9px 11px;border:1px solid #cbd2d9;border-radius:8px;background:#fff;color:#1f2937;font:14px 'IBM Plex Sans',sans-serif}
+        .nc-form textarea {resize:vertical;line-height:1.4}
+        .nc-rodape {display:flex;gap:8px;justify-content:flex-end;padding:14px 18px;border-top:1px solid #e5e7eb}
+        .nc-rodape button {padding:12px 14px;border-radius:8px;border:1px solid #cbd2d9;font:600 12px 'IBM Plex Sans',sans-serif;cursor:pointer}
+        .nc-cancelar {background:#fff;color:#334155}.nc-salvar {background:#aa2b20;color:white;border-color:#aa2b20!important}
+        @media(max-width:900px){.fields-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:640px){.fields-grid{grid-template-columns:1fr}.nc-backdrop{padding:8px;align-items:flex-end}.nc-dialog{border-radius:14px 14px 0 0;max-height:94vh}.tool-actions{flex-direction:column;align-items:stretch}.tool-actions .btn-action{padding:5px 7px;min-height:29px;font-size:10px}tr.row-nc td{background:transparent!important}}
+</style>
 </head>
 <body>
 
@@ -353,12 +380,12 @@
     <div class="dashboard">
         <div class="card brand"><div class="card-label">Itens da lista</div><div class="card-value" id="totalFerramentas">0</div></div>
         <div class="card blue"><div class="card-label">No checklist</div><div class="card-value" id="totalSelecionado">0</div></div>
-        <div class="card green"><div class="card-label">Conferidas</div><div class="card-value" id="totalOK">0</div></div>
-        <div class="card red"><div class="card-label">Pendentes</div><div class="card-value" id="totalPendentes">0</div></div>
+        <div class="card green"><div class="card-label">Conformes</div><div class="card-value" id="totalOK">0</div></div>
+        <div class="card red"><div class="card-label">Não conformes</div><div class="card-value" id="totalPendentes">0</div></div>
     </div>
 
     <div class="progress-section" id="progressSection">
-        <div class="progress-label"><span>Progresso da conferência</span><span id="progressText">0 / 0</span></div>
+        <div class="progress-label"><span>Progresso da avaliação</span><span id="progressText">0 / 0</span></div>
         <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
     </div>
 
@@ -370,6 +397,13 @@
             <div class="field"><label>Responsável pela conferência</label><input id="responsavel" placeholder="Nome do responsável"></div>
             <div class="field"><label>Unidade / Setor</label><input id="unidade" placeholder="Ex.: Oficina MG"></div>
             <div class="field"><label>OS / Referência</label><input id="referencia" placeholder="Opcional"></div>
+                <div class="field"><label>Motivo do checklist</label><select id="motivoChecklist" required>
+                    <option value="">Selecionar motivo</option>
+                    <option value="Desligamento">Desligamento</option>
+                    <option value="Férias">Férias</option>
+                    <option value="Contratação">Contratação</option>
+                    <option value="Verificação semestral">Verificação semestral</option>
+                </select></div>
         </div>
     </div>
 
@@ -398,8 +432,9 @@
     <div class="filter-row" aria-label="Filtros do checklist">
         <button class="filter-chip active" data-filter="todos" onclick="setFiltroStatus('todos', this)">Todos</button>
         <button class="filter-chip" data-filter="selecionados" onclick="setFiltroStatus('selecionados', this)">No checklist</button>
-        <button class="filter-chip" data-filter="pendentes" onclick="setFiltroStatus('pendentes', this)">Pendentes</button>
-        <button class="filter-chip" data-filter="conferidos" onclick="setFiltroStatus('conferidos', this)">Conferidos</button>
+        <button class="filter-chip" data-filter="nao-avaliados" onclick="setFiltroStatus('nao-avaliados', this)">Não avaliados</button>
+        <button class="filter-chip" data-filter="conformes" onclick="setFiltroStatus('conformes', this)">Conformes</button>
+        <button class="filter-chip" data-filter="nao-conformes" onclick="setFiltroStatus('nao-conformes', this)">Não conformes</button>
     </div>
 
     <div class="table-wrap">
@@ -432,8 +467,8 @@
     <div class="sheet" onclick="event.stopPropagation()">
         <div class="sheet-handle"></div>
         <div class="sheet-title">Mais opções</div>
-        <button class="sheet-btn" onclick="marcarVisiveisConferidos(); fecharSheet()">
-            <span class="icon">✓</span><span>Conferir itens visíveis</span>
+        <button class="sheet-btn" onclick="marcarVisiveisConformes(); fecharSheet()">
+            <span class="icon">✓</span><span>Marcar visíveis como conformes</span>
         </button>
         <button class="sheet-btn" onclick="toggleBackup(); fecharSheet()">
             <span class="icon">↕</span> Backup / Comparar PDF
@@ -474,6 +509,19 @@
     </div>
 </div>
 
+<div class="nc-backdrop" id="ncBackdrop" onclick="fecharNC(event)">
+    <div class="nc-dialog" role="dialog" aria-modal="true" aria-labelledby="ncTitulo" onclick="event.stopPropagation()">
+        <div class="nc-top"><div><h2 id="ncTitulo">Registrar não conformidade</h2><p id="ncFerramenta"></p></div><button class="nc-fechar" type="button" onclick="fecharNC()" aria-label="Fechar">×</button></div>
+        <div class="nc-form">
+            <label>Problema identificado<select id="ncTipo"><option value="">Selecionar</option><option value="Quebrada">Quebrada</option><option value="Danificada">Danificada</option><option value="Incompleta">Incompleta</option><option value="Outro">Outro</option></select></label>
+            <label>Encaminhamento<select id="ncDestino"><option value="">Selecionar</option><option value="Avaliação">Avaliação</option><option value="Reparo">Reparo</option><option value="Descarte">Descarte</option></select></label>
+            <label>Quantidade não conforme<input type="number" id="ncQuantidade" inputmode="numeric" min="1" value="1"></label>
+            <label>Descrição da ocorrência<textarea id="ncObservacao" rows="3" placeholder="Ex.: carcaça trincada, ferramenta sem condições de uso"></textarea></label>
+        </div>
+        <div class="nc-rodape"><button class="nc-cancelar" type="button" onclick="fecharNC()">Cancelar</button><button class="nc-salvar" type="button" onclick="salvarNC()">Salvar não conformidade</button></div>
+    </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -481,6 +529,7 @@
 
     let ferramentas = [], filtrado = [], bancoBase = [];
     let selectedCodes = new Map();
+    let codigoEdicaoNC = null;
     let filtroStatus = 'todos';
     let rascunhoRestaurado = false;
     const DRAFT_KEY = 'tradimaq_ferramentas_checklist_v2';
@@ -495,12 +544,27 @@
     let draftTimer = null;
     const SCRIPT_PROMISES = new Map();
 
+    function normalizarRegistro(e){
+        const status = Number(e && e.status);
+        const qty=Math.max(1,Number(e && e.qty)||1);
+        return {status:status===1||status===2?status:0,qty,
+            tipoNC:String(e && e.tipoNC||''),destinoNC:String(e && e.destinoNC||''),
+            obsNC:String(e && e.obsNC||''),qtyNC:Math.min(qty,Math.max(1,Number(e && e.qtyNC)||1))};
+    }
+    function estadoRegistro(e){
+        return e.status===1?'Conforme':e.status===2?'Não conforme':'Não avaliado';
+    }
+    function detalhesMudaram(a,b){
+        return a.qty!==b.qty || a.status!==b.status || (a.tipoNC||'')!==(b.tipoNC||'') ||
+            (a.destinoNC||'')!==(b.destinoNC||'') || (a.obsNC||'')!==(b.obsNC||'') ||
+            Number(a.qtyNC||1)!==Number(b.qtyNC||1);
+    }
     function debounceDraft(){
         clearTimeout(draftTimer);
         draftTimer = setTimeout(salvarRascunhoAgora, 220);
     }
     function salvarRascunhoAgora(){
-        const payload = { data: data.value, mecanico: mecanico.value, responsavel: responsavel.value, unidade: unidade.value, referencia: referencia.value, itens: Array.from(selectedCodes.entries()) };
+        const payload = { data: data.value, mecanico: mecanico.value, responsavel: responsavel.value, unidade: unidade.value, referencia: referencia.value, motivoChecklist:motivoChecklist.value, itens: Array.from(selectedCodes.entries()) };
         localStorage.setItem(DRAFT_KEY, JSON.stringify(payload));
         const el=document.getElementById('draftState'); if(el) el.title='Rascunho salvo neste dispositivo';
     }
@@ -540,14 +604,14 @@
         if (rascunhoRestaurado) return; rascunhoRestaurado = true;
         try {
             const raw=localStorage.getItem(DRAFT_KEY); if(!raw) return; const d=JSON.parse(raw);
-            if(d.data) data.value=d.data; mecanico.value=d.mecanico||''; responsavel.value=d.responsavel||''; unidade.value=d.unidade||''; referencia.value=d.referencia||'';
-            if(Array.isArray(d.itens)){ selectedCodes.clear(); d.itens.forEach(([code,e])=>selectedCodes.set(code,{status:Number(e.status)||0,qty:Math.max(1,Number(e.qty)||1)})); }
+            if(d.data) data.value=d.data; mecanico.value=d.mecanico||''; responsavel.value=d.responsavel||''; unidade.value=d.unidade||''; referencia.value=d.referencia||''; motivoChecklist.value=d.motivoChecklist||'';
+            if(Array.isArray(d.itens)){ selectedCodes.clear(); d.itens.forEach(([code,e])=>selectedCodes.set(code,normalizarRegistro(e))); }
             render(); if(selectedCodes.size||d.mecanico||d.responsavel) showToast('Rascunho anterior restaurado.');
         } catch(e) {}
     }
     function novoChecklist() {
         if(!confirm('Iniciar um novo checklist? O rascunho atual será apagado.')) return;
-        clearTimeout(draftTimer); selectedCodes.clear(); data.value=getTodayISO(); ['mecanico','responsavel','unidade','referencia','busca'].forEach(id=>document.getElementById(id).value='');
+        clearTimeout(draftTimer); selectedCodes.clear(); data.value=getTodayISO(); ['mecanico','responsavel','unidade','referencia','motivoChecklist','busca'].forEach(id=>document.getElementById(id).value='');
         filtroStatus='todos'; document.querySelectorAll('.filter-chip').forEach(b=>b.classList.toggle('active',b.dataset.filter==='todos'));
         ferramentas=[...bancoBase]; filtrado=[...bancoBase]; localStorage.removeItem(DRAFT_KEY); render(); showToast('Novo checklist iniciado.');
     }
@@ -562,16 +626,18 @@
         const itens=[];
         selectedCodes.forEach((entry,code)=>{
             const f=bancoBase.find(x=>x.codigo===code)||ferramentas.find(x=>x.codigo===code);
-            itens.push([code, f?f.descricao:'', Number(entry.qty)||1, entry.status===1?1:0]);
+            itens.push([code, f?f.descricao:'', Number(entry.qty)||1, entry.status,
+                entry.tipoNC||'',entry.destinoNC||'',entry.obsNC||'',Number(entry.qtyNC)||1]);
         });
         return {
-            app:'tradimaq-ferramentas', version:5, createdAt:new Date().toISOString(),
+            app:'tradimaq-ferramentas', version:6, createdAt:new Date().toISOString(),
             meta:{
                 data:document.getElementById('data').value,
                 mecanico:document.getElementById('mecanico').value.trim(),
                 responsavel:document.getElementById('responsavel').value.trim(),
                 unidade:document.getElementById('unidade').value.trim(),
-                referencia:document.getElementById('referencia').value.trim()
+                referencia:document.getElementById('referencia').value.trim(),
+                motivoChecklist:document.getElementById('motivoChecklist').value
             },
             itens
         };
@@ -657,16 +723,16 @@
         const m=new Map();
         selectedCodes.forEach((e,c)=>{
             const f=bancoBase.find(x=>x.codigo===c)||ferramentas.find(x=>x.codigo===c);
-            m.set(c,{descricao:f?f.descricao:'',qty:Number(e.qty)||1,status:e.status===1?1:0});
+            m.set(c,{descricao:f?f.descricao:'',...normalizarRegistro(e)});
         });
         return m;
     }
     function mapaBackup(payload){
         const m=new Map();
-        payload.itens.forEach(i=>m.set(String(i[0]),{descricao:String(i[1]||''),qty:Number(i[2])||1,status:Number(i[3])===1?1:0}));
+        payload.itens.forEach(i=>m.set(String(i[0]),{descricao:String(i[1]||''),...normalizarRegistro({qty:i[2],status:i[3],tipoNC:i[4],destinoNC:i[5],obsNC:i[6],qtyNC:i[7]})}));
         return m;
     }
-    function estadoTexto(e){ return `${e.qty} un. · ${e.status===1?'Conferido':'Pendente'}`; }
+    function estadoTexto(e){ return `${e.qty} un. · ${estadoRegistro(e)}${e.status===2?` · ${e.tipoNC||'Problema'} · ${e.destinoNC||'A definir'} · ${e.qtyNC||1} un. NC${e.obsNC?' · '+e.obsNC:''}`:''}`; }
     function escaparHTML(v){ return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])); }
     function abrirComparacaoPDF(payload,nomeArquivo){
         document.getElementById('compareLeftHeader').textContent='PDF anterior';
@@ -685,7 +751,7 @@
             let classe='diff-same', label='Sem alteração';
             if(a&&!n){classe='diff-removed';label='Somente no PDF';soPDF++;}
             else if(!a&&n){classe='diff-added';label='Novo no atual';soAtual++;}
-            else if(a.qty!==n.qty || a.status!==n.status){classe='diff-changed';label='Alterado';alterados++;}
+            else if(detalhesMudaram(a,n)){classe='diff-changed';label='Alterado';alterados++;}
             else iguais++;
             html += `<tr data-divergente="${classe==='diff-same'?'0':'1'}"><td style="font-family:'IBM Plex Mono',monospace;font-size:10px">${escaparHTML(code)}</td><td>${escaparHTML(base.descricao||'Item')}</td><td>${a?escaparHTML(estadoTexto(a)):'—'}</td><td>${n?escaparHTML(estadoTexto(n)):'—'}</td><td><span class="diff-badge ${classe}">${label}</span></td></tr>`;
         });
@@ -700,6 +766,7 @@
         const p=payload.meta||{};
         if(p.unidade) campos.push(`Unidade anterior: <b>${escaparHTML(p.unidade)}</b>`);
         if(p.referencia) campos.push(`Referência anterior: <b>${escaparHTML(p.referencia)}</b>`);
+        if(p.motivoChecklist) campos.push(`Motivo anterior: <b>${escaparHTML(p.motivoChecklist)}</b>`);
         document.getElementById('compareInfo').innerHTML=`O PDF contém <b>${antigo.size}</b> item(ns). O checklist atual contém <b>${atual.size}</b>. ${campos.join(' · ')}`;
         resetFiltroComparacao();
         document.getElementById('compareBackdrop').classList.add('open');
@@ -719,13 +786,13 @@
             let classe='diff-same', label='Sem alteração';
             if(a&&!b){classe='diff-removed';label='Saiu do checklist';soA++;}
             else if(!a&&b){classe='diff-added';label='Entrou no checklist';soB++;}
-            else if(a.qty!==b.qty || a.status!==b.status || normalizeStr(a.descricao)!==normalizeStr(b.descricao)){classe='diff-changed';label='Alterado';alterados++;}
+            else if(detalhesMudaram(a,b) || normalizeStr(a.descricao)!==normalizeStr(b.descricao)){classe='diff-changed';label='Alterado';alterados++;}
             else iguais++;
             html += `<tr data-divergente="${classe==='diff-same'?'0':'1'}"><td style="font-family:'IBM Plex Mono',monospace;font-size:10px">${escaparHTML(code)}</td><td>${escaparHTML(base.descricao||'Item')}</td><td>${a?escaparHTML(estadoTexto(a)):'—'}</td><td>${b?escaparHTML(estadoTexto(b)):'—'}</td><td><span class="diff-badge ${classe}">${label}</span></td></tr>`;
         });
         const metaA=payloadA.meta||{}, metaB=payloadB.meta||{};
         const diferencasMeta=[];
-        [['Data','data'],['Técnico','mecanico'],['Responsável','responsavel'],['Unidade','unidade'],['OS / Referência','referencia']].forEach(([rotulo,chave])=>{
+        [['Data','data'],['Técnico','mecanico'],['Responsável','responsavel'],['Unidade','unidade'],['OS / Referência','referencia'],['Motivo do checklist','motivoChecklist']].forEach(([rotulo,chave])=>{
             const va=String(metaA[chave]||'—'), vb=String(metaB[chave]||'—');
             if(va!==vb) diferencasMeta.push(`${rotulo}: <b>${escaparHTML(va)}</b> → <b>${escaparHTML(vb)}</b>`);
         });
@@ -757,8 +824,9 @@
         document.getElementById('responsavel').value=p.responsavel||'';
         document.getElementById('unidade').value=p.unidade||'';
         document.getElementById('referencia').value=p.referencia||'';
+        document.getElementById('motivoChecklist').value=p.motivoChecklist||'';
         selectedCodes.clear();
-        pdfBackupCarregado.itens.forEach(i=>selectedCodes.set(String(i[0]),{qty:Number(i[2])||1,status:Number(i[3])===1?1:0}));
+        pdfBackupCarregado.itens.forEach(i=>selectedCodes.set(String(i[0]),normalizarRegistro({qty:i[2],status:i[3],tipoNC:i[4],destinoNC:i[5],obsNC:i[6],qtyNC:i[7]})));
         filtroStatus='todos';
         document.querySelectorAll('.filter-chip').forEach(b=>b.classList.toggle('active',b.dataset.filter==='todos'));
         document.getElementById('busca').value='';
@@ -823,16 +891,12 @@
 
         if (filtroStatus === 'selecionados') {
             base = base.filter(f => selectedCodes.has(f.codigo));
-        } else if (filtroStatus === 'pendentes') {
-            base = base.filter(f => {
-                const e = selectedCodes.get(f.codigo);
-                return !!e && e.status !== 1;
-            });
-        } else if (filtroStatus === 'conferidos') {
-            base = base.filter(f => {
-                const e = selectedCodes.get(f.codigo);
-                return !!e && e.status === 1;
-            });
+        } else if (filtroStatus === 'nao-avaliados') {
+            base = base.filter(f => selectedCodes.has(f.codigo) && selectedCodes.get(f.codigo).status === 0);
+        } else if (filtroStatus === 'conformes') {
+            base = base.filter(f => selectedCodes.has(f.codigo) && selectedCodes.get(f.codigo).status === 1);
+        } else if (filtroStatus === 'nao-conformes') {
+            base = base.filter(f => selectedCodes.has(f.codigo) && selectedCodes.get(f.codigo).status === 2);
         }
 
         filtrado = base;
@@ -863,13 +927,22 @@
             const status = entry ? entry.status : null;
             const qty = entry ? entry.qty : 1;
             if (isSelected && status === 1) tr.classList.add("row-ok");
-            const statusHtml = isSelected ? (status === 1 ? '<span class="badge badge-ok">Conferido</span>' : '<span class="badge badge-pendente">Pendente</span>') : '<span style="color:var(--gray-300)">—</span>';
-            const actionHtml = isSelected ? (status === 1 ? `<button class="btn-action estornar" onclick="toggleStatus('${f.codigo}')">Reabrir</button>` : `<button class="btn-action entregar" onclick="toggleStatus('${f.codigo}')">Conferir</button>`) : '';
+            if (isSelected && status === 2) tr.classList.add("row-nc");
+            const statusHtml = !isSelected ? '<span style="color:var(--gray-300)">—</span>' :
+                (status === 1 ? '<span class="badge badge-ok">Conforme</span>' :
+                 status === 2 ? '<span class="badge badge-nao-conforme">Não conforme</span>' :
+                 '<span class="badge badge-nao-avaliado">Não avaliado</span>');
+            const actionHtml = isSelected ? `<div class="tool-actions">
+                    <button class="btn-action entregar" onclick="marcarConforme('${f.codigo}')">Conforme</button>
+                    <button class="btn-action nao-conforme" onclick="abrirNC('${f.codigo}')">${status===2?'Editar NC':'Não conforme'}</button>
+                    ${status!==0?`<button class="btn-action estornar" onclick="limparAvaliacao('${f.codigo}')">Reavaliar</button>`:''}
+                </div>` : '';
             const qtyHtml = isSelected ? `<input class="qty-input" type="number" min="1" value="${qty}" onchange="updateQty('${f.codigo}', this.value)">` : '<span style="color:var(--gray-300)">—</span>';
+            const detalheNC = status===2 ? `<div class="nc-detail">${escaparHTML(entry.tipoNC||'Problema')} · ${escaparHTML(entry.destinoNC||'A definir')} · ${Number(entry.qtyNC)||1}/${qty} un. <div class="nc-note">${escaparHTML(entry.obsNC||'')}</div></div>` : '';
             tr.innerHTML = `
                 <td><input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleSelect(this, '${f.codigo}')"></td>
                 <td class="td-code" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--gray-500)">${f.codigo}</td>
-                <td><div class="tool-name">${f.descricao}</div><div class="tool-code-mobile">${f.codigo}</div>${isSelected ? `<div class="mobile-qty"><span class="mobile-qty-label">Qtd.</span><div class="qty-stepper"><button type="button" onclick="alterarQty('${f.codigo}',-1)">−</button><input type="number" min="1" value="${qty}" onchange="updateQty('${f.codigo}',this.value)"><button type="button" onclick="alterarQty('${f.codigo}',1)">+</button></div></div>` : ''}</td>
+                <td><div class="tool-name">${escaparHTML(f.descricao)}</div><div class="tool-code-mobile">${escaparHTML(f.codigo)}</div>${detalheNC}${isSelected ? `<div class="mobile-qty"><span class="mobile-qty-label">Qtd.</span><div class="qty-stepper"><button type="button" onclick="alterarQty('${f.codigo}',-1)">−</button><input type="number" min="1" value="${qty}" onchange="updateQty('${f.codigo}',this.value)"><button type="button" onclick="alterarQty('${f.codigo}',1)">+</button></div></div>` : ''}</td>
                 <td class="td-qty">${qtyHtml}</td>
                 <td>${statusHtml}</td>
                 <td>${actionHtml}</td>`;
@@ -900,20 +973,56 @@
     }
     function updateQty(code, value) {
         const e = selectedCodes.get(code);
-        if (e) { e.qty = Math.max(1, parseInt(value) || 1); selectedCodes.set(code, e); salvarRascunho(); }
+        if (e) { e.qty = Math.max(1, parseInt(value) || 1); e.qtyNC=Math.min(e.qty,Number(e.qtyNC)||1); selectedCodes.set(code, e); salvarRascunho(); render(); }
     }
     function alterarQty(code, delta) {
         const e=selectedCodes.get(code);
         if(!e) return;
         e.qty=Math.max(1,(Number(e.qty)||1)+delta);
+        e.qtyNC=Math.min(e.qty,Number(e.qtyNC)||1);
         selectedCodes.set(code,e);
         salvarRascunho();
         render();
     }
-    function toggleStatus(code) {
-        const e = selectedCodes.get(code);
-        if (e) { e.status = e.status === 0 ? 1 : 0; selectedCodes.set(code, e); salvarRascunho(); }
-        if (filtroStatus !== 'todos') aplicarBusca(); else render();
+    function marcarConforme(code){
+        const e=selectedCodes.get(code); if(!e) return;
+        selectedCodes.set(code,{...e,status:1,tipoNC:'',destinoNC:'',obsNC:'',qtyNC:1});
+        salvarRascunho(); aplicarBusca();
+    }
+    function limparAvaliacao(code){
+        const e=selectedCodes.get(code); if(!e) return;
+        if(e.status===2 && !confirm('Limpar a não conformidade registrada para esta ferramenta?')) return;
+        selectedCodes.set(code,{...e,status:0,tipoNC:'',destinoNC:'',obsNC:'',qtyNC:1});
+        salvarRascunho(); aplicarBusca();
+    }
+    function abrirNC(code){
+        const e=selectedCodes.get(code); if(!e) return;
+        codigoEdicaoNC=code;
+        const f=bancoBase.find(f=>f.codigo===code);
+        document.getElementById('ncFerramenta').textContent=`${code} · ${f?f.descricao:''} · Qtd. total: ${e.qty}`;
+        document.getElementById('ncTipo').value=e.tipoNC||'';
+        document.getElementById('ncDestino').value=e.destinoNC||'';
+        document.getElementById('ncQuantidade').value=e.status===2?Math.min(e.qty,Number(e.qtyNC)||1):1;
+        document.getElementById('ncQuantidade').max=e.qty;
+        document.getElementById('ncObservacao').value=e.obsNC||'';
+        document.getElementById('ncBackdrop').classList.add('open');
+    }
+    function fecharNC(event){
+        if(event && event.target.id!=='ncBackdrop') return;
+        document.getElementById('ncBackdrop').classList.remove('open'); codigoEdicaoNC=null;
+    }
+    function salvarNC(){
+        const e=selectedCodes.get(codigoEdicaoNC); if(!e) return;
+        const tipo=document.getElementById('ncTipo').value;
+        const destino=document.getElementById('ncDestino').value;
+        const qtyNC=Number(document.getElementById('ncQuantidade').value);
+        const obs=document.getElementById('ncObservacao').value.trim();
+        if(!tipo){showToast('Selecione o problema identificado.');document.getElementById('ncTipo').focus();return;}
+        if(!destino){showToast('Selecione o encaminhamento.');document.getElementById('ncDestino').focus();return;}
+        if(!Number.isInteger(qtyNC)||qtyNC<1||qtyNC>e.qty){showToast('Quantidade não conforme deve ser entre 1 e '+e.qty);document.getElementById('ncQuantidade').focus();return;}
+        if(!obs){showToast('Descreva a ocorrência.');document.getElementById('ncObservacao').focus();return;}
+        selectedCodes.set(codigoEdicaoNC,{...e,status:2,tipoNC:tipo,destinoNC:destino,obsNC:obs,qtyNC});
+        fecharNC();salvarRascunho();aplicarBusca();showToast('Não conformidade registrada.');
     }
     function toggleAll(cb) {
         const checked = cb.checked;
@@ -927,45 +1036,40 @@
         if (filtroStatus !== 'todos') aplicarBusca(); else render();
     }
 
-    function marcarVisiveisConferidos() {
-        if (!Array.isArray(filtrado) || filtrado.length === 0) {
-            showToast("Nenhum item visível para conferir.");
-            return;
-        }
-
-        let total = 0;
-        filtrado.forEach(f => {
-            const atual = selectedCodes.get(f.codigo);
-            const qty = atual && atual.qty ? atual.qty : 1;
-            selectedCodes.set(f.codigo, { status: 1, qty });
-            total++;
+    function marcarVisiveisConformes() {
+        if (!filtrado.length){showToast('Nenhum item visível.');return;}
+        let alterados=0, preservados=0;
+        filtrado.forEach(f=>{
+            const atual=selectedCodes.get(f.codigo);
+            if(atual && atual.status===2){preservados++;return;}
+            const qty=atual?atual.qty:1;
+            selectedCodes.set(f.codigo,{status:1,qty,tipoNC:'',destinoNC:'',obsNC:'',qtyNC:1});alterados++;
         });
-
-        salvarRascunho();
-        if (filtroStatus !== 'todos') aplicarBusca();
-        else render();
-        showToast(`${total} item${total === 1 ? '' : 's'} conferido${total === 1 ? '' : 's'}.`);
+        salvarRascunho(); aplicarBusca();
+        showToast(`${alterados} conformes. ${preservados?preservados+' não conformidades preservadas.':''}`);
     }
 
     function atualizarDashboard() {
-        let ok = 0, pendentes = 0;
-        selectedCodes.forEach(e => { if (e.status === 1) ok++; else pendentes++; });
-        const total = selectedCodes.size;
-        document.getElementById("totalFerramentas").textContent = ferramentas.length;
-        document.getElementById("totalSelecionado").textContent = total;
-        document.getElementById("totalOK").textContent = ok;
-        document.getElementById("totalPendentes").textContent = pendentes;
-        const ps = document.getElementById("progressSection");
-        if (total > 0) {
-            ps.classList.add("visible");
-            const pct = Math.round((ok / total) * 100);
-            document.getElementById("progressFill").style.width = pct + "%";
-            document.getElementById("progressText").textContent = `${ok} de ${total} conferidas (${pct}%)`;
-        } else ps.classList.remove("visible");
+        let ok=0,nc=0,na=0;
+        selectedCodes.forEach(e=>{if(e.status===1)ok++;else if(e.status===2)nc++;else na++;});
+        const total=selectedCodes.size;
+        document.getElementById('totalFerramentas').textContent=ferramentas.length;
+        document.getElementById('totalSelecionado').textContent=total;
+        document.getElementById('totalOK').textContent=ok;
+        document.getElementById('totalPendentes').textContent=nc;
+        const ps=document.getElementById('progressSection');
+        if(total){
+            ps.classList.add('visible');
+            const pct=Math.round(((ok+nc)/total)*100);
+            document.getElementById('progressFill').style.width=pct+'%';
+            document.getElementById('progressText').textContent=`${ok+nc} de ${total} avaliados (${pct}%) · ${na} não avaliados`;
+        } else ps.classList.remove('visible');
     }
 
     // Exportar
     function validarCampos() {
+        const motivo=document.getElementById('motivoChecklist').value;
+        if(!motivo){showToast('Selecione o motivo do checklist.');document.getElementById('motivoChecklist').focus();return false;}
         const m = document.getElementById("mecanico").value.trim();
         if (!m) { showToast("⚠️ Informe o mecânico."); document.getElementById("mecanico").focus(); return false; }
         if (selectedCodes.size === 0) { showToast("⚠️ Nenhuma ferramenta selecionada."); return false; }
@@ -1005,9 +1109,9 @@
         doc.text('CHECKLIST DE CONTROLE DE FERRAMENTAS',62,12);
         doc.setFont('helvetica','normal');
         doc.setFontSize(8.5);
-        doc.text('Movimentação, conferência e rastreabilidade de itens',62,18);
+        doc.text('MOTIVO: '+(document.getElementById('motivoChecklist').value||'NÃO INFORMADO').toLocaleUpperCase('pt-BR'),62,18);
         doc.setFontSize(7.5);
-        doc.text('Documento de controle interno',62,23);
+        doc.text('Inspeção de condição e rastreabilidade de ferramentas',62,23);
     }
     async function gerarPDF() {
         if (!validarCampos()) return;
@@ -1020,12 +1124,14 @@
         const logo=await obterLogoBase64(); const orange=[255,122,0], dark=[35,39,43], gray=[95,105,115], light=[244,246,248], pageW=doc.internal.pageSize.getWidth();
         desenharCabecalhoPDF(doc, logo, pageW, dark, orange);
         doc.setTextColor(...dark); doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.text('IDENTIFICAÇÃO DO REGISTRO',14,39);
-        let ok=0,pend=0; selectedCodes.forEach(e=>e.status===1?ok++:pend++);
-        const meta=[['Data',formatarDataBR(dataDoc),'Unidade / Setor',un],['Técnico / Mecânico',nome,'OS / Referência',ref],['Responsável pela conferência',resp,'Situação',pend===0?'CONCLUÍDO':`${pend} PENDÊNCIA(S)`]];
+        let ok=0,nc=0,na=0; selectedCodes.forEach(e=>{if(e.status===1)ok++;else if(e.status===2)nc++;else na++;});
+        const motivo=document.getElementById('motivoChecklist').value;
+        const situacao=na?`${na} NÃO AVALIADO(S)`:nc?`${nc} NÃO CONFORME(S)`:'AVALIAÇÃO CONCLUÍDA';
+        const meta=[['Data',formatarDataBR(dataDoc),'Unidade / Setor',un],['Técnico / Mecânico',nome,'OS / Referência',ref],['Motivo',motivo,'Situação',situacao],['Responsável',resp,'Tipo','Inspeção de ferramentas']];
         doc.autoTable({startY:42,body:meta,theme:'grid',margin:{left:14,right:14},styles:{fontSize:8.5,cellPadding:2.5,lineColor:[220,224,228],lineWidth:.25,textColor:dark},columnStyles:{0:{fontStyle:'bold',fillColor:light,cellWidth:33},1:{cellWidth:56},2:{fontStyle:'bold',fillColor:light,cellWidth:35},3:{cellWidth:58}}});
-        const yResumo=doc.lastAutoTable.finalY+6, resumo=[['Itens no checklist',String(selectedCodes.size)],['Conferidos',String(ok)],['Pendentes',String(pend)]], bw=56,gap=4;
+        const yResumo=doc.lastAutoTable.finalY+6, resumo=[['Itens',String(selectedCodes.size)],['Conformes',String(ok)],['Não conformes',String(nc)],['Não avaliados',String(na)]], bw=42.5,gap=4;
         resumo.forEach((r,i)=>{const x=14+i*(bw+gap);doc.setFillColor(...light);doc.roundedRect(x,yResumo,bw,16,1.5,1.5,'F');doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...gray);doc.text(r[0].toUpperCase(),x+4,yResumo+5);doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(...dark);doc.text(r[1],x+4,yResumo+12);});
-        const linhas=[]; selectedCodes.forEach((entry,code)=>{const f=bancoBase.find(x=>x.codigo===code)||ferramentas.find(x=>x.codigo===code);linhas.push([code,f?f.descricao:'Item não localizado',entry.qty,entry.status===1?'CONFERIDO':'PENDENTE']);}); linhas.sort((a,b)=>a[1].localeCompare(b[1],'pt-BR'));
+        const linhas=[]; selectedCodes.forEach((entry,code)=>{const f=bancoBase.find(x=>x.codigo===code)||ferramentas.find(x=>x.codigo===code);linhas.push([code,f?f.descricao:'Item não localizado',entry.qty,entry.status===1?'CONFORME':entry.status===2?'NÃO CONFORME':'NÃO AVALIADO']);}); linhas.sort((a,b)=>a[1].localeCompare(b[1],'pt-BR'));
         doc.autoTable({
             startY:yResumo+22,
             head:[['Código','Descrição da ferramenta','Qtd.','Situação']],
@@ -1034,17 +1140,30 @@
             headStyles:{fillColor:dark,textColor:255,fontSize:8,fontStyle:'bold',cellPadding:2.4},
             bodyStyles:{fontSize:8,cellPadding:2.2,lineColor:[230,233,236],lineWidth:.2,textColor:dark},
             alternateRowStyles:{fillColor:[249,250,251]},
-            columnStyles:{0:{cellWidth:34,font:'courier',fontSize:7.2},1:{cellWidth:'auto'},2:{cellWidth:14,halign:'center'},3:{cellWidth:26,halign:'center',fontStyle:'bold'}},
-            didParseCell:d=>{if(d.section==='body'&&d.column.index===3)d.cell.styles.textColor=d.cell.raw==='PENDENTE'?[180,35,24]:[21,122,56];},
+            columnStyles:{0:{cellWidth:34,font:'courier',fontSize:7.2},1:{cellWidth:'auto'},2:{cellWidth:14,halign:'center'},3:{cellWidth:31,halign:'center',fontStyle:'bold'}},
+            didParseCell:d=>{if(d.section==='body'&&d.column.index===3)d.cell.styles.textColor=d.cell.raw==='NÃO CONFORME'?[180,35,24]:d.cell.raw==='NÃO AVALIADO'?[108,117,125]:[21,122,56];},
             didDrawPage:()=>desenharCabecalhoPDF(doc, logo, pageW, dark, orange)
         });
+        if(nc>0){
+            const ocorrencias=[];
+            selectedCodes.forEach((e,code)=>{if(e.status===2)ocorrencias.push([code,String(e.qtyNC||1),e.tipoNC||'—',e.destinoNC||'—',e.obsNC||'—']);});
+            doc.autoTable({
+                startY:doc.lastAutoTable.finalY+9,
+                head:[['Código','Qtd. NC','Problema','Encaminhamento','Observação']],body:ocorrencias,
+                margin:{left:14,right:14,top:36,bottom:31},
+                headStyles:{fillColor:[130,45,37],textColor:255,fontSize:7.5},
+                bodyStyles:{fontSize:7.3,cellPadding:2.1,lineColor:[222,226,231],lineWidth:.2},
+                columnStyles:{0:{cellWidth:32},1:{cellWidth:16,halign:'center'},2:{cellWidth:31},3:{cellWidth:31},4:{cellWidth:'auto'}},
+                didDrawPage:()=>desenharCabecalhoPDF(doc,logo,pageW,dark,orange)
+            });
+        }
         let y=doc.lastAutoTable.finalY+8;
         if(y>235){
             doc.addPage();
             desenharCabecalhoPDF(doc, logo, pageW, dark, orange);
             y=40;
         }
-        doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...dark);doc.text('DECLARAÇÃO DE CONFERÊNCIA',14,y);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...gray);doc.text(doc.splitTextToSize('Declaro que os itens acima foram relacionados e conferidos conforme a situação registrada neste documento. Eventuais pendências deverão ser regularizadas e registradas pelo responsável.',pageW-28),14,y+5);
+        doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(...dark);doc.text('DECLARAÇÃO DE CONFERÊNCIA',14,y);doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...gray);doc.text(doc.splitTextToSize('Declaro que os itens relacionados foram avaliados conforme a situação registrada. As não conformidades e respectivos encaminhamentos constam neste documento para tratamento pelo responsável.',pageW-28),14,y+5);
         const sy=y+24;doc.setDrawColor(130);doc.line(14,sy,88,sy);doc.line(108,sy,pageW-14,sy);doc.setFontSize(7.5);doc.text('Técnico / Mecânico',51,sy+5,{align:'center'});doc.text('Responsável pela conferência',151,sy+5,{align:'center'});
         const pages=doc.internal.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);const h=doc.internal.pageSize.getHeight();doc.setDrawColor(220);doc.line(14,h-13,pageW-14,h-13);doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(...gray);doc.text(`Gerado em ${new Date().toLocaleString('pt-BR')}`,14,h-8);doc.text(`Página ${i} de ${pages}`,pageW-14,h-8,{align:'right'});}
         // O backup é anexado depois do %%EOF como comentário ASCII.
@@ -1071,11 +1190,11 @@
         const lista = [];
         selectedCodes.forEach((entry, code) => {
             const f = bancoBase.find(x => x.codigo === code) || ferramentas.find(x => x.codigo === code);
-            lista.push([code, f ? f.descricao : "", entry.qty, entry.status === 1 ? "CONFERIDO" : "PENDENTE"]);
+            lista.push([code, f ? f.descricao : "", entry.qty, entry.status === 1 ? "CONFORME" : entry.status === 2 ? "NÃO CONFORME" : "NÃO AVALIADO", entry.status===2?entry.qtyNC||1:"", entry.tipoNC||"", entry.destinoNC||"", entry.obsNC||""]);
         });
-        const dados = [["CHECKLIST DE CONTROLE DE FERRAMENTAS"],["Técnico / Mecânico:", mecanico],["Data:", formatarDataBR(document.getElementById("data").value)],["Responsável pela conferência:", document.getElementById("responsavel").value],["Unidade / Setor:", document.getElementById("unidade").value],["OS / Referência:", document.getElementById("referencia").value],[],["Código","Descrição da ferramenta","Qtd.","Situação"]].concat(lista);
+        const dados = [["CHECKLIST DE CONTROLE DE FERRAMENTAS"],["Técnico / Mecânico:", mecanico],["Data:", formatarDataBR(document.getElementById("data").value)],["Responsável pela conferência:", document.getElementById("responsavel").value],["Unidade / Setor:", document.getElementById("unidade").value],["OS / Referência:", document.getElementById("referencia").value],["Motivo do checklist:",document.getElementById("motivoChecklist").value],[],["Código","Descrição da ferramenta","Qtd.","Situação","Qtd. NC","Problema","Encaminhamento","Observação"]].concat(lista);
         const ws = XLSX.utils.aoa_to_sheet(dados);
-        ws['!cols'] = [{wch:15},{wch:45},{wch:8},{wch:12}];
+        ws['!cols'] = [{wch:18},{wch:48},{wch:8},{wch:18},{wch:10},{wch:20},{wch:18},{wch:55}];
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Ferramentas");
         XLSX.writeFile(wb, `controle_${mecanico.replace(/ /g,'_')}.xlsx`);
@@ -1091,7 +1210,7 @@
         campoBusca.addEventListener("input", executarBusca, {passive:true});
         campoBusca.addEventListener("search", executarBusca, {passive:true});
     }
-    ['data','mecanico','responsavel','unidade','referencia'].forEach(id => document.getElementById(id).addEventListener('input', debounceDraft, {passive:true}));
+    ['data','mecanico','responsavel','unidade','referencia','motivoChecklist'].forEach(id => document.getElementById(id).addEventListener('input', debounceDraft, {passive:true}));
 
     // PWA Manifest inline
     const manifest = { name:"Controle de Ferramentas — Tradimaq", short_name:"Ferramentas", start_url:"./", display:"standalone", background_color:"#f3f4f6", theme_color:"#ff7a00", icons:[{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"192x192",type:"image/png"},{src:"https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png",sizes:"512x512",type:"image/png"}] };
