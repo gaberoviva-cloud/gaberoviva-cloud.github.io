@@ -1214,6 +1214,8 @@ function atualizarViewerFit(){
   const frame=document.getElementById('viewer-frame');
   frame.classList.toggle('contain',foto.fit==='contain');
   frame.classList.toggle('annotating',currentShapeTool!=='none');
+  const proporcao=getRatioPreset(foto.ratio||'4:3');
+  frame.style.width=`min(100%, ${window.innerWidth<=720?560:640}px, ${(window.innerWidth<=720?52:68)*proporcao.w/proporcao.h}vh)`;
   frame.style.aspectRatio=ratioCss(foto.ratio||'4:3');
   document.getElementById('btn-fit-cover').classList.toggle('active',foto.fit!=='contain');
   document.getElementById('btn-fit-contain').classList.toggle('active',foto.fit==='contain');
