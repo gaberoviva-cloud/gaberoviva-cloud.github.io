@@ -1,4 +1,26 @@
 <!DOCTYPE html>
+<!--
+╔══════════════════════════════════════════════════════════════╗
+║ TRADIMAQ · CONTROLE DE VERSÃO                              ║
+╠══════════════════════════════════════════════════════════════╣
+║ Ferramenta : Vistoria Veicular Tradimaq                    ║
+║ Versão     : 1.2.0                                         ║
+║ Atualizado : 2026-10-16                                    ║
+║ Padrão     : SemVer (MAJOR.MINOR.PATCH)                     ║
+╠══════════════════════════════════════════════════════════════╣
+║ CHANGELOG                                                   ║
+║ 1.2.0 · Persistência robusta de fotos: gravação serial,      ║
+║         IndexedDB otimizado, menos uso de RAM, validação     ║
+║         real de salvamento e proteção contra perda.          ║
+║ 1.1.0 · Período de utilização, previsão de devolução,       ║
+║         KM inicial/final e cálculo de KM rodados.           ║
+╚══════════════════════════════════════════════════════════════╝
+REGRA PARA PRÓXIMAS ALTERAÇÕES:
+- PATCH: correção sem alterar fluxo (1.2.0 → 1.2.1)
+- MINOR: nova função compatível (1.2.0 → 1.3.0)
+- MAJOR: mudança de estrutura/fluxo ou incompatibilidade (1.x.x → 2.0.0)
+Sempre atualizar APP_VERSION, APP_UPDATED e este changelog.
+-->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -48,6 +70,15 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-dim);}
 .field textarea{resize:vertical;min-height:72px;line-height:1.6;}
 .f2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.prazo-wrap{display:flex;flex-direction:column;gap:6px;}
+.prazo-toggle{display:flex!important;align-items:center;gap:7px;width:max-content;max-width:100%;padding:6px 9px;border:1px solid var(--line2);border-radius:var(--r);background:var(--bg3);color:var(--txt2)!important;font-size:11px!important;font-weight:600!important;text-transform:none!important;letter-spacing:0!important;cursor:pointer;margin:0!important;}
+.prazo-toggle input{width:16px!important;height:16px!important;margin:0!important;padding:0!important;accent-color:var(--brand);flex:0 0 auto;}
+.prazo-wrap input[type="date"]:disabled{opacity:.5;cursor:not-allowed;background:var(--bg4);}
+.km-hint{margin-top:4px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--txt3);min-height:14px;}
+.km-hint.ok{color:#15803d;font-weight:600;}
+.km-hint.warn{color:#b45309;font-weight:600;}
+.version-pill{opacity:.72;font-size:8px!important;letter-spacing:.03em;}
+@media(max-width:460px){.version-pill{display:none;}}
 
 /* Remessa toggle */
 .remessa-row{display:flex;gap:6px;}
@@ -555,6 +586,7 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
     <span class="hdr-title">Vistoria Veicular</span>
   </div>
   <div class="hdr-right">
+    <span class="status-pill version-pill" id="version-pill">v1.2.0</span>
     <span class="status-pill" id="status-pill">—</span>
   </div>
 </div>
@@ -582,16 +614,33 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
       <div class="field"><label>Placa</label><input id="f-serie" placeholder="Ex: ABC1D23" oninput="changed()" style="text-transform:uppercase;"></div>
     </div>
     <div class="f2">
-      <div class="field"><label>Data</label><input type="date" id="f-data" oninput="changed()"></div>
+      <div class="field"><label>Data Inicial</label><input type="date" id="f-data" oninput="syncPeriodo();changed()"></div>
+      <div class="field">
+        <label>Previsão de Devolução</label>
+        <div class="prazo-wrap">
+          <input type="date" id="f-data-final" oninput="onDataFinalInput();changed()">
+          <label class="prazo-toggle"><input type="checkbox" id="f-sem-previsao" checked onchange="toggleSemPrevisao(this.checked)"> Sem previsão</label>
+        </div>
+      </div>
+    </div>
+    <div class="f2">
       <div class="field"><label>Filial / Local</label><input id="f-local" placeholder="Ex: TRADIMAQ MG" oninput="changed()"></div>
-    </div>
-    <div class="f2">
       <div class="field"><label>Nº Frota / Patrimônio</label><input id="f-tag" placeholder="Ex: FR-012" oninput="changed()"></div>
-      <div class="field"><label>Condutor / Colaborador</label><input id="f-cliente" placeholder="Nome do colaborador" oninput="changed()"></div>
     </div>
     <div class="f2">
-      <div class="field"><label>Quilometragem (km)</label><input id="f-horimetro" type="number" min="0" step="1" placeholder="Ex: 48210" oninput="changed()"></div>
+      <div class="field"><label>Condutor / Colaborador</label><input id="f-cliente" placeholder="Nome do colaborador" oninput="changed()"></div>
       <div class="field"><label>Setor / Departamento</label><input id="f-setor" placeholder="Ex: Manutenção" oninput="changed()"></div>
+    </div>
+    <div class="f2">
+      <div class="field">
+        <label>KM Inicial</label>
+        <input id="f-horimetro" type="number" min="0" step="1" placeholder="Ex: 48210" oninput="atualizarKmRodadosUI();changed()">
+      </div>
+      <div class="field">
+        <label>KM Final</label>
+        <input id="f-km-final" type="number" min="0" step="1" placeholder="Preencher na devolução" oninput="atualizarKmRodadosUI();changed()">
+        <div class="km-hint" id="km-rodados-hint">KM rodados: —</div>
+      </div>
     </div>
   </div>
 
@@ -691,73 +740,203 @@ body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--txt);font-
 
 <script>
 /* ══════════ CONSTANTES ══════════ */
+const APP_VERSION='1.2.0';
+const APP_UPDATED='2026-10-16';
 const LOGO_URL='https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png';
 let LOGO=LOGO_URL;
 const CACHE_KEY='tradimaq_veicular_v1';
 const CURRENT_DRAFT_KEY='tradimaq_veicular_current_draft_id';
 const DRAFT_LIMIT=5;
 const DRAFT_PREFIX='rascunho:';
+const DRAFT_INDEX_KEY='tradimaq_veicular_draft_index_v2';
 const BACKUP_FORMAT='tradimaq-veicular-backup';
-const BACKUP_VERSION=1;
+const BACKUP_VERSION=2;
 const IDB_NAME='tradimaq_veicular_fotos';
 const IDB_STORE='fotos';
 const IDB_VERSION=1;
+const PHOTO_MAX_DIM=1280;
+const PHOTO_JPEG_QUALITY=.82;
+const SAVE_RETRIES=2;
+const SAVE_TIMEOUT_MS=10000;
+const STORAGE_WARN_RATIO=.82;
 
-/* ══════════ INDEXEDDB — FOTOS ══════════ */
+/* ══════════ PERSISTÊNCIA ROBUSTA — INDEXEDDB / RASCUNHOS ══════════
+   v1.2.0
+   - Uma única cópia principal das fotos por rascunho (evita duplicação do cache).
+   - Índice leve de rascunhos no localStorage: a lista NÃO carrega todas as fotos na RAM.
+   - Escritas serializadas + retry em falhas transitórias.
+   - Cache antigo "fotos_cache" continua sendo lido para migração, mas não é mais gravado.
+════════════════════════════════════════════════════════════════════ */
 let _idb=null;
+let _draftIndexReady=false;
+let _lastStorageCheck=0;
+let _storageWarned=false;
+
+function fecharIDB(){
+  try{_idb?.close();}catch(e){}
+  _idb=null;
+}
 function abrirIDB(){
   if(_idb) return Promise.resolve(_idb);
   return new Promise((res,rej)=>{
-    const req=indexedDB.open(IDB_NAME,IDB_VERSION);
+    let settled=false;
+    let req;
+    try{req=indexedDB.open(IDB_NAME,IDB_VERSION);}catch(e){rej(e);return;}
+    const timer=setTimeout(()=>{if(!settled){settled=true;rej(new Error('Tempo esgotado ao abrir armazenamento local'));}},SAVE_TIMEOUT_MS);
     req.onupgradeneeded=e=>{
       const db=e.target.result;
-      if(!db.objectStoreNames.contains(IDB_STORE))
-        db.createObjectStore(IDB_STORE,{keyPath:'id'});
+      if(!db.objectStoreNames.contains(IDB_STORE))db.createObjectStore(IDB_STORE,{keyPath:'id'});
     };
-    req.onsuccess=e=>{_idb=e.target.result;res(_idb);};
-    req.onerror=e=>rej(e.target.error);
+    req.onsuccess=e=>{
+      if(settled){try{e.target.result.close();}catch(_){}return;}
+      settled=true;clearTimeout(timer);
+      _idb=e.target.result;
+      _idb.onversionchange=()=>fecharIDB();
+      res(_idb);
+    };
+    req.onerror=e=>{if(!settled){settled=true;clearTimeout(timer);rej(e.target.error||new Error('Falha ao abrir IndexedDB'));}};
+    req.onblocked=()=>{if(!settled){settled=true;clearTimeout(timer);rej(new Error('Armazenamento bloqueado por outra aba'));}};
   });
 }
-async function idbSalvarFotos(estadoObj){
-  try{
+function isQuotaError(e){
+  const n=String(e?.name||''),m=String(e?.message||'').toLowerCase();
+  return n==='QuotaExceededError'||m.includes('quota')||m.includes('storage full')||m.includes('disk full');
+}
+function isRetryableIDBError(e){
+  if(isQuotaError(e))return false;
+  const n=String(e?.name||'');
+  return ['AbortError','UnknownError','InvalidStateError','TransactionInactiveError','NotReadableError'].includes(n)||/bloquead|blocked|tempor|timeout|tempo esgotado/i.test(String(e?.message||''));
+}
+function delay(ms){return new Promise(r=>setTimeout(r,ms));}
+async function comRetryIDB(fn,label='IndexedDB'){
+  let lastErr;
+  for(let tentativa=0;tentativa<=SAVE_RETRIES;tentativa++){
+    try{return await fn();}
+    catch(e){
+      lastErr=e;console.warn(`${label} · tentativa ${tentativa+1}:`,e);
+      if(tentativa>=SAVE_RETRIES||!isRetryableIDBError(e))break;
+      fecharIDB();await delay(220*(tentativa+1));
+    }
+  }
+  throw lastErr||new Error('Falha no armazenamento local');
+}
+async function idbGet(id){
+  return comRetryIDB(async()=>{
     const db=await abrirIDB();
-    const fotos={};
-    TOPICOS.forEach(t=>{fotos[t.id]=estadoObj[t.id].fotos;});
+    return await new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readonly');
+      const req=tx.objectStore(IDB_STORE).get(id);
+      const timer=setTimeout(()=>{try{tx.abort();}catch(_){}rej(new Error('Tempo esgotado ao ler armazenamento'));},SAVE_TIMEOUT_MS);
+      req.onsuccess=()=>{clearTimeout(timer);res(req.result||null);};
+      req.onerror=e=>{clearTimeout(timer);rej(e.target.error||new Error('Falha ao ler armazenamento'));};
+      tx.onabort=e=>{clearTimeout(timer);rej(tx.error||e.target.error||new Error('Leitura cancelada'));};
+    });
+  },'Leitura IndexedDB');
+}
+async function idbPut(value){
+  return comRetryIDB(async()=>{
+    const db=await abrirIDB();
     return await new Promise((res,rej)=>{
       const tx=db.transaction(IDB_STORE,'readwrite');
-      const store=tx.objectStore(IDB_STORE);
-      store.put({id:'fotos_cache',fotos});
-      tx.oncomplete=()=>res(true);
-      tx.onerror=e=>rej(e.target.error);
-      tx.onabort=e=>rej(e.target.error||new Error('Falha ao salvar fotos'));
+      const timer=setTimeout(()=>{try{tx.abort();}catch(_){}rej(new Error('Tempo esgotado ao gravar armazenamento'));},SAVE_TIMEOUT_MS);
+      tx.objectStore(IDB_STORE).put(value);
+      tx.oncomplete=()=>{clearTimeout(timer);res(true);};
+      tx.onerror=e=>{clearTimeout(timer);rej(tx.error||e.target.error||new Error('Falha ao gravar armazenamento'));};
+      tx.onabort=e=>{clearTimeout(timer);rej(tx.error||e.target.error||new Error('Gravação cancelada'));};
     });
-  }catch(e){console.warn('IDB salvar fotos:',e);throw e;}
+  },'Gravação IndexedDB');
 }
-async function idbCarregarFotos(){
-  try{
+async function idbDelete(id){
+  return comRetryIDB(async()=>{
     const db=await abrirIDB();
-    return new Promise((res,rej)=>{
-      const tx=db.transaction(IDB_STORE,'readonly');
-      const req=tx.objectStore(IDB_STORE).get('fotos_cache');
-      req.onsuccess=e=>res(e.target.result?.fotos||null);
-      req.onerror=e=>rej(e.target.error);
+    return await new Promise((res,rej)=>{
+      const tx=db.transaction(IDB_STORE,'readwrite');
+      tx.objectStore(IDB_STORE).delete(id);
+      tx.oncomplete=()=>res(true);
+      tx.onerror=e=>rej(tx.error||e.target.error||new Error('Falha ao excluir armazenamento'));
+      tx.onabort=e=>rej(tx.error||e.target.error||new Error('Exclusão cancelada'));
     });
-  }catch(e){console.warn('IDB carregar fotos:',e);return null;}
+  },'Exclusão IndexedDB');
+}
+
+/* Compatibilidade: versões antigas duplicavam as fotos em "fotos_cache". */
+async function idbCarregarFotos(){
+  try{return (await idbGet('fotos_cache'))?.fotos||null;}
+  catch(e){console.warn('Cache legado de fotos:',e);return null;}
 }
 async function idbLimparFotos(){
-  try{
-    const db=await abrirIDB();
-    return new Promise((res,rej)=>{
-      const tx=db.transaction(IDB_STORE,'readwrite');
-      tx.objectStore(IDB_STORE).delete('fotos_cache');
-      tx.oncomplete=()=>res();
-      tx.onerror=e=>rej(e.target.error);
-    });
-  }catch(e){console.warn('IDB limpar:',e);}
+  try{return await idbDelete('fotos_cache');}catch(e){console.warn('Limpeza do cache legado:',e);return false;}
 }
 
+function contarFotosEstadoObj(estadoObj){
+  let total=0;
+  Object.values(estadoObj||{}).forEach(tp=>(tp?.fotos||[]).forEach(arr=>{if(Array.isArray(arr))total+=arr.length;}));
+  return total;
+}
+function lerIndiceRascunhos(){
+  try{
+    const arr=JSON.parse(localStorage.getItem(DRAFT_INDEX_KEY)||'[]');
+    return Array.isArray(arr)?arr:[];
+  }catch(e){return [];}
+}
+function salvarIndiceRascunhos(arr){
+  try{localStorage.setItem(DRAFT_INDEX_KEY,JSON.stringify(arr));return true;}
+  catch(e){console.warn('Índice de rascunhos:',e);return false;}
+}
+function resumoRascunho(snapshot,updatedAt,draftId=currentDraftId){
+  const f=snapshot?.fields||{};
+  return {
+    draftId,
+    updatedAt,
+    fields:{modelo:f.modelo||'',serie:f.serie||'',tag:f.tag||'',cliente:f.cliente||'',data:f.data||'',remessa:f.remessa||'emprestimo'},
+    photoCount:contarFotosEstadoObj(snapshot?.estado||{})
+  };
+}
+async function garantirIndiceRascunhos(){
+  let idx=lerIndiceRascunhos();
+  if(idx.length){_draftIndexReady=true;return idx;}
+  if(_draftIndexReady)return idx;
+  try{
+    const db=await abrirIDB();
+    idx=await new Promise((res,rej)=>{
+      const arr=[];
+      const tx=db.transaction(IDB_STORE,'readonly');
+      const req=tx.objectStore(IDB_STORE).openCursor();
+      req.onsuccess=e=>{
+        const c=e.target.result;
+        if(!c){res(arr);return;}
+        const val=c.value;
+        if(typeof val?.id==='string'&&val.id.startsWith(DRAFT_PREFIX)&&val.snapshot){
+          arr.push(resumoRascunho(val.snapshot,val.updatedAt||'',val.draftId||val.id.slice(DRAFT_PREFIX.length)));
+        }
+        c.continue();
+      };
+      req.onerror=e=>rej(e.target.error);
+    });
+    idx.sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
+    const extras=idx.slice(DRAFT_LIMIT);
+    idx=idx.slice(0,DRAFT_LIMIT);
+    salvarIndiceRascunhos(idx);
+    _draftIndexReady=true;
+    for(const x of extras){idbDelete(DRAFT_PREFIX+x.draftId).catch(()=>{});}
+    return idx;
+  }catch(e){console.warn('Reconstrução do índice:',e);_draftIndexReady=true;return [];}
+}
+function atualizarIndiceRascunho(snapshot,updatedAt){
+  let idx=lerIndiceRascunhos();
+  const item=resumoRascunho(snapshot,updatedAt,currentDraftId);
+  idx=[item,...idx.filter(x=>x.draftId!==currentDraftId)].sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
+  const removidos=idx.slice(DRAFT_LIMIT);
+  idx=idx.slice(0,DRAFT_LIMIT);
+  salvarIndiceRascunhos(idx);
+  _draftIndexReady=true;
+  return removidos;
+}
+function removerDoIndiceRascunhos(id){
+  const idx=lerIndiceRascunhos().filter(x=>x.draftId!==id);
+  salvarIndiceRascunhos(idx);
+}
 
-/* ══════════ RASCUNHOS — INDEXEDDB ══════════ */
 function novoDraftId(){
   if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();
   return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10);
@@ -774,40 +953,61 @@ function definirDraftAtual(id){
   try{localStorage.setItem(CURRENT_DRAFT_KEY,currentDraftId);}catch(e){}
 }
 async function idbSalvarRascunho(snapshot){
-  if(!snapshot||!temConteudoVistoria(snapshot))return;
-  const db=await abrirIDB();
-  return new Promise((res,rej)=>{
-    const tx=db.transaction(IDB_STORE,'readwrite'),store=tx.objectStore(IDB_STORE);
-    const updatedAt=new Date().toISOString();
-    store.put({id:DRAFT_PREFIX+currentDraftId,draftId:currentDraftId,updatedAt,snapshot});
-    const req=store.getAll();
-    req.onsuccess=()=>{
-      const drafts=(req.result||[]).filter(x=>typeof x.id==='string'&&x.id.startsWith(DRAFT_PREFIX));
-      drafts.sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
-      drafts.slice(DRAFT_LIMIT).forEach(x=>store.delete(x.id));
-    };
-    tx.oncomplete=()=>res();tx.onerror=e=>rej(e.target.error);tx.onabort=e=>rej(e.target.error||new Error('Transação cancelada'));
-  });
+  if(!snapshot||!temConteudoVistoria(snapshot))return true;
+  const updatedAt=new Date().toISOString();
+  await idbPut({id:DRAFT_PREFIX+currentDraftId,draftId:currentDraftId,updatedAt,snapshot,appVersion:APP_VERSION});
+  const removidos=atualizarIndiceRascunho(snapshot,updatedAt);
+  for(const x of removidos){try{await idbDelete(DRAFT_PREFIX+x.draftId);}catch(e){console.warn('Limpeza de rascunho antigo:',e);}}
+  return true;
 }
 async function idbListarRascunhos(){
-  try{
-    const db=await abrirIDB();
-    return await new Promise((res,rej)=>{
-      const tx=db.transaction(IDB_STORE,'readonly'),req=tx.objectStore(IDB_STORE).getAll();
-      req.onsuccess=()=>{const arr=(req.result||[]).filter(x=>typeof x.id==='string'&&x.id.startsWith(DRAFT_PREFIX));arr.sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));res(arr.slice(0,DRAFT_LIMIT));};
-      req.onerror=e=>rej(e.target.error);
-    });
-  }catch(e){console.warn('IDB listar rascunhos:',e);return [];}
+  return await garantirIndiceRascunhos();
 }
 async function idbObterRascunho(id){
-  try{
-    const db=await abrirIDB();
-    return await new Promise((res,rej)=>{const req=db.transaction(IDB_STORE,'readonly').objectStore(IDB_STORE).get(DRAFT_PREFIX+id);req.onsuccess=()=>res(req.result||null);req.onerror=e=>rej(e.target.error);});
-  }catch(e){console.warn('IDB obter rascunho:',e);return null;}
+  try{return await idbGet(DRAFT_PREFIX+id);}
+  catch(e){console.warn('IDB obter rascunho:',e);return null;}
 }
 async function idbExcluirRascunho(id){
-  const db=await abrirIDB();
-  return new Promise((res,rej)=>{const tx=db.transaction(IDB_STORE,'readwrite');tx.objectStore(IDB_STORE).delete(DRAFT_PREFIX+id);tx.oncomplete=()=>res();tx.onerror=e=>rej(e.target.error);});
+  await idbDelete(DRAFT_PREFIX+id);
+  removerDoIndiceRascunhos(id);
+  return true;
+}
+
+async function prepararArmazenamento(){
+  let ok=true;
+  try{
+    await idbPut({id:'healthcheck',at:Date.now(),appVersion:APP_VERSION});
+    await idbDelete('healthcheck');
+  }catch(e){
+    ok=false;console.warn('IndexedDB indisponível:',e);
+    toast('⚠️ Armazenamento local indisponível. Não feche a vistoria sem exportar um Backup JSON.',5200);
+  }
+  try{
+    if(navigator.storage?.persist){
+      const jaPersistente=await navigator.storage.persisted?.();
+      if(!jaPersistente)await navigator.storage.persist();
+    }
+  }catch(e){console.warn('Persistência de armazenamento não disponível:',e);}
+  verificarEspacoArmazenamento(true).catch(()=>{});
+  return ok;
+}
+async function verificarEspacoArmazenamento(force=false){
+  if(!navigator.storage?.estimate)return null;
+  const now=Date.now();if(!force&&now-_lastStorageCheck<60000)return null;_lastStorageCheck=now;
+  try{
+    const {usage=0,quota=0}=await navigator.storage.estimate();
+    if(!quota)return null;
+    const ratio=usage/quota;
+    if(ratio>=STORAGE_WARN_RATIO&&!_storageWarned){
+      _storageWarned=true;
+      toast(`⚠️ Armazenamento do navegador em ${Math.round(ratio*100)}%. Exporte um Backup JSON e remova rascunhos antigos.`,5200);
+    }
+    return {usage,quota,ratio};
+  }catch(e){return null;}
+}
+function mensagemErroPersistencia(e){
+  if(isQuotaError(e))return '⚠️ Armazenamento cheio. A foto continua na tela, mas NÃO foi gravada. Não feche: exporte Backup JSON ou apague rascunhos antigos.';
+  return '⚠️ Falha ao gravar no aparelho. A foto continua na tela, mas NÃO está confirmada. Não feche e tente Salvar novamente.';
 }
 
 /* ══════════ TÓPICOS ══════════ */
@@ -845,7 +1045,11 @@ const TOPICOS=[
 let estado={};
 TOPICOS.forEach(t=>{estado[t.id]={checked:Array(t.itens.length).fill(false),fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:''};});
 let autoSaveTimer=null,hasUnsaved=false;
+let stateRevision=0;
+let saveQueue=Promise.resolve(true);
 window.addEventListener('beforeunload',e=>{if(hasUnsaved){e.preventDefault();e.returnValue='Informações não salvas serão perdidas. Continuar?';}});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'&&hasUnsaved)salvarCache(true).catch(()=>{});});
+window.addEventListener('pagehide',()=>{if(hasUnsaved)salvarCache(true).catch(()=>{});});
 let camStream=null,camTp=null,camIdx=null;
 let previewShown=false;
 
@@ -860,7 +1064,8 @@ function toggleMobilePreview(){
 /* ══════════ TOAST / BADGE ══════════ */
 function toast(msg,dur=2400){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 function badge(txt,cls){const b=document.getElementById('status-pill');b.textContent=txt;b.className='status-pill'+(cls?' '+cls:'');}
-function changed(){hasUnsaved=true;badge('⏳','dirty');clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();atualizarTitulo();if(window.innerWidth>=860||previewShown)agendarPreview();}
+function marcarSujo(){stateRevision++;hasUnsaved=true;badge('⏳','dirty');}
+function changed(){marcarSujo();clearTimeout(autoSaveTimer);autoSaveTimer=setTimeout(()=>salvarCache(true).catch(()=>{}),3000);atualizarContador();atualizarTitulo();if(window.innerWidth>=860||previewShown)agendarPreview();}
 function atualizarTitulo(){
   const equip=(v('f-tag')||v('f-serie')||'').trim();
   const cliente=(v('f-cliente')||'').trim();
@@ -875,15 +1080,75 @@ function escHTML(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt
 function dataLocalISO(d=new Date()){
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
-function aplicarDataAtual(){const el=document.getElementById('f-data');if(el)el.value=dataLocalISO();}
+function aplicarDataAtual(){const el=document.getElementById('f-data');if(el)el.value=dataLocalISO();syncPeriodo();}
+function syncPeriodo(){
+  const inicio=document.getElementById('f-data'),fim=document.getElementById('f-data-final');
+  if(!fim)return;
+  fim.min=inicio?.value||'';
+  if(fim.value&&inicio?.value&&fim.value<inicio.value)fim.setCustomValidity('A previsão de devolução não pode ser anterior à data inicial.');
+  else fim.setCustomValidity('');
+}
+function aplicarPrazoUI(semPrevisao=true,dataFinal=''){
+  const cb=document.getElementById('f-sem-previsao'),fim=document.getElementById('f-data-final');
+  if(!cb||!fim)return;
+  cb.checked=!!semPrevisao;
+  fim.disabled=!!semPrevisao;
+  fim.value=semPrevisao?'':(dataFinal||'');
+  syncPeriodo();
+}
+function toggleSemPrevisao(checked){
+  const fim=document.getElementById('f-data-final');
+  if(fim){fim.disabled=!!checked;if(checked)fim.value='';else if(!fim.value)fim.focus();}
+  syncPeriodo();changed();
+}
+function onDataFinalInput(){
+  const cb=document.getElementById('f-sem-previsao'),fim=document.getElementById('f-data-final');
+  if(fim?.value&&cb)cb.checked=false;
+  if(fim)fim.disabled=false;
+  syncPeriodo();
+}
+function calcularKmRodados(){
+  const ini=Number(v('f-horimetro')),fim=Number(v('f-km-final'));
+  if(!v('f-horimetro')||!v('f-km-final')||!Number.isFinite(ini)||!Number.isFinite(fim))return null;
+  return fim>=ini?fim-ini:null;
+}
+function atualizarKmRodadosUI(){
+  const el=document.getElementById('km-rodados-hint'),fim=document.getElementById('f-km-final');
+  const ini=Number(v('f-horimetro')),fin=Number(v('f-km-final'));
+  if(!el)return;
+  el.className='km-hint';
+  if(v('f-horimetro')&&v('f-km-final')&&Number.isFinite(ini)&&Number.isFinite(fin)&&fin<ini){
+    if(fim)fim.setCustomValidity('O KM final não pode ser menor que o KM inicial.');
+    el.textContent='KM rodados: valor final menor que o inicial';
+    el.classList.add('warn');
+    return;
+  }
+  if(fim)fim.setCustomValidity('');
+  const km=calcularKmRodados();
+  el.textContent='KM rodados: '+(km===null?'—':km.toLocaleString('pt-BR')+' km');
+  if(km!==null)el.classList.add('ok');
+}
+function validarPeriodoEKm(){
+  const semPrev=!!document.getElementById('f-sem-previsao')?.checked;
+  const inicio=v('f-data'),fim=v('f-data-final');
+  if(!semPrev&&!fim){toast('Informe a previsão de devolução ou marque Sem previsão',3600);document.getElementById('f-data-final')?.focus();return false;}
+  if(!semPrev&&inicio&&fim&&fim<inicio){toast('A previsão de devolução não pode ser anterior à data inicial',3600);document.getElementById('f-data-final')?.focus();return false;}
+  if(v('f-horimetro')&&v('f-km-final')&&Number(v('f-km-final'))<Number(v('f-horimetro'))){toast('O KM final não pode ser menor que o KM inicial',3600);document.getElementById('f-km-final')?.focus();return false;}
+  return true;
+}
 
 /* ══════════ INIT ══════════ */
 document.getElementById('f-data').value=dataLocalISO();
+aplicarPrazoUI(true,'');
+atualizarKmRodadosUI();
 async function initApp(){
   try{const r=await fetch(LOGO_URL);const b=await r.blob();LOGO=await new Promise(res=>{const rd=new FileReader();rd.onload=e=>res(e.target.result);rd.readAsDataURL(b);});}catch(e){}
   renderTopicos();
+  await prepararArmazenamento();
+  await garantirIndiceRascunhos();
   await carregarCache();
   if(!v('f-descricao'))document.getElementById('f-descricao').value='Veículo sem avarias visuais aparentes no momento da vistoria.';
+  const vp=document.getElementById('version-pill');if(vp){vp.textContent='v'+APP_VERSION;vp.title='Atualizado em '+APP_UPDATED;}
   atualizarContador();atualizarTitulo();badge('—','');
   if(window.innerWidth>=860)atualizar();
   atualizarContadorRascunhos().catch(()=>{});
@@ -892,17 +1157,17 @@ initApp();
 
 /* ══════════ CACHE / SNAPSHOT ══════════ */
 function coletarCampos(){
-  return {modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),setor:v('f-setor'),horimetro:v('f-horimetro'),combustivel:v('f-combustivel'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa')};
+  return {modelo:v('f-modelo'),serie:v('f-serie'),data:v('f-data'),dataFinal:v('f-data-final'),semPrevisao:!!document.getElementById('f-sem-previsao')?.checked,local:v('f-local'),tag:v('f-tag'),cliente:v('f-cliente'),setor:v('f-setor'),horimetro:v('f-horimetro'),kmFinal:v('f-km-final'),combustivel:v('f-combustivel'),descricao:v('f-descricao'),resp1:v('f-resp1'),resp2:v('f-resp2'),condicao:v('f-condicao'),remessa:v('f-remessa')};
 }
 function criarSnapshotCompleto(){
   const estadoCompleto={};
   TOPICOS.forEach(t=>{estadoCompleto[t.id]={checked:[...estado[t.id].checked],fotos:estado[t.id].fotos.map(arr=>[...(arr||[])]),nota:estado[t.id].nota||''};});
-  return {version:BACKUP_VERSION,fields:coletarCampos(),estado:estadoCompleto};
+  return {version:BACKUP_VERSION,appVersion:APP_VERSION,fields:coletarCampos(),estado:estadoCompleto};
 }
 function temConteudoVistoria(snapshot=criarSnapshotCompleto()){
   const f=snapshot.fields||{};
   const desc=(f.descricao||'').trim();
-  if(f.modelo||f.serie||f.local||f.tag||f.cliente||f.setor||f.horimetro||f.resp1||f.resp2)return true;
+  if(f.modelo||f.serie||f.local||f.tag||f.cliente||f.setor||f.horimetro||f.kmFinal||f.dataFinal||f.resp1||f.resp2)return true;
   if(f.condicao||f.remessa==='transferencia'||(f.combustivel&&f.combustivel!=='cheio'))return true;
   if(desc&&desc!=='Veículo sem avarias visuais aparentes no momento da vistoria.')return true;
   return Object.values(snapshot.estado||{}).some(tp=>(tp.checked||[]).some(Boolean)||(tp.fotos||[]).some(a=>Array.isArray(a)&&a.length)||(tp.nota||'').trim());
@@ -927,7 +1192,10 @@ async function aplicarSnapshot(snapshot){
   if(!snapshot||!snapshot.fields||!snapshot.estado)throw new Error('Backup inválido');
   const f=snapshot.fields;
   ['modelo','serie','data','local','tag','cliente','setor','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value=f[k]??'';});
+  const kmFinalEl=document.getElementById('f-km-final');if(kmFinalEl)kmFinalEl.value=f.kmFinal??'';
   if(!v('f-data'))aplicarDataAtual();
+  const semPrev=f.semPrevisao!==undefined?!!f.semPrevisao:!f.dataFinal;
+  aplicarPrazoUI(semPrev,f.dataFinal||'');atualizarKmRodadosUI();
   aplicarCombustivelUI(f.combustivel||'cheio');
   aplicarCondicaoUI(f.condicao||'');
   aplicarRemessaUI(f.remessa||'emprestimo');
@@ -941,17 +1209,34 @@ async function aplicarSnapshot(snapshot){
   });
   renderTopicos();atualizarContador();atualizarTitulo();atualizar();
 }
-async function salvarCache(silent=false){
-  let ok=true;
+async function salvarCacheInterno(silent=false){
+  const revisionAtStart=stateRevision;
+  let ok=true,lastErr=null;
   const estadoSemFotos={};TOPICOS.forEach(t=>{estadoSemFotos[t.id]={checked:[...estado[t.id].checked],fotos:[],nota:estado[t.id].nota||''};});
-  const d={...coletarCampos(),estado:estadoSemFotos};
-  try{localStorage.setItem(CACHE_KEY,JSON.stringify(d));}catch(e){ok=false;console.warn('localStorage:',e);}
-  try{await idbSalvarFotos(estado);}catch(e){ok=false;console.warn('IDB fotos:',e);}
-  try{await idbSalvarRascunho(criarSnapshotCompleto());}catch(e){ok=false;console.warn('IDB rascunho:',e);}
-  if(ok){hasUnsaved=false;badge('✓','saved');if(!silent)toast('Salvo!');}
-  else{badge('⚠','dirty');if(!silent)toast('⚠️ Não foi possível salvar tudo. Verifique o espaço do navegador.',3800);}
+  const d={...coletarCampos(),estado:estadoSemFotos,appVersion:APP_VERSION};
+  try{localStorage.setItem(CACHE_KEY,JSON.stringify(d));}catch(e){ok=false;lastErr=e;console.warn('localStorage:',e);}
+  try{await idbSalvarRascunho(criarSnapshotCompleto());}
+  catch(e){ok=false;lastErr=e;console.warn('IDB rascunho:',e);}
+
+  if(ok){
+    // v1.2.0: após confirmar o rascunho completo, remove a duplicação usada nas versões antigas.
+    idbLimparFotos().catch(()=>{});
+    if(stateRevision===revisionAtStart){hasUnsaved=false;badge('✓','saved');}
+    else{hasUnsaved=true;badge('⏳','dirty');}
+    if(!silent)toast('Salvo no aparelho ✓');
+    verificarEspacoArmazenamento(false).catch(()=>{});
+  }else{
+    hasUnsaved=true;badge('⚠','dirty');
+    if(!silent)toast(mensagemErroPersistencia(lastErr),5200);
+  }
   atualizarContadorRascunhos().catch(()=>{});
   return ok;
+}
+function salvarCache(silent=false){
+  const run=()=>salvarCacheInterno(silent);
+  // Nunca permite duas gravações pesadas de fotos ao mesmo tempo.
+  saveQueue=saveQueue.then(run,run);
+  return saveQueue;
 }
 async function carregarCache(){
   try{
@@ -959,18 +1244,45 @@ async function carregarCache(){
     if(raw){
       const d=JSON.parse(raw);
       ['modelo','serie','data','local','tag','cliente','setor','horimetro','descricao','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el&&d[k]!==undefined)el.value=d[k];});
+      const kmFinalEl=document.getElementById('f-km-final');if(kmFinalEl&&d.kmFinal!==undefined)kmFinalEl.value=d.kmFinal||'';
       if(!v('f-data'))aplicarDataAtual();
+      const semPrev=d.semPrevisao!==undefined?!!d.semPrevisao:!d.dataFinal;
+      aplicarPrazoUI(semPrev,d.dataFinal||'');atualizarKmRodadosUI();
       aplicarCondicaoUI(d.condicao||'');aplicarCombustivelUI(d.combustivel||'cheio');aplicarRemessaUI(d.remessa||'emprestimo');
       if(d.estado){TOPICOS.forEach(t=>{if(d.estado[t.id]){const s=d.estado[t.id];estado[t.id].checked=Array.from({length:t.itens.length},(_,i)=>!!s.checked?.[i]);estado[t.id].fotos=Array(t.itens.length).fill(null).map(()=>[]);estado[t.id].nota=s.nota||'';}});}
-      const fotosIDB=await idbCarregarFotos();
-      if(fotosIDB){TOPICOS.forEach(t=>{if(fotosIDB[t.id])estado[t.id].fotos=Array.from({length:t.itens.length},(_,i)=>Array.isArray(fotosIDB[t.id]?.[i])?[...fotosIDB[t.id][i]]:[]);});}
-      renderTopicos();badge('✓','saved');return;
+
+      // Fonte principal desde a v1.2.0: o rascunho completo do registro atual.
+      let recuperouFotos=false;
+      const rec=await idbObterRascunho(currentDraftId);
+      if(rec?.snapshot?.estado){
+        TOPICOS.forEach(t=>{
+          const fs=rec.snapshot.estado?.[t.id]?.fotos;
+          if(Array.isArray(fs)){
+            estado[t.id].fotos=Array.from({length:t.itens.length},(_,i)=>Array.isArray(fs?.[i])?[...fs[i]]:[]);
+            if(estado[t.id].fotos.some(a=>a.length))recuperouFotos=true;
+          }
+        });
+      }
+      // Migração transparente de versões antigas.
+      if(!recuperouFotos){
+        const fotosLegado=await idbCarregarFotos();
+        if(fotosLegado){
+          TOPICOS.forEach(t=>{if(fotosLegado[t.id])estado[t.id].fotos=Array.from({length:t.itens.length},(_,i)=>Array.isArray(fotosLegado[t.id]?.[i])?[...fotosLegado[t.id][i]]:[]);});
+          recuperouFotos=contarFotosEstadoObj(estado)>0;
+          if(recuperouFotos)setTimeout(()=>salvarCache(true).catch(()=>{}),350);
+        }
+      }
+      renderTopicos();badge('✓','saved');hasUnsaved=false;return;
     }
-    // Recuperação extra: se o cache leve sumir, tenta restaurar o rascunho que estava aberto.
+    // Recuperação extra: se o cache leve sumir, restaura o rascunho aberto inteiro.
     const rec=await idbObterRascunho(currentDraftId);
-    if(rec?.snapshot){await aplicarSnapshot(rec.snapshot);badge('✓','saved');}
-  }catch(e){console.warn('carregarCache:',e);toast('⚠️ Não foi possível restaurar o último registro',3200);}
+    if(rec?.snapshot){await aplicarSnapshot(rec.snapshot);badge('✓','saved');hasUnsaved=false;return;}
+    // Último fallback para usuários vindos de versões antigas.
+    const fotosLegado=await idbCarregarFotos();
+    if(fotosLegado){TOPICOS.forEach(t=>{if(fotosLegado[t.id])estado[t.id].fotos=Array.from({length:t.itens.length},(_,i)=>Array.isArray(fotosLegado[t.id]?.[i])?[...fotosLegado[t.id][i]]:[]);});renderTopicos();}
+  }catch(e){console.warn('carregarCache:',e);toast('⚠️ Não foi possível restaurar o último registro',3600);}
 }
+
 async function limpar(){
   if(!confirm('Iniciar um novo registro? O registro atual ficará disponível em Rascunhos.'))return;
   try{if(temConteudoVistoria())await salvarCache(true);}catch(e){console.warn(e);}
@@ -978,17 +1290,18 @@ async function limpar(){
   try{localStorage.removeItem(CACHE_KEY);}catch(e){}
   await idbLimparFotos().catch(()=>{});
   TOPICOS.forEach(t=>{estado[t.id]={checked:Array(t.itens.length).fill(false),fotos:Array(t.itens.length).fill(null).map(()=>[]),nota:''};});
-  ['modelo','serie','local','tag','cliente','setor','horimetro','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value='';});
-  aplicarDataAtual();aplicarCombustivelUI('cheio');aplicarCondicaoUI('');aplicarRemessaUI('emprestimo');
+  ['modelo','serie','local','tag','cliente','setor','horimetro','km-final','resp1','resp2'].forEach(k=>{const el=document.getElementById('f-'+k);if(el)el.value='';});
+  aplicarDataAtual();aplicarPrazoUI(true,'');atualizarKmRodadosUI();aplicarCombustivelUI('cheio');aplicarCondicaoUI('');aplicarRemessaUI('emprestimo');
   document.getElementById('f-descricao').value='Veículo sem avarias visuais aparentes no momento da vistoria.';
   renderTopicos();atualizarContador();atualizarTitulo();atualizar();
   hasUnsaved=false;badge('--','');window.scrollTo({top:0,behavior:'smooth'});
   await atualizarContadorRascunhos();toast('Novo registro iniciado. O anterior ficou em Rascunhos.',3200);
 }
-function limparFotos(){
+async function limparFotos(){
   if(!confirm('Remover todas as fotos?'))return;
-  TOPICOS.forEach(t=>{estado[t.id].fotos=Array(t.itens.length).fill(null).map(()=>[]);estado[t.id].checked=Array(t.itens.length).fill(false);});
-  renderTopicos();atualizarContador();idbLimparFotos().catch(()=>{});salvarCache(true).catch(()=>{});toast('Fotos removidas!');
+  TOPICOS.forEach(t=>{estado[t.id].fotos=Array(t.itens.length).fill(null).map(()=>[]);estado[t.id].checked=Array(t.itens.length).fill(false);});marcarSujo();
+  renderTopicos();atualizarContador();
+  const ok=await salvarCache(true);toast(ok?'Fotos removidas e alteração salva ✓':'⚠️ Fotos removidas da tela, mas a alteração ainda NÃO foi gravada.',ok?2600:4800);
 }
 
 /* ══════════ BACKUP JSON / RASCUNHOS ══════════ */
@@ -1002,10 +1315,10 @@ function contarFotosSnapshot(snapshot){
 function nomeBackupSnapshot(snapshot){
   const f=snapshot.fields||{};const placa=(f.serie||f.tag||'veiculo').replace(/[^a-z0-9_-]/gi,'_');const data=f.data||dataLocalISO();return `backup_veicular_${placa}_${data}.json`;
 }
-function pacoteBackup(snapshot){return {format:BACKUP_FORMAT,version:BACKUP_VERSION,exportedAt:new Date().toISOString(),snapshot};}
+function pacoteBackup(snapshot){return {format:BACKUP_FORMAT,version:BACKUP_VERSION,appVersion:APP_VERSION,appUpdated:APP_UPDATED,exportedAt:new Date().toISOString(),snapshot};}
 function baixarSnapshot(snapshot){baixarBlob(new Blob([JSON.stringify(pacoteBackup(snapshot))],{type:'application/json;charset=utf-8'}),nomeBackupSnapshot(snapshot));}
 async function exportarBackupJSON(){
-  await salvarCache(true);const snapshot=criarSnapshotCompleto();baixarSnapshot(snapshot);toast('Backup JSON gerado ✓',2800);
+  const localOk=await salvarCache(true);const snapshot=criarSnapshotCompleto();baixarSnapshot(snapshot);toast(localOk?'Backup JSON gerado ✓':'Backup JSON gerado ✓ · use este arquivo para segurança (o armazenamento local falhou)',localOk?2800:4800);
 }
 async function importarBackupJSON(event){
   const inp=event.target,file=inp.files?.[0];if(!file)return;
@@ -1027,12 +1340,12 @@ async function abrirRascunhos(){
   const drafts=await idbListarRascunhos();list.innerHTML='';
   if(!drafts.length){list.innerHTML='<div class="draft-empty">Nenhum rascunho salvo ainda.<br>Os últimos 5 registros aparecem aqui automaticamente.</div>';return;}
   drafts.forEach(rec=>{
-    const snap=rec.snapshot||{},f=snap.fields||{},card=document.createElement('div');card.className='draft-card'+(rec.draftId===currentDraftId?' current':'');
+    const f=rec.fields||{},card=document.createElement('div');card.className='draft-card'+(rec.draftId===currentDraftId?' current':'');
     const top=document.createElement('div');top.className='draft-top';
     const name=document.createElement('div');name.className='draft-name';name.textContent=f.serie||f.tag||f.modelo||'Veículo sem identificação';top.appendChild(name);
     if(rec.draftId===currentDraftId){const cur=document.createElement('span');cur.className='draft-current';cur.textContent='Aberto';top.appendChild(cur);}
     const meta=document.createElement('div');meta.className='draft-meta';
-    const tipo=f.remessa==='transferencia'?'Transferência':'Empréstimo',data=f.data?fmtDate(f.data):'—',fotos=contarFotosSnapshot(snap);
+    const tipo=f.remessa==='transferencia'?'Transferência':'Empréstimo',data=f.data?fmtDate(f.data):'—',fotos=Number(rec.photoCount)||0;
     meta.textContent=`${data} · ${tipo} · ${f.cliente||'Sem condutor'} · ${fotos} foto${fotos!==1?'s':''}`;
     const upd=document.createElement('div');upd.className='draft-updated';const du=new Date(rec.updatedAt);upd.textContent='Salvo: '+(isNaN(du)?'—':du.toLocaleString('pt-BR'));
     const actions=document.createElement('div');actions.className='draft-actions';
@@ -1059,27 +1372,56 @@ async function excluirRascunho(id){
   catch(e){console.warn(e);toast('⚠️ Não foi possível excluir o rascunho');}
 }
 
-/* ══════════ IMAGE PROCESSING (força 4:3 horizontal) ══════════ */
-function processImg(dataURL,comTimestamp=false){
+/* ══════════ IMAGE PROCESSING — BAIXO PICO DE MEMÓRIA ══════════
+   A câmera pode entregar arquivos de 10–30 MB. A v1.2.0 evita transformar
+   o ORIGINAL inteiro em base64 antes do redimensionamento. O arquivo é aberto
+   via ObjectURL, reduzido para no máximo 1280 px e só então convertido em JPEG.
+════════════════════════════════════════════════════════════════════ */
+function carregarImagemDeUrl(url){
   return new Promise((res,rej)=>{
     const img=new Image();
-    img.onload=()=>{
-      try{
-        const R=4/3,ir=img.naturalWidth/img.naturalHeight;
-        let sx=0,sy=0,sw=img.naturalWidth,sh=img.naturalHeight;
-        if(ir>R){sw=Math.round(sh*R);sx=Math.round((img.naturalWidth-sw)/2);}
-        else if(ir<R){sh=Math.round(sw/R);sy=Math.round((img.naturalHeight-sh)/2);}
-        const W=Math.min(sw,1280),H=Math.round(W/R);
-        const c=document.createElement('canvas');c.width=W;c.height=H;
-        const ctx=c.getContext('2d');
-        ctx.drawImage(img,sx,sy,sw,sh,0,0,W,H);
-        if(comTimestamp)aplicarTimestampCamera(ctx,W,H);
-        res(c.toDataURL('image/jpeg',.88));
-      }catch(e){rej(e);}
-    };
-    img.onerror=()=>rej(new Error('Não foi possível processar a imagem'));
-    img.src=dataURL;
+    img.onload=()=>res(img);
+    img.onerror=()=>rej(new Error('Não foi possível abrir a imagem'));
+    img.src=url;
   });
+}
+function canvasParaDataURL(c,quality=PHOTO_JPEG_QUALITY){
+  return new Promise((res,rej)=>{
+    if(c.toBlob){
+      c.toBlob(blob=>{
+        if(!blob){rej(new Error('Falha ao compactar imagem'));return;}
+        const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error||new Error('Falha ao finalizar imagem'));r.readAsDataURL(blob);
+      },'image/jpeg',quality);
+    }else{
+      try{res(c.toDataURL('image/jpeg',quality));}catch(e){rej(e);}
+    }
+  });
+}
+async function processDrawable(img,w,h,comTimestamp=false){
+  const R=4/3,ir=w/h;
+  let sx=0,sy=0,sw=w,sh=h;
+  if(ir>R){sw=Math.round(sh*R);sx=Math.round((w-sw)/2);}
+  else if(ir<R){sh=Math.round(sw/R);sy=Math.round((h-sh)/2);}
+  const W=Math.max(1,Math.min(sw,PHOTO_MAX_DIM)),H=Math.max(1,Math.round(W/R));
+  const c=document.createElement('canvas');c.width=W;c.height=H;
+  const ctx=c.getContext('2d',{alpha:false});
+  if(!ctx)throw new Error('Canvas indisponível');
+  ctx.drawImage(img,sx,sy,sw,sh,0,0,W,H);
+  if(comTimestamp)aplicarTimestampCamera(ctx,W,H);
+  try{return await canvasParaDataURL(c,PHOTO_JPEG_QUALITY);}
+  finally{c.width=1;c.height=1;}
+}
+async function processFileImage(file,comTimestamp=false){
+  if(!file||!String(file.type||'').startsWith('image/'))throw new Error('Arquivo não é uma imagem');
+  const url=URL.createObjectURL(file);
+  try{
+    const img=await carregarImagemDeUrl(url);
+    return await processDrawable(img,img.naturalWidth||img.width,img.naturalHeight||img.height,comTimestamp);
+  }finally{URL.revokeObjectURL(url);}
+}
+async function processImg(dataURL,comTimestamp=false){
+  const img=await carregarImagemDeUrl(dataURL);
+  return await processDrawable(img,img.naturalWidth||img.width,img.naturalHeight||img.height,comTimestamp);
 }
 function aplicarTimestampCamera(ctx,W,H,d=new Date()){
   const ts=`${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
@@ -1098,7 +1440,7 @@ function aplicarTimestampCamera(ctx,W,H,d=new Date()){
   else{ctx.fillRect(x,y,boxW,boxH);}
   ctx.fillStyle='#fff';ctx.textBaseline='middle';ctx.fillText(ts,x+padX,y+boxH/2);ctx.textBaseline='alphabetic';
 }
-function readFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej(r.error||new Error('Falha ao ler imagem'));r.readAsDataURL(f);});}
+function readFile(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=()=>rej(r.error||new Error('Falha ao ler arquivo'));r.readAsDataURL(f);});}
 
 /* ══════════ RENDER TÓPICOS ══════════ */
 function renderTopicos(){
@@ -1159,50 +1501,59 @@ function setNota(tpId,val){estado[tpId].nota=val;changed();}
 
 /* ══════════ UPLOAD / CÂMERA NATIVA ══════════ */
 function triggerUp(tpId,idx){document.getElementById(`up-${tpId}-${idx}`)?.click();}
+async function confirmarPersistenciaFotos(msgSucesso='Foto salva no aparelho ✓'){
+  const ok=await salvarCache(true);
+  if(ok){toast(msgSucesso,2400);return true;}
+  toast('⚠️ A foto está na tela, mas NÃO foi gravada no aparelho. Não feche a página; toque Salvar novamente ou exporte Backup JSON.',5600);
+  return false;
+}
 function triggerCap(tpId,idx){
-  // Abre a câmera NATIVA do celular. A captura recebe data/hora; Upload fica limpo.
+  // Câmera NATIVA: processa o arquivo sem carregar a foto original inteira em base64.
   const inp=document.createElement('input');
-  inp.type='file';
-  inp.accept='image/*';
-  inp.capture='environment';
-  inp.style.display='none';
+  inp.type='file';inp.accept='image/*';inp.capture='environment';inp.style.display='none';
   inp.onchange=async e=>{
-    const file=e.target.files?.[0];
-    inp.remove();
-    if(!file)return;
+    const file=e.target.files?.[0];inp.remove();if(!file)return;
     try{
       toast('⏳ Processando foto...',2500);
-      const raw=await readFile(file);
-      const foto=await processImg(raw,true);
-      estado[tpId].fotos[idx].push(foto);
-      estado[tpId].checked[idx]=true;
-      renderItemFotos(tpId,idx);atualizarContador();
-      if(window.innerWidth>=860||previewShown)atualizar();
-      await salvarCache(true);
-      toast('Foto salva! ✓');
+      const foto=await processFileImage(file,true);
+      estado[tpId].fotos[idx].push(foto);estado[tpId].checked[idx]=true;marcarSujo();
+      renderItemFotos(tpId,idx);atualizarContador();if(window.innerWidth>=860||previewShown)atualizar();
+      await confirmarPersistenciaFotos();
     }catch(err){
       console.warn('Falha ao capturar foto:',err);
-      toast('⚠️ Não foi possível processar a foto',3200);
+      toast('⚠️ Não foi possível processar a foto. Tente novamente ou use Upload.',3800);
     }
   };
-  document.body.appendChild(inp);
-  inp.click();
+  document.body.appendChild(inp);inp.click();
 }
 async function onUp(event,tpId,idx){
   const files=[...event.target.files];event.target.value='';if(!files.length)return;
-  const validas=files.filter(f=>f.type.startsWith('image/'));if(!validas.length){toast('Nenhuma imagem válida selecionada');return;}
+  const validas=files.filter(f=>String(f.type||'').startsWith('image/'));
+  if(!validas.length){toast('Nenhuma imagem válida selecionada');return;}
   toast(validas.length>1?`Processando ${validas.length} fotos... ⏳`:'⏳ Processando...',4000);
   const resizeds=[];
-  for(const f of validas){try{const data=await readFile(f);resizeds.push(await processImg(data));}catch(e){console.warn('Falha ao processar imagem:',f.name,e);}}
-  if(!resizeds.length){toast('⚠️ Não foi possível processar as fotos',3200);return;}
-  resizeds.forEach(r=>estado[tpId].fotos[idx].push(r));estado[tpId].checked[idx]=true;
-  renderItemFotos(tpId,idx);atualizarContador();await salvarCache(true);
-  const falhas=validas.length-resizeds.length;toast(`${resizeds.length} foto${resizeds.length!==1?'s':''} salva${resizeds.length!==1?'s':''}! ✓${falhas?' · '+falhas+' ignorada'+(falhas!==1?'s':''):''}`);
+  // Sequencial de propósito: evita várias fotos grandes concorrendo pela RAM do celular.
+  for(const f of validas){
+    try{resizeds.push(await processFileImage(f,false));}
+    catch(e){console.warn('Falha ao processar imagem:',f.name,e);}
+    await delay(20);
+  }
+  if(!resizeds.length){toast('⚠️ Não foi possível processar as fotos',3600);return;}
+  resizeds.forEach(r=>estado[tpId].fotos[idx].push(r));estado[tpId].checked[idx]=true;marcarSujo();
+  renderItemFotos(tpId,idx);atualizarContador();if(window.innerWidth>=860||previewShown)atualizar();
+  const falhas=validas.length-resizeds.length;
+  const msg=`${resizeds.length} foto${resizeds.length!==1?'s':''} salva${resizeds.length!==1?'s':''} no aparelho ✓${falhas?' · '+falhas+' ignorada'+(falhas!==1?'s':''):''}`;
+  const ok=await salvarCache(true);
+  if(ok)toast(msg,3000);
+  else toast(`⚠️ ${resizeds.length} foto${resizeds.length!==1?'s estão':' está'} na tela, mas NÃO ${resizeds.length!==1?'foram gravadas':'foi gravada'} no aparelho. Não feche; tente Salvar novamente ou exporte Backup JSON.`,6000);
 }
-function delFoto(tpId,idx,fi){
-  estado[tpId].fotos[idx].splice(fi,1);
-  renderItemFotos(tpId,idx);atualizarContador();salvarCache(true);
+async function delFoto(tpId,idx,fi){
+  estado[tpId].fotos[idx].splice(fi,1);marcarSujo();
+  renderItemFotos(tpId,idx);atualizarContador();
+  const ok=await salvarCache(true);
+  if(!ok)toast('⚠️ A remoção ainda não foi gravada. Não feche e tente Salvar novamente.',4200);
 }
+
 function renderItemFotos(tpId,idx){
   const fotos=estado[tpId].fotos[idx]||[];
   const container=document.getElementById(`fotos-${tpId}-${idx}`);if(!container)return;
@@ -1319,11 +1670,14 @@ async function capturar(){
   ctx.drawImage(vid,sx,sy,sw,sh,0,0,outW,outH);
   // Data/hora somente em foto realmente capturada pela câmera. Upload/Galeria fica limpo.
   aplicarTimestampCamera(ctx,outW,outH);
-  const dataURL=c.toDataURL('image/jpeg',.92);
+  const dataURL=await canvasParaDataURL(c,PHOTO_JPEG_QUALITY);
   fecharCam();
-  estado[camTp].fotos[camIdx].push(dataURL);estado[camTp].checked[camIdx]=true;
+  estado[camTp].fotos[camIdx].push(dataURL);estado[camTp].checked[camIdx]=true;marcarSujo();
   renderItemFotos(camTp,camIdx);atualizarContador();
-  toast('Salvando...⏳',1500);salvarCache(true).then(()=>toast('Foto salva! ✓'));
+  toast('Salvando...⏳',1500);
+  const ok=await salvarCache(true);
+  if(ok)toast('Foto salva no aparelho ✓');
+  else toast('⚠️ Foto NÃO confirmada no armazenamento. Não feche e tente Salvar novamente.',5200);
 }
 function fecharCam(){
   if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
@@ -1358,7 +1712,10 @@ function condLabel(v){return{leve:'🟢 Dano Leve',moderado:'🟡 Dano Moderado'
 function atualizar(){
   const modelo=escHTML(v('f-modelo')||'—'),serie=escHTML(v('f-serie')||'—'),data=v('f-data');
   const local=escHTML(v('f-local')||'—'),tag=escHTML(v('f-tag')||'—'),cliente=escHTML(v('f-cliente')||'—'),setor=escHTML(v('f-setor')||'—');
-  const horimetro=escHTML(v('f-horimetro')||'—');
+  const kmInicial=escHTML(v('f-horimetro')||'—'),kmFinal=escHTML(v('f-km-final')||'—');
+  const kmRodados=calcularKmRodados();
+  const semPrevisao=!!document.getElementById('f-sem-previsao')?.checked;
+  const previsaoDevolucao=semPrevisao?'SEM PREVISÃO':fmtDate(v('f-data-final'));
   const combMap={reserva:'Reserva',['1/4']:'1/4',['1/2']:'1/2',['3/4']:'3/4',cheio:'Cheio'};
   const combustivel=combMap[v('f-combustivel')]||'—';
   const desc=escHTML(v('f-descricao')||'—').replace(/\n/g,'<br>'),resp1=escHTML(v('f-resp1')||'—'),resp2=escHTML(v('f-resp2')||'—');
@@ -1411,12 +1768,15 @@ function atualizar(){
       <div class="doc-info-cell"><div class="doc-info-key">Marca / Modelo</div><div class="doc-info-val">${modelo}</div></div>
       <div class="doc-info-cell"><div class="doc-info-key">Placa</div><div class="doc-info-val">${serie}</div></div>
       <div class="doc-info-cell"><div class="doc-info-key">Nº Frota</div><div class="doc-info-val">${tag}</div></div>
-      <div class="doc-info-cell"><div class="doc-info-key">Data</div><div class="doc-info-val">${fmtDate(data)}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Combustível</div><div class="doc-info-val">${combustivel}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Data Inicial</div><div class="doc-info-val">${fmtDate(data)}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Previsão de Devolução</div><div class="doc-info-val">${previsaoDevolucao}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">KM Inicial</div><div class="doc-info-val">${kmInicial !== '—' ? kmInicial+' km' : '—'}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">KM Final</div><div class="doc-info-val">${kmFinal !== '—' ? kmFinal+' km' : '—'}</div></div>
       <div class="doc-info-cell"><div class="doc-info-key">Condutor</div><div class="doc-info-val">${cliente}</div></div>
       <div class="doc-info-cell"><div class="doc-info-key">Setor</div><div class="doc-info-val">${setor}</div></div>
-      <div class="doc-info-cell"><div class="doc-info-key">Quilometragem</div><div class="doc-info-val">${horimetro !== '—' ? horimetro+' km' : '—'}</div></div>
-      <div class="doc-info-cell"><div class="doc-info-key">Combustível</div><div class="doc-info-val">${combustivel}</div></div>
-      <div class="doc-info-cell" style="grid-column:span 2;"><div class="doc-info-key">Local</div><div class="doc-info-val">${local}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">KM Rodados</div><div class="doc-info-val">${kmRodados===null?'—':kmRodados.toLocaleString('pt-BR')+' km'}</div></div>
+      <div class="doc-info-cell"><div class="doc-info-key">Local</div><div class="doc-info-val">${local}</div></div>
     </div>
     <div class="doc-sec">
       <div class="doc-sec-title">Avaliação de Condição</div>
@@ -1441,7 +1801,7 @@ function atualizar(){
           <div class="doc-footer-col"><strong>Contato</strong>www.tradimaq.com.br</div>
         </div>
         <div class="doc-footer-brand">
-          <div class="doc-footer-site">www.tradimaq.com.br</div>
+          <div class="doc-footer-site">www.tradimaq.com.br · Vistoria Veicular v${APP_VERSION}</div>
           <img class="doc-footer-logo" src="${LOGO}" alt="Tradimaq">
         </div>
       </div>
@@ -1452,6 +1812,7 @@ function atualizar(){
 
 /* ══════════ PDF (IMPRESSÃO) ══════════ */
 async function gerarPDF(){
+  if(!validarPeriodoEKm())return;
   await salvarCache(true);
   atualizar();
 
@@ -1539,8 +1900,11 @@ async function exportarZIP(){
     `Placa: ${v('f-serie')||'—'}`,
     `Nº Frota: ${v('f-tag')||'—'}`,
     `Setor: ${v('f-setor')||'—'}`,
-    `Data: ${data}`,
-    `Quilometragem: ${v('f-horimetro')||'—'} km`,
+    `Data inicial: ${data}`,
+    `Previsão de devolução: ${document.getElementById('f-sem-previsao')?.checked?'SEM PREVISÃO':(v('f-data-final')?v('f-data-final').split('-').reverse().join('/'):'—')}`,
+    `KM inicial: ${v('f-horimetro')||'—'} km`,
+    `KM final: ${v('f-km-final')||'—'} km`,
+    `KM rodados: ${calcularKmRodados()===null?'—':calcularKmRodados()+' km'}`,
     `Local: ${v('f-local')||'—'}`,
     ``,
     `Total de fotos: ${totalFotos}`,
