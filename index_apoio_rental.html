@@ -2,305 +2,235 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tradimaq — Apoio Rental</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="manifest" id="pwa-manifest">
-  <meta name="theme-color" content="#ff7a00">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121416">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Apoio Rental">
+  <meta name="description" content="Central de apoio Rental da Tradimaq: registros, vistorias e controle de ferramentas.">
+  <title>Tradimaq | Apoio Rental</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="manifest" id="pwa-manifest">
   <link rel="apple-touch-icon" href="https://gaberoviva-cloud.github.io/Data/empilhadeira_amarela_em_estilo_vetorial.png">
   <link rel="icon" type="image/png" href="https://gaberoviva-cloud.github.io/Data/empilhadeira_amarela_em_estilo_vetorial.png">
-  <link rel="shortcut icon" type="image/png" href="https://gaberoviva-cloud.github.io/Data/empilhadeira_amarela_em_estilo_vetorial.png">
-
+  <!-- Apoio Rental v2.0.0 | 2026-10-16 | Redesign mobile-first; mesmos destinos e fluxo de navegação -->
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --brand: #ff7a00;
-      --brand-dark: #d96500;
-      --border: rgba(255,255,255,0.12);
-      --bg: #1a1a1a;
+      color-scheme: dark;
+      --bg: #121416;
+      --panel: #1d2023;
+      --panel-hover: #262a2e;
+      --line: #303438;
+      --text: #f4f5f6;
+      --muted: #92999f;
+      --accent: #f47720;
+      --accent-light: #ff9a4c;
     }
-
-    html { background: var(--bg); }
-
+    *, *::before, *::after { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); }
     body {
-      font-family: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+      margin: 0;
       min-height: 100vh;
+      min-height: 100svh;
       background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 28px 20px;
+      color: var(--text);
+      font-family: 'IBM Plex Sans', 'Segoe UI', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
-      color: #fff;
     }
-
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,122,0,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(255,122,0,0.10) 0%, transparent 60%);
-      pointer-events: none;
       z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 78% 31% at 100% 0, rgba(244,119,32,.09), transparent 75%),
+        linear-gradient(180deg, rgba(255,255,255,.015), transparent 50%);
     }
-
-    #app-screen {
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    .shell {
       position: relative;
       z-index: 1;
-      width: 100%;
-      max-width: 400px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      animation: fadeUp 0.4s ease both;
-    }
-
-    .logo-area {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .logo-area img {
-      height: 40px;
-      width: auto;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 9px;
-    }
-
-    .logo-fallback {
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      color: white;
-    }
-
-    .logo-fallback span { color: var(--brand); }
-
-    .logo-tagline {
-      font-size: 11px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.46);
-      font-weight: 600;
-    }
-
-    .card {
+      max-width: 560px;
       width: 100%;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      min-height: 100vh;
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: calc(21px + env(safe-area-inset-top, 0px)) 20px calc(19px + env(safe-area-inset-bottom, 0px));
     }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 14px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .card-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 7px;
-      background: rgba(255,122,0,0.18);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      flex-shrink: 0;
-    }
-
-    .card-title {
-      font-size: 12px;
-      font-weight: 600;
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-
-    .card-subtitle {
-      font-size: 10px;
-      color: rgba(255,255,255,0.38);
-      margin-top: 1px;
-    }
-
-    .card-body {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .btn {
+    .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 100%;
-      min-height: 48px;
-      padding: 12px 13px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 8px;
-      color: rgba(255,255,255,0.82);
-      font-size: 13px;
-      font-weight: 500;
-      font-family: inherit;
-      cursor: pointer;
-      text-align: left;
-      transition: background 0.15s, border-color 0.15s, transform 0.1s;
-      touch-action: manipulation;
-      text-decoration: none;
-      -webkit-tap-highlight-color: transparent;
+      min-height: 40px;
+      gap: 16px;
     }
-
-    .btn:hover {
-      background: rgba(255,122,0,0.16);
-      border-color: rgba(255,122,0,0.38);
-      color: white;
-    }
-
-    .btn:active {
-      transform: scale(0.97);
-      background: rgba(255,122,0,0.35);
-      border-color: rgba(255,122,0,0.7);
-      color: white;
-    }
-
-    .btn-arrow {
-      font-size: 12px;
-      opacity: 0.35;
+    .brand-row { display: flex; align-items: center; min-width: 0; gap: 13px; }
+    .brand-logo { display: block; width: 144px; height: 29px; object-fit: contain; object-position: left center; }
+    .brand-fallback { font-weight: 700; font-size: 23px; letter-spacing: -.045em; line-height: 1; }
+    .brand-fallback span { color: var(--accent); }
+    .brand-divider { width: 1px; height: 21px; flex: 0 0 1px; background: #414448; }
+    .brand-unit { font-size: 10px; font-weight: 700; letter-spacing: .13em; color: #aab0b5; }
+    .app-mark {
+      display: grid;
+      width: 38px; height: 38px;
       flex-shrink: 0;
-      transition: opacity 0.15s, transform 0.15s;
+      place-items: center;
+      background: #232628;
+      color: var(--accent-light);
+      border: 1px solid #393430;
+      border-radius: 12px;
     }
-
-    .btn:hover .btn-arrow { opacity: 0.85; transform: translateX(3px); }
-
+    .app-mark svg { width: 19px; height: 19px; }
+    .welcome { margin: 47px 0 30px; }
+    .eyebrow { display: flex; align-items: center; gap: 9px; margin: 0 0 14px; font-weight: 700; font-size: 10px; letter-spacing: .18em; color: var(--accent-light); }
+    .eyebrow-line { display: inline-block; width: 18px; height: 2px; border-radius: 3px; background: var(--accent); }
+    h1 { margin: 0; font-size: clamp(31px, 8.7vw, 40px); letter-spacing: -.053em; font-weight: 700; line-height: 1.08; }
+    h1 span { color: var(--accent-light); }
+    .welcome p:not(.eyebrow) { color: #a5abb0; font-size: 14px; line-height: 1.5; max-width: 315px; margin: 13px 0 0; }
+    .overview {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 13px 15px;
+      background: linear-gradient(100deg, rgba(244,119,32,.12), rgba(244,119,32,.032));
+      border: 1px solid rgba(244,119,32,.19);
+      border-radius: 13px;
+      margin-bottom: 29px;
+    }
+    .overview-left { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .overview-symbol { display: grid; place-items: center; width: 31px; height: 31px; flex: 0 0 31px; color: var(--accent-light); background: rgba(244,119,32,.13); border-radius: 9px; }
+    .overview-symbol svg { width: 17px; height: 17px; }
+    .overview strong { display: block; color: #f4f0ed; font-size: 12.5px; font-weight: 600; }
+    .overview small { display: block; margin-top: 2px; font-size: 10.5px; color: #a49f9b; }
+    .counter { font-size: 10px; font-weight: 700; letter-spacing: .035em; color: #ffc18f; white-space: nowrap; border-radius: 6px; padding: 6px 7px; background: rgba(244,119,32,.12); }
+    .section { margin-bottom: 27px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 1px 12px; }
+    .section-ident { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .section-index { font-size: 10px; font-weight: 700; letter-spacing: .04em; color: var(--accent); }
+    h2 { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .015em; }
+    .section-count { font-size: 10.5px; color: #7f868d; white-space: nowrap; }
+    .tool-list { border: 1px solid var(--line); border-radius: 15px; background: var(--panel); padding: 5px; overflow: hidden; }
+    .tool {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; min-height: 82px;
+      text-align: left; padding: 12px 12px;
+      border: 0; border-radius: 11px;
+      background: transparent; color: inherit;
+      cursor: pointer; transition: background .18s, transform .14s;
+      touch-action: manipulation;
+    }
+    .tool + .tool { border-top: 1px solid #34373a; border-top-left-radius: 0; border-top-right-radius: 0; }
+    .tool-icon { display: grid; flex: 0 0 46px; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: #303033; color: #dddfe1; }
+    .tool-icon svg { width: 22px; height: 22px; stroke-width: 1.8; }
+    .tool-icon.orange { background: #382b22; color: #ff9e58; }
+    .tool-icon.blue { background: #29333d; color: #9cb8d4; }
+    .tool-icon.steel { background: #30323a; color: #c6cbd7; }
+    .tool-copy { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
+    .tool-name { font-size: 14px; font-weight: 600; line-height: 1.25; color: #f3f3f3; overflow-wrap: anywhere; }
+    .tool-subtitle { font-size: 11px; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
+    .tool-arrow { display: grid; flex: 0 0 28px; place-items: center; width: 28px; height: 28px; background: #303335; border-radius: 9px; color: #afb5bb; }
+    .tool-arrow svg { width: 15px; height: 15px; }
+    .tool:hover { background: var(--panel-hover); }
+    .tool:active { transform: scale(.985); background: #333034; }
+    .tool:focus-visible { outline: 2px solid var(--accent-light); outline-offset: -3px; }
+    .tool:hover .tool-arrow { background: rgba(244,119,32,.16); color: var(--accent-light); }
     footer {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      font-size: 11px;
-      color: rgba(255,255,255,0.22);
-      margin-top: 12px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 7px; width: 100%; margin-top: auto;
+      padding-top: 25px; color: #777e83;
+      font-size: 10.5px; text-align: center;
     }
-
-    footer a {
-      color: rgba(255,255,255,0.32);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    footer a:hover { color: var(--brand); }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    #loading-screen {
-      position: fixed;
-      inset: 0;
-      background: linear-gradient(135deg, #e8924e 0%, #d4834a 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-      color: white;
-      gap: 14px;
-      transition: opacity 0.4s ease;
-    }
-
+    .foot-rule { width: 30px; height: 2px; background: #58504a; border-radius: 2px; margin-bottom: 3px; }
+    .footer-brand { color: #a7aeb3; font-weight: 600; letter-spacing: .12em; font-size: 9.5px; }
+    .footer-brand span { color: var(--accent); }
+    footer a { color: #797f84; text-decoration: none; }
+    footer a:hover, footer a:focus-visible { color: #f4ad76; }
+    #loading-screen { position: fixed; inset: 0; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13px; background: #121416; transition: opacity .25s ease; }
     #loading-screen.hidden { opacity: 0; pointer-events: none; }
-    .loading-logo { width: 92px; height: 92px; object-fit: contain; animation: ls-pulse 1.2s ease-in-out infinite; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.18)); }
-    @keyframes ls-pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.15);opacity:0.8} }
-    .loading-text { font-size: 17px; font-weight: 700; letter-spacing: 0.04em; }
-    .loading-sub  { font-size: 12px; opacity: 0.75; letter-spacing: 0.06em; text-transform: uppercase; }
-    .ls-spinner {
-      width: 30px; height: 30px;
-      border: 3px solid rgba(255,255,255,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: ls-spin 0.8s linear infinite;
-    }
-    @keyframes ls-spin { to { transform: rotate(360deg); } }
-    @media (max-width: 480px) {
-      body { justify-content: flex-start; padding-top: 34px; }
-      #app-screen { max-width: 100%; }
-}
+    .loading-logo { width: 65px; height: 65px; object-fit: contain; }
+    .loading-text { font-size: 14px; font-weight: 600; letter-spacing: .03em; }
+    .loading-line { width: 44px; height: 3px; background: #35302c; border-radius: 3px; overflow: hidden; }
+    .loading-line::before { content: ''; display: block; width: 60%; height: 100%; background: var(--accent); animation: loading 1s ease-in-out infinite alternate; }
+    @keyframes loading { to { transform: translateX(75%); } }
+    @media (min-width: 620px) { .shell { padding-left: 28px; padding-right: 28px; } .welcome { margin-top: 62px; } .tool { min-height: 88px; } }
+    @media (max-width: 365px) { .shell { padding-left: 15px; padding-right: 15px; } .brand-logo { width: 128px; } .tool { padding: 10px 8px; gap: 10px; } .section-count { font-size: 10px; } .welcome { margin-top: 35px; } }
+    @media (max-height: 710px) { .welcome { margin-top: 25px; margin-bottom: 22px; } .overview { margin-bottom: 20px; } .section { margin-bottom: 18px; } .tool { min-height: 74px; padding-top: 9px; padding-bottom: 9px; } footer { padding-top: 12px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
   </style>
 </head>
 <body>
-
-  <div id="loading-screen">
-    <img class="loading-logo" src="https://gaberoviva-cloud.github.io/Data/empilhadeira_amarela_em_estilo_vetorial.png" alt="Apoio Rental">
+  <div id="loading-screen" aria-hidden="true">
+    <img class="loading-logo" src="https://gaberoviva-cloud.github.io/Data/empilhadeira_amarela_em_estilo_vetorial.png" alt="">
     <div class="loading-text">Apoio Rental</div>
-    <div class="ls-spinner"></div>
-    <div class="loading-sub">Carregando Apoio Rental...</div>
+    <div class="loading-line"></div>
+  </div>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand-row">
+        <img class="brand-logo" src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq" onerror="this.outerHTML='<span class=&quot;brand-fallback&quot;>TRADI<span>MAQ</span></span>'">
+        <span class="brand-divider" aria-hidden="true"></span>
+        <span class="brand-unit">RENTAL</span>
+      </div>
+      <span class="app-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      </span>
+    </header>
+
+    <main id="app-screen">
+      <div class="welcome">
+        <p class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> CENTRAL DE OPERAÇÕES</p>
+        <h1>Apoio <span>Rental.</span></h1>
+        <p>Sua central de registros, vistorias e controle operacional.</p>
+      </div>
+
+      <div class="overview">
+        <div class="overview-left">
+          <span class="overview-symbol" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          <div><strong>Acessos rápidos</strong><small>Escolha uma ferramenta para começar</small></div>
+        </div>
+        <span class="counter">03 MÓDULOS</span>
+      </div>
+
+      <section class="section" aria-labelledby="registros-title">
+        <div class="section-head"><div class="section-ident"><span class="section-index">01</span><h2 id="registros-title">Registros e vistorias</h2></div><span class="section-count">2 acessos</span></div>
+        <div class="tool-list">
+          <button type="button" class="tool" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/relatorio_ocorrencias_cdm_v2.html.html')">
+            <span class="tool-icon orange" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5h8l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20V5A1.5 1.5 0 0 1 5.5 3.5H8Z"/><path d="M15.5 3.5V8H20M8 12h8M8 16h8"/></svg></span>
+            <span class="tool-copy"><span class="tool-name">Relatório de Ocorrências</span><span class="tool-subtitle">CDM · Registros e documentação</span></span>
+            <span class="tool-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+          </button>
+          <button type="button" class="tool" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/vistoria_veicular_tradimaq.html')">
+            <span class="tool-icon blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="m5 11 2-5h10l2 5M5 17H3v-6h18v6h-2M5 17h14M5 17v2m14-2v2M6 14h2m8 0h2"/></svg></span>
+            <span class="tool-copy"><span class="tool-name">Vistoria Veicular</span><span class="tool-subtitle">Inspeção · Entrada e devolução</span></span>
+            <span class="tool-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="controle-title">
+        <div class="section-head"><div class="section-ident"><span class="section-index">02</span><h2 id="controle-title">Gestão e controle</h2></div><span class="section-count">1 acesso</span></div>
+        <div class="tool-list">
+          <button type="button" class="tool" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/controle_ferramentas_tradimaq.html')">
+            <span class="tool-icon steel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 6.5a5 5 0 0 0-6.6 6.6l-5.2 5.2a2 2 0 0 0 2.8 2.8l5.2-5.2a5 5 0 0 0 6.6-6.6L14 12l-3-3 3.5-2.5Z"/></svg></span>
+            <span class="tool-copy"><span class="tool-name">Controle de Ferramentas</span><span class="tool-subtitle">Empréstimos · Conferência e inventário</span></span>
+            <span class="tool-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span class="foot-rule" aria-hidden="true"></span>
+      <span class="footer-brand">TRADI<span>MAQ</span> / APOIO RENTAL</span>
+      <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank" rel="noopener noreferrer">Desenvolvido por Gabriel Roza · v2.0.0</a>
+    </footer>
   </div>
 
-  <main id="app-screen">
-    <div class="logo-area">
-      <img src="https://www.tradimaq.com.br/wp-content/uploads/2024/05/logo_cinza.png" alt="Tradimaq"
-        onerror="this.outerHTML='<div class=\'logo-fallback\'>TRADI<span>MAQ</span></div>'">
-      <div class="logo-tagline">Apoio Rental</div>
-    </div>
-
-    <section class="card">
-      <div class="card-header">
-        <div class="card-icon">📋</div>
-        <div>
-          <div class="card-title">Registros e Vistorias</div>
-          <div class="card-subtitle">Ocorrências · Veículos · PDF</div>
-        </div>
-      </div>
-      <div class="card-body">
-        <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/relatorio_ocorrencias_cdm_v2.html.html')">
-          <span>📝 Relatório de Ocorrências (CDM)</span>
-          <span class="btn-arrow">→</span>
-        </button>
-
-        <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/vistoria_veicular_tradimaq.html')">
-          <span>🚗 Vistoria Veicular</span>
-          <span class="btn-arrow">→</span>
-        </button>
-      </div>
-    </section>
-
-    <section class="card">
-      <div class="card-header">
-        <div class="card-icon">🔧</div>
-        <div>
-          <div class="card-title">Controle de Ferramentas</div>
-          <div class="card-subtitle">Empréstimo · Mobile</div>
-        </div>
-      </div>
-      <div class="card-body">
-        <button class="btn" onclick="abrir('https://gaberoviva-cloud.github.io/Pages/controle_ferramentas_tradimaq.html')">
-          <span>Abrir controle</span>
-          <span class="btn-arrow">→</span>
-        </button>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <a href="https://www.linkedin.com/in/gabriel-v-v-roza" target="_blank" rel="noopener noreferrer">By Gabriel Roza</a>
-  </footer>
-<script>
+  <script>
     function abrir(url) {
       if (!navigator.onLine) {
         alert('Sem conexão com a internet. Verifique sua rede e tente novamente.');
@@ -308,24 +238,22 @@
       }
       window.location.href = url;
     }
-
     document.addEventListener('DOMContentLoaded', function () {
       const ls = document.getElementById('loading-screen');
-      setTimeout(() => {
+      setTimeout(function () {
         ls.classList.add('hidden');
-        setTimeout(() => ls.remove(), 450);
-      }, 450);
+        setTimeout(function () { ls.remove(); }, 300);
+      }, 180);
     });
-
     (function () {
       const icon = 'https://gaberoviva-cloud.github.io/Data/empilhadeira_amarela_em_estilo_vetorial.png';
       const manifest = {
         name: 'Tradimaq — Apoio Rental',
         short_name: 'Apoio Rental',
-        start_url: './',
+        start_url: './index_apoio_rental.html',
         display: 'standalone',
-        background_color: '#1a1a1a',
-        theme_color: '#ff7a00',
+        background_color: '#121416',
+        theme_color: '#121416',
         icons: [
           { src: icon, sizes: '192x192', type: 'image/png' },
           { src: icon, sizes: '512x512', type: 'image/png' }
