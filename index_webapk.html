@@ -14,7 +14,7 @@
 <link id="pwa-manifest" rel="manifest"/>
 <link href="https://gaberoviva-cloud.github.io/Data/5202113.png" rel="apple-touch-icon"/>
 <link href="https://gaberoviva-cloud.github.io/Data/5202113.png" rel="icon" type="image/png"/>
-<!-- Tradimaq Sistema v2.1.1 | 2026-10-16 | Layout compacto, suporte flutuante. URLs, usuários e sessão preservados. -->
+<!-- Tradimaq Sistema v2.1.2 | 2026-10-16 | Layout compacto, suporte flutuante. URLs, usuários e sessão preservados. -->
 <style>
     :root {
       color-scheme: dark;
@@ -161,7 +161,7 @@
     @media (max-height: 710px) { .welcome { margin-top: 25px; margin-bottom: 22px; } .overview { margin-bottom: 20px; } .section { margin-bottom: 18px; } .tool { min-height: 74px; padding-top: 9px; padding-bottom: 9px; } footer { padding-top: 12px; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
   
-    /* Tradimaq Sistema — v2.1.1 | interface e autenticação visual */
+    /* Tradimaq Sistema — v2.1.2 | interface e autenticação visual */
     .brand-unit { letter-spacing: .09em; }
     .brand-fallback { display: none; }
     .shell { isolation: isolate; }
@@ -268,7 +268,7 @@
     }
 
     /* ───────────────────────────────────────────────────────────
-       TRADIMAQ v2.1.1 — COMPACTO MOBILE / APK
+       TRADIMAQ v2.1.2 — COMPACTO MOBILE / APK
        Base visual preservada. Ajustes prioritários para viewport
        utilizável sem scroll em celulares comuns. Suporte flutuante.
        ─────────────────────────────────────────────────────────── */
@@ -435,7 +435,7 @@ html,body{background:#08090a;color:#f6f6f6}body::before{background:linear-gradie
 .op-stack{display:flex;flex-direction:column;gap:9px}
 .op-feature{overflow:hidden;position:relative;display:flex;text-align:left;width:100%;min-height:157px;background:linear-gradient(115deg,#f58b36,#e87323);border:1px solid #ff9f52;border-radius:5px;color:#1b110c;cursor:pointer;padding:18px 17px;transition:transform .16s;touch-action:manipulation}
 .op-feature:active,.op-dual:active,.op-tools:active{transform:scale(.985)}
-.op-feature::after{content:'';position:absolute;width:200px;height:200px;border:1px solid rgba(30,20,10,.11);border-radius:50%;right:-88px;top:-63px}
+/* Decoração circular removida: evita linha sobre o ícone do status. */
 .op-feature-text{position:relative;z-index:1;display:flex;flex-direction:column}.op-eyebrow{font-size:9px;letter-spacing:.15em;font-weight:700;color:#623c23;margin-bottom:9px}
 .op-feature strong{font-size:27px;letter-spacing:-.05em;line-height:1;font-weight:700}.op-feature strong span{color:#fff7ef}.op-feature small{font-size:10px;margin:7px 0 9px;color:#5d3822}
 .op-feature-cta{align-self:start;margin-top:auto;font-size:9.5px;font-weight:700;letter-spacing:.1em;padding:7px 9px;border:1px solid rgba(31,21,12,.3);border-radius:3px}
@@ -454,7 +454,7 @@ footer{padding-top:10px;align-items:flex-start}.foot-rule,.footer-brand{display:
 @media(max-height:680px){.op-intro{margin:12px 0 13px}.op-intro h1{font-size:30px;margin:7px 0}.op-feature{min-height:136px;padding:13px}.op-feature strong{font-size:23px}.op-dual{min-height:108px;padding:10px}.op-tools{min-height:58px;padding:8px}.op-bottom{display:none}.op-stack{gap:7px}}
 @media(max-height:575px){.op-intro{margin:8px 0}.op-serial{display:none}.op-intro h1{font-size:26px}.op-feature{min-height:112px}.op-feature strong{font-size:21px}.op-feature small{display:none}.op-feature-cta{margin-top:9px}.op-dual{min-height:90px}.op-dual strong{font-size:12px}.op-tools{min-height:51px}.op-dual-grid{gap:6px}}
 @media(max-width:345px){.shell{padding-left:12px;padding-right:12px}.op-feature-art{right:5px}.op-feature-art svg{width:92px;height:92px}}
-/* v2.1.1 — marca original + WhatsApp alinhado (Font Awesome Free Brands, CC BY 4.0). */
+/* v2.1.2 — marca original + WhatsApp alinhado (Font Awesome Free Brands, CC BY 4.0). */
 .brand-logo{display:block;width:144px;height:29px;object-fit:contain;object-position:left center;max-width:100%}
 .brand-fallback{display:none}
 .help-fab{align-items:center;justify-content:center;gap:8px}
@@ -538,7 +538,7 @@ footer{padding-top:10px;align-items:flex-start}.foot-rule,.footer-brand{display:
 </div>
 </div>
 <script>
-    // Tradimaq Sistema v2.1.1 — 2026-10-16
+    // Tradimaq Sistema v2.1.2 — 2026-10-16
     // Aviso: autenticação no navegador não restringe acesso real aos HTMLs públicos.
     // A lista de usuários, regras e endereços foi mantida nesta versão visual.
 
