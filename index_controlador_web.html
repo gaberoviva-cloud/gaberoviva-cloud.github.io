@@ -43,15 +43,15 @@ button,a{font:inherit}
 }
 .topbar{
   display:flex;align-items:center;justify-content:space-between;gap:24px;
-  min-height:52px;
+  min-height:60px;
 }
 .brand{display:flex;align-items:center;gap:14px;min-width:0}
 .logo-wrap{
-  width:128px;height:34px;display:flex;align-items:center;justify-content:flex-start;flex:0 0 auto;
+  width:190px;height:48px;display:flex;align-items:center;justify-content:flex-start;flex:0 0 auto;
 }
-.logo-wrap img{max-width:100%;max-height:30px;object-fit:contain;display:block}
+.logo-wrap img{max-width:100%;max-height:46px;object-fit:contain;display:block}
 .logo-fallback{display:none;font-weight:700;letter-spacing:-.03em;font-size:22px}.logo-fallback span{color:var(--brand)}
-.divider{width:1px;height:28px;background:var(--line);flex:0 0 auto}
+.divider{width:1px;height:34px;background:var(--line);flex:0 0 auto}
 .title-block{min-width:0}
 .eyebrow{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--brand);margin-bottom:2px}
 .title{font-size:18px;line-height:1.15;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -76,7 +76,7 @@ button,a{font:inherit}
 .tools-grid{
   min-height:0;
   display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
+  grid-template-columns:repeat(6,minmax(0,1fr));
   grid-template-rows:repeat(2,minmax(0,1fr));
   gap:12px;
 }
@@ -123,6 +123,7 @@ button,a{font:inherit}
 .open-label svg{width:13px;height:13px;stroke:var(--brand);fill:none;stroke-width:2;transition:transform .18s ease}
 .tool-card:hover .open-label svg{transform:translateX(2px)}
 
+.tool-card.wide{grid-column:span 2}
 .tool-card.primary{border-color:#42301f;background:linear-gradient(145deg,rgba(255,122,0,.085),rgba(255,255,255,.02))}
 .tool-card.primary .icon-box{border-color:#5a3a20;background:#271e17;color:#ff9a3d}
 .tool-card.primary .card-title{color:#fff}
@@ -137,7 +138,7 @@ button,a{font:inherit}
 
 @media (max-width:1280px) and (min-width:900px){
   .app{padding-left:14px;padding-right:14px}
-  .tools-grid{gap:9px}
+  .tools-grid{gap:9px;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr))}
   .tool-card{padding:14px 13px 12px;border-radius:15px}
   .icon-box{width:35px;height:35px}.icon-box svg{width:18px;height:18px}
   .card-main{padding:9px 0 7px}.card-title{font-size:14px}.card-desc{font-size:9.7px;line-height:1.3}
@@ -146,7 +147,7 @@ button,a{font:inherit}
 
 @media (max-height:760px) and (min-width:900px){
   .app{padding:12px 18px 10px;gap:9px}
-  .topbar{min-height:42px}.logo-wrap{height:27px;width:116px}.logo-wrap img{max-height:25px}.divider{height:23px}
+  .topbar{min-height:46px}.logo-wrap{height:38px;width:150px}.logo-wrap img{max-height:36px}.divider{height:28px}
   .title{font-size:16px}.meta-chip{height:28px}
   .hero h1{font-size:24px;margin-bottom:3px}.hero p{font-size:11px}.hero-row{padding:0}
   .content{gap:8px}.tools-grid{gap:9px}
@@ -157,7 +158,7 @@ button,a{font:inherit}
 }
 
 @media (max-width:899px){
-  .tools-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr))}
+  .tools-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr))}
   .card-desc{max-width:none}
   .quick-note{display:none}
 }
@@ -167,9 +168,10 @@ button,a{font:inherit}
   body{min-height:100dvh}
   .app{height:auto;min-height:100dvh;padding:14px 12px 16px;display:block}
   .topbar{min-height:44px}.divider,.top-meta .meta-chip:first-child{display:none}
-  .logo-wrap{width:105px}.title{font-size:14px}.eyebrow{font-size:9px}
+  .logo-wrap{width:130px;height:40px}.logo-wrap img{max-height:38px}.title{font-size:14px}.eyebrow{font-size:9px}
   .hero-row{margin:22px 0 14px;align-items:flex-start}.hero h1{font-size:24px}.hero p{font-size:11px}
   .tools-grid{display:grid;grid-template-columns:1fr;grid-template-rows:none;gap:9px}
+  .tool-card.wide{grid-column:auto}
   .tool-card{min-height:150px;padding:15px}
   .card-title{font-size:18px}.card-desc{font-size:11px}
   .footer{margin-top:14px;flex-direction:column;align-items:flex-start}
@@ -191,7 +193,7 @@ button,a{font:inherit}
       </div>
     </div>
     <div class="top-meta">
-      <div class="meta-chip"><span class="meta-dot"></span><span>10 ferramentas</span></div>
+      <div class="meta-chip"><span class="meta-dot"></span><span>11 ferramentas</span></div>
       <div class="meta-chip clock" id="clock">--:--</div>
     </div>
   </header>
@@ -206,64 +208,70 @@ button,a{font:inherit}
     </div>
 
     <section class="tools-grid" aria-label="Ferramentas do controlador">
-      <a class="tool-card primary" data-key="1" href="https://gaberoviva-cloud.github.io/Pages/status_tradimaq_final.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="M3 9h2M9 5h2M15 12h2"/></svg></div><span class="key">01</span></div>
-        <div class="card-main"><div class="card-kicker">Operação diária</div><h2 class="card-title">Status Diário</h2><p class="card-desc">Visão operacional da frota e situação dos equipamentos por filial.</p></div>
-        <div class="card-bottom"><span class="card-path">status_tradimaq_final.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="tool-card primary" data-key="2" href="https://gaberoviva-cloud.github.io/Pages/Gerador_de_Laudos_V7_Assinatura_Ajustada.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h5M9 12h6M9 16h6"/></svg></div><span class="key">02</span></div>
-        <div class="card-main"><div class="card-kicker">Documentação</div><h2 class="card-title">Laudo de Manutenção</h2><p class="card-desc">Emissão de laudos técnicos com identificação, assinatura e apresentação padronizada.</p></div>
-        <div class="card-bottom"><span class="card-path">Gerador_de_Laudos_V7...</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="tool-card" data-key="3" href="https://gaberoviva-cloud.github.io/Pages/central_preventivas_tradimaq.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2M7 3 4 6M17 3l3 3"/></svg></div><span class="key">03</span></div>
-        <div class="card-main"><div class="card-kicker">Planejamento</div><h2 class="card-title">Preventivas</h2><p class="card-desc">Programação, planos e projeção de manutenções preventivas da frota.</p></div>
-        <div class="card-bottom"><span class="card-path">central_preventivas_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="tool-card" data-key="4" href="https://gaberoviva-cloud.github.io/Pages/comparador_terex.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M8 7h11M15 3l4 4-4 4M16 17H5M9 13l-4 4 4 4"/></svg></div><span class="key">04</span></div>
+      <a class="tool-card" data-key="1" href="https://gaberoviva-cloud.github.io/Pages/comparador_terex.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M8 7h11M15 3l4 4-4 4M16 17H5M9 13l-4 4 4 4"/></svg></div><span class="key">01</span></div>
         <div class="card-main"><div class="card-kicker">Consulta técnica</div><h2 class="card-title">Comparador Terex</h2><p class="card-desc">Comparação rápida de informações e referências dos equipamentos Terex.</p></div>
         <div class="card-bottom"><span class="card-path">comparador_terex.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
 
-      <a class="tool-card" data-key="5" href="https://gaberoviva-cloud.github.io/Pages/controle_ferramentas_tradimaq.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-3-3z"/></svg></div><span class="key">05</span></div>
-        <div class="card-main"><div class="card-kicker">Controle interno</div><h2 class="card-title">Ferramentas</h2><p class="card-desc">Controle e consulta do ferramental utilizado pela equipe de manutenção.</p></div>
-        <div class="card-bottom"><span class="card-path">controle_ferramentas_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      <a class="tool-card primary" data-key="2" href="https://gaberoviva-cloud.github.io/Pages/conciliacao_frota.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 7h10M10 3l4 4-4 4"/><path d="M20 17H10M14 13l-4 4 4 4"/></svg></div><span class="key">02</span></div>
+        <div class="card-main"><div class="card-kicker">Conferência</div><h2 class="card-title">Conciliação de Frota</h2><p class="card-desc">Comparação entre bases para localizar divergências de status, cliente e movimentação da frota.</p></div>
+        <div class="card-bottom"><span class="card-path">conciliacao_frota.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
 
-      <a class="tool-card" data-key="6" href="https://gaberoviva-cloud.github.io/Pages/relatorio_tecnico_tradimaq.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><span class="key">06</span></div>
-        <div class="card-main"><div class="card-kicker">Registro técnico</div><h2 class="card-title">Relatório Técnico</h2><p class="card-desc">Registro técnico do controlador com evidências, descrição e documentação do atendimento.</p></div>
-        <div class="card-bottom"><span class="card-path">relatorio_tecnico_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="tool-card primary" data-key="7" href="https://gaberoviva-cloud.github.io/Pages/vistoria_tradimaq_final.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4"/><path d="M5 4h14v16H5z"/><path d="M8 4V2M16 4V2"/></svg></div><span class="key">07</span></div>
-        <div class="card-main"><div class="card-kicker">Inspeção</div><h2 class="card-title">Vistoria de Plataformas</h2><p class="card-desc">Checklist de saída e retorno para inspeção visual e condição das plataformas.</p></div>
-        <div class="card-bottom"><span class="card-path">vistoria_tradimaq_final.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="tool-card primary" data-key="8" href="https://gaberoviva-cloud.github.io/Pages/vistoria_veicular_tradimaq.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 14l2-5h14l2 5v5h-2v-2H5v2H3z"/><circle cx="7" cy="14" r="1"/><circle cx="17" cy="14" r="1"/></svg></div><span class="key">08</span></div>
-        <div class="card-main"><div class="card-kicker">Inspeção</div><h2 class="card-title">Vistoria Veicular</h2><p class="card-desc">Checklist dedicado à conferência de veículos, saída, retorno e registro de condições.</p></div>
-        <div class="card-bottom"><span class="card-path">vistoria_veicular_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
-      </a>
-
-      <a class="tool-card primary" data-key="9" href="https://gaberoviva-cloud.github.io/Pages/dashboard_tradimaq.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><span class="key">09</span></div>
+      <a class="tool-card primary" data-key="3" href="https://gaberoviva-cloud.github.io/Pages/dashboard_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><span class="key">03</span></div>
         <div class="card-main"><div class="card-kicker">Gestão da frota</div><h2 class="card-title">Dashboard Tradimaq</h2><p class="card-desc">Painel consolidado para leitura rápida dos principais dados e indicadores da operação.</p></div>
         <div class="card-bottom"><span class="card-path">dashboard_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
 
-      <a class="tool-card primary" data-key="0" href="https://gaberoviva-cloud.github.io/Pages/conciliacao_frota.html">
-        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 7h10M10 3l4 4-4 4"/><path d="M20 17H10M14 13l-4 4 4 4"/></svg></div><span class="key">10</span></div>
-        <div class="card-main"><div class="card-kicker">Conferência</div><h2 class="card-title">Conciliação de Frota</h2><p class="card-desc">Comparação entre bases para localizar divergências de status, cliente e movimentação da frota.</p></div>
-        <div class="card-bottom"><span class="card-path">conciliacao_frota.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      <a class="tool-card" data-key="4" href="https://gaberoviva-cloud.github.io/Pages/controle_ferramentas_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-3-3z"/></svg></div><span class="key">04</span></div>
+        <div class="card-main"><div class="card-kicker">Controle interno</div><h2 class="card-title">Ferramentas</h2><p class="card-desc">Controle e consulta do ferramental utilizado pela equipe de manutenção.</p></div>
+        <div class="card-bottom"><span class="card-path">controle_ferramentas_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card" data-key="5" href="https://gaberoviva-cloud.github.io/Pages/Gerenciador_PDF.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h4M9 13h6M9 17h4"/></svg></div><span class="key">05</span></div>
+        <div class="card-main"><div class="card-kicker">Arquivo</div><h2 class="card-title">Gerenciador de PDFs</h2><p class="card-desc">Controle de contratos e documentos em PDF por equipe, com alertas de vencimento.</p></div>
+        <div class="card-bottom"><span class="card-path">Gerenciador_PDF.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="6" href="https://gaberoviva-cloud.github.io/Pages/Gerador_de_Laudos_V7_Assinatura_Ajustada.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v5h5M9 12h6M9 16h6"/></svg></div><span class="key">06</span></div>
+        <div class="card-main"><div class="card-kicker">Documentação</div><h2 class="card-title">Laudo de Manutenção</h2><p class="card-desc">Emissão de laudos técnicos com identificação, assinatura e apresentação padronizada.</p></div>
+        <div class="card-bottom"><span class="card-path">Gerador_de_Laudos_V7...</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card" data-key="7" href="https://gaberoviva-cloud.github.io/Pages/central_preventivas_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2M7 3 4 6M17 3l3 3"/></svg></div><span class="key">07</span></div>
+        <div class="card-main"><div class="card-kicker">Planejamento</div><h2 class="card-title">Preventivas</h2><p class="card-desc">Programação, planos e projeção de manutenções preventivas da frota.</p></div>
+        <div class="card-bottom"><span class="card-path">central_preventivas_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card" data-key="8" href="https://gaberoviva-cloud.github.io/Pages/relatorio_tecnico_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><span class="key">08</span></div>
+        <div class="card-main"><div class="card-kicker">Registro técnico</div><h2 class="card-title">Relatório Técnico</h2><p class="card-desc">Registro técnico do controlador com evidências, descrição e documentação do atendimento.</p></div>
+        <div class="card-bottom"><span class="card-path">relatorio_tecnico_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="9" href="https://gaberoviva-cloud.github.io/Pages/status_tradimaq_final.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/><path d="M3 9h2M9 5h2M15 12h2"/></svg></div><span class="key">09</span></div>
+        <div class="card-main"><div class="card-kicker">Operação diária</div><h2 class="card-title">Status Diário</h2><p class="card-desc">Visão operacional da frota e situação dos equipamentos por filial.</p></div>
+        <div class="card-bottom"><span class="card-path">status_tradimaq_final.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary" data-key="0" href="https://gaberoviva-cloud.github.io/Pages/vistoria_tradimaq_final.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4"/><path d="M5 4h14v16H5z"/><path d="M8 4V2M16 4V2"/></svg></div><span class="key">10</span></div>
+        <div class="card-main"><div class="card-kicker">Inspeção</div><h2 class="card-title">Vistoria de Plataformas</h2><p class="card-desc">Checklist de saída e retorno para inspeção visual e condição das plataformas.</p></div>
+        <div class="card-bottom"><span class="card-path">vistoria_tradimaq_final.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+
+      <a class="tool-card primary wide" href="https://gaberoviva-cloud.github.io/Pages/vistoria_veicular_tradimaq.html">
+        <div class="card-top"><div class="icon-box"><svg viewBox="0 0 24 24"><path d="M3 14l2-5h14l2 5v5h-2v-2H5v2H3z"/><circle cx="7" cy="14" r="1"/><circle cx="17" cy="14" r="1"/></svg></div><span class="key">11</span></div>
+        <div class="card-main"><div class="card-kicker">Inspeção</div><h2 class="card-title">Vistoria Veicular</h2><p class="card-desc">Checklist dedicado à conferência de veículos, saída, retorno e registro de condições.</p></div>
+        <div class="card-bottom"><span class="card-path">vistoria_veicular_tradimaq.html</span><span class="open-label">Abrir <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
       </a>
     </section>
   </main>
