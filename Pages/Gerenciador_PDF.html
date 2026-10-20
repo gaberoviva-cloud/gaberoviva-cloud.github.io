@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101b2c">
+<title>ARQUIVO • Gerenciador de PDFs</title>
+<style>
+:root{color-scheme:light;--bg:#fff;--page:#eaeef5;--soft:#f3f6fb;--text:#14213a;--muted:#667593;--line:#dde3ee;--line2:#cfd7e6;--blue:#1f4aa8;--bluep:#e6edfb;--navy:#0e1b33;--navy2:#16294a;--red:#c8333d;--amber:#b4741a;--green:#178a62;--r:12px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}a{color:var(--blue)}
+.ic{width:18px;height:18px;flex:none}
+.hidden{display:none!important}
+button:focus-visible,.nav-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* estrutura */
+.layout{min-height:100vh;display:grid;grid-template-columns:232px minmax(0,1fr)}
+.side{background:var(--soft);border-right:1px solid var(--line);padding:24px 14px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.brand-icon{width:32px;height:32px;border-radius:9px;background:var(--text);color:#fff;display:grid;place-items:center;font-weight:800;font-size:16px}
+.brand strong{display:block;font-size:15px;letter-spacing:-.2px;line-height:1.1}
+.brand small{color:var(--muted);font-size:10px;letter-spacing:1.2px;font-weight:600}
+.nav{display:grid;gap:2px}
+.nav-btn{border:0;background:transparent;width:100%;color:var(--muted);text-align:left;padding:9px 10px;border-radius:8px;display:flex;align-items:center;gap:11px;font-weight:550}
+.nav-btn:hover{color:var(--text);background:#f1f2f4}
+.nav-btn.active{color:var(--text);background:#ececf0;font-weight:650}
+.side-info{margin-top:auto;padding:0 10px}
+.side-info small{display:block;color:var(--muted);font-size:10px;letter-spacing:1.2px;font-weight:650;margin-bottom:4px}
+.side-info strong{font-size:15px}
+.side-info p{margin:6px 0 0;color:var(--muted);font-size:12px}
+.side-foot{color:#a3a7b0;padding:0 10px;font-size:11px}
+.main{min-width:0;min-height:100vh}
+.topbar{height:64px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:0 clamp(20px,3.4vw,48px);border-bottom:1px solid var(--line);background:#fff}
+.eyebrow{font-size:11px;color:var(--muted);font-weight:550}
+.topbar h1{font-size:18px;margin:1px 0 0;line-height:1.2;letter-spacing:-.3px;font-weight:650}
+.top-actions{display:flex;align-items:center;gap:12px}
+.content{max-width:1280px;margin:0 auto;padding:32px clamp(17px,3.4vw,48px) 64px}
+.mobile-nav{display:none}
+
+/* botões e campos */
+.btn{appearance:none;border:1px solid var(--line2);background:#fff;color:var(--text);padding:0 14px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:600;min-height:36px;white-space:nowrap;transition:background .12s,border-color .12s}
+.btn:hover{background:var(--soft);border-color:#cdd1d8}
+.btn.primary{color:#fff;background:var(--blue);border-color:var(--blue)}
+.btn.primary:hover{background:#1c47b5;border-color:#1c47b5}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--red);border-color:#f0cdd0}
+.btn.danger:hover{background:#fff6f6}
+.btn.small{font-size:12px;min-height:30px;padding:0 10px}
+.btn svg{width:15px;height:15px}
+.button-group{display:flex;gap:8px;flex-wrap:wrap}
+.linkbtn{color:var(--blue);background:transparent;border:0;padding:3px 0;font-weight:600}
+.linkbtn:hover{text-decoration:underline}
+.control{border:1px solid var(--line2);background:#fff;color:var(--text);border-radius:8px;padding:0 11px;height:36px;min-width:0;outline:0;transition:border-color .12s,box-shadow .12s}
+textarea.control{height:auto;padding:9px 11px}
+.control:focus{border-color:var(--blue);box-shadow:0 0 0 3px #2457d614}
+.search{flex:1 1 240px}.select-filter{flex:0 1 185px}
+.field{display:block;font-size:12px;font-weight:600;margin:0 0 14px}
+.field span{display:block;margin:0 0 6px;color:var(--muted)}
+.field .control,.field textarea{width:100%}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.hint{font-size:11px;color:var(--muted);margin:-6px 0 12px}
+.hint-box{font-size:12px;color:var(--muted);padding:9px 12px;margin:0 0 16px;background:var(--soft);border:1px solid var(--line);border-radius:8px;overflow-wrap:anywhere}
+.checkbox-line{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;margin:4px 0 16px}
+.checkbox-line input{accent-color:var(--blue);width:16px;height:16px}
+.upload{display:block;text-align:center;border:1px dashed #c9ced8;background:var(--soft);border-radius:10px;padding:18px 10px;color:var(--muted);margin:4px 0 4px;cursor:pointer}
+.upload:hover{border-color:var(--blue)}
+.upload input{position:absolute;opacity:0;width:1px;height:1px}
+.upload strong{display:block;color:var(--text);font-size:13px;margin-bottom:3px}
+.upload small{color:var(--muted)}
+.upload.has-file{border-color:#9fd3bd;background:#f6fbf8}
+
+/* textos e status */
+.page-intro{display:flex;justify-content:space-between;align-items:flex-start;gap:15px;margin-bottom:24px}
+.page-intro h2{font-size:22px;letter-spacing:-.5px;margin:0 0 4px;font-weight:650}
+.page-intro p{margin:0;color:var(--muted)}
+.muted{color:var(--muted)}.muted-sm,.small-count{font-size:12px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.pill .dot{display:none}
+.pill.expired{color:var(--red)}.pill.soon{color:var(--amber)}.pill.ok{color:var(--green)}.pill.none,.pill.off{color:var(--muted)}
+.sync-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.sync-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#b8bec9}
+.sync-status.synced:before{background:#2caa83}.sync-status.warn:before{background:#e3ac45}
+
+/* blocos */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:0 0 22px}
+.stat{background:#fff;padding:18px 20px}
+.stat label{color:var(--muted);font-size:12px;font-weight:550}
+.stat strong{display:block;font-size:30px;line-height:1.2;letter-spacing:-1px;margin-top:4px;font-weight:650}
+.stat.red strong{color:var(--red)}.stat.amber strong{color:var(--amber)}.stat.green strong{color:var(--green)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.panel-pad{padding:20px}
+.panel-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;border-bottom:1px solid var(--line)}
+.panel-header h3{margin:0;font-size:14px;font-weight:650}
+.notice{border:1px solid #f1e4c8;background:#fffaf0;border-radius:var(--r);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.notice strong{color:#7a5517}.notice p{margin:2px 0 0;color:#8a7350;font-size:12px}
+.notice.good{background:#f5fbf8;border-color:#d8eee3}.notice.good strong,.notice.good p{color:var(--green)}
+.filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
+.results-count{font-size:12px;color:var(--muted);padding:9px 18px;border-bottom:1px solid var(--line)}
+.secondary-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:24px 0 10px}.secondary-head h3{font-size:14px;margin:0}
+.empty{padding:48px 20px;text-align:center;color:var(--muted)}
+.empty .empty-ico{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;margin:0 auto 14px;color:var(--muted)}
+.empty strong{color:var(--text);display:block;font-size:14px}
+.empty p{max-width:390px;margin:6px auto 14px}
+
+/* tabela */
+.table-wrap{overflow-x:auto;max-width:100%}
+.data-table{width:100%;border-collapse:collapse;text-align:left}
+.data-table th{color:var(--muted);font-size:11px;font-weight:600;padding:11px 18px}
+.data-table td{border-top:1px solid var(--line);padding:14px 18px;vertical-align:middle}
+.data-table tr:hover td{background:var(--soft)}
+.person{font-weight:600}.doc-title{font-weight:650}
+.file-sub{font-size:12px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.cell-actions{display:flex;justify-content:flex-end;align-items:center;gap:14px;flex-wrap:wrap}
+
+/* contratos, pessoas, busca */
+.hero-search{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line2);border-radius:12px;padding:6px 6px 6px 14px;margin-bottom:20px}
+.hero-search:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px #2457d614}
+.search-glyph{color:var(--muted);display:grid}.search-glyph .ic{width:19px;height:19px}
+.hero-input{min-width:0;flex:1;border:0;outline:0;background:transparent;font-size:15px;padding:9px 2px}
+.contract-grid{padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.contract-card{border:1px solid var(--line);border-radius:var(--r);padding:18px;min-width:0;background:#fff}
+.contract-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.contract-head h3{margin:0 0 2px;font-size:15px;font-weight:650;overflow-wrap:anywhere}.contract-head p{margin:0;font-size:12px;color:var(--muted)}
+.contract-symbol{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;background:var(--soft);border:1px solid var(--line);color:var(--muted);border-radius:10px}
+.contract-folders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.contract-folders button{border:1px solid var(--line);border-radius:10px;background:var(--soft);text-align:left;padding:12px;min-width:0}
+.contract-folders button:hover{background:var(--bluep);border-color:#c9d8f7}
+.contract-folders button span{color:var(--muted);display:block;margin-bottom:8px}
+.contract-folders button strong,.contract-folders button small{display:block}
+.contract-folders button small{font-size:11px;color:var(--muted);margin-top:2px}
+.contract-bottom{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.contract-list-row{display:flex;align-items:center;width:100%;background:#fff;border:0;border-bottom:1px solid var(--line);text-align:left;padding:13px 18px;gap:12px}
+.contract-list-row:last-child{border-bottom:0}
+.contract-list-row:hover{background:var(--soft)}
+.contract-list-info{flex:1;min-width:0}.contract-list-info strong,.contract-list-info span{display:block}
+.contract-list-info strong{font-size:13px;overflow-wrap:anywhere}.contract-list-info span{font-size:12px;color:var(--muted);margin-top:1px}
+.chev{font-size:22px;color:#b5bac4;line-height:1}
+.employees{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:14px}
+.employee{padding:18px;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.person-head{display:flex;gap:12px;align-items:center}
+.avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#eff1f5;color:#3a4256;font-weight:700;font-size:14px;flex-shrink:0}
+.person-head h3{font-size:14px;margin:0;font-weight:650}.person-head p{font-size:12px;color:var(--muted);margin:2px 0 0}
+.employee-meta{border-top:1px solid var(--line);margin:14px 0 12px;padding-top:12px;display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:12px;color:var(--muted)}
+.two-col{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(265px,1fr);gap:16px;align-items:start}
+.location-row{padding:12px 0;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line)}
+.location-row:first-of-type{border-top:0}.location-row strong{display:block;font-size:13px}.location-row small{display:block;color:var(--muted);margin-top:2px}
+.folder-card{display:flex;align-items:center;gap:15px;justify-content:space-between;flex-wrap:wrap;border:1px solid var(--line);background:var(--soft);border-radius:10px;padding:15px}
+.folder-card strong{display:block}.folder-card small{color:var(--muted)}
+
+/* configurações */
+.setting{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:20px 0;border-top:1px solid var(--line)}
+.setting:first-child{border-top:0;padding-top:0}.setting:last-child{padding-bottom:0}
+.setting h3{margin:0 0 4px;font-size:14px;font-weight:650}
+.setting p{margin:0;font-size:13px;color:var(--muted);max-width:560px}
+.codepath{font-size:12px;font-family:ui-monospace,Consolas,monospace;background:var(--soft);border:1px solid var(--line);display:inline-block;max-width:100%;overflow-wrap:anywhere;padding:8px 10px;border-radius:8px;margin-top:10px}
+
+/* janelas e avisos */
+.modal-shade{position:fixed;inset:0;background:rgba(15,17,22,.45);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.modal{background:#fff;border-radius:16px;width:min(600px,100%);max-height:min(92vh,850px);display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.18);animation:rise .16s ease-out}
+@keyframes rise{from{opacity:.4;transform:translateY(8px)}to{opacity:1;transform:none}}
+.modal-head{padding:20px 22px 16px;display:flex;align-items:start;justify-content:space-between;gap:12px}
+.modal-head h2{margin:0;font-size:18px;letter-spacing:-.3px;font-weight:650}.modal-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.iconbtn{border:0;background:transparent;border-radius:8px;width:32px;height:32px;font-size:22px;color:var(--muted);flex:0 0 32px;line-height:1}.iconbtn:hover{background:var(--soft)}
+.modal-body{padding:4px 22px 20px;overflow-y:auto}
+.modal-foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.toaststack{position:fixed;z-index:70;right:17px;bottom:20px;display:grid;gap:8px;max-width:calc(100vw - 34px)}
+.toast{background:var(--text);color:#fff;border-radius:10px;box-shadow:0 10px 28px #0003;padding:12px 16px;max-width:380px;font-size:13px}
+.toast.error{background:#8c2a33}
+
+
+/* ===== tema executivo azul-marinho ===== */
+.side{background:var(--navy);border-right:0;color:#c3cfe4}
+.brand-icon{background:#3b78e7;color:#fff;box-shadow:0 4px 14px #3b78e744}
+.brand strong{color:#fff}.brand small{color:#8fa3c4}
+.nav-btn{color:#a9b8d3}
+.nav-btn:hover{color:#fff;background:#16294a}
+.nav-btn.active{color:#fff;background:#223b66;box-shadow:inset 3px 0 0 #5c97ff}
+.side-info{background:var(--navy2);border:1px solid #243d68;border-radius:12px;padding:14px}
+.side-info small{color:#8fa3c4}.side-info strong{color:#fff}.side-info p{color:#8fa3c4}
+.side-foot{color:#6f83a6}
+.topbar{background:#fff;border-bottom:1px solid var(--line);box-shadow:0 1px 3px #0e1b3310}
+.topbar h1{color:var(--navy)}
+.page-intro h2{color:var(--navy)}
+.btn{border-color:var(--line2)}
+.btn:hover{background:var(--bluep);border-color:#b8c8ea}
+.btn.primary{background:var(--blue);border-color:var(--blue)}
+.btn.primary:hover{background:#173a85;border-color:#173a85}
+.control:focus,.hero-search:focus-within{box-shadow:0 0 0 3px #1f4aa818}
+.panel{border-color:var(--line);box-shadow:0 1px 3px #0e1b3310,0 8px 24px #0e1b3308}
+.panel-header{background:var(--soft)}
+.filters{background:#f8fafd}
+.results-count{background:#f8fafd}
+.data-table th{background:var(--soft);color:#5a6b87;text-transform:uppercase;letter-spacing:.5px;font-size:10px;font-weight:700;border-bottom:1px solid var(--line)}
+.data-table tr:hover td{background:#f4f7fd}
+.stats{gap:14px;background:none;border:0;border-radius:0;overflow:visible}
+.stat{border:1px solid var(--line);border-top:3px solid var(--navy);border-radius:var(--r);box-shadow:0 1px 3px #0e1b3310}
+.stat.red{border-top-color:var(--red)}.stat.amber{border-top-color:#e0a030}.stat.green{border-top-color:#25a47a}
+.stat strong{color:var(--navy)}
+.stat.red strong{color:var(--red)}.stat.amber strong{color:var(--amber)}.stat.green strong{color:var(--green)}
+.hero-search{box-shadow:0 4px 16px #0e1b3310;border-color:var(--line2)}
+.contract-card,.employee{border-color:var(--line);box-shadow:0 1px 3px #0e1b3310;transition:box-shadow .15s,transform .15s}
+.contract-card:hover,.employee:hover{box-shadow:0 8px 24px #0e1b3314}
+.contract-card{border-top:3px solid var(--navy2)}
+.contract-symbol{background:var(--navy2);border-color:var(--navy2);color:#fff}
+.contract-folders button{background:var(--soft);border-color:var(--line)}
+.contract-folders button span{color:var(--blue)}
+.contract-list-row:hover{background:#f4f7fd}
+.avatar{background:var(--navy2);color:#fff}
+.folder-card{background:var(--bluep);border-color:#c9d8f5}
+.codepath{background:var(--soft)}
+.empty .empty-ico{background:var(--soft)}
+.setting{border-top-color:var(--line)}
+.modal-head{background:var(--soft);border-bottom:1px solid var(--line);border-radius:16px 16px 0 0;padding-bottom:16px}
+.modal-head h2{color:var(--navy)}
+.modal-body{padding-top:18px}
+.upload{background:var(--soft)}
+.toast{background:var(--navy)}
+.notice{background:#fff8ea}
+
+@media(max-width:1120px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}.data-table th,.data-table td{padding:12px}.layout{grid-template-columns:204px minmax(0,1fr)}}
+@media(max-width:750px){
+.layout{display:block}.side{display:none}
+.topbar{height:58px;padding:0 16px}.topbar h1{font-size:17px}.topbar .eyebrow,#syncBadge{display:none}
+.top-actions>.btn:not(.primary){display:none}.top-actions .btn.primary{padding:0 11px;font-size:12px;min-height:34px}
+.content{padding:20px 14px 96px}
+.page-intro{flex-wrap:wrap}.page-intro>div{flex:1 1 100%}.page-intro h2{font-size:20px}
+.stat{padding:14px 16px}.stat strong{font-size:26px}
+.notice{align-items:flex-start;flex-direction:column;padding:13px}
+.panel-header{padding:14px}.filters{padding:12px}.select-filter{flex:1 1 130px}.search{flex:1 1 100%}
+.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);z-index:30;padding:6px 6px max(8px,env(safe-area-inset-bottom))}
+.mobile-nav .nav-btn{flex-direction:column;justify-content:center;gap:3px;font-size:10px;padding:7px 2px;min-height:50px;text-align:center;min-width:0}
+.mobile-nav .nav-btn.active{background:var(--bluep);color:var(--blue)}
+.table-wrap{overflow-x:visible}
+.data-table,.data-table tbody,.data-table tr,.data-table td{display:block;width:100%}
+.data-table thead{display:none}
+.data-table tr{border-top:1px solid var(--line);padding:12px 16px;display:grid;grid-template-columns:1fr auto;gap:8px}
+.data-table td{border:0!important;padding:0!important;background:transparent!important}
+.data-table td.mobile-main{grid-column:1;grid-row:1}
+.data-table td.mobile-status{grid-column:2;grid-row:1;align-self:center}
+.data-table td.mobile-sub{grid-column:1/3;grid-row:2;font-size:12px}
+.data-table td.mobile-date{grid-column:1;grid-row:3;font-size:12px;color:var(--muted)}
+.data-table td.mobile-actions{grid-column:2;grid-row:3;text-align:right}
+.employees{grid-template-columns:1fr}
+.hero-search{padding:5px 5px 5px 12px}.hero-input{font-size:14px}.hero-search .btn{padding:0 12px}
+.contract-grid{grid-template-columns:1fr;padding:12px}.contract-list-row{padding:12px 14px}
+.modal-shade{align-items:flex-end;padding:0}.modal{border-radius:16px 16px 0 0;max-height:94dvh;width:100%}
+.modal-head{padding:18px 17px 12px}.modal-body{padding:4px 17px 17px}.modal-foot{padding:13px 17px}
+.setting{flex-direction:column;gap:12px}.folder-card{align-items:flex-start}.toaststack{bottom:84px}
+}
+@media(max-width:370px){.form-grid{grid-template-columns:1fr}.stat strong{font-size:23px}}
+
+@media(max-width:750px){
+.stats{gap:10px}
+.mobile-nav{background:var(--navy);border-top:0}
+.mobile-nav .nav-btn{color:#9fb1d0}
+.mobile-nav .nav-btn.active{background:#223b66;color:#fff}
+.modal-head{border-radius:16px 16px 0 0}
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="side">
+    <div class="brand"><div class="brand-icon">A</div><div><strong>ARQUIVO</strong><small>GESTOR DE PDFs</small></div></div>
+    <nav class="nav" id="sideNav"></nav>
+    <div class="side-info"><small>ACOMPANHAMENTO</small><strong id="sidePending">0 pendências</strong><p>Alertas de documentos vencidos ou próximos dos 30 dias.</p></div>
+    <div class="side-foot">ARQUIVO v3.0</div>
+  </aside>
+  <div class="main"><header class="topbar"><div><div class="eyebrow">Gerenciador de PDFs • Contratos e equipes</div><h1 id="topTitle">Visão geral</h1></div><div class="top-actions"><span class="sync-status" id="syncBadge">Salvo neste navegador</span><button class="btn primary" id="topAdd" data-action="new-doc">Adicionar PDF</button></div></header><main class="content" id="workspace"></main></div>
+</div>
+<nav class="mobile-nav" id="mobNav" aria-label="Navegação principal"></nav>
+<div id="modalRoot"></div><div id="toastStack" class="toaststack" aria-live="polite"></div>
+<script>
+'use strict';
+const APP_VERSION='3.0.0';
+const DB_NAME='arquivo_controle_documental_1';
+const FOLDER_NAME='Controle_Documental';
+const DOC_OPTIONS=['ASO','NR-06','NR-10','NR-11','NR-12','NR-18','NR-33','NR-35','CNH','Ficha de registro','Contrato de trabalho','Certificado','Treinamento','PGR','PCMSO','LTCAT','GRO','APR','Laudo técnico','Alvará','CIPA','Ordem de serviço','Outro'];
+const ICON={};
+const uid=()=> (typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():`${Date.now()}-${Math.random().toString(36).slice(2)}`);
+const esc=(v)=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const stateDefault=()=>({version:2,contracts:[],employees:[],documents:[],deleted:{},modifiedAt:new Date().toISOString()});
+let state=stateDefault(),db,baseHandle=null,page='dashboard',syncBusy=false,syncAgain=false,syncEnabled=false;
+let filters={contract:'',unit:'',sector:'',search:'',status:'',employee:'',type:'',scope:''};
+const $=s=>document.querySelector(s);
+// ===== v3 • ícones, navegação e utilidades =====
+let folderDirect=false,askResolve=null,skipNextPull=false,lastPull=0;
+const IC={plus:'<path d="M12 5v14M5 12h14"/>',grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',folder:'<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H9l2 2.5h7.5A2.5 2.5 0 0 1 21 10v7.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/>',users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.3 14.3a6.5 6.5 0 0 1 3.2 5.7"/>',file:'<path d="M14 3H7.5A2.5 2.5 0 0 0 5 5.5v13A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V8z"/><path d="M14 3v5h5"/>',search:'<circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/>',sliders:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',building:'<path d="M5 21V4.5A1.5 1.5 0 0 1 6.5 3h7A1.5 1.5 0 0 1 15 4.5V21M15 9h2.5A1.5 1.5 0 0 1 19 10.5V21M3 21h18M8.5 7.5h3M8.5 11.5h3M8.5 15.5h3"/>'};
+const ic=n=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n]||''}</svg>`;
+const NAV=[['dashboard','grid','Painel geral','Painel'],['contracts','folder','Contratos','Contratos'],['employees','users','Colaboradores','Pessoas'],['documents','file','Documentos','Arquivos'],['settings','sliders','Configurações','Ajustes']];
+function buildNav(){$('#sideNav').innerHTML=NAV.map(n=>`<button class="nav-btn" data-page="${n[0]}">${ic(n[1])}<span>${n[2]}</span></button>`).join('');$('#mobNav').innerHTML=NAV.map(n=>`<button class="nav-btn" data-page="${n[0]}">${ic(n[1])}<span>${n[3]}</span></button>`).join('');$('#topAdd').innerHTML=ic('plus')+' Adicionar PDF'}
+const tomb=(...ids)=>{const t=new Date().toISOString();for(const id of ids)if(id)state.deleted[id]=t};
+const stamp=x=>x?.updatedAt||x?.createdAt||'';
+function ask(title,text,opts){return new Promise(res=>{askResolve=res;const root=$('#modalRoot');root.innerHTML=`<div class="modal-shade" id="modalShade"><section class="modal" style="width:min(470px,100%)" role="dialog" aria-modal="true"><div class="modal-head"><div><h2>${esc(title)}</h2></div></div><div class="modal-body"><p style="margin:0;color:var(--muted)">${esc(text)}</p></div><div class="modal-foot">${opts.map((o,i)=>`<button class="btn ${o.cls||''}" data-ask="${i}">${esc(o.label)}</button>`).join('')}</div></section></div>`;root.querySelectorAll('[data-ask]').forEach(b=>b.onclick=()=>{askResolve=null;root.innerHTML='';res(opts[b.dataset.ask].value)})})}
+
+// ===== v3 • pasta compartilhada: reconhecer, mesclar e atualizar =====
+async function getRoot(create){return folderDirect?baseHandle:await baseHandle.getDirectoryHandle(FOLDER_NAME,{create})}
+async function readIndex(root){const info=JSON.parse(await(await readFile(root,'indice_geral.json')).text());if(info.app!=='ARQUIVO'||!Array.isArray(info.documents)||!Array.isArray(info.employees))throw Error('Pasta sem índice válido do ARQUIVO');return info}
+// Procura o ARQUIVO na pasta escolhida: ela mesma, uma subpasta Controle_Documental ou qualquer subpasta (inclusive renomeada).
+async function findRoot(chosen){
+ const tryRoot=async h=>{try{return {root:h,info:await readIndex(h)}}catch{return null}};
+ let f=await tryRoot(chosen);if(f)return f;
+ try{f=await tryRoot(await chosen.getDirectoryHandle(FOLDER_NAME));if(f)return f}catch{}
+ try{let n=0;for await(const [,h] of chosen.entries()){if(h.kind!=='directory'||++n>60)continue;f=await tryRoot(h);if(f)return f}}catch{}
+ return null}
+async function importPdfFrom(root,path,wantId){
+ if(!path)return '';
+ if(wantId&&await getPdf(wantId))return wantId;
+ try{const file=await readFile(root,path),id=wantId||uid();await putPdf(file,id);return id}catch{return ''}}
+// Mescla aditiva: o que só existe na pasta entra; o que existe nos dois fica com a edição mais recente; exclusões registradas são respeitadas.
+async function mergeFromIndex(root,info,dry=false){
+ const r={added:0,updated:0,removed:0,missing:0},rdead=info.deleted||{},dead={...rdead,...state.deleted};
+ for(const key of ['documents','employees','contracts']){const keep=state[key].filter(x=>!rdead[x.id]);r.removed+=state[key].length-keep.length;if(!dry)state[key]=keep}
+ for(const key of ['contracts','employees'])for(const rx of info[key]||[]){
+  if(dead[rx.id])continue;const lx=state[key].find(x=>x.id===rx.id);
+  if(!lx){r.added++;if(!dry)state[key].push({...rx})}else if(stamp(rx)>stamp(lx)){r.updated++;if(!dry)Object.assign(lx,rx)}}
+ for(const rd of info.documents||[]){
+  if(dead[rd.id])continue;const i=state.documents.findIndex(x=>x.id===rd.id),ld=state.documents[i];
+  if(ld&&stamp(rd)<=stamp(ld))continue;
+  ld?r.updated++:r.added++;if(dry)continue;
+  const d={...rd};d.fileId=await importPdfFrom(root,rd.pdfPath,rd.fileId);
+  if(rd.pdfPath&&!d.fileId){r.missing++;if(ld?.fileId){d.fileId=ld.fileId;d.fileName=ld.fileName}}
+  d.history=[];for(const h of rd.history||[]){const fid=await importPdfFrom(root,h.pdfPath,h.fileId);if(fid){const n={...h,fileId:fid};delete n.pdfPath;d.history.push(n)}}
+  delete d.pdfPath;if(ld)state.documents[i]=d;else state.documents.push(d)}
+ if(!dry)state.deleted=dead;
+ return r}
+async function pullFolder(manual=true){
+ if(!baseHandle||!await checkPermission(manual)){if(manual)toast('Autorize o acesso à pasta para atualizar.',true);return null}
+ try{
+  const root=await getRoot(false),info=await readIndex(root),r=await mergeFromIndex(root,info),n=r.added+r.updated+r.removed;
+  if(n){state=normalizeState(state);state.modifiedAt=new Date().toISOString();await txn('kv','put',state,'state')}
+  if(manual)toast(n?`Atualizado pela pasta: ${r.added} novo(s), ${r.updated} alterado(s), ${r.removed} removido(s).`:'Tudo já está atualizado.');
+  return r
+ }catch(e){if(e.name!=='NotFoundError'&&manual){console.error(e);toast('Não foi possível ler a pasta: '+e.message,true)}return null}}
+async function autoPull(){if(!syncEnabled||syncBusy||Date.now()-lastPull<60000)return;lastPull=Date.now();const r=await pullFolder(false);if(r&&(r.added||r.updated||r.removed)){render();toast('Cadastros atualizados pela pasta compartilhada.')}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoPull()});
+async function connectFolder(){
+ if(!('showDirectoryPicker'in window)){toast('Use o Chrome ou Edge atualizado para selecionar pastas. O backup ZIP funciona em outros navegadores.',true);return}
+ try{
+  const chosen=await window.showDirectoryPicker({id:'arquivo-documental',mode:'readwrite'});
+  const found=await findRoot(chosen),hasLocal=state.contracts.length||state.employees.length||state.documents.length;
+  let mode='merge';
+  if(found){
+   const i=found.info,n=`${(i.contracts||[]).length} contrato(s), ${i.employees.length} colaborador(es) e ${i.documents.length} documento(s)`;
+   mode=hasLocal
+    ?await ask('Pasta do ARQUIVO reconhecida',`A pasta já contém ${n}. Mesclar mantém o que você tem aqui e acrescenta o que está na pasta; substituir descarta os cadastros deste navegador.`,[{label:'Cancelar',value:null},{label:'Substituir',cls:'danger',value:'replace'},{label:'Mesclar',cls:'primary',value:'merge'}])
+    :await ask('Pasta do ARQUIVO reconhecida',`Encontrei ${n}. Carregar neste computador?`,[{label:'Cancelar',value:null},{label:'Carregar',cls:'primary',value:'merge'}]);
+   if(!mode)return;
+  }
+  baseHandle=found?found.root:chosen;folderDirect=!!found;
+  await txn('kv','put',baseHandle,'folder');await txn('kv','put',folderDirect,'folderDirect');
+  syncEnabled=await checkPermission(true);
+  if(!syncEnabled){toast('Permita o acesso à pasta para sincronizar.',true);render();return}
+  if(found){
+   toast('Carregando cadastros e PDFs da pasta...');
+   if(mode==='replace')state=stateDefault();
+   const r=await mergeFromIndex(found.root,found.info);
+   state=normalizeState(state);state.modifiedAt=new Date().toISOString();await txn('kv','put',state,'state');
+   resetFilters();page='dashboard';render();
+   toast(`Pasta reconhecida: ${state.contracts.length} contrato(s), ${state.employees.length} colaborador(es), ${fileCount()} PDF(s).${r.missing?` ${r.missing} PDF(s) não encontrado(s) na pasta.`:''}`);
+  }else toast('Pasta vinculada. Organizando os arquivos...');
+  await performSync();render();
+ }catch(e){if(e.name!=='AbortError'){console.error(e);toast('Não foi possível conectar a pasta: '+e.message,true)}}}
+function folderNotice(){
+ if(baseHandle&&!syncEnabled)return `<div class="notice"><div><strong>Autorize o acesso à pasta</strong><p>O navegador pede confirmação a cada nova sessão. Ao autorizar, o app busca as atualizações da equipe e sincroniza.</p></div><button class="btn small primary" data-action="sync-folder">Autorizar e atualizar</button></div>`;
+ if(!baseHandle&&!state.contracts.length&&!state.employees.length&&!state.documents.length)return `<div class="notice"><div><strong>Já usa o ARQUIVO em outro computador?</strong><p>Conecte a pasta existente e seus cadastros e PDFs voltam automaticamente.</p></div><button class="btn small primary" data-action="connect-folder">Conectar pasta existente</button></div>`;
+ return ''}
+function renderSettings(){
+ const support='showDirectoryPicker'in window,linked=!!baseHandle;
+ const status=syncEnabled?'Conectada: '+esc(baseHandle?.name||''):linked?'Autorização pendente: '+esc(baseHandle.name):'Somente neste navegador';
+ return `<div class="page-intro"><div><h2>Configurações</h2><p>Pasta compartilhada, backup e avisos.</p></div></div>${folderNotice()}
+<section class="panel panel-pad">
+<div class="setting"><div><h3>Pasta compartilhada</h3><p>Escolha uma pasta local, de rede ou sincronizada (OneDrive, Drive). Se ela já tiver o ARQUIVO, os cadastros e PDFs são reconhecidos e carregados — ideal para trocar de computador, recuperar após limpar o cache ou usar em equipe. Ao sincronizar, as alterações de cada pessoa são mescladas.</p><div class="codepath">Controle_Documental / Contrato / Empresa ou Funcionarios / Nome / PDF</div><div style="margin-top:12px"><span class="pill ${syncEnabled?'ok':'soon'}">${status}</span></div></div><div class="button-group"><button class="btn primary" data-action="connect-folder" ${!support?'disabled title="Requer Chrome ou Edge"':''}>${linked?'Trocar pasta':'Conectar pasta'}</button><button class="btn" data-action="pull-folder" ${!linked?'disabled':''}>Atualizar da pasta</button><button class="btn" data-action="sync-folder" ${!linked?'disabled':''}>${syncEnabled||!linked?'Sincronizar':'Autorizar acesso'}</button></div></div>
+<div class="setting"><div><h3>Backup completo (ZIP)</h3><p>Baixa contratos, cadastros, datas, histórico e PDFs em um ZIP. Não depende da pasta conectada; recomendado periodicamente.</p></div><div class="button-group"><button class="btn" data-action="export-backup">Baixar backup</button><button class="btn" data-action="import-backup">Importar ZIP</button></div></div>
+<div class="setting"><div><h3>Notificações de vencimento</h3><p>Alertas no painel a partir de 30 dias antes do vencimento. Também é possível permitir avisos do sistema enquanto a página estiver aberta.</p></div><button class="btn" data-action="enable-notify">${('Notification'in window&&Notification.permission==='granted')?'Notificações ativas':'Ativar avisos'}</button></div>
+<div class="setting"><div><h3>Privacidade</h3><p>Os PDFs ficam no banco local do navegador e, quando vinculada, na pasta que você autorizou. Nada é enviado a serviços externos. O app não tem login nem criptografia: proteja o computador e a pasta compartilhada.</p></div></div></section>
+<div class="notice"><div><strong>Sobre a validade</strong><p>O app calcula os prazos que você cadastrar. Não presume validade legal de NR, ASO ou certificados; confira a regra aplicável antes de informar a data.</p></div></div><input type="file" id="backupInput" accept=".zip,application/zip" class="hidden">`}
+
+const fileCount=()=>state.documents.filter(x=>x.fileId).length;
+function toast(msg,error=false){const area=$('#toastStack');const n=document.createElement('div');n.className='toast'+(error?' error':'');n.textContent=msg;area.appendChild(n);setTimeout(()=>n.remove(),4800)}
+function txn(store,method,...args){return new Promise((resolve,reject)=>{const t=db.transaction(store,method==='get'?'readonly':'readwrite');const req=t.objectStore(store)[method](...args);req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
+function openDb(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains('kv'))d.createObjectStore('kv');if(!d.objectStoreNames.contains('pdf'))d.createObjectStore('pdf')};r.onsuccess=()=>{db=r.result;resolve()};r.onerror=()=>reject(r.error)})}
+async function putPdf(blob,id){await txn('pdf','put',blob,id)}
+async function getPdf(id){return id?await txn('pdf','get',id):null}
+async function save(){state.modifiedAt=new Date().toISOString();await txn('kv','put',state,'state');scheduleSync();render()}
+const dateISO=()=>new Date().toLocaleDateString('en-CA',{timeZone:'America/Sao_Paulo'}); // usado apenas para a data operacional local
+function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function parseDay(str){if(!str||!/^\d{4}-\d{2}-\d{2}$/.test(str))return null;const [y,m,d]=str.split('-').map(Number);return new Date(Date.UTC(y,m-1,d))}
+function dayDiff(date){const t=parseDay(today()),d=parseDay(date);return !d?null:Math.round((d.getTime()-t.getTime())/86400000)}
+function addPeriod(date,qty,unit){if(!date||!qty||qty<=0)return '';const [y,m,d]=date.split('-').map(Number);if(!y||!m||!d)return '';let month=(m-1)+Number(qty)*(unit==='anos'?12:1);const yy=y+Math.floor(month/12),mm=((month%12)+12)%12;const last=new Date(Date.UTC(yy,mm+1,0)).getUTCDate();return `${yy}-${String(mm+1).padStart(2,'0')}-${String(Math.min(d,last)).padStart(2,'0')}`}
+const brDate=s=>s?`${s.slice(8,10)}/${s.slice(5,7)}/${s.slice(0,4)}`:'—';
+function getEmployee(id){return state.employees.find(x=>x.id===id)}
+function getContract(id){return state.contracts.find(x=>x.id===id)}
+function contractOfDoc(d){return getContract(d.contractId||getEmployee(d.employeeId)?.contractId)}
+function docOwner(d){return d.scope==='company'?'Empresa':(getEmployee(d.employeeId)?.name||'Colaborador removido')}
+function normalizeState(data){
+ const obj={...stateDefault(),...data};
+ if(!Array.isArray(obj.employees))obj.employees=[];
+ if(!Array.isArray(obj.documents))obj.documents=[];
+ if(!Array.isArray(obj.contracts))obj.contracts=[];
+ if(!obj.deleted||typeof obj.deleted!=='object'||Array.isArray(obj.deleted))obj.deleted={};
+ // Registros criados na versão anterior viram contratos separados por filial/operação.
+ for(const e of obj.employees){
+  if(!obj.contracts.some(c=>c.id===e.contractId)){
+   const unit=e.unit||'Sem localidade',sector=e.sector||'Geral';
+   let c=obj.contracts.find(c=>c.legacyKey===unit+'|'+sector);
+   if(!c){c={id:uid(),name:`${unit} — ${sector}`,unit,sector,client:'',legacyKey:unit+'|'+sector,createdAt:new Date().toISOString()};obj.contracts.push(c)}
+   e.contractId=c.id;
+  }
+ }
+ for(const d of obj.documents){
+  if(d.scope!=='company')d.scope='employee';
+  if(d.scope==='employee')d.contractId=getContractFromList(obj,getEmployeeFromList(obj,d.employeeId)?.contractId)?.id||d.contractId||'';
+  if(!Array.isArray(d.history))d.history=[];
+ }
+ obj.version=2;
+ return obj;
+}
+function getEmployeeFromList(obj,id){return obj.employees.find(e=>e.id===id)}
+function getContractFromList(obj,id){return obj.contracts.find(c=>c.id===id)}
+function status(doc){if(doc.noExpiry)return 'none';if(!doc.expiryDate)return 'none';const n=dayDiff(doc.expiryDate);return n<0?'expired':n<=30?'soon':'ok'}
+function statusText(doc){const s=status(doc),d=dayDiff(doc.expiryDate);return s==='expired'?`Vencido há ${Math.abs(d)} ${Math.abs(d)===1?'dia':'dias'}`:s==='soon'?(d===0?'Vence hoje':`Faltam ${d} ${d===1?'dia':'dias'}`):s==='none'?'Vitalício':'Em dia'}
+function pill(doc){let s=status(doc);return `<span class="pill ${s}"><span class="dot"></span>${esc(statusText(doc))}</span>`}
+function activeDocs(){return state.documents.filter(d=>d.scope==='company'||(getEmployee(d.employeeId)&&getEmployee(d.employeeId).active!==false))}
+function matchesContractFilter(d){return !filters.contract||contractOfDoc(d)?.id===filters.contract}
+function validFilters(d){
+ const e=d.scope==='company'?null:getEmployee(d.employeeId),c=contractOfDoc(d);
+ if(d.scope!=='company'&&!e)return false;
+ if(!matchesContractFilter(d))return false;
+ if(filters.unit&&c?.unit!==filters.unit)return false;
+ if(filters.sector&&c?.sector!==filters.sector)return false;
+ if(filters.employee&&d.employeeId!==filters.employee)return false;
+ if(filters.scope&&d.scope!==filters.scope)return false;
+ if(filters.status&&(filters.status==='pending'?!['expired','soon'].includes(status(d)):status(d)!==filters.status))return false;
+ if(filters.type&&d.type!==filters.type)return false;
+ if(filters.search){
+  const q=filters.search.toLocaleLowerCase('pt-BR');
+  const hay=[d.type,d.fileName,d.notes,d.issueDate,d.expiryDate,e?.name,e?.reg,e?.sector,c?.name,c?.unit,c?.sector,c?.client,d.scope==='company'?'empresa pgr pcmso':'' ].join(' ').toLocaleLowerCase('pt-BR');
+  if(!hay.includes(q))return false;
+ }
+ return true;
+}
+const sortDocs=(a,b)=>{let weight={expired:0,soon:1,ok:2,none:3};return weight[status(a)]-weight[status(b)] || (a.expiryDate||'9999').localeCompare(b.expiryDate||'9999') || docOwner(a).localeCompare(docOwner(b),'pt-BR')};
+function filteredDocs(){return state.documents.filter(validFilters).sort(sortDocs)}
+const unique=(k,source=state.contracts)=>[...new Set(source.map(e=>(e[k]||'').trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'pt-BR'));
+function selectOptions(items,value,all){return `<option value="">${esc(all)}</option>`+items.map(x=>`<option value="${esc(x)}" ${x===value?'selected':''}>${esc(x)}</option>`).join('')}
+function contractSelect(value='',all='Todos os contratos'){return `<option value="">${esc(all)}</option>`+state.contracts.slice().sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map(c=>`<option value="${c.id}" ${c.id===value?'selected':''}>${esc(c.name)}</option>`).join('')}
+function avatar(name){return esc((name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]?.toUpperCase()).join('')||'?')}
+function updateGlobal(){const d=activeDocs(),n=d.filter(x=>['expired','soon'].includes(status(x))).length;$('#sidePending').textContent=`${n} ${n===1?'pendência':'pendências'}`;$('#syncBadge').textContent=syncEnabled?'Pasta conectada':baseHandle?'Autorização pendente':'Salvo neste navegador';$('#syncBadge').className='sync-status'+(syncEnabled?' synced':' warn')}
+function goto(p){page=p;window.scrollTo({top:0,behavior:'instant'});render()}
+function render(){updateGlobal();document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('#topTitle').textContent={dashboard:'Visão geral',contracts:'Contratos',employees:'Colaboradores',documents:'Buscar arquivos',settings:'Configurações'}[page];$('#workspace').innerHTML=({dashboard:renderDashboard,contracts:renderContracts,employees:renderEmployees,documents:renderDocuments,settings:renderSettings}[page])()}
+function docTable(docs,limit){
+ const display=limit?docs.slice(0,limit):docs;
+ if(!display.length)return empty('Nenhum PDF encontrado','Tente outro termo, selecione outro contrato ou cadastre o primeiro documento.');
+ return `<div class="table-wrap"><table class="data-table"><thead><tr><th>Arquivo / documento</th><th>Localização</th><th>Validade</th><th>Situação</th><th style="text-align:right">Ações</th></tr></thead><tbody>${display.map(d=>{
+ const c=contractOfDoc(d),e=getEmployee(d.employeeId);
+ return `<tr><td class="mobile-main"><div class="doc-title">${esc(d.type)}</div><div class="file-sub">${esc(d.fileName||'Sem PDF')}${d.history?.length?' · '+d.history.length+' versão(ões)':''}</div></td><td class="mobile-sub"><div class="person">${esc(d.scope==='company'?'Empresa':e?.name||'Colaborador removido')}</div><div class="file-sub">${esc(c?.name||'Sem contrato')} / ${d.scope==='company'?'Empresa':'Funcionários'}</div></td><td class="mobile-date">${d.noExpiry?'Vitalício':brDate(d.expiryDate)}</td><td class="mobile-status">${pill(d)}</td><td class="mobile-actions"><div class="cell-actions">${d.fileId?`<button class="linkbtn" data-action="open-pdf" data-file="${d.fileId}">Abrir</button>`:''}<button class="linkbtn" data-action="doc-more" data-id="${d.id}">Detalhes</button><button class="linkbtn" data-action="doc-edit" data-id="${d.id}">Editar</button></div></td></tr>`}).join('')}</tbody></table></div>${limit&&docs.length>limit?`<div style="padding:14px 19px;text-align:center"><button class="btn small" data-page="documents">Ver todos os arquivos →</button></div>`:''}`;
+}
+function empty(title,desc){return `<div class="empty"><div class="empty-ico">${ic('file')}</div><strong>${esc(title)}</strong><p>${esc(desc)}</p></div>`}
+function alertNotice(d){const expired=d.filter(x=>status(x)==='expired').length,soon=d.filter(x=>status(x)==='soon').length;return expired||soon?`<div class="notice"><div><strong>Atenção: ${expired?' '+expired+' documento(s) vencido(s)':''}${expired&&soon?' e ':''}${soon?' '+soon+' a vencer em até 30 dias':''}</strong><p>Priorize a atualização dos PDFs para manter os registros em dia.</p></div><button class="btn small" data-action="show-pending">Ver pendências →</button></div>`:`<div class="notice good"><div><strong>Sem vencimentos próximos</strong><p>Nenhum documento vencido ou a vencer nos próximos 30 dias neste conjunto de contratos.</p></div></div>`}
+function renderDashboard(){
+ const relevant=activeDocs().filter(d=>matchesContractFilter(d));
+ const counts={expired:0,soon:0,ok:0,none:0};relevant.forEach(d=>counts[status(d)]++);
+ const pending=relevant.filter(d=>['expired','soon'].includes(status(d))).sort(sortDocs);
+ const contractCards=state.contracts.map(c=>{
+  const e=state.employees.filter(x=>x.contractId===c.id),d=state.documents.filter(x=>contractOfDoc(x)?.id===c.id),company=d.filter(x=>x.scope==='company'),n=d.filter(x=>['expired','soon'].includes(status(x))).length;
+  return `<button class="contract-list-row" data-action="contract-open" data-id="${c.id}"><div class="contract-symbol">${ic('folder')}</div><div class="contract-list-info"><strong>${esc(c.name)}</strong><span>${e.length} pessoas · ${company.length} PDFs da empresa · ${d.length} arquivos</span></div><span class="pill ${n?'soon':'ok'}">${n?n+' alerta(s)':'Em dia'}</span><span class="chev">›</span></button>`
+ }).join('');
+ return `<div class="page-intro"><div><h2>Seus documentos em ordem</h2><p>Encontre qualquer PDF por nome, tipo ou contrato. Sem leitura automática dos arquivos.</p></div><button class="btn small" data-action="new-contract">${ic('plus')}Novo contrato</button></div>
+ <div class="hero-search"><div class="search-glyph">${ic('search')}</div><input id="home-search" class="hero-input" type="search" placeholder="Buscar Washington, NR-35, PCMSO, nome do PDF..." aria-label="Pesquisar documentos"><button class="btn primary" data-action="home-search">Pesquisar</button></div>
+ ${folderNotice()}${alertNotice(relevant)}
+ <div class="stats"><div class="stat red"><div><label>Vencidos</label><strong>${counts.expired}</strong></div></div><div class="stat amber"><div><label>Próximos 30 dias</label><strong>${counts.soon}</strong></div></div><div class="stat green"><div><label>Documentos em dia</label><strong>${counts.ok}</strong></div></div><div class="stat"><div><label>Vitalícios</label><strong>${counts.none}</strong></div></div></div>
+ <div class="two-col"><section class="panel"><div class="panel-header"><h3>Vencimentos que precisam de atenção</h3><button class="linkbtn" data-action="show-pending">Ver todos →</button></div>${pending.length?docTable(pending,6):empty('Sem pendências','Os documentos a vencer em 30 dias aparecem aqui.')}</section><section class="panel"><div class="panel-header"><h3>Contratos</h3><button class="linkbtn" data-page="contracts">Gerenciar →</button></div>${contractCards||empty('Nenhum contrato','Crie um contrato e comece a organizar seus PDFs.')}</section></div>`;
+}
+function renderContracts(){
+ const cs=state.contracts.filter(c=>!filters.search||[c.name,c.unit,c.sector,c.client].join(' ').toLowerCase().includes(filters.search.toLowerCase()));
+ return `<div class="page-intro"><div><h2>Contratos e suas pastas</h2><p>A organização de cada contrato é dividida em <b>Empresa</b> e <b>Funcionários</b>.</p></div><button class="btn primary" data-action="new-contract">${ic('plus')}Novo contrato</button></div>
+ <section class="panel"><div class="filters"><input id="f-search" class="control search" value="${esc(filters.search)}" placeholder="Buscar contrato, localidade, cliente..."></div>
+ <div class="contract-grid">${cs.length?cs.map(c=>{
+ const es=state.employees.filter(e=>e.contractId===c.id),ds=state.documents.filter(d=>contractOfDoc(d)?.id===c.id),company=ds.filter(d=>d.scope==='company'),person=ds.filter(d=>d.scope!=='company'),pend=ds.filter(d=>['expired','soon'].includes(status(d))).length;
+ return `<article class="contract-card"><div class="contract-head"><div class="contract-symbol">${ic('folder')}</div><div><h3>${esc(c.name)}</h3><p>${esc([c.client,c.unit,c.sector].filter(Boolean).join(' • ')||'Organização documental')}</p></div></div><div class="contract-folders"><button data-action="company-docs" data-id="${c.id}"><span>${ic('building')}</span><strong>Empresa</strong><small>${company.length} PDF(s)</small></button><button data-action="contract-employees" data-id="${c.id}"><span>${ic('users')}</span><strong>Funcionários</strong><small>${es.length} pessoa(s) · ${person.length} PDF(s)</small></button></div><div class="contract-bottom">${pend?`<span class="pill soon">${pend} vencimento(s)</span>`:'<span class="pill ok">Sem vencimentos próximos</span>'}<button class="btn small" data-action="contract-edit" data-id="${c.id}">Editar contrato</button></div><div class="button-group"><button class="btn small" data-action="company-new" data-id="${c.id}">${ic('plus')}PDF da empresa</button><button class="btn small" data-action="employee-new" data-id="${c.id}">${ic('plus')}Funcionário</button></div></article>`}).join(''):empty('Nenhum contrato','Cadastre um contrato para criar as pastas Empresa e Funcionários.')}</div></section>`;
+}
+function renderEmployees(){
+ const list=state.employees.filter(e=>(!filters.contract||e.contractId===filters.contract)&&(!filters.search||[e.name,e.reg,getContract(e.contractId)?.name,getContract(e.contractId)?.unit,...state.documents.filter(d=>d.employeeId===e.id).map(d=>d.type+' '+d.fileName)].join(' ').toLowerCase().includes(filters.search.toLowerCase()))).sort((a,b)=>Number(b.active!==false)-Number(a.active!==false)||a.name.localeCompare(b.name,'pt-BR'));
+ return `<div class="page-intro"><div><h2>Funcionários</h2><p>${state.employees.length} pessoa(s) cadastrada(s) em seus contratos.</p></div><button class="btn primary" data-action="new-employee">${ic('plus')}Cadastrar</button></div><section class="panel"><div class="filters"><input class="control search" id="f-search" value="${esc(filters.search)}" placeholder="Buscar pessoa, documento, contrato..."><select id="f-contract" class="control select-filter">${contractSelect(filters.contract)}</select></div><div class="panel-pad">${list.length?`<div class="employees">${list.map(e=>{const docs=state.documents.filter(d=>d.employeeId===e.id),pend=docs.filter(d=>['expired','soon'].includes(status(d))).length;return `<div class="employee"><div class="person-head"><div class="avatar">${avatar(e.name)}</div><div style="min-width:0"><h3>${esc(e.name)} ${e.active===false?'<span class="pill off">Inativo</span>':''}</h3><p>${esc(getContract(e.contractId)?.name||'Sem contrato')}</p></div></div><div class="employee-meta"><div>${docs.length} PDF(s) ${e.reg?'· '+esc(e.reg):''}</div>${pend?`<span class="pill soon">${pend} alerta(s)</span>`:'<span class="pill ok">Em ordem</span>'}</div><div class="button-group"><button class="btn small primary" data-action="new-doc" data-id="${e.id}">${ic('plus')}PDF</button><button class="btn small" data-action="employee-docs" data-id="${e.id}">Ver arquivos</button><button class="btn small" data-action="employee-edit" data-id="${e.id}">Editar</button></div></div>`}).join('')}</div>`:empty('Nenhum funcionário encontrado','Cadastre uma pessoa ou ajuste sua pesquisa.')}</div></section>`;
+}
+function renderDocuments(){
+ const docs=filteredDocs();
+ return `<div class="page-intro"><div><h2>Biblioteca de PDFs</h2><p>${state.documents.length} documento(s) registrados · ${fileCount()} PDF(s) disponíveis.</p></div><button class="btn primary" data-action="new-doc">${ic('plus')}Adicionar PDF</button></div><section class="panel"><div class="filters"><input class="control search" type="search" id="f-search" placeholder="Buscar nome, PGR, ASO, NR, PDF, contrato..." value="${esc(filters.search)}"><select id="f-contract" class="control select-filter">${contractSelect(filters.contract)}</select><select id="f-scope" class="control select-filter"><option value="">Empresa + funcionários</option><option value="company" ${filters.scope==='company'?'selected':''}>Só empresa</option><option value="employee" ${filters.scope==='employee'?'selected':''}>Só funcionários</option></select><select id="f-status" class="control select-filter"><option value="">Todas as situações</option><option value="pending" ${filters.status==='pending'?'selected':''}>Todos os alertas</option><option value="expired" ${filters.status==='expired'?'selected':''}>Vencidos</option><option value="soon" ${filters.status==='soon'?'selected':''}>Até 30 dias</option><option value="ok" ${filters.status==='ok'?'selected':''}>Em dia</option><option value="none" ${filters.status==='none'?'selected':''}>Vitalícios</option></select><select id="f-employee" class="control select-filter">${contractSelectEmployees()}</select><button class="btn small" data-action="clear-filters">Limpar filtros</button></div><div class="results-count">${docs.length} resultado(s) encontrado(s)</div>${docTable(docs)}</section>`;
+}
+function contractSelectEmployees(){return `<option value="">Todos os funcionários</option>`+state.employees.filter(e=>!filters.contract||e.contractId===filters.contract).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map(e=>`<option value="${e.id}" ${filters.employee===e.id?'selected':''}>${esc(e.name)}</option>`).join('')}
+function showModal(title,sub,body,footer){$('#modalRoot').innerHTML=`<div class="modal-shade" id="modalShade"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><h2 id="modalTitle">${esc(title)}</h2><p>${esc(sub)}</p></div><button class="iconbtn" type="button" data-action="close-modal" aria-label="Fechar">×</button></div>${body}<div class="modal-foot">${footer}</div></section></div>`;setTimeout(()=>$('#modalRoot input:not([type="hidden"]):not([type="file"]),#modalRoot select')?.focus(),40)}
+function closeModal(){$('#modalRoot').innerHTML='';if(askResolve){const r=askResolve;askResolve=null;r(null)}}
+function contractDialog(id){
+ const c=getContract(id)||{name:'',unit:'',sector:'Plataformas',client:''};
+ showModal(id?'Editar contrato':'Novo contrato','Cada contrato contém duas pastas: Empresa e Funcionários.',`<form id="contractForm" data-id="${esc(id||'')}"><div class="modal-body"><label class="field"><span>Nome do contrato *</span><input name="name" class="control" value="${esc(c.name)}" required maxlength="100" placeholder="Ex.: ES • Plataformas"></label><div class="form-grid"><label class="field"><span>Localidade / filial</span><input name="unit" list="unitList" class="control" value="${esc(c.unit)}" placeholder="Ex.: Espírito Santo"><datalist id="unitList">${[...new Set([...unique('unit'),'Espírito Santo','Pará','Minas Gerais','Goiás'])].map(x=>`<option value="${esc(x)}">`).join('')}</datalist></label><label class="field"><span>Setor / operação</span><input name="sector" class="control" value="${esc(c.sector||'')}" placeholder="Ex.: Plataformas"></label></div><label class="field"><span>Empresa / cliente (opcional)</span><input name="client" class="control" maxlength="150" value="${esc(c.client||'')}" placeholder="Ex.: Filial ES ou nome do contratante"></label><p class="hint">A pasta do contrato usará o nome acima. Você poderá editar essas informações depois.</p></div></form>`,`<button class="btn" data-action="close-modal">Cancelar</button>${id?`<button class="btn danger" data-action="contract-remove" data-id="${id}">Excluir</button>`:''}<button class="btn primary" type="submit" form="contractForm">${id?'Salvar contrato':'Criar contrato'}</button>`);
+}
+function employeeDialog(id,contractId){
+ if(!state.contracts.length){toast('Crie um contrato antes de cadastrar funcionários.');contractDialog();return}
+ const e=getEmployee(id)||{name:'',reg:'',contractId:contractId||filters.contract||state.contracts[0].id,active:true};
+ showModal(id?'Editar funcionário':'Novo funcionário','O nome cria uma pasta em Contrato / Funcionários.',`<form id="employeeForm" data-id="${esc(id||'')}"><div class="modal-body"><label class="field"><span>Nome completo *</span><input name="name" class="control" required maxlength="150" value="${esc(e.name)}" placeholder="Ex.: Washington Silva"></label><label class="field"><span>Contrato *</span><select name="contractId" class="control" required>${state.contracts.map(c=>`<option value="${c.id}" ${c.id===e.contractId?'selected':''}>${esc(c.name)}</option>`).join('')}</select></label><label class="field"><span>Matrícula (opcional)</span><input name="reg" class="control" maxlength="50" value="${esc(e.reg||'')}" placeholder="Código interno do funcionário"></label><label class="checkbox-line"><input type="checkbox" name="active" ${e.active!==false?'checked':''}> Funcionário ativo (seus documentos entram nos alertas)</label>${id?'<p class="hint">Se alterar o nome ou o contrato, os PDFs serão reorganizados na próxima sincronização.</p>':''}</div></form>`,`<button class="btn" data-action="close-modal">Cancelar</button>${id?`<button class="btn danger" data-action="employee-remove" data-id="${id}">Excluir</button>`:''}<button class="btn primary" type="submit" form="employeeForm">${id?'Salvar alterações':'Cadastrar funcionário'}</button>`);
+}
+function docDialog(id,employeeId,companyContractId){
+ if(!state.contracts.length){toast('Crie um contrato para organizar seus documentos.');contractDialog();return}
+ const old=state.documents.find(x=>x.id===id);
+ const scope=old?.scope||(companyContractId||!state.employees.length?'company':'employee');
+ const contractId=old?.contractId||getEmployee(employeeId)?.contractId||companyContractId||filters.contract||state.contracts[0].id;
+ const d=old||{contractId,scope,employeeId:employeeId||'',type:scope==='company'?'PGR':'ASO',issueDate:'',periodAmount:1,periodUnit:'anos',expiryDate:'',noExpiry:false,notes:''};
+ const co=state.contracts.map(c=>`<option value="${c.id}" ${c.id===contractId?'selected':''}>${esc(c.name)}</option>`).join('');
+ const employees=state.employees.filter(e=>e.contractId===contractId).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+ const employeeOptions=employees.map(e=>`<option value="${e.id}" ${e.id===d.employeeId?'selected':''}>${esc(e.name)}</option>`).join('');
+ showModal(id?'Editar / substituir PDF':'Adicionar PDF','Escolha o contrato, a pasta de destino e a validade.',`<form id="documentForm" data-id="${esc(id||'')}"><div class="modal-body"><div class="form-grid"><label class="field"><span>Destino</span><select name="scope" class="control"><option value="employee" ${scope==='employee'?'selected':''}>Funcionário</option><option value="company" ${scope==='company'?'selected':''}>Empresa (PGR, PCMSO etc.)</option></select></label><label class="field"><span>Contrato *</span><select name="contractId" class="control" required>${co}</select></label></div><label class="field" id="employeeField" ${scope==='company'?'style="display:none"':''}><span>Funcionário *</span><select name="employeeId" class="control"><option value="">Selecione a pessoa...</option>${employeeOptions}</select></label><div id="destinationHint" class="hint-box">${scope==='company'?'Pasta: '+esc(getContract(contractId)?.name||'Contrato')+' / Empresa':'Pasta: '+esc(getContract(contractId)?.name||'Contrato')+' / Funcionários / Nome'}</div><label class="field"><span>Nome / tipo do documento *</span><input name="type" list="docTypeList" class="control" required maxlength="110" value="${esc(d.type)}" placeholder="NR-35, ASO, PCMSO, PGR, Ficha de registro..."><datalist id="docTypeList">${DOC_OPTIONS.map(t=>`<option value="${t}">`).join('')}</datalist></label><div class="form-grid"><label class="field"><span>Data do documento (opcional)</span><input class="control" type="date" name="issueDate" value="${esc(d.issueDate||'')}"></label><label class="field"><span>Período de validade</span><div style="display:flex;gap:7px"><input type="number" name="periodAmount" class="control" min="1" max="999" value="${esc(d.periodAmount||1)}" style="width:40%"><select name="periodUnit" class="control" style="width:60%"><option value="anos" ${d.periodUnit==='anos'?'selected':''}>Ano(s)</option><option value="meses" ${d.periodUnit==='meses'?'selected':''}>Mês(es)</option></select></div></label></div><label class="field"><span>Data de vencimento</span><input class="control" type="date" name="expiryDate" value="${esc(d.expiryDate||'')}" ${d.noExpiry?'disabled':''}></label><label class="checkbox-line"><input type="checkbox" name="noExpiry" ${d.noExpiry?'checked':''}> <strong>Vitalício — documento sem vencimento</strong></label><p class="hint">Você preenche manualmente as datas. A validade automática é opcional; ao marcar Vitalício, não haverá alerta.</p><label class="field"><span>Observações / palavras-chave (opcional)</span><textarea class="control" name="notes" rows="2" maxlength="1000" placeholder="Ex.: treinamento, lote, número de certificado, responsável...">${esc(d.notes||'')}</textarea></label><label class="upload ${d.fileId?'has-file':''}" id="uploadLabel"><input type="file" name="pdf" accept="application/pdf,.pdf"><strong id="uploadTitle">${d.fileId?'PDF atual: '+esc(d.fileName||'documento.pdf'):'Selecionar PDF'}</strong><small>${d.fileId?'Novo PDF substitui o atual e preserva a versão anterior no histórico':'Selecione um PDF para guardar na pasta escolhida'}</small></label></div></form>`,`<button class="btn" data-action="close-modal">Cancelar</button><button class="btn primary" type="submit" form="documentForm">${id?'Salvar / atualizar':'Guardar PDF'}</button>`);
+ updateDestinationControls();
+}
+function updateDestinationControls(){
+ const f=$('#documentForm');if(!f)return;
+ const c=getContract(f.elements.contractId.value),scope=f.elements.scope.value,field=$('#employeeField'),sel=f.elements.employeeId;
+ field.style.display=scope==='company'?'none':'';
+ const last=sel.value;sel.innerHTML='<option value="">Selecione a pessoa...</option>'+state.employees.filter(e=>e.contractId===c?.id).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR')).map(e=>`<option value="${e.id}">${esc(e.name)}</option>`).join('');
+ if([...sel.options].some(o=>o.value===last))sel.value=last;
+ sel.required=scope==='employee';
+ $('#destinationHint').textContent=`Pasta: ${c?.name||'Contrato'} / ${scope==='company'?'Empresa':'Funcionarios / '+(getEmployee(sel.value)?.name||'Nome do funcionário')}`;
+}
+function docDetails(id){
+ const d=state.documents.find(x=>x.id===id);if(!d)return;
+ const e=getEmployee(d.employeeId),c=contractOfDoc(d);
+ showModal(d.type,'Arquivo PDF, validade e versões anteriores',`<div class="modal-body"><div class="folder-card"><div><strong>${esc(d.scope==='company'?'Empresa':e?.name||'—')}</strong><small>${esc(c?.name||'—')} / ${d.scope==='company'?'Empresa':'Funcionários'}</small></div>${pill(d)}</div><div class="form-grid" style="margin-top:18px"><div><strong class="muted-sm">Emissão / data</strong><div>${brDate(d.issueDate)}</div></div><div><strong class="muted-sm">Vencimento</strong><div>${d.noExpiry?'Vitalício':brDate(d.expiryDate)}</div></div></div>${d.notes?`<p style="white-space:pre-wrap">${esc(d.notes)}</p>`:''}<div class="secondary-head"><h3>PDF atual</h3><div class="button-group">${d.fileId?`<button class="btn small primary" data-action="open-pdf" data-file="${d.fileId}">Abrir PDF</button><button class="btn small" data-action="download-pdf" data-file="${d.fileId}" data-name="${esc(d.fileName)}">Baixar</button>`:''}</div></div><p class="muted-sm">${d.fileId?esc(d.fileName):'Sem PDF anexado'}</p><div class="secondary-head"><h3>Histórico de atualizações</h3><span class="small-count">${d.history?.length||0} versão(ões)</span></div>${d.history?.length?d.history.map(h=>`<div class="location-row" style="padding-left:0;padding-right:0"><div><strong>${esc(h.fileName||'PDF anterior')}</strong><small>Substituído em ${brDate(h.replacedAt?.slice(0,10))} · ${h.noExpiry?'Vitalício':brDate(h.expiryDate)}</small></div><button class="btn small" data-action="download-pdf" data-file="${h.fileId}" data-name="${esc(h.fileName||'versao_anterior.pdf')}">Baixar</button></div>`).join(''):'<p class="muted-sm">Nenhuma versão anterior.</p>'}</div>`,`<button class="btn danger" data-action="doc-remove" data-id="${d.id}">Excluir</button><button class="btn" data-action="close-modal">Fechar</button><button class="btn primary" data-action="doc-edit" data-id="${d.id}">Editar / atualizar</button>`);
+}
+function validPDF(file){return !!file&&(file.type==='application/pdf'||/\.pdf$/i.test(file.name))}
+async function submitContract(form){
+ const f=new FormData(form),name=(f.get('name')||'').trim();
+ if(!name){toast('Digite o nome do contrato.',true);return}
+ const update={name,unit:(f.get('unit')||'').trim(),sector:(f.get('sector')||'').trim(),client:(f.get('client')||'').trim(),updatedAt:new Date().toISOString()};
+ let c=getContract(form.dataset.id);if(c)Object.assign(c,update);else state.contracts.push({id:uid(),...update,createdAt:new Date().toISOString()});
+ closeModal();await save();toast('Contrato salvo e pronto para receber PDFs.');
+}
+async function submitEmployee(form){
+ const f=new FormData(form),name=(f.get('name')||'').trim(),contractId=f.get('contractId');
+ if(!name||!getContract(contractId)){toast('Preencha nome e contrato.',true);return}
+ let e=getEmployee(form.dataset.id);
+ const c=getContract(contractId),update={name,contractId,unit:c.unit,sector:c.sector,reg:(f.get('reg')||'').trim(),active:f.has('active'),updatedAt:new Date().toISOString()};
+ if(e)Object.assign(e,update);else{e={id:uid(),...update,createdAt:new Date().toISOString()};state.employees.push(e)}
+ closeModal();await save();toast('Funcionário salvo na pasta do contrato.');
+}
+async function submitDocument(form){
+ const f=new FormData(form),scope=f.get('scope'),contractId=f.get('contractId'),employeeId=scope==='company'?'':f.get('employeeId');
+ const type=(f.get('type')||'').trim(),issueDate=f.get('issueDate')||'',noExpiry=f.has('noExpiry');
+ const expiryDate=noExpiry?'':(f.get('expiryDate')||'');
+ const periodAmount=Math.max(1,parseInt(f.get('periodAmount'),10)||1),periodUnit=f.get('periodUnit')||'anos';
+ const file=form.elements.pdf.files[0];
+ if(!getContract(contractId)||!type){toast('Escolha contrato e tipo do documento.',true);return}
+ if(scope==='employee'&&getEmployee(employeeId)?.contractId!==contractId){toast('Selecione um funcionário deste contrato.',true);return}
+ if(file&&!validPDF(file)){toast('Anexe um arquivo PDF válido.',true);return}
+ if(!noExpiry&&!expiryDate){toast('Informe o vencimento ou marque Vitalício.',true);return}
+ if(!noExpiry&&issueDate&&expiryDate<issueDate){toast('Vencimento anterior à data do documento.',true);return}
+ let d=state.documents.find(x=>x.id===form.dataset.id);
+ if(!d){if(!file){toast('Selecione o PDF para cadastrar.',true);return}d={id:uid(),history:[],createdAt:new Date().toISOString(),fileId:'',fileName:''};state.documents.push(d)}
+ if(file){
+  if(d.fileId){d.history=d.history||[];d.history.unshift({fileId:d.fileId,fileName:d.fileName,replacedAt:new Date().toISOString(),expiryDate:d.expiryDate||'',noExpiry:!!d.noExpiry,issueDate:d.issueDate||'',type:d.type||''})}
+  const fileId=uid();await putPdf(file,fileId);d.fileId=fileId;d.fileName=file.name;
+ }
+ Object.assign(d,{scope,contractId,employeeId,type,issueDate,expiryDate,noExpiry,periodAmount,periodUnit,notes:(f.get('notes')||'').trim(),updatedAt:new Date().toISOString()});
+ closeModal();await save();toast(file?'PDF guardado na biblioteca.':'Dados do documento atualizados.');
+}
+function safeName(s){return String(s||'Nao_informado').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[<>:"\\/|?*\x00-\x1f]/g,'-').replace(/\.+$/,'').replace(/\s+/g,' ').trim().slice(0,80)||'Nao_informado'}
+function contractDir(c){const duplicated=state.contracts.filter(x=>safeName(x.name).toLowerCase()===safeName(c.name).toLowerCase());return safeName(c.name)+(duplicated.length>1?'__'+c.id.slice(0,8):'')}
+function employeeDir(e){const c=getContract(e.contractId);if(!c)return ['Sem_contrato','Funcionarios',safeName(e.name)];const n=state.employees.filter(x=>x.contractId===c.id&&safeName(x.name).toLowerCase()===safeName(e.name).toLowerCase()).length;return [contractDir(c),'Funcionarios',safeName(e.name)+(n>1?'__'+e.id.slice(0,8):'')]}
+function companyDir(c){return [contractDir(c),'Empresa']}
+function pdfPath(d,e,old){const c=contractOfDoc(d);if(!c)return null;const dir=d.scope==='company'?companyDir(c):employeeDir(e);const hist=!!old;const row=old||d;const suffix=(row.noExpiry?'Vitalicio':row.expiryDate?'Vence '+brDate(row.expiryDate).replaceAll('/','-'):'Sem-data');const last=hist?`Historico/${safeName(row.type||d.type)} - ${suffix}__${row.fileId.slice(0,8)}.pdf`:`${safeName(d.type)} - ${suffix}__${d.id.slice(0,8)}.pdf`;return [...dir,...last.split('/')].join('/')}
+function manifest(){const docs=state.documents.map(d=>{const e=getEmployee(d.employeeId);return {...d,pdfPath:d.fileId?pdfPath(d,e):null,history:(d.history||[]).map(h=>({...h,pdfPath:pdfPath(d,e,h)}))}});return {app:'ARQUIVO',format:2,generatedAt:new Date().toISOString(),contracts:state.contracts,employees:state.employees,documents:docs,deleted:state.deleted}}
+function utf8Json(v){return new Blob([JSON.stringify(v,null,2)],{type:'application/json'})}
+async function getDir(root,parts,create=false){let d=root;for(const part of parts)d=await d.getDirectoryHandle(part,{create});return d}
+async function setFile(root,relative,blob){const parts=relative.split('/'),filename=parts.pop();const dir=await getDir(root,parts,true),fh=await dir.getFileHandle(filename,{create:true}),write=await fh.createWritable();await write.write(blob);await write.close()}
+async function readFile(root,relative){const parts=relative.split('/'),name=parts.pop();return (await(await getDir(root,parts,false)).getFileHandle(name)).getFile()}
+async function removeFile(root,relative){try{const parts=relative.split('/'),name=parts.pop();await (await getDir(root,parts,false)).removeEntry(name)}catch(e){console.warn('Não foi possível excluir um arquivo antigo',relative,e)}}
+async function checkPermission(prompt=false){if(!baseHandle)return false;try{let res=await baseHandle.queryPermission({mode:'readwrite'});if(res==='granted')return true;if(prompt&&typeof baseHandle.requestPermission==='function')return (await baseHandle.requestPermission({mode:'readwrite'}))==='granted'}catch{}return false}
+function makeFiles(){
+ const m=manifest(),files=new Map();
+ files.set('indice_geral.json',{signature:'meta-'+state.modifiedAt,blob:utf8Json(m)});
+ for(const c of state.contracts){
+  const root=contractDir(c),all=state.documents.filter(d=>contractOfDoc(d)?.id===c.id),company=all.filter(d=>d.scope==='company');
+  files.set(`${root}/Empresa/dados_empresa.json`,{signature:'meta-'+state.modifiedAt,blob:utf8Json({contrato:c,documentos:company})});
+  files.set(`${root}/Funcionarios/_organizacao.json`,{signature:'meta-'+state.modifiedAt,blob:utf8Json({contrato:c.id,funcionarios:state.employees.filter(e=>e.contractId===c.id).map(e=>({id:e.id,nome:e.name}))})});
+ }
+ for(const e of state.employees){const personal=state.documents.filter(d=>d.scope!=='company'&&d.employeeId===e.id),root=employeeDir(e).join('/');files.set(`${root}/dados_colaborador.json`,{signature:'meta-'+state.modifiedAt,blob:utf8Json({colaborador:e,documentos:personal})})}
+ for(const d of m.documents){if(d.fileId&&d.pdfPath)files.set(d.pdfPath,{signature:d.fileId,fileId:d.fileId});for(const h of d.history||[])if(h.fileId&&h.pdfPath)files.set(h.pdfPath,{signature:h.fileId,fileId:h.fileId})}
+ return files;
+}
+async function performSync(){if(!baseHandle||!await checkPermission()){syncEnabled=false;render();return}if(syncBusy){syncAgain=true;return}syncBusy=true;$('#syncBadge').textContent='Sincronizando pasta...';try{const root=await getRoot(true);const pulled=skipNextPull?(skipNextPull=false,null):await pullFolder(false);if(pulled&&(pulled.added||pulled.updated||pulled.removed))render();let previous={files:{}};try{previous=JSON.parse(await(await readFile(root,'_arquivos_gerenciados.json')).text())}catch{}const files=makeFiles(),newIndex={format:1,files:{}};for(const [path,item] of files){let exists=true;if(item.fileId&&previous.files?.[path]===item.signature){try{await readFile(root,path)}catch{exists=false}}if(!item.fileId||previous.files?.[path]!==item.signature||!exists){const blob=item.blob||await getPdf(item.fileId);if(!blob)throw Error('Arquivo PDF não encontrado: '+path);await setFile(root,path,blob)}newIndex.files[path]=item.signature}for(const old of Object.keys(previous.files||{})){if(!files.has(old))await removeFile(root,old)}for(const old of Object.keys(previous.files||{}).filter(x=>!files.has(x))){const segments=old.split('/');segments.pop();for(let j=segments.length;j>0;j--){const parent=segments.slice(0,j-1),leaf=segments[j-1];try{await(await getDir(root,parent,false)).removeEntry(leaf)}catch{}}}await setFile(root,'_arquivos_gerenciados.json',utf8Json(newIndex));syncEnabled=true;$('#syncBadge').className='sync-status synced';$('#syncBadge').textContent='Pasta sincronizada';}catch(e){console.error(e);syncEnabled=false;toast('Falha ao sincronizar pasta: '+e.message,true);$('#syncBadge').textContent='Erro na sincronização'}finally{syncBusy=false;if(syncAgain){syncAgain=false;scheduleSync()}else setTimeout(()=>updateGlobal(),2200)}}
+let syncTimer;function scheduleSync(){if(!baseHandle)return;clearTimeout(syncTimer);syncTimer=setTimeout(performSync,450)}
+function downloadBlob(blob,filename){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000)}
+// ZIP em formato STORE, sem dependências externas. PDFs já são compactados.
+const encoder=new TextEncoder();
+const crcTable=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(buf){let c=0xffffffff;for(const x of buf)c=crcTable[(c^x)&255]^(c>>>8);return (c^0xffffffff)>>>0}
+function short(n){let b=new Uint8Array(2),v=new DataView(b.buffer);v.setUint16(0,n,true);return b}
+function long(n){let b=new Uint8Array(4),v=new DataView(b.buffer);v.setUint32(0,n>>>0,true);return b}
+async function zipFiles(entries){let out=[],central=[],offset=0;for(const [name,blob] of entries){const bytes=new Uint8Array(await blob.arrayBuffer()),fname=encoder.encode(name),crc=crc32(bytes),len=bytes.length;if(fname.length>65535||len>0xffffffff)throw Error('Arquivo grande demais para este formato ZIP');const head=[long(0x04034b50),short(20),short(0x0800),short(0),short(0),short(0),long(crc),long(len),long(len),short(fname.length),short(0),fname];out.push(...head,bytes);const cent=[long(0x02014b50),short(20),short(20),short(0x0800),short(0),short(0),short(0),long(crc),long(len),long(len),short(fname.length),short(0),short(0),short(0),short(0),long(0),long(offset),fname];central.push(...cent);offset+=head.reduce((a,b)=>a+b.length,0)+len}const centralLength=central.reduce((a,b)=>a+b.length,0),count=entries.length;if(count>65535)throw Error('Backup possui arquivos demais');return new Blob([...out,...central,long(0x06054b50),short(0),short(0),short(count),short(count),long(centralLength),long(offset),short(0)],{type:'application/zip'})}
+async function exportBackup(){try{$('#syncBadge').textContent='Preparando backup...';const entries=[['cadastros.json',utf8Json(state)]];const ids=new Set();for(const d of state.documents){if(d.fileId)ids.add(d.fileId);for(const h of d.history||[])if(h.fileId)ids.add(h.fileId)}for(const id of ids){const pdf=await getPdf(id);if(!pdf)throw Error('PDF não encontrado: '+id);entries.push([`pdfs/${id}.pdf`,pdf])}downloadBlob(await zipFiles(entries),`Backup_Arquivo_${today()}.zip`);toast(`Backup concluído: ${ids.size} PDF(s).`)}catch(e){console.error(e);toast('Erro ao gerar backup: '+e.message,true)}finally{updateGlobal()}}
+async function unzipOwn(file){const b=await file.arrayBuffer(),view=new DataView(b),out=new Map(),dec=new TextDecoder();let i=0;while(i+30<=b.byteLength){const sig=view.getUint32(i,true);if(sig===0x02014b50||sig===0x06054b50)break;if(sig!==0x04034b50)throw Error('Arquivo ZIP inválido ou não suportado');const flags=view.getUint16(i+6,true),method=view.getUint16(i+8,true),size=view.getUint32(i+18,true),fl=view.getUint16(i+26,true),extra=view.getUint16(i+28,true);if(flags&8||method!==0)throw Error('Importe um ZIP gerado por este aplicativo (formato sem compactação)');const name=dec.decode(new Uint8Array(b,i+30,fl));i+=30+fl+extra;if(i+size>b.byteLength)throw Error('ZIP incompleto');out.set(name,new Blob([b.slice(i,i+size)]));i+=size}return out}
+async function importBackup(file){try{const files=await unzipOwn(file),metadata=files.get('cadastros.json');if(!metadata)throw Error('O ZIP não é um backup do ARQUIVO');const restored=JSON.parse(await metadata.text());if(!Array.isArray(restored.employees)||!Array.isArray(restored.documents))throw Error('Dados inválidos');if(!confirm(`Importar ${restored.employees.length} colaborador(es) e ${restored.documents.length} documento(s)? Isso substituirá o cadastro atual. Faça um backup antes.`))return;const ids=new Set();for(const d of restored.documents){if(d.fileId)ids.add(d.fileId);for(const h of d.history||[])if(h.fileId)ids.add(h.fileId)}for(const id of ids)if(!files.has(`pdfs/${id}.pdf`))throw Error('PDF ausente no backup: '+id);for(const id of ids)await putPdf(files.get(`pdfs/${id}.pdf`),id);state=normalizeState({...restored,modifiedAt:new Date().toISOString()});await txn('kv','put',state,'state');filters={contract:'',unit:'',sector:'',search:'',status:'',employee:'',type:'',scope:''};goto('dashboard');skipNextPull=true;scheduleSync();toast(`Backup restaurado: ${ids.size} arquivo(s) PDF.`)}catch(e){console.error(e);toast('Falha na importação: '+e.message,true)}}
+async function downloadPdf(fileId,filename){try{const blob=await getPdf(fileId);if(!blob)throw Error('Arquivo não encontrado');downloadBlob(blob,filename||'documento.pdf')}catch(e){toast(e.message,true)}}
+async function openPdf(fileId){
+ // Open a blank tab synchronously from the click to avoid popup blockers while reading IndexedDB.
+ const tab=window.open('','_blank');
+ try{const blob=await getPdf(fileId);if(!blob)throw Error('PDF não encontrado.');const url=URL.createObjectURL(new Blob([blob],{type:'application/pdf'}));if(tab){tab.location.href=url;setTimeout(()=>URL.revokeObjectURL(url),180000)}else{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click();setTimeout(()=>URL.revokeObjectURL(url),180000)}}catch(e){if(tab)tab.close();toast(e.message,true)}
+}
+async function deleteContract(id){
+ const c=getContract(id);if(!c)return;
+ const people=state.employees.filter(x=>x.contractId===id),docs=state.documents.filter(d=>contractOfDoc(d)?.id===id);
+ if(!confirm(`Excluir o contrato "${c.name}" com ${people.length} funcionário(s) e ${docs.length} documento(s)? Essa ação removerá os arquivos da pasta sincronizada. Faça backup antes.`))return;
+ tomb(id,...people.map(p=>p.id),...docs.map(d=>d.id));
+ state.documents=state.documents.filter(d=>contractOfDoc(d)?.id!==id);
+ state.employees=state.employees.filter(e=>e.contractId!==id);
+ state.contracts=state.contracts.filter(x=>x.id!==id);
+ filters.contract='';filters.employee='';closeModal();await save();toast('Contrato excluído.');
+}
+function resetFilters(){filters={contract:'',unit:'',sector:'',search:'',status:'',employee:'',type:'',scope:''}}
+async function deleteEmployee(id){const e=getEmployee(id);if(!e)return;const n=state.documents.filter(d=>d.employeeId===id).length;if(!confirm(`Excluir ${e.name} e seus ${n} documento(s), incluindo PDFs e versões anteriores? Esta exclusão é definitiva no cadastro e na pasta sincronizada. Faça um backup antes.`))return;tomb(id,...state.documents.filter(d=>d.employeeId===id).map(d=>d.id));state.documents=state.documents.filter(d=>d.employeeId!==id);state.employees=state.employees.filter(x=>x.id!==id);if(filters.employee===id)filters.employee='';closeModal();await save();toast('Colaborador e documentos excluídos.')}
+async function deleteDoc(id){const d=state.documents.find(x=>x.id===id);if(!d)return;if(!confirm(`Excluir o cadastro "${d.type}" e seu histórico? Os arquivos desta entrada serão removidos da pasta sincronizada. Faça backup se precisar preservá-los.`))return;tomb(id);state.documents=state.documents.filter(x=>x.id!==id);closeModal();await save();toast('Documento excluído.');}
+async function notifyDue(){if(!('Notification'in window)||Notification.permission!=='granted')return;let d=activeDocs().filter(x=>['expired','soon'].includes(status(x)));if(!d.length)return;try{const key=`arquivo_avisou_${today()}`;if(localStorage.getItem(key))return;new Notification('ARQUIVO • Vencimentos de documentos',{body:`Você tem ${d.length} documento(s) vencido(s) ou a vencer em 30 dias.`});localStorage.setItem(key,'1')}catch(e){console.warn(e)}}
+async function allowNotify(){if(!('Notification'in window)||!window.isSecureContext){toast('Notificações requerem navegador e contexto seguro (HTTPS ou localhost).',true);return}try{const permission=await Notification.requestPermission();if(permission==='granted'){toast('Avisos autorizados (enquanto o app estiver aberto).');notifyDue()}else toast('Permissão não concedida. Os avisos continuam no painel.')}catch(e){toast('Não foi possível ativar notificações.',true)}render()}
+function selectFilter(id,val){filters[id]=val;if(id==='employee'&&page==='documents'){}render()}
+// Delegação de eventos: os elementos das listas são regenerados a cada atualização.
+document.addEventListener('click',async ev=>{
+ const pag=ev.target.closest('[data-page]');if(pag){if(page!==pag.dataset.page)filters.search='';goto(pag.dataset.page);return}
+ const el=ev.target.closest('[data-action]');if(!el)return;
+ const action=el.dataset.action,id=el.dataset.id;
+ try{switch(action){
+  case 'new-contract':contractDialog();break;
+  case 'contract-edit':contractDialog(id);break;
+  case 'contract-remove':await deleteContract(id);break;
+  case 'contract-open':filters.contract=id;filters.employee='';filters.scope='';goto('documents');break;
+  case 'company-docs':filters.contract=id;filters.scope='company';filters.employee='';filters.status='';filters.search='';goto('documents');break;
+  case 'contract-employees':filters.contract=id;filters.search='';goto('employees');break;
+  case 'company-new':docDialog(null,null,id);break;
+  case 'employee-new':employeeDialog(null,id);break;
+  case 'new-employee':employeeDialog();break;
+  case 'employee-edit':employeeDialog(id);break;
+  case 'new-doc':docDialog(null,id);break;
+  case 'doc-edit':docDialog(id);break;
+  case 'doc-more':docDetails(id);break;
+  case 'employee-docs':filters.employee=id;filters.contract=getEmployee(id)?.contractId||'';filters.scope='employee';filters.status='';filters.search='';goto('documents');break;
+  case 'show-pending':filters.search='';filters.status='pending';goto('documents');break;
+  case 'home-search':filters.search=$('#home-search')?.value.trim()||'';filters.status='';filters.scope='';filters.contract='';filters.employee='';goto('documents');break;
+  case 'clear-filters':resetFilters();render();break;
+  case 'close-modal':closeModal();break;
+  case 'doc-remove':await deleteDoc(id);break;
+  case 'employee-remove':await deleteEmployee(id);break;
+  case 'download-pdf':await downloadPdf(el.dataset.file,el.dataset.name);break;
+  case 'open-pdf':await openPdf(el.dataset.file);break;
+  case 'connect-folder':await connectFolder();break;
+  case 'sync-folder':if(!await checkPermission(true)){toast('Reconecte a pasta e autorize o acesso.',true)}else{syncEnabled=true;await performSync()}render();break;
+  case 'restore-folder':await connectFolder();break;case 'pull-folder':await pullFolder(true);render();break;
+  case 'export-backup':await exportBackup();break;
+  case 'import-backup':$('#backupInput')?.click();break;
+  case 'enable-notify':await allowNotify();break;
+ }}catch(e){console.error(e);toast('Não foi possível concluir a operação: '+e.message,true)}
+});
+document.addEventListener('change',async ev=>{
+ const el=ev.target;
+ if(el.id==='backupInput'&&el.files?.length){await importBackup(el.files[0]);el.value='';return}
+ if(el.id==='f-contract'){filters.contract=el.value;filters.employee='';render();return}
+ if(el.id==='f-unit')return selectFilter('unit',el.value);
+ if(el.id==='f-sector')return selectFilter('sector',el.value);
+ if(el.id==='f-status')return selectFilter('status',el.value);
+ if(el.id==='f-employee')return selectFilter('employee',el.value);
+ if(el.id==='f-scope'){filters.scope=el.value;if(el.value==='company')filters.employee='';render();return}
+ if(el.closest('#documentForm')){
+  const form=el.closest('form');
+  if(['scope','contractId','employeeId'].includes(el.name)){updateDestinationControls();return}
+  if(el.name==='pdf'&&el.files[0]){const file=el.files[0];$('#uploadTitle').textContent=file.name;$('#uploadLabel').classList.add('has-file')}
+  if(['issueDate','periodAmount','periodUnit'].includes(el.name)&&!form.elements.noExpiry.checked){const auto=addPeriod(form.elements.issueDate.value,form.elements.periodAmount.value,form.elements.periodUnit.value);if(auto)form.elements.expiryDate.value=auto}
+  if(el.name==='noExpiry'){form.elements.expiryDate.disabled=el.checked;if(el.checked)form.elements.expiryDate.value='';else if(form.elements.issueDate.value)form.elements.expiryDate.value=addPeriod(form.elements.issueDate.value,form.elements.periodAmount.value,form.elements.periodUnit.value)}
+ }
+});
+let searchTimeout;document.addEventListener('input',ev=>{
+ if(ev.target.id==='f-search'){
+  const el=ev.target,v=el.value,start=el.selectionStart;
+  clearTimeout(searchTimeout);searchTimeout=setTimeout(()=>{filters.search=v;render();const newer=$('#f-search');if(newer){newer.focus();newer.setSelectionRange(Math.min(start,newer.value.length),Math.min(start,newer.value.length))}},180);
+ }
+ if(ev.target.closest('#documentForm')&&['issueDate','periodAmount'].includes(ev.target.name)){
+  const form=ev.target.closest('form');if(!form.elements.noExpiry.checked&&form.elements.issueDate.value)form.elements.expiryDate.value=addPeriod(form.elements.issueDate.value,form.elements.periodAmount.value,form.elements.periodUnit.value)
+ }
+});
+document.addEventListener('keydown',ev=>{if(ev.key==='Enter'&&ev.target.id==='home-search'){ev.preventDefault();filters.search=ev.target.value.trim();filters.status='';filters.contract='';filters.scope='';filters.employee='';goto('documents')}});
+document.addEventListener('submit',async ev=>{
+ const form=ev.target;if(!['contractForm','employeeForm','documentForm'].includes(form.id))return;
+ ev.preventDefault();const submitter=document.querySelector(`[form="${form.id}"][type="submit"]`);if(submitter)submitter.disabled=true;
+ try{if(form.id==='contractForm')await submitContract(form);else if(form.id==='employeeForm')await submitEmployee(form);else await submitDocument(form)}catch(e){console.error(e);toast('Erro ao salvar: '+e.message,true)}finally{if(submitter)submitter.disabled=false}
+});
+document.addEventListener('click',e=>{if(e.target.id==='modalShade')closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+async function init(){buildNav();try{await openDb();state=normalizeState(await txn('kv','get','state')||stateDefault());await txn('kv','put',state,'state');baseHandle=await txn('kv','get','folder')||null;folderDirect=!!await txn('kv','get','folderDirect');syncEnabled=await checkPermission(false);render();if(syncEnabled)scheduleSync();notifyDue();setInterval(()=>{render();notifyDue()},3600000)}catch(e){console.error(e);$('#workspace').innerHTML=`<div class="notice"><div><strong>Não foi possível abrir o armazenamento local</strong><p>Abra esta página no Chrome ou Edge (preferencialmente em HTTPS ou localhost), com os dados de sites permitidos. ${esc(e.message)}</p></div></div>`}}
+init();
+</script>
+</body>
+</html>
