@@ -1,15 +1,743 @@
 [
   {
+    "codigo": "4.09.0000000A350",
+    "descricao": "MANOMETRO GLICERINA 0 A 350 PSI / 0 A 25 BAR"
+  },
+  {
+    "codigo": "4.09.0000000A850",
+    "descricao": "MANOMETRO GLICERINA 0 A 850 PSI / 0 A 60 BAR"
+  },
+  {
+    "codigo": "4.09.000000A3500",
+    "descricao": "MANOMETRO GLICERINA 0 A 3500 PSI / 0 A 250 BAR"
+  },
+  {
+    "codigo": "4.09.00000AJ7558",
+    "descricao": "ASPIRADOR PO E LIQUIDO 2800 W 75 L REF: AJ7558 JACTO CLEAN"
+  },
+  {
+    "codigo": "4.09.0000000AJG2",
+    "descricao": "ALMOTOLIA DE GATILHO 500 ml"
+  },
+  {
+    "codigo": "4.09.0000000AM13",
+    "descricao": "ARMARIO PORTA FERRAMENTAS REF: MARCON AM-13"
+  },
+  {
+    "codigo": "4.09.0000000AM50",
+    "descricao": "ARMARIO PARA FERRAMENTAS BASIC CMB B005"
+  },
+  {
+    "codigo": "4.09.00000AT3003",
+    "descricao": "MULTIMETRO AUTOMOTIVO AT-3003 ICEL"
+  },
+  {
+    "codigo": "4.09.0000000B900",
+    "descricao": "PISTOLA C MEDIDOR DIGITAL P OLEO REF: B900"
+  },
+  {
+    "codigo": "4.09.0000BALANÇA",
+    "descricao": "BALANÇA"
+  },
+  {
+    "codigo": "4.09.0BASKET30MM",
+    "descricao": "CINTA SLING 30 mm - 1 METRO - 1 TONELADA VERTICAL - 2 TONELADAS BASKET (U) COR ROXA"
+  },
+  {
+    "codigo": "4.09.000000BS500",
+    "descricao": "MESA HIDRAULICA PANTOGRAFICA BOVENAL ME 300"
+  },
+  {
+    "codigo": "4.09.0000BSP0400",
+    "descricao": "MANOMETRO 0 A 400 BAR ROSCA TRASEIRA DE 1/4 BSP"
+  },
+  {
+    "codigo": "4.09.00C100AMHEL",
+    "descricao": "MARCADOR MILLR.MHG2/5 2 0,5-6,0MM C/100 AM HEL REF: 4.09.C100AMHEL"
+  },
+  {
+    "codigo": "4.09.00C200AMHEL",
+    "descricao": "MARCADOR MILLE.MHG 2/5 1 0,5-6,0MM C/100 AM HEL"
+  },
+  {
+    "codigo": "4.09.000000CH450",
+    "descricao": "CHAVE PARA PORCA SKF COD: 450"
+  },
+  {
+    "codigo": "4.09.000000CHL75",
+    "descricao": "LIXADEIRA ORBITAL 6 POL. REF: CHIAPERINI 4.09.CHL75"
+  },
+  {
+    "codigo": "4.09.000CIIR0026",
+    "descricao": "DISP DE SEGURANCA ANTICHICOTEAMENTO REF:CIIR0026"
+  },
+  {
+    "codigo": "4.09.000000CL20B",
+    "descricao": "CARREGADOR DE BATERIAS CL20B OKEY"
+  },
+  {
+    "codigo": "4.09.000000CL30B",
+    "descricao": "CARREGADOR DE BATERIAS 18V-160C"
+  },
+  {
+    "codigo": "4.09.000CL504020",
+    "descricao": "CAIXA P/M.0500X400X200MM CL504020 LUMIBRAS REF: 4.09.CL504020"
+  },
+  {
+    "codigo": "4.09.000CMT2CV2P",
+    "descricao": "LAVADORA CMT 2CV2P CARR.MA ZM 220/380V"
+  },
+  {
+    "codigo": "4.09.000CPO15024",
+    "descricao": "CANETA DE POLARIDADE 24V"
+  },
+  {
+    "codigo": "4.09.000000CT100",
+    "descricao": "CENTELHADOR PARA TESTE DE FAÍSCA EM CABOS DE VELA"
+  },
+  {
+    "codigo": "4.09.0CT10000000",
+    "descricao": "CAVALETE PARA CARROCERIA 10 TON REF: BOVENAU-CT10000"
+  },
+  {
+    "codigo": "4.09.00000000D70",
+    "descricao": "LIQUIDO REVELADOR DE TRINCA"
+  },
+  {
+    "codigo": "4.09.0000D191316",
+    "descricao": "SOQUETE 13/16 ½"
+  },
+  {
+    "codigo": "4.09.0000D707045",
+    "descricao": "CHAVE DE IMPACTO 3/4"
+  },
+  {
+    "codigo": "4.09.00000DR3862",
+    "descricao": "LIXADEIRA PNEUMATICA ROLOC 3 POL. REF: LDR2 4.09.DR3862"
+  },
+  {
+    "codigo": "4.09.0000DR34824",
+    "descricao": "MINI RETIFICA PNEUMATICA PINÇA DE 1/4 REF: LDR2"
+  },
+  {
+    "codigo": "4.09.000DS703068",
+    "descricao": "SACA CUBO VW MAHLE"
+  },
+  {
+    "codigo": "4.09.000DS704042",
+    "descricao": "CHAVE TRAVA CUBO UNIVERSAL"
+  },
+  {
+    "codigo": "4.09.000DS800023",
+    "descricao": "SACA VENTIL R12/R134"
+  },
+  {
+    "codigo": "4.09.000DS800080",
+    "descricao": "CLIPADEIRA HIDRAULICA COMPLETA"
+  },
+  {
+    "codigo": "4.09.00000DVS029",
+    "descricao": "PA ANTI FAISCA COM CABO DE MADEIRA"
+  },
+  {
+    "codigo": "4.09.00000000E59",
+    "descricao": "REMOVEDOR"
+  },
+  {
+    "codigo": "4.09.000EE007571",
+    "descricao": "CHAVE DE FENDA 3/8 X 6"
+  },
+  {
+    "codigo": "4.09.000EE110016",
+    "descricao": "REMOVEDOR E INSTALADOR DE PNEU AGRICOLA PEQ."
+  },
+  {
+    "codigo": "4.09.0000ENX001F",
+    "descricao": "ENXADA PVC RIGIDO ANTIFAISCA C CABO DE MADEIRA"
+  },
+  {
+    "codigo": "4.09.0000ESMERIL",
+    "descricao": "MOTO ESMERIL MMI-50 MOTO MIL"
+  },
+  {
+    "codigo": "4.09.000000ET095",
+    "descricao": "ESPELHO TELESCOPIO ET095"
+  },
+  {
+    "codigo": "4.09.00000ET3360",
+    "descricao": "ALICATE AMPERIMETRO AC/DC - REF. 3367 (NOVO)"
+  },
+  {
+    "codigo": "4.09.0000ETE7255",
+    "descricao": "SOQUETE ETE 7255"
+  },
+  {
+    "codigo": "4.09.000000F1469",
+    "descricao": "CADEADO E-35 PADO HASTE LONGA"
+  },
+  {
+    "codigo": "4.09.00000FBS402",
+    "descricao": "MOTOBOMBA SUBMERCIVEL INDUSTRIAL FAMAC MODELO ( FBS40/2 TRIFASICO 3.0 CV )"
+  },
+  {
+    "codigo": "4.09.000FE004788",
+    "descricao": "JG SOQ EST 1/2 D19PMU 10MM 1.1/4 GE"
+  },
+  {
+    "codigo": "4.09.000FE007884",
+    "descricao": "SACA POLIA MINI 2G"
+  },
+  {
+    "codigo": "4.09.000FE044180",
+    "descricao": "PUNÇÃO CENTRO BEZ 120 X 5 MM 16400"
+  },
+  {
+    "codigo": "4.09.000FE062830",
+    "descricao": "ALGARISMO ACO 5 MM PLK-07"
+  },
+  {
+    "codigo": "4.09.000FE065935",
+    "descricao": "ALICATE BOMBA D' ÁGUA 12 IS"
+  },
+  {
+    "codigo": "4.09.000FE066965",
+    "descricao": "SOQUETE P/ VELA - 1/2 x 5/8"
+  },
+  {
+    "codigo": "4.09.000FE066971",
+    "descricao": "SOQUETE P/ VELA - 1/2 x 13/16"
+  },
+  {
+    "codigo": "4.09.000FE067685",
+    "descricao": "JOGO DE SOQUETE 1/2 - 8 - 32MM"
+  },
+  {
+    "codigo": "4.09.000FE068070",
+    "descricao": "SACA POLIA DE 2G DESLIZ TRAM 44025/018"
+  },
+  {
+    "codigo": "4.09.000FE068433",
+    "descricao": "ESPÁTULA P/ PNEU MED.: 608X19MM CHATA A-222"
+  },
+  {
+    "codigo": "4.09.000FE079983",
+    "descricao": "VACUOMETRO 30/760 MMHG VAC 001 PLANA"
+  },
+  {
+    "codigo": "4.09.000FE143734",
+    "descricao": "SERRA MANUAL (LÂMINA DE SERRA)"
+  },
+  {
+    "codigo": "4.09.000FE251160",
+    "descricao": "CARRO ESTEIRA MECANICO 85 X 42 X100 N1 100KG"
+  },
+  {
+    "codigo": "4.09.0000000FG16",
+    "descricao": "MORSA PARA FURADEIRA \"4\""
+  },
+  {
+    "codigo": "4.09.00000000G2T",
+    "descricao": "GIRAFA HIDRAULICA 2T"
+  },
+  {
+    "codigo": "4.09.000000G3000",
+    "descricao": "GUINCHO HIDRAULICO 3 TONELADAS RODAGEM DE FERRO G3000 BOVENAU"
+  },
+  {
+    "codigo": "4.09.000000GM20T",
+    "descricao": "MACACO HIDRAULICO TIPO GARRAFA 20 TONELADAS REF: MARCON 4.9.GM20T"
+  },
+  {
+    "codigo": "4.09.00000GSA300",
+    "descricao": "GRUPO SOCARIA DE AUTOPORTANTE GSA300"
+  },
+  {
+    "codigo": "4.09.0000GWS6115",
+    "descricao": "ESMERILHADEIRA ANGULAR 4.1/2\" 670 WATTS ROTAÇAO DE 11.000 RPM - GWS 6-115"
+  },
+  {
+    "codigo": "4.09.00000HD613C",
+    "descricao": "PISTOLA PROFISSIONAL"
+  },
+  {
+    "codigo": "4.09.0000HD1215S",
+    "descricao": "MAQUINA LAVAR TRIFASICA 220V 2100PSI HD12/15S KARCHER"
+  },
+  {
+    "codigo": "4.09.00000000HL7",
+    "descricao": "BOMBA PARA GRAXA COM PROPUSORA LUBRIFICANTE"
+  },
+  {
+    "codigo": "4.09.00000HP1620",
+    "descricao": "FURADEIRA MANUAL DE 650W DE 220V"
+  },
+  {
+    "codigo": "4.09.000HS35219E",
+    "descricao": "EMPUNHADURA P/TALHAD GED HS352–19E"
+  },
+  {
+    "codigo": "4.09.0HS35222E25",
+    "descricao": "EMPUNHADURA P/TALHAD GED HS352–22E/25E"
+  },
+  {
+    "codigo": "4.09.0000IDS1000",
+    "descricao": "INJETOR DE SINAL E SIMULADOR DE SENSOR DE ROTAÇÃO"
+  },
+  {
+    "codigo": "4.09.00000000JR7",
+    "descricao": "GALAO CONTAINER DE SEGURANÇA PARA OLEO 20L"
+  },
+  {
+    "codigo": "4.09.000000K2350",
+    "descricao": "LAVADORA DE ALTA PRESSÃO"
+  },
+  {
+    "codigo": "4.09.000K2001220",
+    "descricao": "SOLDADOR REVOLVER K 2001 220V"
+  },
+  {
+    "codigo": "4.09.000KB012E8L",
+    "descricao": "KOMBO DIAMANTADO ESFERICO PARA BOTOES DE 12MM"
+  },
+  {
+    "codigo": "4.09.000KB014E8L",
+    "descricao": "KOMBO DIAMANTADO ESFERICO PARA BOTOES DE 14MM"
+  },
+  {
+    "codigo": "4.09.00000KB1932",
+    "descricao": "ADAPTADOR IMPACTO 1/2\" P 3/4\""
+  },
+  {
+    "codigo": "4.09.00000KB2132",
+    "descricao": "REDUTOR DE 1\" PARA 3/4"
+  },
+  {
+    "codigo": "4.09.00000KB3219",
+    "descricao": "REDUTOR DE 3/4 PARA 1/2"
+  },
+  {
+    "codigo": "4.09.00000KB3221",
+    "descricao": "REDUTOR DE 3/4 PARA 1\""
+  },
+  {
+    "codigo": "4.09.000000KRONA",
+    "descricao": "ELETRODUTO PVC A.CHAMA C/R.H 3/4 X3M KRONA REF:4.09.KRONA"
+  },
+  {
+    "codigo": "4.09.0000L516CME",
+    "descricao": "TRENA - FITA DE AÇO 5 METROS"
+  },
+  {
+    "codigo": "4.09.0000000L850",
+    "descricao": "BOMBA ELETRICA SUBMERSA 3/4 370W 220V REF. LIDER L850"
+  },
+  {
+    "codigo": "4.09.00000LAB475",
+    "descricao": "FONTE MIG LAB 475 AMPERES"
+  },
+  {
+    "codigo": "4.09.00LAOS62437",
+    "descricao": "TAMPA OIL SAFE BICO LONGO AM LAOS 62437 REF: LAOS62437"
+  },
+  {
+    "codigo": "4.09.00LAOS63618",
+    "descricao": "BARRIL OIL SAFE 5L LAOS 63618 REF: LAOS 63618"
+  },
+  {
+    "codigo": "4.09.00LAOS66251",
+    "descricao": "BARRIL OIL SAFE 10 L LAOS 66251 REF: LAOS66251"
+  },
+  {
+    "codigo": "4.09.000LAV2000I",
+    "descricao": "LAVADORA LAV-2000I 220V 1600LBS"
+  },
+  {
+    "codigo": "4.09.0LAVKAR1215",
+    "descricao": "LAVADORA KARCHER HD 12/05"
+  },
+  {
+    "codigo": "4.09.00000LUB18E",
+    "descricao": "CHAVE SACA FILTRO DE ÓLEO TIPO CINTA"
+  },
+  {
+    "codigo": "4.09.00000LUB440",
+    "descricao": "BOMBA DE GRAXA C/ COMPAC. 7KG LUMAGI"
+  },
+  {
+    "codigo": "4.09.0000LUB7000",
+    "descricao": "PROPULSORA PNEUMATICA DE GRAXA P/ TB COMPLETA C/ MANG 15MTS LUMAGI"
+  },
+  {
+    "codigo": "4.09.00000000M4T",
+    "descricao": "MACACO HIDRÁULICO 4T PARA EMPILHADEIRA M4000 BOVENAU"
+  },
+  {
+    "codigo": "4.09.000000M0016",
+    "descricao": "MACHO MANUAL M16 DIN 352"
+  },
+  {
+    "codigo": "4.09.0000000M601",
+    "descricao": "MACHO MANUAL - DE 6,0 - 1,0"
+  },
+  {
+    "codigo": "4.09.000000M2175",
+    "descricao": "MACHO MANUAL M2 / 1,75MM"
+  },
+  {
+    "codigo": "4.09.000000M3005",
+    "descricao": "MACHO MANUAL - DE 3,0 - 0,5"
+  },
+  {
+    "codigo": "4.09.000000M4007",
+    "descricao": "MACHO MANUAL - DE 4,0 - 0,7"
+  },
+  {
+    "codigo": "4.09.000000M5008",
+    "descricao": "MACHO MANUAL - DE 5,0 - 0,8"
+  },
+  {
+    "codigo": "4.09.00000M14020",
+    "descricao": "MACHO MANUAL AR M 14,0 – 2,0 3P HWM"
+  },
+  {
+    "codigo": "4.09.00000M20025",
+    "descricao": "MACHO MANUAL AR M 20,0 – 2,5 3P HWM"
+  },
+  {
+    "codigo": "4.09.00000M24030",
+    "descricao": "MACHO MANUAL AR M 24,0 – 3,0 3P HWM"
+  },
+  {
+    "codigo": "4.09.00000M80125",
+    "descricao": "MACHO MANUAL - DE 8,0 - 1,25"
+  },
+  {
+    "codigo": "4.09.0000MA00002",
+    "descricao": "MACHO AR SERI MG 16-2,0 3PDO E100"
+  },
+  {
+    "codigo": "4.09.00000MALAJB",
+    "descricao": "MALA FERRAMENTAS"
+  },
+  {
+    "codigo": "4.09.000000MATSU",
+    "descricao": "KIT MONTAGEM E DESMONTAGEM PNEU CAMINHÃO REF MATSU"
+  },
+  {
+    "codigo": "4.09.00000MC1000",
+    "descricao": "MACACO HIDRAULICO PARA CAIXA DE CAMBIO 1 TON REF. BOVENAU MC-1000"
+  },
+  {
+    "codigo": "4.09.000MCDI3000",
+    "descricao": "COMPRESSIMETRO MOTOR A DIESEL REF: MCD/I-3000"
+  },
+  {
+    "codigo": "4.09.0000000ME10",
+    "descricao": "MOTO ESMERIL PARA BANCADA"
+  },
+  {
+    "codigo": "4.09.000000ME500",
+    "descricao": "MOTO ESMERIL BAMBOZZI ME500 6\""
+  },
+  {
+    "codigo": "4.09.0000MGH2TPP",
+    "descricao": "GUINCHO HIDRAULICO 2 TON."
+  },
+  {
+    "codigo": "4.09.00MGMVLC001",
+    "descricao": "CONTAINER VÃO LIVRE COMUM MGM 001"
+  },
+  {
+    "codigo": "4.09.00MGMVLC067",
+    "descricao": "CONTAINER VÃO LIVRE COMUM MGM067"
+  },
+  {
+    "codigo": "4.09.00MGMVLC104",
+    "descricao": "CONTAINER VÃO LIVRE COMUM MGM 104 C/ PORTA MARITIMA"
+  },
+  {
+    "codigo": "4.09.00MGMVLC148",
+    "descricao": "CONTAINER ISOTERMICO"
+  },
+  {
+    "codigo": "4.09.000MGMVLRAC",
+    "descricao": "4.09.000MGMVLRAC CONTAINER VAO LIVRE REVESTIDO DE AR CONDICIONADO MGM 037"
+  },
+  {
+    "codigo": "4.09.0000MIGMB26",
+    "descricao": "BICO MIG QM 1,2 MB 26 OXIMIG"
+  },
+  {
+    "codigo": "4.09.0000000MLT3",
+    "descricao": "PONTA DE PROVA PARA MULTIMETRO E ALICATE AMPERIMETRO ( MINIPA MLT-3 )"
+  },
+  {
+    "codigo": "4.09.000000MORSA",
+    "descricao": "MORSA"
+  },
+  {
+    "codigo": "4.09.0000MOV0475",
+    "descricao": "CONTAINER MODULO ESCRITORIO TERMO ACUSTICO"
+  },
+  {
+    "codigo": "4.09.0000MOV0476",
+    "descricao": "CONTAINER MODULO DUPLO"
+  },
+  {
+    "codigo": "4.09.0000MOV0479",
+    "descricao": "CONTAINER MODULO ALMOXARIFADO TERMO ACUSTICO"
+  },
+  {
+    "codigo": "4.09.000000MR052",
+    "descricao": "MACHO MANUAL M10 / 1,5 mm - 3 peças"
+  },
+  {
+    "codigo": "4.09.000000MR053",
+    "descricao": "MACHO MANUAL M12 / 2,0 mm - 3 peças"
+  },
+  {
+    "codigo": "4.09.0000000MT30",
+    "descricao": "MACACO ESPECIAL 30T"
+  },
+  {
+    "codigo": "4.09.00000MT2001",
+    "descricao": "DESMONTADORA DE PNEUS DE CAMINHÃO"
+  },
+  {
+    "codigo": "4.09.00000MT5000",
+    "descricao": "MACACO HIDRAULICO MT 5000 - MT 50 TON"
+  },
+  {
+    "codigo": "4.09.00000000N9B",
+    "descricao": "KIT SUPER UTIL PARA TOMADAS DE PRESSÕES N9B"
+  },
+  {
+    "codigo": "4.09.00000000N23",
+    "descricao": "CHAVE SEXTAVADA PE DE GALINHA (BUJÃO DE CAMBIO ) Nº 23"
+  },
+  {
+    "codigo": "4.09.00000000N50",
+    "descricao": "MARCADOR NUMERICO P/ PNEUS EMEB N-50 220V"
+  },
+  {
+    "codigo": "4.09.0000000NC40",
+    "descricao": "CAVALETE MECANICO 40 TON ALTURA MINIMA DE 400MM REF. NC400 – Nº 3044 NOWAK"
+  },
+  {
+    "codigo": "4.09.000ORIGO420",
+    "descricao": "MAQUINA DE SOLDA - RETIFICADOR ESAB MOD. ORIGO ARC 420 - COD. 406734 - TRIFÁSICA 220/380/440V"
+  },
+  {
+    "codigo": "4.09.000PARAFUSA",
+    "descricao": "PARAFUSADEIRA TRAMON"
+  },
+  {
+    "codigo": "4.09.00000PL2000",
+    "descricao": "LANTERNA DE SEGURANCA INTRISECAMENTE SEGURA REF: PL2000"
+  },
+  {
+    "codigo": "4.09.0000PLAT500",
+    "descricao": "ESCADA PLATAFORMA 0,50M 01 DEGR + PLAT"
+  },
+  {
+    "codigo": "4.09.0000PLAT750",
+    "descricao": "ESCADA PLATAFORMA 0,75M 02 DEGR + PLAT"
+  },
+  {
+    "codigo": "4.09.0000000PNT4",
+    "descricao": "CALIBRADOR DE PNEUS IV DE PAREDE 4-145PSI 220V REF. EXCEL PNEUTRONIC-PNT4"
+  },
+  {
+    "codigo": "4.09.00000PT1000",
+    "descricao": "ROTULADOR PORTATIL TERMO.TRANSF."
+  },
+  {
+    "codigo": "4.09.0000000R603",
+    "descricao": "TACÔMETRO (CONTA GIRO) DIGITAL - MINIPA"
+  },
+  {
+    "codigo": "4.09.000R6004506",
+    "descricao": "TORQUIMETRO C RELOGIO 3/4 R600 4506 ( GEDORE )"
+  },
+  {
+    "codigo": "4.09.000RAVEN501",
+    "descricao": "CARRINHO PARA TRANSMISSÃO"
+  },
+  {
+    "codigo": "4.09.00RI0120201",
+    "descricao": "MACARICO HESA 22 FUROS"
+  },
+  {
+    "codigo": "4.09.000RI500166",
+    "descricao": "GARRAFA INJETORA DE FLUIDO R141B"
+  },
+  {
+    "codigo": "4.09.00000RM0003",
+    "descricao": "MACACO TIPO JACARE 5 TON - LONGO REF. REBEIRO RM0003"
+  },
+  {
+    "codigo": "4.09.0000ROUTE66",
+    "descricao": "BANCADA FECHADA C/ 4 PORTAS ROUTE 66 RLL-213L ROTTERMAN (VIDE OBSERVAÇÃO)"
+  },
+  {
+    "codigo": "4.09.000SCHULZ01",
+    "descricao": "KIT FERRAMENTAS COM 160 PEÇAS (MARCA SCHULZ)"
+  },
+  {
+    "codigo": "4.09.0SERRABOSCH",
+    "descricao": "SERRA MARMORE BOSCH 127V"
+  },
+  {
+    "codigo": "4.09.0000SHP5000",
+    "descricao": "SHAMPOOZEIRA ELETRONICA COM TEMPO AJUSTAVEL 220V REF: PLANATAC SHP5000"
+  },
+  {
+    "codigo": "4.09.000000SK79S",
+    "descricao": "CHAVE DE IMPACTO PNEUMATICA DE 1\" COM EIXO ESTENDIDO 4.200Nm REF. SHALLPER-SK79/S"
+  },
+  {
+    "codigo": "4.09.00000SKIL01",
+    "descricao": "FURADEIRA DE IMPACTO"
+  },
+  {
+    "codigo": "4.09.00ST11924ST",
+    "descricao": "PEGADOR TELESCOPIO COM IMA ST11924 ST SATA"
+  },
+  {
+    "codigo": "4.09.00ST1355100",
+    "descricao": "SOQUETE TORX ENCAIXE 1/2\" 55 X 100 REF: ST 13 55 100 IFLA"
+  },
+  {
+    "codigo": "4.09.0000STCAN01",
+    "descricao": "CANETA TESTE DE POLARIDADE"
+  },
+  {
+    "codigo": "4.09.0000TB7120D",
+    "descricao": "SOQUETE ESTRIADO 3/4\" X 5/8\" X 51MM"
+  },
+  {
+    "codigo": "4.09.00TLU9003CC",
+    "descricao": "COLETOR DE OLEO TIPO CARRINHO PARA CAMINHOES E TRATORES - 95 L"
+  },
+  {
+    "codigo": "4.09.0000TORK001",
+    "descricao": "TORQUIMETRO ESTALO 1/2 25 135 NM ROB 2550 / 13"
+  },
+  {
+    "codigo": "4.09.000000TR101",
+    "descricao": "ESCADA PLATAFORMA EM ALUMINIO 4 DEGRAUS TR-101"
+  },
+  {
+    "codigo": "4.09.000000TR175",
+    "descricao": "ESCADA DURALUMINIO MOD. TREPADEIRA TR-175 C/6 DGS. MAIS PLATAFORMA"
+  },
+  {
+    "codigo": "4.09.000000TR300",
+    "descricao": "ESCADA DURALUMINIO MOD. TREPADEIRA TR-300 C/11 DGS. MAIS PLATAFORMA ALUSTAR"
+  },
+  {
+    "codigo": "4.09.000000TXT10",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T10"
+  },
+  {
+    "codigo": "4.09.000000TXT15",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T15"
+  },
+  {
+    "codigo": "4.09.000000TXT20",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T20"
+  },
+  {
+    "codigo": "4.09.000000TXT25",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T25"
+  },
+  {
+    "codigo": "4.09.000000TXT27",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T27"
+  },
+  {
+    "codigo": "4.09.000000TXT30",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T30"
+  },
+  {
+    "codigo": "4.09.000000TXT40",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T40"
+  },
+  {
+    "codigo": "4.09.000000TXT45",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T45"
+  },
+  {
+    "codigo": "4.09.000000TXT50",
+    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T50"
+  },
+  {
+    "codigo": "4.09.00000000V30",
+    "descricao": "LIQUIDO PENETRANTE"
+  },
+  {
+    "codigo": "4.09.0000000V400",
+    "descricao": "VULCANIZADOR PARA CAMARA DE AR 220V REF. VILUZ-VCA400"
+  },
+  {
+    "codigo": "4.09.00V88890300",
+    "descricao": "SCANNER DE DIAGNOSTICO - VOLVO"
+  },
+  {
+    "codigo": "4.09.000W5150K22",
+    "descricao": "KIT CHAVE DE IMPACTO 1/2\", C/ 2 BATERIA"
+  },
+  {
+    "codigo": "4.09.00000WF3000",
+    "descricao": "BOMBA SUBMERSA WF 3000 MOTOR AQUÁRIO LAGO FONTE ELEVA 3 METR."
+  },
+  {
+    "codigo": "4.09.0000000Y6AC",
+    "descricao": "YOKE REF: Y6 AC MAGNAVIS"
+  },
+  {
+    "codigo": "4.09.00000000001",
+    "descricao": "LAVADORA DE ALTA PRESSÃO MOD: KARCHER HD6/13 MONOFASICO 110/220v"
+  },
+  {
+    "codigo": "4.09.00000001B38",
+    "descricao": "CHAVE COMBINADA 38 MM"
+  },
+  {
     "codigo": "4.09.00000000002",
     "descricao": "ASPIRADOR DE PÓ"
   },
   {
-    "codigo": "4.09.00000000086",
-    "descricao": "CARRINHO DE MÃO"
+    "codigo": "4.09.00000002TON",
+    "descricao": "MACACO BONEVAU JACARÉ 2 TON"
   },
   {
-    "codigo": "4.09.00000000105",
-    "descricao": "BALANÇA"
+    "codigo": "4.09.00000000003",
+    "descricao": "PICADEIRA DE SOLDA SEM MOLA"
+  },
+  {
+    "codigo": "4.09.00000000004",
+    "descricao": "REBITADEIRA MAN REB ROSCA MM RR-410"
+  },
+  {
+    "codigo": "4.09.00000000005",
+    "descricao": "PINGADEIRA PARA ÓLEO ( CAP. 25 LITROS ) JACTOIL - 401"
+  },
+  {
+    "codigo": "4.09.0000005BG10",
+    "descricao": "SUGADOR DE SOLDA"
+  },
+  {
+    "codigo": "4.09.0000005HP2P",
+    "descricao": "COMPRESSOR AR AP TRIF 20PCM-200L CMAV-2C-PROF MOTOMIL MOTOR 5HP2P"
+  },
+  {
+    "codigo": "4.09.00000005TON",
+    "descricao": "CINTA COM CATRACA 50 M.M- 9 METROS - 5 TONELADAS"
+  },
+  {
+    "codigo": "4.09.00000000006",
+    "descricao": "JOGO DE CHAVE TORX"
   },
   {
     "codigo": "4.09.000000006X5",
@@ -20,48 +748,560 @@
     "descricao": "CONTAINER MODULO VESTIÁRIO ACLOPADO TERMO ACUSTICO 6 X 5 M"
   },
   {
-    "codigo": "4.09.00000033060",
-    "descricao": "CHAVE PARA TUBOS (GRIFO) - REF. 225 - 24\""
+    "codigo": "4.09.00000000007",
+    "descricao": "CAIXA DE FERRAMENTA TIPO CARRO FERRAMENTAS"
   },
   {
-    "codigo": "4.09.00000033140",
-    "descricao": "CHAVE PARA TUDOS (GRIFO) - REF. 227 - 14"
+    "codigo": "4.09.00000000009",
+    "descricao": "CHAVE AJUSTAVEL - REF. GEDORE 62 - 610 (24\") - ATE 62 MM"
   },
   {
-    "codigo": "4.09.00000038104",
-    "descricao": "TALHADEIRA"
+    "codigo": "4.09.000000009GH",
+    "descricao": "DESFORCIMETRO 780KGF. REF. TC-78 EDA 9GH"
   },
   {
-    "codigo": "4.09.00000050512",
-    "descricao": "PRENSA ENFARDADEIRA HORIZONTAL CONTINUA AUTOMATICA MODELO PHA-CA 30T"
+    "codigo": "4.09.00000000010",
+    "descricao": "CHAVE CANO 48\" AMERICANA ABERTURA 6\" FERRO FUNDIDO"
   },
   {
-    "codigo": "4.09.00000062840",
-    "descricao": "ALGARISMO AÇO 6 MM PLK-08"
+    "codigo": "4.09.00000000012",
+    "descricao": "MARRETA 0,5 KG C/CABO"
   },
   {
-    "codigo": "4.09.00000500698",
-    "descricao": "CONJUNTO MOVEL DE BRITAGEM E PENEIRAMENTO"
+    "codigo": "4.09.00000000013",
+    "descricao": "MARRETA 1,5 KG C/CABO"
   },
   {
-    "codigo": "4.09.0000MOV0475",
-    "descricao": "CONTAINER MODULO ESCRITORIO TERMO ACUSTICO"
+    "codigo": "4.09.00000000014",
+    "descricao": "LIMA ROTATIVA 10 X 20 X 6 mm"
   },
   {
-    "codigo": "4.09.MARTROM1575",
-    "descricao": "MARTELO ROMP. 10KG PAT: 1575 C/ PUNHO, PONTEIRO E TALHADEIRA"
+    "codigo": "4.09.00000000015",
+    "descricao": "LIMA MEIA CANA"
+  },
+  {
+    "codigo": "4.09.00000000016",
+    "descricao": "LIMA REDONDA BASTARDA 8\""
+  },
+  {
+    "codigo": "4.09.00000000018",
+    "descricao": "RETIFICA SOLDA 40-400A TRR-425DC TRIF"
+  },
+  {
+    "codigo": "4.09.00000000019",
+    "descricao": "TALHA MANUAL CAPACIDADE 750 KG ELEVACAO 1,50M"
+  },
+  {
+    "codigo": "4.09.00000000020",
+    "descricao": "PEDRA ESMERIL 6''"
+  },
+  {
+    "codigo": "4.09.000020F1000",
+    "descricao": "MARRETA AÇO CABO FIBRA 1,0KG GEDORE"
+  },
+  {
+    "codigo": "4.09.00000000021",
+    "descricao": "CALIBRADOR DE PNEU DE 10 a 150 lbs"
+  },
+  {
+    "codigo": "4.09.00000000022",
+    "descricao": "MANGUEIRA PARA MAÇARICO DUPLA"
+  },
+  {
+    "codigo": "4.09.00000000023",
+    "descricao": "ACENDEDOR PARA MAÇARICO"
+  },
+  {
+    "codigo": "4.09.00000000025",
+    "descricao": "BICO CORTE Nº6"
+  },
+  {
+    "codigo": "4.09.00000000026",
+    "descricao": "BROCA A.R. 1/8 ''"
+  },
+  {
+    "codigo": "4.09.00000000027",
+    "descricao": "BROCA A.R. 3/16 ''"
+  },
+  {
+    "codigo": "4.09.00000000028",
+    "descricao": "BROCA A.R. 1/4 ''"
+  },
+  {
+    "codigo": "4.09.00000000029",
+    "descricao": "BROCA A.R. 5/16 ''"
+  },
+  {
+    "codigo": "4.09.00000000030",
+    "descricao": "BROCA A.R. 3/8 ''"
+  },
+  {
+    "codigo": "4.09.00000000031",
+    "descricao": "BROCA A.R. 1/2 ''"
+  },
+  {
+    "codigo": "4.09.00000000032",
+    "descricao": "BROCA A.R. 9/16 ''"
+  },
+  {
+    "codigo": "4.09.00000000033",
+    "descricao": "VALVULA REGULADORA DE OXIGENIO"
+  },
+  {
+    "codigo": "4.09.00000000034",
+    "descricao": "VALVULA REGULADORA DO ACETILENO"
+  },
+  {
+    "codigo": "4.09.000000034MM",
+    "descricao": "SOQEUTE SEXTAVADO 1/2 POL. 34MM FER: 4.09.34MM"
+  },
+  {
+    "codigo": "4.09.00000000035",
+    "descricao": "ABRAÇADEIRA PARA MANGUEIRA DO MAÇARICO"
+  },
+  {
+    "codigo": "4.09.00000000036",
+    "descricao": "LANTERNA A BATERIA 941 6 V"
+  },
+  {
+    "codigo": "4.09.00000000037",
+    "descricao": "PONTEIRA ROMPEDOR CINZEL BOB CAT 49,5X750MM"
+  },
+  {
+    "codigo": "4.09.00000038A23",
+    "descricao": "ESPATULA REDONDA 600MM FER: GEDORNE 4 .09.38A23"
+  },
+  {
+    "codigo": "4.09.00000000039",
+    "descricao": "BROCA AR 6MM"
+  },
+  {
+    "codigo": "4.09.00000000040",
+    "descricao": "EBULIDOR ALUMINIO 110W"
+  },
+  {
+    "codigo": "4.09.00000000041",
+    "descricao": "BROCA AR 8MM"
+  },
+  {
+    "codigo": "4.09.00000000042",
+    "descricao": "BROCA AR 10MM"
+  },
+  {
+    "codigo": "4.09.00000000043",
+    "descricao": "BROCA AR 1,5MM"
+  },
+  {
+    "codigo": "4.09.00000000045",
+    "descricao": "BROCA AR 5MM"
+  },
+  {
+    "codigo": "4.09.00000000046",
+    "descricao": "BROCA DE VIDIA 8MM"
+  },
+  {
+    "codigo": "4.09.00000000047",
+    "descricao": "REBOLO PARA RETÍFICA A11"
+  },
+  {
+    "codigo": "4.09.00000000048",
+    "descricao": "PROPULSORA PNEUMÁTICA DE ÓLEO 12021"
+  },
+  {
+    "codigo": "4.09.00000000049",
+    "descricao": "PA QUADRADA COM CABO COMPRIDO"
+  },
+  {
+    "codigo": "4.09.00000000050",
+    "descricao": "ENXADA"
+  },
+  {
+    "codigo": "4.09.000050LT303",
+    "descricao": "COLETOR DE OLEO C/ CARRINHO 50 LT 303 JACTOIL"
+  },
+  {
+    "codigo": "4.09.00000000051",
+    "descricao": "SERRA TICO-TICO MOD: BOSCH GST 65 450W 220v"
+  },
+  {
+    "codigo": "4.09.00000000052",
+    "descricao": "MARRETA 1,0 KG C/ CABO"
+  },
+  {
+    "codigo": "4.09.00000000053",
+    "descricao": "ALAVANCA PARA BORRACHEIRO REF. A-1200"
+  },
+  {
+    "codigo": "4.09.00000000054",
+    "descricao": "ALICATE FURADOR 9\" EM AÇO CROMADO ( FURADOR DE COURO E CINTO COM CABO DE PLASTICO )"
+  },
+  {
+    "codigo": "4.09.00000000056",
+    "descricao": "PARAFUSADEIRA PNEUMATICA AT 6600 - PUMA"
+  },
+  {
+    "codigo": "4.09.00000000058",
+    "descricao": "MANÔMETRO DE ALTA PRESSÃO 0 A 5000 PSI"
+  },
+  {
+    "codigo": "4.09.00000000059",
+    "descricao": "MANÔMETRO DE BAIXA PRESSÃO 0 A 400 PSI"
+  },
+  {
+    "codigo": "4.09.00000000060",
+    "descricao": "BICO DE CANETA MAÇARICO PARA SOLDA AMARELA"
+  },
+  {
+    "codigo": "4.09.00000000061",
+    "descricao": "ALICATE POP ARREBITADEIRA"
+  },
+  {
+    "codigo": "4.09.00000000062",
+    "descricao": "BROCA AR 8,5MM"
+  },
+  {
+    "codigo": "4.09.00000000063",
+    "descricao": "BROCA AR 6,5MM"
+  },
+  {
+    "codigo": "4.09.00000000064",
+    "descricao": "ALICATE DE ABRIR TRAVA RETO 8000A1 - 5,1/2\" GEDORE - 21329"
+  },
+  {
+    "codigo": "4.09.00000000065",
+    "descricao": "MARTELO DE ORELHA 1KG"
+  },
+  {
+    "codigo": "4.09.00000000066",
+    "descricao": "CABO PARA PÁ COMPRIDO"
+  },
+  {
+    "codigo": "4.09.00000000067",
+    "descricao": "CHAVE PARA MANDRIL DE FURADEIRA 1/2\""
+  },
+  {
+    "codigo": "4.09.00000000068",
+    "descricao": "PISTOLA PARA PINTURA C/ CANECA DEVILBISS JGA600"
+  },
+  {
+    "codigo": "4.09.00000000069",
+    "descricao": "MARCADOR INDUSTRIAL"
+  },
+  {
+    "codigo": "4.09.00000000070",
+    "descricao": "BROCA AR 4MM"
+  },
+  {
+    "codigo": "4.09.00000000071",
+    "descricao": "BROCA AR 9MM"
+  },
+  {
+    "codigo": "4.09.00000000072",
+    "descricao": "PULVERIZADOR EM ALUMÍNIO COM BOTÃO"
+  },
+  {
+    "codigo": "4.09.00000000073",
+    "descricao": "BROCA AR 5/32"
+  },
+  {
+    "codigo": "4.09.00000000074",
+    "descricao": "BROCA AR 7/16"
+  },
+  {
+    "codigo": "4.09.00000000075",
+    "descricao": "JOGO DE MACHO DE ABRIR ROSCAS - 7/16 NC"
+  },
+  {
+    "codigo": "4.09.00000000078",
+    "descricao": "UNIDADE DE LUBRIFICAÇÃO - LUBRIFIU"
+  },
+  {
+    "codigo": "4.09.00000000080",
+    "descricao": "COTOVELO GALVANIZADO 1/2"
+  },
+  {
+    "codigo": "4.09.00000000081",
+    "descricao": "NIPLE GALVANIZADO 1/2"
+  },
+  {
+    "codigo": "4.09.00000000083",
+    "descricao": "BICO PARA LIMPEZA DE ALUMINIO"
+  },
+  {
+    "codigo": "4.09.00000000084",
+    "descricao": "BROCA AR 7MM"
+  },
+  {
+    "codigo": "4.09.00000000085",
+    "descricao": "NIPLE DE PVC 1/2"
+  },
+  {
+    "codigo": "4.09.00000000086",
+    "descricao": "CARRINHO DE MÃO"
+  },
+  {
+    "codigo": "4.09.00000000087",
+    "descricao": "PLUG DE TOMADA MACHO 2 PINOS 10A 110V"
+  },
+  {
+    "codigo": "4.09.00000000088",
+    "descricao": "TOMADA DE SOBREPOR STECK 380/440 V 63A 3P+T"
+  },
+  {
+    "codigo": "4.09.00000000089",
+    "descricao": "MANÔMETRO DE PRESSÃO DIAM. 50 MM 1/4 BSP 150 PSI"
+  },
+  {
+    "codigo": "4.09.00000000090",
+    "descricao": "MANDRIL PARA FURADEIRA 1,5 A 13 MM 1/2 X 20 UNF BOSCH"
+  },
+  {
+    "codigo": "4.09.00000000091",
+    "descricao": "CALIBRADOR DE PNEU S7188 14 A 120 LBS SCHWEERS"
+  },
+  {
+    "codigo": "4.09.00000000092",
+    "descricao": "TERMOMETRO DIGITAL INFRAVERMELHO - REF. MT-350 MINIPA"
+  },
+  {
+    "codigo": "4.09.00000000093",
+    "descricao": "BOLSA DE LONA E COURO PARA FERRAMENTAS 350 MM X 300 MM VERDE - MG CINTO"
+  },
+  {
+    "codigo": "4.09.00000000095",
+    "descricao": "TALHA MECANICA CAP.2 TON - ELEVAÇÃO 5 M"
+  },
+  {
+    "codigo": "4.09.00000000096",
+    "descricao": "GALÃO PLÁSTICO PARA 50 LITROS"
+  },
+  {
+    "codigo": "4.09.00000000097",
+    "descricao": "SUPORTE PARA PEGAR BATERIA"
+  },
+  {
+    "codigo": "4.09.00000000099",
+    "descricao": "MANÔMETRO DE PRESSÃO DIAM. 50 MM 1/4 350 PSI"
+  },
+  {
+    "codigo": "4.09.00000000100",
+    "descricao": "RELOGIO COMPARADOR"
+  },
+  {
+    "codigo": "4.09.000100AMHEL",
+    "descricao": "MARCADOR MILLE.MHG2/5 0 0,5-6,0MM C/100 AM HEL FER: 4.09.100AMHEL"
+  },
+  {
+    "codigo": "4.09.00000000101",
+    "descricao": "TORQUIMETRO DE ESTALO \"L\"FLEX-O-CLICK 50-240 N.m"
+  },
+  {
+    "codigo": "4.09.00000000104",
+    "descricao": "TESTE DE ARREFECIMENTO 8 TAMPAS SA-2000 30 LB PLANA"
+  },
+  {
+    "codigo": "4.09.00000000105",
+    "descricao": "BALANÇA MECANICA 1000 KG"
+  },
+  {
+    "codigo": "4.09.00000000106",
+    "descricao": "ALICATE TORQUES"
+  },
+  {
+    "codigo": "4.09.00000000107",
+    "descricao": "PENDENTE LUZ EXTENÇÃO EMERGENCIA SOCORRO PARA BATERIA 12V"
+  },
+  {
+    "codigo": "4.09.00000000108",
+    "descricao": "MARRETA C/ CABO 2 KG"
+  },
+  {
+    "codigo": "4.09.00000000112",
+    "descricao": "MACACO 35 TON"
+  },
+  {
+    "codigo": "4.09.00000000113",
+    "descricao": "CHAVE DE RODA 30 X 33"
+  },
+  {
+    "codigo": "4.09.00000000114",
+    "descricao": "CABO PARA ENXADA COMPRIDO"
+  },
+  {
+    "codigo": "4.09.00000000115",
+    "descricao": "CABO P/PÁ"
+  },
+  {
+    "codigo": "4.09.00000000118",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 1\""
+  },
+  {
+    "codigo": "4.09.00000000120",
+    "descricao": "REDUÇÃO DE 1/2\" PARA 3/4\""
+  },
+  {
+    "codigo": "4.09.00000000121",
+    "descricao": "MÁQUINA DE SOLDA MIG 195A FLEX MIG195I PARA ARAMES COM OU SEM GÁS - FORTGPRO-FG4511"
+  },
+  {
+    "codigo": "4.09.00000000122",
+    "descricao": "CONVERSOR DE VOLTAGEM 220 - 110"
+  },
+  {
+    "codigo": "4.09.00000000123",
+    "descricao": "ALICATE PARA SOLDA"
+  },
+  {
+    "codigo": "4.09.00000000124",
+    "descricao": "GERADOR DE ESPUMA - SHAMPORIZADOR MANUAL"
+  },
+  {
+    "codigo": "4.09.00000000125",
+    "descricao": "RELÓGIO DO COMPRESSOR"
+  },
+  {
+    "codigo": "4.09.00000000128",
+    "descricao": "GIZ ESTACA AMARELO TAM. 110x12mm cod 3100 USO PROF."
+  },
+  {
+    "codigo": "4.09.00000000130",
+    "descricao": "PA CAVADEIRA ARTICULADA C/ CABO"
   },
   {
     "codigo": "4.09.00000000131",
     "descricao": "PENDENTE DE LUZ C GARRA 5MTS"
   },
   {
+    "codigo": "4.09.00000000132",
+    "descricao": "BROCA DE VIDIA 6MM"
+  },
+  {
+    "codigo": "4.09.00000000133",
+    "descricao": "BROCA DE VIDIA 5MM"
+  },
+  {
+    "codigo": "4.09.00000000134",
+    "descricao": "COMPRESSOR CSI 7,4 / 50L 140LB 110/220V SCHULZ"
+  },
+  {
+    "codigo": "4.09.00000000135",
+    "descricao": "BOMBA PROPULSOURA PNEUMATICA OLEO S/MANG 12021Z BOZZA"
+  },
+  {
     "codigo": "4.09.00000000136",
     "descricao": "MACHO AR SERT MF 14-1,5 2P"
   },
   {
+    "codigo": "4.09.00000000138",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/4 X 6\" REF. GEDORE 150 - 1/4 X 6\""
+  },
+  {
+    "codigo": "4.09.00000000139",
+    "descricao": "TRINCHA DE 3\""
+  },
+  {
+    "codigo": "4.09.00000000140",
+    "descricao": "CAIXA MANÔMETRO C/ 6 MANOMETROS ( SUPER UTIL Nº 9 )"
+  },
+  {
+    "codigo": "4.09.00000000141",
+    "descricao": "MARRETA 10 KG"
+  },
+  {
+    "codigo": "4.09.00000000142",
+    "descricao": "MORSA PARA BANCADA Nº8"
+  },
+  {
+    "codigo": "4.09.00000000144",
+    "descricao": "ARMARIO PARA FERRAMENTAS COM GAVETAS"
+  },
+  {
+    "codigo": "4.09.00000000147",
+    "descricao": "LUBRIF ANTIC SUPER LUB 300"
+  },
+  {
+    "codigo": "4.09.00000000148",
+    "descricao": "OLEO LUBRIF 20 LT 351"
+  },
+  {
+    "codigo": "4.09.00000000149",
+    "descricao": "CAIXA DE MANOMETRO"
+  },
+  {
+    "codigo": "4.09.00000000151",
+    "descricao": "CAIXA DE MANÔMETRO C/ 3 RELÓGIOS"
+  },
+  {
+    "codigo": "4.09.00000000152",
+    "descricao": "TRINCHA DE 2\""
+  },
+  {
+    "codigo": "4.09.00000000153",
+    "descricao": "LIXA DE FERRO 50"
+  },
+  {
+    "codigo": "4.09.00000000154",
+    "descricao": "BROCA AR 12,5 MM"
+  },
+  {
+    "codigo": "4.09.00000000155",
+    "descricao": "MARTELO P/ SOLDADOR TIPO PICARETA"
+  },
+  {
+    "codigo": "4.09.00000000156",
+    "descricao": "CABO ENXADA TORH"
+  },
+  {
+    "codigo": "4.09.00000000157",
+    "descricao": "EXTENSÃO CURTA ENCAIXE DE 3/4 REF. 017120"
+  },
+  {
+    "codigo": "4.09.00000000158",
+    "descricao": "ACOPLADOR HIDRÁULICO REDONDO"
+  },
+  {
+    "codigo": "4.09.00000000159",
+    "descricao": "BICO DE ABASTECIMENTO AUTOMÁTICO"
+  },
+  {
+    "codigo": "4.09.00000000160",
+    "descricao": "TRINCHA DE 1.1/2"
+  },
+  {
+    "codigo": "4.09.00000000161",
+    "descricao": "GALÃO BOMBONA PLÁSTICO DE 20 LITROS"
+  },
+  {
+    "codigo": "4.09.00000000163",
+    "descricao": "CARRO TRANSPORTE DE BEBIDAS"
+  },
+  {
+    "codigo": "4.09.00000000164",
+    "descricao": "BROCA AR 22MM"
+  },
+  {
+    "codigo": "4.09.00000000165",
+    "descricao": "PULVERIZADOR CORPO PLASTICO"
+  },
+  {
     "codigo": "4.09.00000000166",
     "descricao": "LAVADORA DE ALTA PRESSÃO ÁGUA QUENTE HDS 12/15 CAGE NEW/KARCHER"
+  },
+  {
+    "codigo": "4.09.00000000167",
+    "descricao": "MORSA BANCADA N° 6"
+  },
+  {
+    "codigo": "4.09.00000000168",
+    "descricao": "PENDENTE P/ 220V"
+  },
+  {
+    "codigo": "4.09.00000000170",
+    "descricao": "BANCADA NAVAL 40MM C/ 2 GAVETAS 200 X 60 X 92 ( FERCAR )"
+  },
+  {
+    "codigo": "4.09.00000000171",
+    "descricao": "CARRO DE OFICINA - REF. CR-25 MARCON"
   },
   {
     "codigo": "4.09.00000000172",
@@ -74,10 +1314,6 @@
   {
     "codigo": "4.09.00000000174",
     "descricao": "LANTERNA DE CABEÇA DE LED ECO LUX ECO 162"
-  },
-  {
-    "codigo": "4.09.00000000175",
-    "descricao": "CABO PARA ENXERTO DE BATERIA"
   },
   {
     "codigo": "4.09.00000000176",
@@ -108,6 +1344,10 @@
     "descricao": "DESINCRUSTADOR DE AGULHAS PNEUMÁTICO DEP 800 PLUS"
   },
   {
+    "codigo": "4.09.0000000182F",
+    "descricao": "BICO ENGRAXADEIRA BOMBA GRAXA FINO 1/8''"
+  },
+  {
     "codigo": "4.09.00000000189",
     "descricao": "CHAVE IMPACTO PNEUMATICA 1 PRO-189 PDR CURTO 345 KGFM"
   },
@@ -124,8 +1364,108 @@
     "descricao": "SOPRADOR DE WALT 220V D26411"
   },
   {
-    "codigo": "4.09.00000000224",
-    "descricao": "TESTE PRESSAO RADIADOR 0A30PSI CMR/CJ CRIS"
+    "codigo": "4.09.00000000197",
+    "descricao": "CHUMBADOR 1/2 X 3"
+  },
+  {
+    "codigo": "4.09.00000000198",
+    "descricao": "BROCA DE VIDIA 3/4"
+  },
+  {
+    "codigo": "4.09.00000000199",
+    "descricao": "BROCA DE VIDIA 13.0 MM"
+  },
+  {
+    "codigo": "4.09.00000000200",
+    "descricao": "FURADEIRA IMPACTO 1/2 GSB20-2RE 1194/119B.4 220V ( BOSCH )"
+  },
+  {
+    "codigo": "4.09.00000000201",
+    "descricao": "GRAVADOR VIBRATÓRIO"
+  },
+  {
+    "codigo": "4.09.00000000202",
+    "descricao": "SOQUETE ESTRIADO 21MM COM ENCAIXE DE 3/4 D32"
+  },
+  {
+    "codigo": "4.09.00000000204",
+    "descricao": "CHAVE DE IMPACTO 1\" 220V"
+  },
+  {
+    "codigo": "4.09.00000000205",
+    "descricao": "SOQUETE 24MM PARA CHAVE DE IMPACTO AT40300"
+  },
+  {
+    "codigo": "4.09.00000000206",
+    "descricao": "SOQUETE 27MM PARA CHAVE DE IMPACTO AT40300"
+  },
+  {
+    "codigo": "4.09.00000000207",
+    "descricao": "SOQUETE 32MM PARA CHAVE DE IMPACTO AT40300"
+  },
+  {
+    "codigo": "4.09.00000000208",
+    "descricao": "SOQUETE 33MM PARA CHAVE DE IMPACTO AT40300"
+  },
+  {
+    "codigo": "4.09.00000000209",
+    "descricao": "FACÃO"
+  },
+  {
+    "codigo": "4.09.00000000210",
+    "descricao": "CALIBRADOR DE PNEUS ELETRICO 145LBS"
+  },
+  {
+    "codigo": "4.09.00000000211",
+    "descricao": "BROCA 16 x 315 PARA MOURÃO DE ENCAIXE DE 1/2"
+  },
+  {
+    "codigo": "4.09.00000000212",
+    "descricao": "MACACO JACARE 5 TONELADAS"
+  },
+  {
+    "codigo": "4.09.00000000213",
+    "descricao": "MACACO HIDRAULICO MTO: 12500 - MTO 12"
+  },
+  {
+    "codigo": "4.09.00000000214",
+    "descricao": "COMPRESSOR ATV 20/220 140LBS 5HP TRIF ATG2"
+  },
+  {
+    "codigo": "4.09.00000000215",
+    "descricao": "ESTUFA P/ ELETROUDO 3KG EDT45 80V C/ GARRA"
+  },
+  {
+    "codigo": "4.09.00000000216",
+    "descricao": "CONJUNTO OXIGENIO ACETILENO SOLDA CORTE PLUS VAZIO ( CONDOR )"
+  },
+  {
+    "codigo": "4.09.00000000217",
+    "descricao": "RETIFICA 7000/28000RPM GDO800C 220V ( MAKITA )"
+  },
+  {
+    "codigo": "4.09.00000000218",
+    "descricao": "GUINCHO HIDRAULICO C/ PROLONGADOR 3 TON"
+  },
+  {
+    "codigo": "4.09.00000000219",
+    "descricao": "BOMBA P/ OLEO ROTAT 20 LITROS 351 ( JACTOIL )"
+  },
+  {
+    "codigo": "4.09.00000000220",
+    "descricao": "REBITADOR T/ ALAVANCA GBR ( GESIPA )"
+  },
+  {
+    "codigo": "4.09.00000000221",
+    "descricao": "CARRO ESTEIRA MECANICO 87 X 45 211 ( BRUSQUE )"
+  },
+  {
+    "codigo": "4.09.00000000222",
+    "descricao": "ALICATE RAVEN 713060 PARA TRAVA"
+  },
+  {
+    "codigo": "4.09.00000000223",
+    "descricao": "BANCADA PARA TAMBOR DE ÓLEO"
   },
   {
     "codigo": "4.09.00000000225",
@@ -164,6 +1504,130 @@
     "descricao": "LAVADORA ALTA PRESSÃO ELECTROLUX"
   },
   {
+    "codigo": "4.09.00000000300",
+    "descricao": "ESCADA ALUMINIO 3 EM 1 ESTIC.DUPLA 10/19 DEG-5,4 MED5,4 ALULEV"
+  },
+  {
+    "codigo": "4.09.00000000301",
+    "descricao": "CHAVE HEXAGONAL 16MM"
+  },
+  {
+    "codigo": "4.09.00000000302",
+    "descricao": "ARAME LATÃO"
+  },
+  {
+    "codigo": "4.09.00000000303",
+    "descricao": "REMOVEDOR PASTOSO"
+  },
+  {
+    "codigo": "4.09.00000000304",
+    "descricao": "REVELADOR"
+  },
+  {
+    "codigo": "4.09.00000000305",
+    "descricao": "CHAVE DE RODA"
+  },
+  {
+    "codigo": "4.09.00000000307",
+    "descricao": "CANETA TINTEIRO"
+  },
+  {
+    "codigo": "4.09.00000000308",
+    "descricao": "MULTIMETRO AUTOMOTIVO MINIPA MA-149"
+  },
+  {
+    "codigo": "4.09.00000000310",
+    "descricao": "SACA VALVULA LONGO"
+  },
+  {
+    "codigo": "4.09.00000000311",
+    "descricao": "SACA VALVULA CURTO"
+  },
+  {
+    "codigo": "4.09.00000000312",
+    "descricao": "ESPATULA CHATA 60 CM PARA PNEUS DE CAMINHÃO"
+  },
+  {
+    "codigo": "4.09.00000000313",
+    "descricao": "CHAVE AJUSTÁVEL 12"
+  },
+  {
+    "codigo": "4.09.00000000316",
+    "descricao": "CHAVE BIELA L - 13 MM"
+  },
+  {
+    "codigo": "4.09.00000000317",
+    "descricao": "ARMARIO C/PRAT. 221 X 247 X 64"
+  },
+  {
+    "codigo": "4.09.00000000318",
+    "descricao": "BASE MAG. UNIV. AJUST FINO 270.240 DG"
+  },
+  {
+    "codigo": "4.09.00000000319",
+    "descricao": "LIMA TRIANGULAR BASTARDA 8"
+  },
+  {
+    "codigo": "4.09.00000000320",
+    "descricao": "LIMA QUADRADA BASTARDA 8''"
+  },
+  {
+    "codigo": "4.09.00000000323",
+    "descricao": "SERROTE"
+  },
+  {
+    "codigo": "4.09.00000000325",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/16 X 12\""
+  },
+  {
+    "codigo": "4.09.00000000326",
+    "descricao": "PUNÇÃO 150X6"
+  },
+  {
+    "codigo": "4.09.00000000327",
+    "descricao": "PUNÇÃO 150X3"
+  },
+  {
+    "codigo": "4.09.00000000328",
+    "descricao": "PRENSA HIDRAULICA 60 TON MPH60"
+  },
+  {
+    "codigo": "4.09.00000000329",
+    "descricao": "CHAVE IMPACTO PN 3/4 1380NM AT-6600 ( PUMA )"
+  },
+  {
+    "codigo": "4.09.00000000330",
+    "descricao": "SELO METALICO GALVANIZADO PARA FITA PET 16MM"
+  },
+  {
+    "codigo": "4.09.00000000331",
+    "descricao": "ESMERILHADEIRA ANGULAR GWS8-115 850W 220V MOD-1820 ( BOSCH )"
+  },
+  {
+    "codigo": "4.09.00000000332",
+    "descricao": "LIXADEIRA DEWALT 7\" MOD: 849 110V"
+  },
+  {
+    "codigo": "4.09.00000000335",
+    "descricao": "COMPRESSIMETRO MOTOR À DIESEL"
+  },
+  {
+    "codigo": "4.09.00000000336",
+    "descricao": "MICROMETRO EXTERNO 0-25MM"
+  },
+  {
+    "codigo": "4.09.00000000337",
+    "descricao": "MICROMETRO EXTERNO 50-75MM"
+  },
+  {
+    "codigo": "4.09.00000000338",
+    "descricao": "MICROMETRO EXTERNO 100-125MM"
+  },
+  {
+    "codigo": "4.09.00000000340",
+    "descricao": "PARAFUSADEIRA PNEUMATICA AT 3880"
+  },
+  {
     "codigo": "4.09.00000000341",
     "descricao": "PRENSA HIDRAULICA 15 TON."
   },
@@ -172,44 +1636,12 @@
     "descricao": "BOMBA DE TRANSFERENCIA ALAVANCA P/ TAMBOR 200L MOD. 7022T BOZZA"
   },
   {
-    "codigo": "4.09.00000000343",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS10 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000344",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS15 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000345",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS20 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000346",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS25 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000347",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS27 (SUBSTITUIDO PELO COD.4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000348",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS30 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000349",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS40 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000350",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS45 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
-    "codigo": "4.09.00000000351",
-    "descricao": "CHAVE L TIPO TORX COM GUIA TS50 (SUBSTITUIDO PELO COD. 4.09.00000794520)"
-  },
-  {
     "codigo": "4.09.00000000352",
     "descricao": "MEDIDOR DE PRESSÃO DE PNEUS MS 27-C"
+  },
+  {
+    "codigo": "4.09.0000352HS19",
+    "descricao": "TALHADEIRA C/EMPUNHADURA 250 X19MM"
   },
   {
     "codigo": "4.09.00000000353",
@@ -237,15 +1669,15 @@
   },
   {
     "codigo": "4.09.00000000359",
-    "descricao": "ALICATE ANEL BICO EXTERNO CURVO 7\"  19-60MM"
+    "descricao": "ALICATE ANEL BICO EXTERNO CURVO 7\" 19-60MM"
   },
   {
     "codigo": "4.09.00000000360",
-    "descricao": "ALICATE ANEL BICO EXTERNO RETO7\"  19-60MM"
+    "descricao": "ALICATE ANEL BICO EXTERNO RETO7\" 19-60MM"
   },
   {
     "codigo": "4.09.00000000361",
-    "descricao": "ALICATE ANEL BICO INTERNO CURVO 7\"  19-60MM"
+    "descricao": "ALICATE ANEL BICO INTERNO CURVO 7\" 19-60MM"
   },
   {
     "codigo": "4.09.00000000362",
@@ -253,11 +1685,11 @@
   },
   {
     "codigo": "4.09.00000000363",
-    "descricao": "FERRO SOLDA  320W127V"
+    "descricao": "FERRO SOLDA 320W127V"
   },
   {
     "codigo": "4.09.00000000364",
-    "descricao": "CHAVE INGLESA AJUSTAVEL  24\""
+    "descricao": "CHAVE INGLESA AJUSTAVEL 24\""
   },
   {
     "codigo": "4.09.00000000365",
@@ -265,7 +1697,7 @@
   },
   {
     "codigo": "4.09.00000000366",
-    "descricao": "CHAVE INGLESA  191-24\""
+    "descricao": "CHAVE INGLESA 191-24\""
   },
   {
     "codigo": "4.09.00000000367",
@@ -349,7 +1781,7 @@
   },
   {
     "codigo": "4.09.00000000387",
-    "descricao": "JOGO 10 SOQUETES (7/8\" A 2\")  4  - 3/4"
+    "descricao": "JOGO 10 SOQUETES (7/8\" A 2\") 4 - 3/4"
   },
   {
     "codigo": "4.09.00000000388",
@@ -388,16 +1820,320 @@
     "descricao": "MACHO MANUAL ACO RAPIDO HSS DIN M12 X 1.75MM 3PC"
   },
   {
-    "codigo": "4.09.00000000397",
-    "descricao": "ESTETOSCOPIO ELETRONICO REF. PLANATC 000397"
-  },
-  {
     "codigo": "4.09.00000000398",
     "descricao": "ESTAÇÃO COMPACTA DE TRATAMENTO - ECT-02C - Cap: 2 m3/h"
   },
   {
-    "codigo": "4.09.00000000493",
-    "descricao": "COMPRESSO DE AR MOD: ( CHIAPERINI CJ 20+ APV/250L - 5 HP )"
+    "codigo": "4.09.00000000400",
+    "descricao": "SOQUETE P/ VELA 1/2 X 13/16"
+  },
+  {
+    "codigo": "4.09.00000400KGF",
+    "descricao": "MANOMETRO INDUSTRIAL 0-400KGF/6000PSI COM ROSCA DE 1/2\" REF. TECNO MM400KGF6KPSI"
+  },
+  {
+    "codigo": "4.09.00000000401",
+    "descricao": "SOLDA RL 40/60 235MSY15 500G"
+  },
+  {
+    "codigo": "4.09.00000000402",
+    "descricao": "SOLDA ESTRANH BARRA 100GR 50/50"
+  },
+  {
+    "codigo": "4.09.00000000404",
+    "descricao": "FERRO P/ SOLDA 40W 127V"
+  },
+  {
+    "codigo": "4.09.00000000405",
+    "descricao": "ALICATE DE CORTE 6"
+  },
+  {
+    "codigo": "4.09.00000000406",
+    "descricao": "ALICATE BICO CURVO S/ MOLA P/ ANEL - 3\\4 X 2.3\\8"
+  },
+  {
+    "codigo": "4.09.00000000407",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 9 MM"
+  },
+  {
+    "codigo": "4.09.00000000408",
+    "descricao": "CHAVE FIXA ( BOCA ) 36 X 41 MM REF. GEDORE 6 - 36 X 41"
+  },
+  {
+    "codigo": "4.09.00000000409",
+    "descricao": "CHAVE TIPO L - P 9\\16"
+  },
+  {
+    "codigo": "4.09.00000000410",
+    "descricao": "CHAVE ESTRELA - 13 X 15MM - GEDORE"
+  },
+  {
+    "codigo": "4.09.00000000412",
+    "descricao": "JOGO DE SOQUETE DE ENCAIXE - 1\\2 10 a 32MM - REF. 19 KMU"
+  },
+  {
+    "codigo": "4.09.00000000413",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/4 X 8\" REF. GEDORE 150 - 1/4 X 8\""
+  },
+  {
+    "codigo": "4.09.00000000414",
+    "descricao": "CHAVE DE FENDA SIMPLES 5/16 X 6\" REF. GEDORE 150 - 5/16 X 6\""
+  },
+  {
+    "codigo": "4.09.00000000416",
+    "descricao": "CHAVE STARTER ( MEIA LUA ) 14 X 16 MM"
+  },
+  {
+    "codigo": "4.09.00000000417",
+    "descricao": "CHAVE STARTER ( MEIA LUA ) 15 X 17 MM"
+  },
+  {
+    "codigo": "4.09.00000000418",
+    "descricao": "ALICATE UNIVERSAL - 8\""
+  },
+  {
+    "codigo": "4.09.00000000419",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS ( TIPO TOCO ) 1/4 X 1.1/2"
+  },
+  {
+    "codigo": "4.09.00000000420",
+    "descricao": "JOGO CACHIMBO TIPO CANHÃO - 3\\8\""
+  },
+  {
+    "codigo": "4.09.00000000422",
+    "descricao": "FERRO DE SOLDA TIPO MACHADINHA 220 V"
+  },
+  {
+    "codigo": "4.09.00000000423",
+    "descricao": "FERRO DE SOLDA PONTA FINA 70W/220V"
+  },
+  {
+    "codigo": "4.09.00000000424",
+    "descricao": "LIMA CHATA MURCA 8''"
+  },
+  {
+    "codigo": "4.09.00000000425",
+    "descricao": "MULTIMETRO DIGITAL MINIPA ET-2042D/E/F"
+  },
+  {
+    "codigo": "4.09.000425DCTRI",
+    "descricao": "MÁQUINA DE SOLDA RETIFICADORA TRIFÁSICO 430A - BAMBOZZI-TRR2600S"
+  },
+  {
+    "codigo": "4.09.00000000426",
+    "descricao": "CHAVE COMBINADA 1. 3/16"
+  },
+  {
+    "codigo": "4.09.00000000427",
+    "descricao": "CHAVE MEIA LUA 10MM"
+  },
+  {
+    "codigo": "4.09.00000000428",
+    "descricao": "EXTENSÃO LONGA 1/2"
+  },
+  {
+    "codigo": "4.09.0000000428M",
+    "descricao": "JOGO DE CHAVE ALLEN DE 3 A 14 MM - MEDIDAS"
+  },
+  {
+    "codigo": "4.09.00000000429",
+    "descricao": "SOQUETE EXTRIADO DE 3/4\" DE 1.13/16"
+  },
+  {
+    "codigo": "4.09.00000000430",
+    "descricao": "JOGO CACHIMBO CATRACA MM"
+  },
+  {
+    "codigo": "4.09.00000000432",
+    "descricao": "CHAVE SOQUETE COM CABO (TIPO CANHÃO) 1/4\" - COD.27240"
+  },
+  {
+    "codigo": "4.09.00000000433",
+    "descricao": "MINI EXTRATOR 3 GARRAS"
+  },
+  {
+    "codigo": "4.09.00000000434",
+    "descricao": "ROLO DE SOLDA BEST AZUL - 1MM DE 500G SN60% PB40%"
+  },
+  {
+    "codigo": "4.09.00000000435",
+    "descricao": "BROCA AR 11MM"
+  },
+  {
+    "codigo": "4.09.00000000436",
+    "descricao": "BROCA AR 12MM"
+  },
+  {
+    "codigo": "4.09.00000000437",
+    "descricao": "BROCA 13MM"
+  },
+  {
+    "codigo": "4.09.00000000438",
+    "descricao": "COMPRESSIMETRO MOTOR A GASOLINA"
+  },
+  {
+    "codigo": "4.09.00000000439",
+    "descricao": "JOGO PUNÇÃO NUMÉRICO 1 A 9 5MM"
+  },
+  {
+    "codigo": "4.09.00000000440",
+    "descricao": "PUNÇÃO DE CENTRO Nº 4"
+  },
+  {
+    "codigo": "4.09.00000000441",
+    "descricao": "PUNÇÃO DE CENTRO Nº 5"
+  },
+  {
+    "codigo": "4.09.00000000442",
+    "descricao": "PARAFUSADEIRA PNEUMATICA AT 4300"
+  },
+  {
+    "codigo": "4.09.00000000443",
+    "descricao": "CALIBRE DE ROSCA 52 LAMINAS MM / POLEGADAS"
+  },
+  {
+    "codigo": "4.09.00000000444",
+    "descricao": "CAVADEIRA ARTICULADA 130mm"
+  },
+  {
+    "codigo": "4.09.00000000446",
+    "descricao": "CHAVE DE ESTRIA 14/17 ABERTA"
+  },
+  {
+    "codigo": "4.09.00000000447",
+    "descricao": "CHAVE DE ESTRIA POLIGONAL ABERTA 17 X 19 mm ABERTA"
+  },
+  {
+    "codigo": "4.09.00000000454",
+    "descricao": "MARTELO TIPO PENA 500 gr"
+  },
+  {
+    "codigo": "4.09.00000000455",
+    "descricao": "MARTELO TIPO CHAPEADOR PENA ATRAVESSADA"
+  },
+  {
+    "codigo": "4.09.00000000456",
+    "descricao": "MARTELO TIPO PONTA CURTA"
+  },
+  {
+    "codigo": "4.09.00000000457",
+    "descricao": "MARTELO TIPO FACE PLANA"
+  },
+  {
+    "codigo": "4.09.00000000458",
+    "descricao": "MARTELO TIPO PENA 200GR"
+  },
+  {
+    "codigo": "4.09.00000000459",
+    "descricao": "MARTELO TIPO BOLA 300 gr"
+  },
+  {
+    "codigo": "4.09.00000000460",
+    "descricao": "RETIFICA PUMA MOD. AT-7033K PNEUMATICA"
+  },
+  {
+    "codigo": "4.09.00000000461",
+    "descricao": "LIXADEIRA ANGULAR PUMA ATE 7\" - MOD. AT-7078"
+  },
+  {
+    "codigo": "4.09.00000000462",
+    "descricao": "LIXADEIRA ROTO ORBITAL 5\" - DYNABRADE - MOD. 56880"
+  },
+  {
+    "codigo": "4.09.00000000463",
+    "descricao": "MACACO HIDRÁULICO JACARÉ 10 TON"
+  },
+  {
+    "codigo": "4.09.00000000464",
+    "descricao": "MACACO HIDRÁULICO 08 TON"
+  },
+  {
+    "codigo": "4.09.00000000465",
+    "descricao": "LIXADEIRA ROTO ORBITROL 5'' - DYNABRADE - MOD. 56815"
+  },
+  {
+    "codigo": "4.09.00000000467",
+    "descricao": "LIXADEIRA ANGULAR INDUSTRIAL 7 GWS12U 1600W 220V - MOD. SA7000C 180 MM"
+  },
+  {
+    "codigo": "4.09.00000000468",
+    "descricao": "JG. EXTRATOR DE PARAFUSO - MACHO C/ ROSCA ESQUERDA"
+  },
+  {
+    "codigo": "4.09.00000000469",
+    "descricao": "PRENSA HIDRAULICA 100 TON C/ AUX. 15 TON."
+  },
+  {
+    "codigo": "4.09.00000000470",
+    "descricao": "DESANDADOR UNIVERSAL ATÉ 3/8 - 150 MM"
+  },
+  {
+    "codigo": "4.09.00000000471",
+    "descricao": "TORQUIMETRO DE APERTO ANGULA 360° - ENCAIXE 1/2 - ATÉ 500 NM"
+  },
+  {
+    "codigo": "4.09.00000000472",
+    "descricao": "MOTOR 1CV TRIF P4 NEMA VOGES"
+  },
+  {
+    "codigo": "4.09.00000000473",
+    "descricao": "PRENSA HIDRAULICA 30 TON"
+  },
+  {
+    "codigo": "4.09.00000000474",
+    "descricao": "CHAVE DE IMPACTO 3/4 - PUMA - AT-6600S"
+  },
+  {
+    "codigo": "4.09.00000000476",
+    "descricao": "ESTICADOR HID P/ LANTER 6 TON MARCON"
+  },
+  {
+    "codigo": "4.09.00000000477",
+    "descricao": "BROCA AR 16MM"
+  },
+  {
+    "codigo": "4.09.00000000478",
+    "descricao": "BROCA AR 18MM"
+  },
+  {
+    "codigo": "4.09.00000000479",
+    "descricao": "MACACO HIDROPNEUMATICO 20 TON"
+  },
+  {
+    "codigo": "4.09.00000000480",
+    "descricao": "PREDENDOR DE CARGA C/ CATRACA 1 POL X 3,5 M 70 KG"
+  },
+  {
+    "codigo": "4.09.00000000481",
+    "descricao": "LIXADEIRA PNEUMATICA 4.1/2\" - DYNABRADE - MOD. 52634"
+  },
+  {
+    "codigo": "4.09.00000000482",
+    "descricao": "LAVADORA DE PEÇAS LP-7 220V - MARCON"
+  },
+  {
+    "codigo": "4.09.00000000483",
+    "descricao": "CRIMPER TERMINAL ISOLADO NA 4501"
+  },
+  {
+    "codigo": "4.09.00000000484",
+    "descricao": "CRIMPER TERMINAL ISOLADO NA 4511"
+  },
+  {
+    "codigo": "4.09.00000000485",
+    "descricao": "ALICATE DECAPADOR ACR-4"
+  },
+  {
+    "codigo": "4.09.00000000486",
+    "descricao": "COMPRESSOR 175LBS / 12BAR-30 PÉS 220V/350L"
+  },
+  {
+    "codigo": "4.09.00000000488",
+    "descricao": "CABEÇOTE MEF 44R P/ MIG LAB 475"
+  },
+  {
+    "codigo": "4.09.00000000490",
+    "descricao": "TOCHA DE SOLDA MIG TORCH SBME 235 DE 3 METROS"
   },
   {
     "codigo": "4.09.00000000494",
@@ -414,14 +2150,6 @@
   {
     "codigo": "4.09.00000000497",
     "descricao": "TOCHAS DE GRAFITE PARA CORTE E GOIVAGEM"
-  },
-  {
-    "codigo": "4.09.00000000500",
-    "descricao": "RETIFICADOR ESAB - ORIGO ARC 406 - CODIGO 0401511"
-  },
-  {
-    "codigo": "4.09.00000000501",
-    "descricao": "CONJUNTO DE PARA ELETRODO 400AH - 6 MT CODIGO 0400257"
   },
   {
     "codigo": "4.09.00000000502",
@@ -442,10 +2170,6 @@
   {
     "codigo": "4.09.00000000506",
     "descricao": "MANOMETRO GLICERINA 0-100 BAR"
-  },
-  {
-    "codigo": "4.09.00000000507",
-    "descricao": "ALICATE AMPERIMETRO DIGITAL CLAMP METER FT 266-C"
   },
   {
     "codigo": "4.09.00000000560",
@@ -542,10 +2266,6 @@
   {
     "codigo": "4.09.00000000583",
     "descricao": "CX FERRAMENTA BAU 400 X 160 X 110 840"
-  },
-  {
-    "codigo": "4.09.00000000584",
-    "descricao": "AGULHEIRO PARA MAÇARICO"
   },
   {
     "codigo": "4.09.00000000585",
@@ -652,12 +2372,12 @@
     "descricao": "CHAVE SOQUETE IMPACTO ENC. 1/2 X 21MM LONGO"
   },
   {
-    "codigo": "4.09.00000000611",
-    "descricao": "CHAVE SOQUETE IMPACTO ENC. 1/2 X 19MM LONGO NOLL"
-  },
-  {
     "codigo": "4.09.00000000612",
     "descricao": "CHAVE SOQUETE IMPACTO ENC. 1/2 X 19MM LONGO"
+  },
+  {
+    "codigo": "4.09.0000000612M",
+    "descricao": "JOGO DE CHAVE FIXA"
   },
   {
     "codigo": "4.09.00000000613",
@@ -670,10 +2390,6 @@
   {
     "codigo": "4.09.00000000615",
     "descricao": "CHAVE SOQUETE IMPACTO ENC. 1/2 X 15MM LONGO"
-  },
-  {
-    "codigo": "4.09.00000000616",
-    "descricao": "CHAVE SOQUETE IMPACTO ENC. 1/2 X 15MM LONGO R6300"
   },
   {
     "codigo": "4.09.00000000617",
@@ -709,7 +2425,7 @@
   },
   {
     "codigo": "4.09.00000000625",
-    "descricao": "PROPULSORA PNEUMATICA COM  BALDE 25KG"
+    "descricao": "PROPULSORA PNEUMATICA COM BALDE 25KG"
   },
   {
     "codigo": "4.09.00000000626",
@@ -860,6 +2576,18 @@
     "descricao": "SARGENTO 6\""
   },
   {
+    "codigo": "4.09.00000000698",
+    "descricao": "REGULADOR DE PRESSÃO DE OXIGÊNIO R51"
+  },
+  {
+    "codigo": "4.09.00000000699",
+    "descricao": "SOQUETE SEXTAVADO LONGO 1/2\" DE 13/16"
+  },
+  {
+    "codigo": "4.09.00000000700",
+    "descricao": "CARRO BASICO S/ GAVETA - FERCAR"
+  },
+  {
     "codigo": "4.09.00000000701",
     "descricao": "PULVERIZADOR AGRICOLA COSTAL MANUAL 20L"
   },
@@ -880,12 +2608,12 @@
     "descricao": "ASPIRADOR DE PÓ PORTATIL 12V 60W"
   },
   {
-    "codigo": "4.09.00000000781",
-    "descricao": "APLICADOR UNIVERSAL DE HELICOIDAL"
+    "codigo": "4.09.00000000780",
+    "descricao": "REDUTOR DE 3/4\" PARA 1/2\""
   },
   {
-    "codigo": "4.09.00000000782",
-    "descricao": "HELICOIL M14X1,25X9V"
+    "codigo": "4.09.00000000781",
+    "descricao": "APLICADOR UNIVERSAL DE HELICOIDAL"
   },
   {
     "codigo": "4.09.00000000783",
@@ -900,6 +2628,30 @@
     "descricao": "BASE DE MACACO"
   },
   {
+    "codigo": "4.09.00000000865",
+    "descricao": "FERRO DE SOLDA 70W - 127V RETO"
+  },
+  {
+    "codigo": "4.09.00000000866",
+    "descricao": "CHUMBADOR CBA 3/8 X 2.1/2"
+  },
+  {
+    "codigo": "4.09.00000000867",
+    "descricao": "BICO INFLADORPREENDEDOR MS18"
+  },
+  {
+    "codigo": "4.09.00000000868",
+    "descricao": "CALIBRADOR DE PNEUS MS13 - 0 A 60 LIBRAS"
+  },
+  {
+    "codigo": "4.09.00000000869",
+    "descricao": "CALIBRADOR TG3 - 0 A 220 LIBRAS"
+  },
+  {
+    "codigo": "4.09.00000000870",
+    "descricao": "CALIBRADOR TIPO CANETA BC 125-1"
+  },
+  {
     "codigo": "4.09.00000000871",
     "descricao": "FURADEIRA BANCADA 5/8 FSB, 220V"
   },
@@ -912,20 +2664,12 @@
     "descricao": "MOTOCOMPRESSOR AR BP C/RODIZIO 8,5PCM-25L MC8,5-BIVOLT CHIAPERINI"
   },
   {
-    "codigo": "4.09.00000000874",
-    "descricao": "COLUNA MOTOESMERIL 16001 CEL"
-  },
-  {
     "codigo": "4.09.00000000875",
     "descricao": "CAIXA PARA PEÇAS MARFINITE 1030"
   },
   {
     "codigo": "4.09.00000000876",
     "descricao": "BIGORNA DE 14KG - FBM"
-  },
-  {
-    "codigo": "4.09.00000000877",
-    "descricao": "GALÃO BOMBONA PLÁSTICO DE 50 LITROS"
   },
   {
     "codigo": "4.09.00000000878",
@@ -952,30 +2696,6 @@
     "descricao": "BROCA AR 2,5 MM"
   },
   {
-    "codigo": "4.09.000000009GH",
-    "descricao": "DESFORCIMETRO 780KGF. REF. TC-78 EDA 9GH"
-  },
-  {
-    "codigo": "4.09.00000000JR7",
-    "descricao": "GALAO CONTAINER DE SEGURANÇA PARA OLEO 20L"
-  },
-  {
-    "codigo": "4.09.00000000M4T",
-    "descricao": "MACACO HIDRÁULICO 4T PARA EMPILHADEIRA M4000 BOVENAU"
-  },
-  {
-    "codigo": "4.09.00000000N23",
-    "descricao": "CHAVE SEXTAVADA PE DE GALINHA (BUJÃO DE CAMBIO ) Nº 23"
-  },
-  {
-    "codigo": "4.09.00000000N50",
-    "descricao": "MARCADOR NUMERICO P/ PNEUS EMEB N-50 220V"
-  },
-  {
-    "codigo": "4.09.00000000N9B",
-    "descricao": "KIT SUPER UTIL PARA TOMADAS DE PRESSÕES N9B"
-  },
-  {
     "codigo": "4.09.00000001000",
     "descricao": "BROCA AR 2 MM"
   },
@@ -984,8 +2704,20 @@
     "descricao": "ESCOVA LIMPA POLO E TERMINAL DE BATERIA - LIMPA BORNE"
   },
   {
+    "codigo": "4.09.00000001002",
+    "descricao": "CAIXA DE FERRAMENTAS TIPO \"GABINETE\" COM 4 GAVETAS"
+  },
+  {
+    "codigo": "4.09.00000001007",
+    "descricao": "CAIXA DE FERRAMENTA TIPO SANFONADA C/ 5 GAVETAS"
+  },
+  {
     "codigo": "4.09.00000001029",
     "descricao": "PE DE CABRA 60CM"
+  },
+  {
+    "codigo": "4.09.0000001050F",
+    "descricao": "FURADEIRA DE IMPACTO 5/8 4.09.1050. VODER- 220V"
   },
   {
     "codigo": "4.09.00000001052",
@@ -1012,6 +2744,10 @@
     "descricao": "TRINCHA DE 3/4\""
   },
   {
+    "codigo": "4.09.001313K4401",
+    "descricao": "HANDSET CURTIS 1313 OEM ACCESS 1313K-4401"
+  },
+  {
     "codigo": "4.09.00000001348",
     "descricao": "CHAVE ESTRIA ABERT GED 24 X 27 MM 400"
   },
@@ -1036,6 +2772,10 @@
     "descricao": "MACACO HIDR. GARRAFA 04 TON STARFER"
   },
   {
+    "codigo": "4.09.00000001460",
+    "descricao": "CARRO PARA FERRAMENTAS AJUSTAVEL - REF. 3010"
+  },
+  {
     "codigo": "4.09.00000001474",
     "descricao": "PORCA NY MA M16"
   },
@@ -1056,6 +2796,10 @@
     "descricao": "ALICATE PRENSA TERMINAL 0,5A6MM2 Y10/22"
   },
   {
+    "codigo": "4.09.00000001580",
+    "descricao": "CARRO PARA FERRAMENTAS 400/615* x 625 x 900 mm"
+  },
+  {
     "codigo": "4.09.00000001582",
     "descricao": "KIT REPARO PNEU SEM CAMARA"
   },
@@ -1066,10 +2810,6 @@
   {
     "codigo": "4.09.00000001798",
     "descricao": "PE DE CABRA 45CM GUEPAR"
-  },
-  {
-    "codigo": "4.09.0000000182F",
-    "descricao": "BICO ENGRAXADEIRA BOMBA GRAXA FINO 1/8''"
   },
   {
     "codigo": "4.09.00000001846",
@@ -1096,16 +2836,20 @@
     "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 7/8\""
   },
   {
-    "codigo": "4.09.00000001B38",
-    "descricao": "CHAVE COMBINADA 38 MM"
-  },
-  {
     "codigo": "4.09.00000002000",
     "descricao": "SOQUETE HEXAGONAL / ALLEN 4 MM COM ENCAIXE DE 1/2'"
   },
   {
+    "codigo": "4.09.000002000MM",
+    "descricao": "CANETA PVC ABERTA HD-2P 30X030X2000MM HELFER: 4.09.2000MM"
+  },
+  {
     "codigo": "4.09.00000002001",
     "descricao": "LAVADORA DE ALTA PRESSAO 200 BAR 3000 PSI 15L/MIN VAZAO TRIFASICO"
+  },
+  {
+    "codigo": "4.09.000002100SD",
+    "descricao": "MEDIDOR DIGITAL P/ OLEO 2100S-D SAMOA"
   },
   {
     "codigo": "4.09.00000002115",
@@ -1120,8 +2864,104 @@
     "descricao": "GALAO PARA COMBUSTIVEL EM METAL 20L"
   },
   {
+    "codigo": "4.09.00000002501",
+    "descricao": "CHAVE COMBINADA 6 MM"
+  },
+  {
+    "codigo": "4.09.00000002502",
+    "descricao": "CHAVE COMBINADA 7 MM"
+  },
+  {
+    "codigo": "4.09.00000002503",
+    "descricao": "CHAVE COMBINADA 8 MM"
+  },
+  {
+    "codigo": "4.09.00000002504",
+    "descricao": "CHAVE COMBINADA 9 MM"
+  },
+  {
+    "codigo": "4.09.00000002505",
+    "descricao": "CHAVE COMBINADA 10 MM"
+  },
+  {
+    "codigo": "4.09.00000002506",
+    "descricao": "CHAVE COMBINADA 11 MM"
+  },
+  {
+    "codigo": "4.09.00000002507",
+    "descricao": "CHAVE COMBINADA 12 MM"
+  },
+  {
+    "codigo": "4.09.00000002508",
+    "descricao": "CHAVE COMBINADA 13 MM"
+  },
+  {
+    "codigo": "4.09.00000002509",
+    "descricao": "CHAVE COMBINADA 14 MM"
+  },
+  {
+    "codigo": "4.09.00000002510",
+    "descricao": "CHAVE COMBINADA 15 MM"
+  },
+  {
+    "codigo": "4.09.00000002511",
+    "descricao": "CHAVE COMBINADA 16 MM"
+  },
+  {
+    "codigo": "4.09.00000002512",
+    "descricao": "CHAVE COMBINADA 17 MM"
+  },
+  {
+    "codigo": "4.09.00000002513",
+    "descricao": "CHAVE COMBINADA 18 MM"
+  },
+  {
+    "codigo": "4.09.00000002514",
+    "descricao": "CHAVE COMBINADA 19 MM"
+  },
+  {
     "codigo": "4.09.00000002515",
     "descricao": "CHAVE COMBINADA 20 MM"
+  },
+  {
+    "codigo": "4.09.00000002516",
+    "descricao": "CHAVE COMBINADA 21 MM"
+  },
+  {
+    "codigo": "4.09.00000002517",
+    "descricao": "CHAVE COMBINADA 22 MM"
+  },
+  {
+    "codigo": "4.09.00000002518",
+    "descricao": "CHAVE COMBINADA 23 MM"
+  },
+  {
+    "codigo": "4.09.00000002519",
+    "descricao": "CHAVE COMBINADA 24 MM"
+  },
+  {
+    "codigo": "4.09.00000002520",
+    "descricao": "CHAVE COMBINADA 25 MM"
+  },
+  {
+    "codigo": "4.09.00000002521",
+    "descricao": "CHAVE COMBINADA 26 MM"
+  },
+  {
+    "codigo": "4.09.00000002522",
+    "descricao": "CHAVE COMBINADA 27 MM REF. GEDORE 1 B - 27"
+  },
+  {
+    "codigo": "4.09.00000002524",
+    "descricao": "CHAVE COMBINADA 30 MM REF. GEDORE 1 B - 30"
+  },
+  {
+    "codigo": "4.09.00000002525",
+    "descricao": "CHAVE COMBINADA 32 MM REF. GEDORE 1 B - 32"
+  },
+  {
+    "codigo": "4.09.00000002526",
+    "descricao": "CHAVE COMBINADA 36 MM REF. GEDORE 1 B - 36"
   },
   {
     "codigo": "4.09.00000002527",
@@ -1136,8 +2976,92 @@
     "descricao": "CHAVE COMBINADA 29 MM REF. GEDORE 1 B - 29"
   },
   {
+    "codigo": "4.09.00000002540",
+    "descricao": "CHAVE COMBINADA 33 MM REF. GEDORE 1 B - 33"
+  },
+  {
     "codigo": "4.09.00000002546",
     "descricao": "CHAVE DE BOCA 48MM"
+  },
+  {
+    "codigo": "4.09.00000002551",
+    "descricao": "CHAVE COMBINADA 1/4'' REF. GEDORE 1 B - 1/4\""
+  },
+  {
+    "codigo": "4.09.00000002552",
+    "descricao": "CHAVE COMBINADA 5/16\""
+  },
+  {
+    "codigo": "4.09.00000002553",
+    "descricao": "CHAVE COMBINADA 3/8\""
+  },
+  {
+    "codigo": "4.09.00000002554",
+    "descricao": "CHAVE COMBINADA 7/16\" REF. GEDORE 1 B - 7/16\""
+  },
+  {
+    "codigo": "4.09.00000002555",
+    "descricao": "CHAVE COMBINADA 1/2\""
+  },
+  {
+    "codigo": "4.09.00000002556",
+    "descricao": "CHAVE COMBINADA 9/16\""
+  },
+  {
+    "codigo": "4.09.00000002557",
+    "descricao": "CHAVE COMBINADA 5/8\" - REF. GEDORE 1 B - 5/8\""
+  },
+  {
+    "codigo": "4.09.00000002558",
+    "descricao": "CHAVE COMBINADA 11/16\""
+  },
+  {
+    "codigo": "4.09.00000002559",
+    "descricao": "CHAVE COMBINADA 3/4\""
+  },
+  {
+    "codigo": "4.09.00000002560",
+    "descricao": "CHAVE COMBINADA 25/32\" REF. GEDORE 1 B - 25/32\""
+  },
+  {
+    "codigo": "4.09.00000002561",
+    "descricao": "CHAVE COMBINADA 13/16\""
+  },
+  {
+    "codigo": "4.09.00000002562",
+    "descricao": "CHAVE COMBINADA 7/8\""
+  },
+  {
+    "codigo": "4.09.00000002563",
+    "descricao": "CHAVE COMBINADA 15/16\""
+  },
+  {
+    "codigo": "4.09.00000002564",
+    "descricao": "CHAVE COMBINADA 1\" REF. GEDORE 1 B - 1\""
+  },
+  {
+    "codigo": "4.09.00000002565",
+    "descricao": "CHAVE COMBINADA 1.1/16 - REF. GEDORE 1B - 1.1/16"
+  },
+  {
+    "codigo": "4.09.00000002566",
+    "descricao": "CHAVE COMBINADA 1.1/8\""
+  },
+  {
+    "codigo": "4.09.00000002568",
+    "descricao": "CHAVE COMBINADA 1.1/4 - REF. GEDORE 1B - 1.1/4"
+  },
+  {
+    "codigo": "4.09.00000002569",
+    "descricao": "CHAVE COMBINADA 1.5/16 - REF. GEDORE 1B - 1.5/16"
+  },
+  {
+    "codigo": "4.09.00000002572",
+    "descricao": "CHAVE COMBINADA 1.1/2 - REF. GEDORE 1B - 1.1/2"
+  },
+  {
+    "codigo": "4.09.00000002603",
+    "descricao": "JOGO DE CHAVE COMBINADA EM MM (CHAVES DE 6 A 32MM)"
   },
   {
     "codigo": "4.09.00000002691",
@@ -1150,6 +3074,10 @@
   {
     "codigo": "4.09.00000002790",
     "descricao": "BROCA DE ACO HSS 08MM"
+  },
+  {
+    "codigo": "4.09.0000002801F",
+    "descricao": "FURADEIRA DE COLUNA 1 HP TRIFASICA 220v REF. RDM-2801F MOTOMIL"
   },
   {
     "codigo": "4.09.00000002848",
@@ -1168,6 +3096,10 @@
     "descricao": "PA SX MA 8.8 EN 16X100 RI"
   },
   {
+    "codigo": "4.09.00000002905",
+    "descricao": "ALICATE PARA ANEL EXTERNO DE 3 A 10 MM (1/8 A 3/8)"
+  },
+  {
     "codigo": "4.09.00000002908",
     "descricao": "PA SEXTAVADO MA 8.8 EN 16X35 RI"
   },
@@ -1176,8 +3108,8 @@
     "descricao": "TALHA COMPAC.SC 1TON 3ELEV"
   },
   {
-    "codigo": "4.09.00000002TON",
-    "descricao": "MACACO BONEVAU JACARÉ 2 TON"
+    "codigo": "4.09.0003010MH25",
+    "descricao": "CARRETEL MANUAL B.SIMPLES P/OLEO C/ 25MT MANGUEIRA"
   },
   {
     "codigo": "4.09.00000003148",
@@ -1188,6 +3120,10 @@
     "descricao": "CHAVE ALLEN 2.5MM"
   },
   {
+    "codigo": "4.09.00000003287",
+    "descricao": "CABO T REF: 018210"
+  },
+  {
     "codigo": "4.09.00000003294",
     "descricao": "QUADRADO P/ CATRACA 3/4\""
   },
@@ -1196,8 +3132,28 @@
     "descricao": "SOQUETE SEXTAVADO IMPACTO 3/4\" X 19MM CURTO"
   },
   {
-    "codigo": "4.09.000000034MM",
-    "descricao": "SOQEUTE SEXTAVADO 1/2 POL. 34MM FER: 4.09.34MM"
+    "codigo": "4.09.00000003501",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 6 X 7 MM REF. GEDORE 2 - 6 X 7"
+  },
+  {
+    "codigo": "4.09.00000003502",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 8 X 9 MM REF. GEDORE 2 - 8 X 9"
+  },
+  {
+    "codigo": "4.09.00000003503",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 10 X 11 MM REF. GEDORE 2 - 10 X 11"
+  },
+  {
+    "codigo": "4.09.00000003504",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 12 X 13 MM"
+  },
+  {
+    "codigo": "4.09.00000003505",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 14 X 15 MM"
+  },
+  {
+    "codigo": "4.09.00000003506",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 16 X 17 MM REF. GEDORE 2 - 16 X 17"
   },
   {
     "codigo": "4.09.00000003508",
@@ -1224,8 +3180,20 @@
     "descricao": "CHAVE ESTRELA ( ESTRIA ) 27 X 32 MM REF. GEDORE 2 - 27 X 32"
   },
   {
+    "codigo": "4.09.00000003551",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 1/4 X 5/16\" REF. GEDORE 2 - 1/4 X 5/16\""
+  },
+  {
+    "codigo": "4.09.00000003553",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 1/2 X 9/16\" REF. GEDORE 2 - 1/2 X 9/16\""
+  },
+  {
     "codigo": "4.09.00000003554",
     "descricao": "CHAVE ESTRELA ( ESTRIA ) 5/8 X 11/16\" REF. GEDORE 2 - 5/8 X 11/16\""
+  },
+  {
+    "codigo": "4.09.00000003556",
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 3/4 X 25/32\" REF. GERORE 2 - 3/4 X 25/32\""
   },
   {
     "codigo": "4.09.00000003557",
@@ -1233,7 +3201,7 @@
   },
   {
     "codigo": "4.09.00000003558",
-    "descricao": "CHAVE ESTRELA ( ESTRIA ) 13/16  X 7/8\" REF. GEDORE 2 - 13/16 X 7/8\""
+    "descricao": "CHAVE ESTRELA ( ESTRIA ) 13/16 X 7/8\" REF. GEDORE 2 - 13/16 X 7/8\""
   },
   {
     "codigo": "4.09.00000003559",
@@ -1281,11 +3249,15 @@
   },
   {
     "codigo": "4.09.00000003881",
-    "descricao": "TOCHA TBI PRO 453  EXPERT 5,0M"
+    "descricao": "TOCHA TBI PRO 453 EXPERT 5,0M"
   },
   {
     "codigo": "4.09.00000003882",
     "descricao": "KIT CARREGADOR C/2 BATERIAS 5AH 20V + BOLSA"
+  },
+  {
+    "codigo": "4.09.0000003882T",
+    "descricao": "VIRA MACHO DE 3,0 - 8,2 T 150MM"
   },
   {
     "codigo": "4.09.00000003884",
@@ -1309,7 +3281,7 @@
   },
   {
     "codigo": "4.09.00000003889",
-    "descricao": "JOGO DE BROCAS AR POL 1/16 - 1/2  29PCS"
+    "descricao": "JOGO DE BROCAS AR POL 1/16 - 1/2 29PCS"
   },
   {
     "codigo": "4.09.00000003890",
@@ -1448,12 +3420,20 @@
     "descricao": "BALDE COM GRADUACAO LATAO 20 LT"
   },
   {
+    "codigo": "4.09.0000004210P",
+    "descricao": "JG CHAVE ALLEN C 1/8-9/16"
+  },
+  {
     "codigo": "4.09.00000004239",
     "descricao": "PISTOLA ARPREX 02-A MEDIA PRESSAO"
   },
   {
     "codigo": "4.09.00000004244",
     "descricao": "CHAVE INGLESA (12\")"
+  },
+  {
+    "codigo": "4.09.00000004437",
+    "descricao": "SOQUETE 5/8 ALEN HEXAGONAL"
   },
   {
     "codigo": "4.09.00000004445",
@@ -1480,16 +3460,116 @@
     "descricao": "MARRETA CABO BORRACHA 2KG GEDORE 21B REF:21B5"
   },
   {
+    "codigo": "4.09.00000004501",
+    "descricao": "CHAVE FIXA ( BOCA ) 6 X 7 MM"
+  },
+  {
+    "codigo": "4.09.00000004502",
+    "descricao": "CHAVE FIXA ( BOCA ) 8 X 9 MM"
+  },
+  {
+    "codigo": "4.09.00000004504",
+    "descricao": "CHAVE FIXA ( BOCA ) 10 X 11 MM"
+  },
+  {
+    "codigo": "4.09.00000004505",
+    "descricao": "CHAVE FIXA ( BOCA ) 12 X 13 MM REF. GEDORE 6 - 12 X 13"
+  },
+  {
+    "codigo": "4.09.00000004507",
+    "descricao": "CHAVE FIXA ( BOCA ) 14 X 15 MM"
+  },
+  {
+    "codigo": "4.09.00000004509",
+    "descricao": "CHAVE FIXA ( BOCA ) 16 X 17 MM"
+  },
+  {
     "codigo": "4.09.00000004510",
     "descricao": "MARRETA CABO BORRACHA 6KG GEDORE 21B"
+  },
+  {
+    "codigo": "4.09.00000004511",
+    "descricao": "CHAVE FIXA ( BOCA ) 18 X 19 MM"
+  },
+  {
+    "codigo": "4.09.00000004512",
+    "descricao": "CHAVE FIXA ( BOCA ) 19 X 22 MM - REF.6 - 19 x 22"
+  },
+  {
+    "codigo": "4.09.00000004513",
+    "descricao": "CHAVE FIXA ( BOCA ) 20 X 22 MM"
+  },
+  {
+    "codigo": "4.09.00000004514",
+    "descricao": "CHAVE FIXA ( BOCA ) 21 X 23 MM"
+  },
+  {
+    "codigo": "4.09.00000004515",
+    "descricao": "CHAVE FIXA ( BOCA ) 24 X 26 MM"
+  },
+  {
+    "codigo": "4.09.00000004516",
+    "descricao": "CHAVE FIXA ( BOCA ) 24 X 27 MM REF. GEDORE 6 - 24 X 27"
+  },
+  {
+    "codigo": "4.09.00000004517",
+    "descricao": "CHAVE FIXA ( BOCA ) 25 X 28 MM REF. GEDORE 6 - 25 X 28"
+  },
+  {
+    "codigo": "4.09.00000004518",
+    "descricao": "CHAVE FIXA ( BOCA ) 27 X 32 MM REF. GEDORE 6 - 27 X 32"
   },
   {
     "codigo": "4.09.00000004519",
     "descricao": "CHAVE FIXA ( BOCA ) 30 X 32 REF. GEDORE 6 - 30 X 32"
   },
   {
-    "codigo": "4.09.00000004523",
-    "descricao": "CALÇO PARA RODAS DE BORRACHA SINTETICA 300 X 160 X 160MM"
+    "codigo": "4.09.00000004533",
+    "descricao": "CHAVE FIXA ( BOCA ) 13 X 14 MM - REF. GEDORE 6 - 13 X 14"
+  },
+  {
+    "codigo": "4.09.00000004541",
+    "descricao": "CHAVE FIXA 22X24 mm - REF.6-22x24"
+  },
+  {
+    "codigo": "4.09.00000004551",
+    "descricao": "CHAVE FIXA ( BOCA ) 1/4 X 5/16\""
+  },
+  {
+    "codigo": "4.09.00000004552",
+    "descricao": "CHAVE FIXA ( BOCA ) 3/8 X 7/16\""
+  },
+  {
+    "codigo": "4.09.00000004553",
+    "descricao": "CHAVE FIXA ( BOCA ) 1/2 X 9/16\""
+  },
+  {
+    "codigo": "4.09.00000004555",
+    "descricao": "CHAVE FIXA ( BOCA ) 5/8 X 11/16\" REF. GEDORE 6 - 5/8 X 11/16\""
+  },
+  {
+    "codigo": "4.09.00000004557",
+    "descricao": "CHAVE FIXA ( BOCA ) 25/32 X 3/4\""
+  },
+  {
+    "codigo": "4.09.00000004558",
+    "descricao": "CHAVE FIXA ( BOCA ) 3/4 X 7/8\""
+  },
+  {
+    "codigo": "4.09.00000004559",
+    "descricao": "CHAVE FIXA ( BOCA ) 13/16 X 7/8\""
+  },
+  {
+    "codigo": "4.09.00000004560",
+    "descricao": "CHAVE FIXA ( BOCA ) 15/16 X 1\" REF. GEDORE 6 - 15/16 X 1"
+  },
+  {
+    "codigo": "4.09.00000004561",
+    "descricao": "CHAVE FIXA ( BOCA ) 1.1/16 X 1.1/8'' REF. GEDORE 6 - 1.1/16 X 1.1/8''"
+  },
+  {
+    "codigo": "4.09.00000004562",
+    "descricao": "CHAVE FIXA ( BOCA ) 1.1/16 X 1.1/4\""
   },
   {
     "codigo": "4.09.00000004565",
@@ -1498,6 +3578,22 @@
   {
     "codigo": "4.09.00000004599",
     "descricao": "CHAVE FIXA ( BOCA ) 22 X 27 MM REF. GEDORE 6 - 22 X 27"
+  },
+  {
+    "codigo": "4.09.00000004604",
+    "descricao": "JOGO CHAVE FIXA (CHAVE BOCA) MM"
+  },
+  {
+    "codigo": "4.09.00000004629",
+    "descricao": "SOQUETE 3/8 ALEN HEXAGONAL"
+  },
+  {
+    "codigo": "4.09.00000004630",
+    "descricao": "SOQUETE 1/2 ALEN HEXAGONAL"
+  },
+  {
+    "codigo": "4.09.00000004654",
+    "descricao": "JOGO CHAVE FIXA (CHAVE BOCA) POLEGADA"
   },
   {
     "codigo": "4.09.00000004697",
@@ -1514,6 +3610,22 @@
   {
     "codigo": "4.09.00000004994",
     "descricao": "BALDE COM GRADUACAO PLASTICO 20 LT"
+  },
+  {
+    "codigo": "4.09.00000005005",
+    "descricao": "CHAVE POLIGONAL ABERTA (MM) - REF. 400 - 14x17"
+  },
+  {
+    "codigo": "4.09.00000005055",
+    "descricao": "CHAVE POLIGONAL REF: GEDORE 5055"
+  },
+  {
+    "codigo": "4.09.00000005060",
+    "descricao": "FERRO SOLDA 68W - 220V"
+  },
+  {
+    "codigo": "4.09.00000005082",
+    "descricao": "KIT MONTAGEM E DESMONTAGEM DE PNEUS KRAUCHER"
   },
   {
     "codigo": "4.09.00000005124",
@@ -1536,12 +3648,12 @@
     "descricao": "PICARETA/CHIBANCA C/ CABO 90CM"
   },
   {
-    "codigo": "4.09.00000005405",
-    "descricao": "BOMBA MANUAL P/ OLEO DUPLO EFEITO"
+    "codigo": "4.09.00000005325",
+    "descricao": "SUPORTE DO DISCO"
   },
   {
-    "codigo": "4.09.00000005518",
-    "descricao": "AR LI AÇO  F- 436 5/8"
+    "codigo": "4.09.00000005405",
+    "descricao": "BOMBA MANUAL P/ OLEO DUPLO EFEITO"
   },
   {
     "codigo": "4.09.00000005521",
@@ -1561,7 +3673,7 @@
   },
   {
     "codigo": "4.09.00000005839",
-    "descricao": "BATEDOR 1.35/2 - 040.935 GEDORE 301  82055900"
+    "descricao": "BATEDOR 1.35/2 - 040.935 GEDORE 301 82055900"
   },
   {
     "codigo": "4.09.00000005871",
@@ -1580,28 +3692,44 @@
     "descricao": "MARRETA TIPO CUNHA 4 KG"
   },
   {
-    "codigo": "4.09.00000005950",
-    "descricao": "SOQUETE IMP 1 GEDORE 19 MM K21"
+    "codigo": "4.09.00000005941",
+    "descricao": "MARRETA QUADRADA 4KG"
   },
   {
-    "codigo": "4.09.00000005TON",
-    "descricao": "CINTA COM CATRACA 50 M.M- 9 METROS - 5 TONELADAS"
+    "codigo": "4.09.00000005950",
+    "descricao": "SOQUETE IMP 1 GEDORE 19 MM K21"
   },
   {
     "codigo": "4.09.00000006000",
     "descricao": "CAVALETE MECÃNICO 6 TONELADAS CT 6000 BOVENAU"
   },
   {
+    "codigo": "4.09.00000006001",
+    "descricao": "CHAVE STARTER 11 X 13 MM"
+  },
+  {
     "codigo": "4.09.00000006003",
     "descricao": "CHAVE STARTER ( MEIA LUA ) 15 X 17 MM REF. GEDORE 304 - 15 X 17"
+  },
+  {
+    "codigo": "4.09.00000006004",
+    "descricao": "CHAVE STARTER ( MEIA LUA ) 19 X 22 MM REF. GEDORE 304 - 19 X 22"
   },
   {
     "codigo": "4.09.00000006006",
     "descricao": "CHAVE STARTER 13 X 15 MM"
   },
   {
+    "codigo": "4.09.00000006008",
+    "descricao": "CHAVE STARTER (MEIA-LUA) 10X12 MM"
+  },
+  {
     "codigo": "4.09.00000006051",
     "descricao": "CHAVE STARTER (MEIA-LUA) 7/16 X 1/2\" - REF. REF. 304 - 7/16 X 1/2\""
+  },
+  {
+    "codigo": "4.09.00000006052",
+    "descricao": "CHAVE STARTER (MEIA-LUA) 9/16 X 5/8\" - REF. 304-9/16 X 5/8"
   },
   {
     "codigo": "4.09.00000006231",
@@ -1624,8 +3752,12 @@
     "descricao": "JG ALIC P/ANEIRS EXT/INT GED 4P C8000A-J4"
   },
   {
-    "codigo": "4.09.00000007094",
-    "descricao": "MANG. HIDRAUL. SAE 100R7 AT 3/8 TEXTIL"
+    "codigo": "4.09.00000006925",
+    "descricao": "CALIBRADOR DE FOLGAS (20 LÂMINAS)"
+  },
+  {
+    "codigo": "4.09.0000007022T",
+    "descricao": "BOMBA MANUAL 7022T TUBO TELESCOPICO 200 LITROS BOZZA"
   },
   {
     "codigo": "4.09.00000007219",
@@ -1641,7 +3773,7 @@
   },
   {
     "codigo": "4.09.00000007412",
-    "descricao": "ESMERILHADEIRA  4.1/2 840W 9557HNG 220V"
+    "descricao": "ESMERILHADEIRA 4.1/2 840W 9557HNG 220V"
   },
   {
     "codigo": "4.09.00000007455",
@@ -1660,16 +3792,8 @@
     "descricao": "JOGO CH FENDA / PHILIPS 5P 150/160S"
   },
   {
-    "codigo": "4.09.00000007739",
-    "descricao": "BALDE 10 LITROS"
-  },
-  {
     "codigo": "4.09.00000007740",
     "descricao": "BALDE 15 LITROS"
-  },
-  {
-    "codigo": "4.09.00000007782",
-    "descricao": "REGISTRO ESFERA 1552 3 DECA"
   },
   {
     "codigo": "4.09.00000007849",
@@ -1682,6 +3806,26 @@
   {
     "codigo": "4.09.00000007980",
     "descricao": "SACA PRISIONEIRO GEDORE 8600/1"
+  },
+  {
+    "codigo": "4.09.00000007990",
+    "descricao": "CONTAINER - MODULO METALICO HABIT MOD 13/0 - NIVEL 2 ( 7990 )"
+  },
+  {
+    "codigo": "4.09.000008000A2",
+    "descricao": "ALICATE PARA ANEL EXTERNO - 7 - 8000/A2 - R"
+  },
+  {
+    "codigo": "4.09.00008000A21",
+    "descricao": "ALICATE ABRIR TRAVA CURVO 6.3/4\" 8000A21"
+  },
+  {
+    "codigo": "4.09.00008000J21",
+    "descricao": "ALICATE FECHAR TRAVA CURVO 6.3/4\" 8000J21"
+  },
+  {
+    "codigo": "4.09.000008020G3",
+    "descricao": "BOMBA DE GRAXA LUBRIFICANTE MANUAL PARA 14 KGS 8020-G3 - BOZZA"
   },
   {
     "codigo": "4.09.00000008047",
@@ -1760,10 +3904,6 @@
     "descricao": "INVERSORA /RETIF SOLDA TIG 120/200A BIVOLT AUTOM RIV228 VRD"
   },
   {
-    "codigo": "4.09.00000008157",
-    "descricao": "ESMERILHADEIRA 4.1/2 850W GWS850 1377 220V C/3 DISCOS"
-  },
-  {
     "codigo": "4.09.00000008158",
     "descricao": "LAVADORA 450LB 1CV 220V MONO MOT INDUCAO C/RODA MB0147C"
   },
@@ -1836,10 +3976,6 @@
     "descricao": "FURADEIRA INDUSTRIAL 113D GSB 13 RE"
   },
   {
-    "codigo": "4.09.00000008176",
-    "descricao": "BROCA AR 5.0MM"
-  },
-  {
     "codigo": "4.09.00000008177",
     "descricao": "BROCA SERPENTINA"
   },
@@ -1857,11 +3993,11 @@
   },
   {
     "codigo": "4.09.00000008181",
-    "descricao": "MARRETA DE COBRE  CABO DE ACO EMBORRACHADO 5KG"
+    "descricao": "MARRETA DE COBRE CABO DE ACO EMBORRACHADO 5KG"
   },
   {
     "codigo": "4.09.00000008182",
-    "descricao": "MARRETA DE COBRE  CABO DE ACO EMBORRACHADO 2KG"
+    "descricao": "MARRETA DE COBRE CABO DE ACO EMBORRACHADO 2KG"
   },
   {
     "codigo": "4.09.00000008183",
@@ -1928,16 +4064,12 @@
     "descricao": "LIMA ROTATIVA HTOM CONICA COM RAIO 12X28X6X73 CQC"
   },
   {
-    "codigo": "4.09.00000008199",
-    "descricao": "GERADOR SOLAR DE ILUMINACAO - TIS-3P500- M-12-23-7,5M-6B280-6H50-BR"
-  },
-  {
     "codigo": "4.09.00000008320",
     "descricao": "BOMBA PNEUMATICA DA DIAFRAGMA"
   },
   {
     "codigo": "4.09.00000008442",
-    "descricao": "JOGO CHAVE FENDA/PHILLIPS -  BELZER 6 PC"
+    "descricao": "JOGO CHAVE FENDA/PHILLIPS - BELZER 6 PC"
   },
   {
     "codigo": "4.09.00000008445",
@@ -1953,7 +4085,7 @@
   },
   {
     "codigo": "4.09.00000008448",
-    "descricao": "CHAVE SOQUETE IMPACTO ENCAIXE  1\"X 36MM LONGA"
+    "descricao": "CHAVE SOQUETE IMPACTO ENCAIXE 1\"X 36MM LONGA"
   },
   {
     "codigo": "4.09.00000008449",
@@ -1985,11 +4117,11 @@
   },
   {
     "codigo": "4.09.00000008456",
-    "descricao": "MAQUINA SOLDA  FONTE  250VRD AMP (TIG LIFT/MMA)22"
+    "descricao": "MAQUINA SOLDA FONTE 250VRD AMP (TIG LIFT/MMA)22"
   },
   {
     "codigo": "4.09.00000008457",
-    "descricao": "MAQUINA SOLDA  FONTE 300VRD (TIG/ELETRODO)220"
+    "descricao": "MAQUINA SOLDA FONTE 300VRD (TIG/ELETRODO)220"
   },
   {
     "codigo": "4.09.00000008458",
@@ -2024,10 +4156,6 @@
     "descricao": "JOGO SOQUETE SEXTAVADO 1/2 (10 A 32MM) 22 PCS"
   },
   {
-    "codigo": "4.09.00000008466",
-    "descricao": "MODULO METALICO TIPO CONTAINER VAO LIVRE STANDER MP"
-  },
-  {
     "codigo": "4.09.00000008467",
     "descricao": "PONTEIRO PARA ROMPEDOR R 03 P RAMMER"
   },
@@ -2049,7 +4177,7 @@
   },
   {
     "codigo": "4.09.00000008472",
-    "descricao": "SACA POLIA  2 GARRAS 8562-3"
+    "descricao": "SACA POLIA 2 GARRAS 8562-3"
   },
   {
     "codigo": "4.09.00000008473",
@@ -2098,10 +4226,6 @@
   {
     "codigo": "4.09.00000008484",
     "descricao": "SOQUETE 1/2 SEXTAVADO 10MM"
-  },
-  {
-    "codigo": "4.09.00000008485",
-    "descricao": "DISPOSITIVO UNIVERSAL P/ PRÉ CARGA EM ACUMULADORES A NITROGÊNIO N²"
   },
   {
     "codigo": "4.09.00000008486",
@@ -2184,8 +4308,8 @@
     "descricao": "JOGO BROCAS AR 9PCS"
   },
   {
-    "codigo": "4.09.00000008544",
-    "descricao": "BALDE 5 LITROS"
+    "codigo": "4.09.00000008522",
+    "descricao": "BOMBA DE GRAXA MANUAL 7 KG"
   },
   {
     "codigo": "4.09.00000008770",
@@ -2224,16 +4348,24 @@
     "descricao": "ENCAIXE DE 1\" POLEGADA"
   },
   {
+    "codigo": "4.09.00000008988",
+    "descricao": "TORQUIMETRO PORTATIL 020 Á 250 LIBRAS"
+  },
+  {
     "codigo": "4.09.00000008999",
     "descricao": "ALICATE P/ ANEL EXT. CURVO 8000/A21"
+  },
+  {
+    "codigo": "4.09.000009000LD",
+    "descricao": "FILTRO REGULADOR 1/4\" P/PROPULSORA"
   },
   {
     "codigo": "4.09.00000009134",
     "descricao": "CHAVE ALLEN GED. HEX. 42 22,0MM"
   },
   {
-    "codigo": "4.09.00000009146",
-    "descricao": "UNIDADE DE ABASTECIMENTO PRO- ARLA 32 - 1 - MEDIDOR DIGITAL E GATILHO AUTOMATICO 1\" 220"
+    "codigo": "4.09.00000009274",
+    "descricao": "CHAVE TORQUE"
   },
   {
     "codigo": "4.09.00000009366",
@@ -2261,7 +4393,7 @@
   },
   {
     "codigo": "4.09.00000009644",
-    "descricao": "SCANNER DE  DIAGNOSTICO KIT COMPLETO (MERCEDES)"
+    "descricao": "SCANNER DE DIAGNOSTICO KIT COMPLETO (MERCEDES)"
   },
   {
     "codigo": "4.09.00000009645",
@@ -2360,6 +4492,10 @@
     "descricao": "PC PORTA BICO TOCHA TBI PRO153 M6 0914731"
   },
   {
+    "codigo": "4.09.00000009866",
+    "descricao": "JOGO CHAVE RETA TORX 163 BTX-13"
+  },
+  {
     "codigo": "4.09.00000009874",
     "descricao": "CADEADO PAPAIZ CR 35"
   },
@@ -2388,62 +4524,6 @@
     "descricao": "SACA FILTRO CINTA PEQUENA"
   },
   {
-    "codigo": "4.09.0000000A350",
-    "descricao": "MANOMETRO GLICERINA 0 A 350 PSI / 0 A 25 BAR"
-  },
-  {
-    "codigo": "4.09.0000000A850",
-    "descricao": "MANOMETRO GLICERINA 0 A 850 PSI / 0 A 60 BAR"
-  },
-  {
-    "codigo": "4.09.0000000AM13",
-    "descricao": "ARMARIO PORTA FERRAMENTAS REF: MARCON AM-13"
-  },
-  {
-    "codigo": "4.09.0000000AM50",
-    "descricao": "ARMARIO PARA FERRAMENTAS BASIC CMB B005"
-  },
-  {
-    "codigo": "4.09.0000000B900",
-    "descricao": "PISTOLA C MEDIDOR DIGITAL P OLEO REF: B900"
-  },
-  {
-    "codigo": "4.09.0000000FG16",
-    "descricao": "MORSA PARA FURADEIRA \"4\""
-  },
-  {
-    "codigo": "4.09.0000000L850",
-    "descricao": "BOMBA ELETRICA SUBMERSA 3/4 370W 220V REF. LIDER L850"
-  },
-  {
-    "codigo": "4.09.0000000ME10",
-    "descricao": "MOTO ESMERIL PARA BANCADA"
-  },
-  {
-    "codigo": "4.09.0000000MLT3",
-    "descricao": "PONTA DE PROVA PARA MULTIMETRO E ALICATE AMPERIMETRO ( MINIPA MLT-3 )"
-  },
-  {
-    "codigo": "4.09.0000000MT30",
-    "descricao": "MACACO ESPECIAL 30T"
-  },
-  {
-    "codigo": "4.09.0000000NC40",
-    "descricao": "CAVALETE MECANICO 40 TON ALTURA MINIMA DE 400MM REF. NC400 – Nº 3044 NOWAK"
-  },
-  {
-    "codigo": "4.09.0000000PNT4",
-    "descricao": "CALIBRADOR DE PNEUS IV DE PAREDE 4-145PSI 220V  REF. EXCEL PNEUTRONIC-PNT4"
-  },
-  {
-    "codigo": "4.09.0000000V400",
-    "descricao": "VULCANIZADOR PARA CAMARA DE AR 220V REF. VILUZ-VCA400"
-  },
-  {
-    "codigo": "4.09.0000000Y6AC",
-    "descricao": "YOKE REF: Y6 AC MAGNAVIS"
-  },
-  {
     "codigo": "4.09.00000010000",
     "descricao": "CHAVE PARA PORCA DE CILINDRO"
   },
@@ -2464,12 +4544,20 @@
     "descricao": "SACA RODA DE PLATAFORMA ELEVATORIA"
   },
   {
-    "codigo": "4.09.0000001050F",
-    "descricao": "FURADEIRA DE IMPACTO 5/8 4.09.1050. VODER- 220V"
-  },
-  {
     "codigo": "4.09.00000011009",
     "descricao": "FUNIL COM TELA PARA TRATORES REF. COBEL-11009"
+  },
+  {
+    "codigo": "4.09.00000011020",
+    "descricao": "PROPULSORA PNEUMÁTICA DE GRAXA REF. 12020Z - BOZZA"
+  },
+  {
+    "codigo": "4.09.000011020G2",
+    "descricao": "PROPULSORA PNEUMATICA 30 KG PARA GRAXA COM BALDE + ACESSÓRIOS REF. BOZZA 11020-G2"
+  },
+  {
+    "codigo": "4.09.000011030G2",
+    "descricao": "PROPULSORA PNEUMATICA 20 KG PARA GRAXA PARA BALDE + CARRINHO + ACESSORIO REF. BOZZA 11030-G2"
   },
   {
     "codigo": "4.09.00000011220",
@@ -2500,16 +4588,68 @@
     "descricao": "CHAVE HEXAGONAL (ALLEN) 1,5 MM - REF. GEDORE 42 - 1,5"
   },
   {
+    "codigo": "4.09.00000012002",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 2 MM - REF. GEDORE 42 - 2"
+  },
+  {
     "codigo": "4.09.00000012003",
     "descricao": "CHAVE HEXAGONAL (ALLEN) 2,5 MM - REF. GEDORE 42 - 2,5"
   },
   {
+    "codigo": "4.09.00000012004",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 3 MM - REF. GEDORE 42 - 3"
+  },
+  {
+    "codigo": "4.09.00000012005",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 4 MM - REF. GEDORE 42 - 4"
+  },
+  {
+    "codigo": "4.09.00000012006",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 5 MM - REF. GEDORE 42 - 5"
+  },
+  {
+    "codigo": "4.09.00000012007",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 6 MM REF. GEDORE 42 - 6"
+  },
+  {
+    "codigo": "4.09.00000012008",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 7 MM - REF. GEDORE 42 - 7"
+  },
+  {
+    "codigo": "4.09.00000012009",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 8 MM - REF. GEDORE 42 - 8"
+  },
+  {
+    "codigo": "4.09.00000012010",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 9 MM - REF. GEDORE 42 - 9"
+  },
+  {
+    "codigo": "4.09.00000012011",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 10 MM - REF. GEDORE 42 - 10"
+  },
+  {
+    "codigo": "4.09.00000012012",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 11 MM - REF. GEDORE 42 - 11"
+  },
+  {
+    "codigo": "4.09.00000012013",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 12 MM - REF. GEDORE 42 - 12"
+  },
+  {
+    "codigo": "4.09.00000012014",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 14 MM - REF. GEDORE 12-14"
+  },
+  {
     "codigo": "4.09.00000012015",
-    "descricao": "CHAVE HEXAGONAL ( ALLEN ) 16 MM REF. GEDORE  42 - 16"
+    "descricao": "CHAVE HEXAGONAL ( ALLEN ) 16 MM REF. GEDORE 42 - 16"
   },
   {
     "codigo": "4.09.00000012016",
     "descricao": "CHAVE HEXAGONAL ( ALLEN ) 17 MM REF. GEDORE 42 - 17"
+  },
+  {
+    "codigo": "4.09.00000012017",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 19 MM - REF. GEDORE 42 - 19"
   },
   {
     "codigo": "4.09.00000012018",
@@ -2528,24 +4668,104 @@
     "descricao": "CHAVE HEXAGONAL (ALLEN) 5/64\" - REF. GEDORE 42 - 5/64\""
   },
   {
+    "codigo": "4.09.00000012052",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 3/32\" - REF. GEDORE 42 - 3/32\""
+  },
+  {
+    "codigo": "4.09.00000012053",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 1/8\" - REF. GEDORE 42 - 1/8\""
+  },
+  {
+    "codigo": "4.09.00000012054",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 5/32\" - REF. GEDORE 42 - 5/32\""
+  },
+  {
+    "codigo": "4.09.00000012055",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 3/16\" REF. GEDORE 42 - 3/16\""
+  },
+  {
+    "codigo": "4.09.00000012056",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 7/32\" - REF. GEDORE 42 - 7/32\""
+  },
+  {
+    "codigo": "4.09.00000012057",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 1/4\" - REF. GEDORE 42 - 1/4\""
+  },
+  {
+    "codigo": "4.09.00000012058",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 5/16\" - REF. GEDORE 42 - 5/16\""
+  },
+  {
+    "codigo": "4.09.00000012059",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 3/8\" - REF. GEDORE 42 - 3/8\""
+  },
+  {
+    "codigo": "4.09.00000012060",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 7/16\" - REF. GEDORE 42 - 7/16\""
+  },
+  {
+    "codigo": "4.09.00000012061",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 1/2\" - REF. GEDORE 42 - 1/2\""
+  },
+  {
+    "codigo": "4.09.00000012062",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 9/16\" REF. GEDORE 42 - 9/16\""
+  },
+  {
+    "codigo": "4.09.00000012063",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 5/8\" - REF. GEDORE 42 - 5/8\""
+  },
+  {
     "codigo": "4.09.00000012064",
-    "descricao": "CHAVE HEXAGONAL (ALLEN) 11/16\"  - REF. GEDORE 42 - 11/16\""
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 11/16\" - REF. GEDORE 42 - 11/16\""
+  },
+  {
+    "codigo": "4.09.00000012065",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 3/4\" - REF. GEDORE 42 - 3/4\""
   },
   {
     "codigo": "4.09.00000012066",
-    "descricao": "CHAVE HEXAGONAL (ALLEN) 7/8\"  - REF. GEDORE 42 - 7/8\""
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 7/8\" - REF. GEDORE 42 - 7/8\""
   },
   {
     "codigo": "4.09.00000012067",
-    "descricao": "CHAVE HEXAGONAL (ALLEN) 1\"  - REF. GEDORE 42 - 1\""
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 1\" - REF. GEDORE 42 - 1\""
   },
   {
     "codigo": "4.09.00000012068",
-    "descricao": "CHAVE HEXAGONAL (ALLEN) 9/64\"  - REF. GEDORE 42 - 9/64\""
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 9/64\" - REF. GEDORE 42 - 9/64\""
   },
   {
     "codigo": "4.09.00000012069",
-    "descricao": "CHAVE HEXAGONAL (ALLEN) 9/32\"  - REF. GEDORE 42 - 9/32\""
+    "descricao": "CHAVE HEXAGONAL (ALLEN) 9/32\" - REF. GEDORE 42 - 9/32\""
+  },
+  {
+    "codigo": "4.09.00000012102",
+    "descricao": "JOGO CHAVE ALLEN HEXAGONAL - MM (CHAVES DE 3-4-5-6-8-10-12-14 MM)"
+  },
+  {
+    "codigo": "4.09.00000012104",
+    "descricao": "JOGO DE CHAVE HEXAGONAL"
+  },
+  {
+    "codigo": "4.09.00000012112",
+    "descricao": "JOGO CHAVE HEXAGONAL (CHAVE ALLEN) MM"
+  },
+  {
+    "codigo": "4.09.00000012152",
+    "descricao": "JOGO CHAVE ALLEN HEXAGONAL - POLEGADA (CHAVES DE 1/8-5/32-3/16-7/32-1/4-5/16-3/8-7/16-1/2-9/16 POL)"
+  },
+  {
+    "codigo": "4.09.00000012153",
+    "descricao": "JOGO DE CHAVE HEXAGONAL 3/32 A 3/8 MM"
+  },
+  {
+    "codigo": "4.09.00000012154",
+    "descricao": "JOGO DE CHAVE HEXAGONAL - ALLEM - POLEGADAS (9 PEÇAS) - REF. 42-9P"
+  },
+  {
+    "codigo": "4.09.00000012157",
+    "descricao": "JOGO CHAVE HEXAGONAL (CHAVE ALLEN) POLEGADA"
   },
   {
     "codigo": "4.09.00000012205",
@@ -2560,16 +4780,16 @@
     "descricao": "CHAVE HEXAGONAL (ALLEN) LONGA 6 MM - REF. GEDORE 42 L - 6"
   },
   {
+    "codigo": "4.09.00000012209",
+    "descricao": "CHAVE HEXAGONAL - ALLEN - LONGA 8 MM REF. GEDORE 42 L - 8"
+  },
+  {
     "codigo": "4.09.00000012211",
     "descricao": "CHAVE HEXAGONAL (ALLEN) LONGA 10 MM - REF. GEDORE 42 L - 10"
   },
   {
     "codigo": "4.09.00000012212",
     "descricao": "CHAVE HEXAGONAL (ALLEN) LONGA 11 MM - REF. GEDORE 42 L - 11*"
-  },
-  {
-    "codigo": "4.09.00000012214",
-    "descricao": "CHAVE HEXAGONAL (ALLEN) LONGA 14 MM - REF. GEDORE 42 L - 14"
   },
   {
     "codigo": "4.09.00000012253",
@@ -2608,16 +4828,32 @@
     "descricao": "CHAVE SOQUETE ALLEN LONGA DE 1/2 POL. 5MM - GEDORE IN19L-5"
   },
   {
+    "codigo": "4.09.00000012352",
+    "descricao": "JOGO DE CHAVE HEXAGONAL ALLEN - LONGA - POLEGADA"
+  },
+  {
     "codigo": "4.09.00000012361",
     "descricao": "CHAVE L ABAULADA 14"
   },
   {
-    "codigo": "4.09.00000012370",
-    "descricao": "CABO COM QUADRADO PARA SOQUETE 1/4\" REF. GEDORE 2098"
-  },
-  {
     "codigo": "4.09.00000012500",
     "descricao": "MACACO HIDRAULICO TIPO GARRAFA 12 TON ( REFERENCA 99576 MODELO 12500 )"
+  },
+  {
+    "codigo": "4.09.00000012820",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) C/ CABO T - REF. GEDORE 42 T - 3"
+  },
+  {
+    "codigo": "4.09.00000012830",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) C/ CABO T - REF. GEDORE 42 T - 4"
+  },
+  {
+    "codigo": "4.09.00000012840",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) C/ CABO T - REF. GEDORE 42 T - 5"
+  },
+  {
+    "codigo": "4.09.00000012850",
+    "descricao": "CHAVE HEXAGONAL (ALLEN) C/ CABO T - REF. GEDORE 42 T - 6"
   },
   {
     "codigo": "4.09.00000012909",
@@ -2626,6 +4862,10 @@
   {
     "codigo": "4.09.00000012910",
     "descricao": "CHAVE L ABAULADA 12"
+  },
+  {
+    "codigo": "4.09.00000012951",
+    "descricao": "JOGO DE CHAVE HEXAGONAL ABAULADA 1,5 A 10 MM"
   },
   {
     "codigo": "4.09.00000013001",
@@ -2717,7 +4957,7 @@
   },
   {
     "codigo": "4.09.00000013161",
-    "descricao": "CHAVE  COMB 1 13/16 GEDORE"
+    "descricao": "CHAVE COMB 1 13/16 GEDORE"
   },
   {
     "codigo": "4.09.00000013200",
@@ -2744,6 +4984,18 @@
     "descricao": "CABO COM QUADRADO 1/4\" REF. GEDORE 2098"
   },
   {
+    "codigo": "4.09.00000013301",
+    "descricao": "JOGO DE SOQUETES REF. 20HMU"
+  },
+  {
+    "codigo": "4.09.00000013302",
+    "descricao": "JOGO DE SOQUETES - REF. 20HPU"
+  },
+  {
+    "codigo": "4.09.00000013305",
+    "descricao": "JOGO DE SOQUETE SEXTAVADO ENCAIXE 1/4'' (CHAVES DE 4 A 13 MM)"
+  },
+  {
     "codigo": "4.09.00000013306",
     "descricao": "JOGO DE SOQUETE SEXTAVADO ENCAIXE 1/2'' (CHAVES DE 3/8 A 1.1/4 POL)"
   },
@@ -2764,12 +5016,20 @@
     "descricao": "MOTOESMERIL DE BANCADA 10'' 220V 300W - SCHULZ"
   },
   {
-    "codigo": "4.09.00000014032",
-    "descricao": "FUNIL C BICO SANFONADO 135 MM"
+    "codigo": "4.09.00000014012",
+    "descricao": "SOQUETE ESTRIADO 3/8 - REF. D 30 - 17"
   },
   {
-    "codigo": "4.09.00000014110",
-    "descricao": "MANIVELA PARA SOQUETE ENCAIXE 3/8\" REF: GEDORE 3084"
+    "codigo": "4.09.00000014013",
+    "descricao": "SOQUETE ESTRIADO 3/8 - REF. D 30 - 18"
+  },
+  {
+    "codigo": "4.09.00000014016",
+    "descricao": "SOQUETE ESTRIADO 3/8\" - REF. D 30 - 21"
+  },
+  {
+    "codigo": "4.09.00000014032",
+    "descricao": "FUNIL C BICO SANFONADO 135 MM"
   },
   {
     "codigo": "4.09.00000014130",
@@ -2778,10 +5038,6 @@
   {
     "codigo": "4.09.00000014145",
     "descricao": "EXTENSÃO LONGA 12\" PARA SOQUETE DE 3/8\" REF. GEDORE 3090 - 12\""
-  },
-  {
-    "codigo": "4.09.00000014170",
-    "descricao": "JUNTA UNIVERSAL 3/8\" REF. GEDORE 3095"
   },
   {
     "codigo": "4.09.00000014202",
@@ -2812,20 +5068,24 @@
     "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 12 MM - REF. GEDORE 19 - 12"
   },
   {
+    "codigo": "4.09.00000015016",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 21 MM - REF. GEDORE 19 - 21"
+  },
+  {
     "codigo": "4.09.00000015017",
-    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 22 MM  - REF. GEDORE 19 - 22"
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 22 MM - REF. GEDORE 19 - 22"
   },
   {
     "codigo": "4.09.00000015018",
-    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 23 MM  - REF. GEDORE 19 - 23"
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 23 MM - REF. GEDORE 19 - 23"
   },
   {
     "codigo": "4.09.00000015020",
-    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 26 MM  - REF. GEDORE 19 - 26"
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 26 MM - REF. GEDORE 19 - 26"
   },
   {
     "codigo": "4.09.00000015022",
-    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 28 MM  - REF. GEDORE 19 - 28"
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 28 MM - REF. GEDORE 19 - 28"
   },
   {
     "codigo": "4.09.00000015051",
@@ -2892,6 +5152,10 @@
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 11 MM"
   },
   {
+    "codigo": "4.09.00000015103",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 12 MM"
+  },
+  {
     "codigo": "4.09.00000015104",
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 13 MM"
   },
@@ -2900,20 +5164,68 @@
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 14 MM"
   },
   {
+    "codigo": "4.09.00000015106",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 15 MM"
+  },
+  {
     "codigo": "4.09.00000015107",
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 16 MM"
+  },
+  {
+    "codigo": "4.09.00000015108",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 17 MM"
   },
   {
     "codigo": "4.09.00000015109",
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 18 MM"
   },
   {
+    "codigo": "4.09.00000015110",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 19 MM"
+  },
+  {
     "codigo": "4.09.00000015111",
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 20 MM"
   },
   {
+    "codigo": "4.09.00000015112",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 21 MM"
+  },
+  {
+    "codigo": "4.09.00000015113",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 22 MM"
+  },
+  {
     "codigo": "4.09.00000015114",
     "descricao": "HIDROLAVADORA 500 LIBRAS TRIFASICA CHIAPERINI 00229 ( REF.CHIAPERINI-LJ7000/TRIF )"
+  },
+  {
+    "codigo": "4.09.00000015115",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 24 MM"
+  },
+  {
+    "codigo": "4.09.00000015116",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 26 MM"
+  },
+  {
+    "codigo": "4.09.00000015118",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 28 MM"
+  },
+  {
+    "codigo": "4.09.00000015119",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 30 MM"
+  },
+  {
+    "codigo": "4.09.00000015120",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 32 MM"
+  },
+  {
+    "codigo": "4.09.00000015121",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 25 MM"
+  },
+  {
+    "codigo": "4.09.00000015122",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 29 MM"
   },
   {
     "codigo": "4.09.00000015151",
@@ -2936,6 +5248,10 @@
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 19/32\""
   },
   {
+    "codigo": "4.09.00000015156",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 5/8\""
+  },
+  {
     "codigo": "4.09.00000015157",
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 11/16\""
   },
@@ -2946,6 +5262,10 @@
   {
     "codigo": "4.09.00000015159",
     "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 25/32\""
+  },
+  {
+    "codigo": "4.09.00000015160",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 13/16\""
   },
   {
     "codigo": "4.09.00000015161",
@@ -2984,6 +5304,10 @@
     "descricao": "MANIVELA PARA SOQUETE ENCAIXE 1/2\" REF: GEDORE 1985"
   },
   {
+    "codigo": "4.09.00000015230",
+    "descricao": "CABO T COM ENCAIXE DE 1/2 REF. GEDORE 1987"
+  },
+  {
     "codigo": "4.09.00000015240",
     "descricao": "EXTENÇÃO 1/2\" CURTA 5\" REF. GEDORE 1990 - 5\""
   },
@@ -2994,6 +5318,10 @@
   {
     "codigo": "4.09.00000015270",
     "descricao": "CATRACA SIMPLES C/ ENCAIXE 1/2 - REF. GEDORE 1993 Z-94"
+  },
+  {
+    "codigo": "4.09.00000015280",
+    "descricao": "CATRACA REVERSIVEL C/ ENCAIXE 1/2"
   },
   {
     "codigo": "4.09.00000015281",
@@ -3021,11 +5349,27 @@
   },
   {
     "codigo": "4.09.00000015512",
-    "descricao": "JOGO DE SOQUETE SEXTAVADO 1/2\" COM 20 PEÇAS + 4 ACESSORIOS DE 10  a 32 MM REF: 19 KM"
+    "descricao": "JOGO DE SOQUETE SEXTAVADO 1/2\" COM 20 PEÇAS + 4 ACESSORIOS DE 10 a 32 MM REF: 19 KM"
   },
   {
     "codigo": "4.09.00000015513",
-    "descricao": "JOGO DE SOQUETE ESTRIADO 1/2\" COM 20 PEÇAS + 4 ACESSORIOS DE 10  a 32 mm REF: 19 19 KP"
+    "descricao": "JOGO DE SOQUETE ESTRIADO 1/2\" COM 20 PEÇAS + 4 ACESSORIOS DE 10 a 32 mm REF: 19 19 KP"
+  },
+  {
+    "codigo": "4.09.00000015554",
+    "descricao": "JOGO DE SOQUETES 1/2\" ESTRIADOS REF. GEDORE 19 LPZ DE 3/8 A 1.1/4\""
+  },
+  {
+    "codigo": "4.09.00000015568",
+    "descricao": "JOGO DE SOQUETES SEXTAVADOS - REF. 19 LPZ ( 3/8 A 1\")"
+  },
+  {
+    "codigo": "4.09.00000015704",
+    "descricao": "SOQUETE ESTRIADO LONGO 1/2\" DE 19 MM"
+  },
+  {
+    "codigo": "4.09.00000015711",
+    "descricao": "SOQUETE ESTRAIDO LONGO 1/2\" - REF. D 19 L - 27 MM"
   },
   {
     "codigo": "4.09.00000015717",
@@ -3037,7 +5381,7 @@
   },
   {
     "codigo": "4.09.00000015815",
-    "descricao": "CHAVE COMB 1  5/8 GEDORE"
+    "descricao": "CHAVE COMB 1 5/8 GEDORE"
   },
   {
     "codigo": "4.09.00000015844",
@@ -3112,8 +5456,16 @@
     "descricao": "SOQUETE EXTRIADO DE 3/4 DE 24 MM REF. GEDORE D 32 - 24"
   },
   {
+    "codigo": "4.09.00000017005",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 27 MM"
+  },
+  {
     "codigo": "4.09.00000017006",
     "descricao": "SOQUETE ESTRIADO DE 3/4\""
+  },
+  {
+    "codigo": "4.09.00000017007",
+    "descricao": "SOQUETE ESTRIADO DE 3/4\" DE 30 MM"
   },
   {
     "codigo": "4.09.00000017008",
@@ -3122,6 +5474,10 @@
   {
     "codigo": "4.09.00000017009",
     "descricao": "SOQUETE SEXTAVADO DE 3/4\" DE 36 MM REF. GEDORE D 32 - 36"
+  },
+  {
+    "codigo": "4.09.00000017010",
+    "descricao": "SOQUETE ESTRIADO DE 1/2\" DE 23 MM"
   },
   {
     "codigo": "4.09.00000017011",
@@ -3140,8 +5496,56 @@
     "descricao": "FORCADO RETO LONGO 10 DENTES"
   },
   {
+    "codigo": "4.09.00000017016",
+    "descricao": "SOQUETE ESTRIADO 3/4\" - REF. D32-28MM"
+  },
+  {
+    "codigo": "4.09.00000017051",
+    "descricao": "SOQUETE EXTRIADO DE 3/4\" DE 1.3/8\" REF. GEDORE D 32 - 1.3/8\""
+  },
+  {
+    "codigo": "4.09.00000017052",
+    "descricao": "SOQUETE ESTRIADO 7/8\" - REF. D32-7/8\""
+  },
+  {
+    "codigo": "4.09.00000017054",
+    "descricao": "SOQUETE ESTRIADO 1\" - REF. D32-1\""
+  },
+  {
+    "codigo": "4.09.00000017055",
+    "descricao": "SOQUETE ESTRIADO 1.1/16\" - REF. D32-1.1/16\""
+  },
+  {
+    "codigo": "4.09.00000017056",
+    "descricao": "SOQUETE EXTRIADO DE 3/4\" DE 1.1/8\" REF. GEDORE D 32 - 1.1/8\""
+  },
+  {
+    "codigo": "4.09.00000017057",
+    "descricao": "SOQUETE ESTRIADO 1.1/4\" - REF. D32-1.1/4\""
+  },
+  {
+    "codigo": "4.09.00000017058",
+    "descricao": "SOQUETE SEXTAVADO 1.5/16\" - REF. 017058"
+  },
+  {
+    "codigo": "4.09.00000017059",
+    "descricao": "SOQUETE ESTRIADO 1.3/8\" - REF. D32-1.3/8\""
+  },
+  {
+    "codigo": "4.09.00000017065",
+    "descricao": "SOQUETE ESTRIADO 1.13/16\" - REF. D32-1.13/16\""
+  },
+  {
     "codigo": "4.09.00000017074",
     "descricao": "FLUIDO CORTE METAL NR1 500ML TAPMATIC"
+  },
+  {
+    "codigo": "4.09.00000017110",
+    "descricao": "CABO DE FORÇA T DE 3/4\" REF. GEDORE 3287"
+  },
+  {
+    "codigo": "4.09.00000017120",
+    "descricao": "EXTENÇÃO 3/4\" CURTA 8\" REF. GEDORE 3290 - 8\""
   },
   {
     "codigo": "4.09.00000017130",
@@ -3152,8 +5556,12 @@
     "descricao": "CATRACA PARA SOQUETE 3/4\" REF. GEDORE 3293 Z-94"
   },
   {
+    "codigo": "4.09.00000017201",
+    "descricao": "JOGO DE SOQUETE ESTRIADO ENCAIXE 3/4\" MM"
+  },
+  {
     "codigo": "4.09.00000017401",
-    "descricao": "SOQUETE  19MM"
+    "descricao": "SOQUETE 19MM"
   },
   {
     "codigo": "4.09.00000017402",
@@ -3165,11 +5573,15 @@
   },
   {
     "codigo": "4.09.00000017404",
-    "descricao": "SOQUETE  26MM"
+    "descricao": "SOQUETE 26MM"
   },
   {
     "codigo": "4.09.00000017405",
     "descricao": "SOQUETE SEXTAVADO DE 3/4\" DE 27 MM - REF. GEDORE 32 - 27"
+  },
+  {
+    "codigo": "4.09.00000017407",
+    "descricao": "SOQUETE SEXTAVADO DE 3/4\" DE 30 MM - REF. GEDORE 32 - 30"
   },
   {
     "codigo": "4.09.00000017408",
@@ -3177,7 +5589,7 @@
   },
   {
     "codigo": "4.09.00000017409",
-    "descricao": "SOQUETE  36MM"
+    "descricao": "SOQUETE 36MM"
   },
   {
     "codigo": "4.09.00000017410",
@@ -3197,15 +5609,19 @@
   },
   {
     "codigo": "4.09.00000017414",
-    "descricao": "SOQUETE  34MM"
+    "descricao": "SOQUETE 34MM"
+  },
+  {
+    "codigo": "4.09.00000017415",
+    "descricao": "SOQUETE EXTRIADO DE 3/4\" DE 1.1/4\" REF. GEDORE D 32 - 1.1/4\""
   },
   {
     "codigo": "4.09.00000017416",
-    "descricao": "SOQUETE  28MM"
+    "descricao": "SOQUETE 28MM"
   },
   {
     "codigo": "4.09.00000017417",
-    "descricao": "SOQUETE  21MM"
+    "descricao": "SOQUETE 21MM"
   },
   {
     "codigo": "4.09.00000017418",
@@ -3220,12 +5636,24 @@
     "descricao": "SOQUETE SEXTAVADO DE 3/4\" DE 1.5/16\" - REF. GEDORE 32 - 1.5/16\""
   },
   {
+    "codigo": "4.09.00000017461",
+    "descricao": "SOQUETE SEXTAVADO 3/4\" DE 1.1/2'' REF. GEDORE 32 - 1.1/2\""
+  },
+  {
     "codigo": "4.09.00000017462",
     "descricao": "SOQUETE SEXTAVADO 3/4\" DE 1.5/8'' REF. GEDORE 32 - 1.5/8\""
   },
   {
     "codigo": "4.09.00000017463",
     "descricao": "SOQUETE SEXTAVADO 3/4\" DE 15/16'' REF. GEDORE 32 - 15/16\""
+  },
+  {
+    "codigo": "4.09.00000017467",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 20 MM"
+  },
+  {
+    "codigo": "4.09.00000017501",
+    "descricao": "JOGO DE SOQUETE 3/4\" SEXTAVADO 22 A 50 MM REF: GEDORE 32 EMU"
   },
   {
     "codigo": "4.09.00000017502",
@@ -3276,28 +5704,96 @@
     "descricao": "TORNO BANCADA (MORSA) FIXO N.08 - SOMAR"
   },
   {
+    "codigo": "4.09.00000018005",
+    "descricao": "SOQUETE ESTRIADO 55 MM - REF. D21-55"
+  },
+  {
+    "codigo": "4.09.00000018008",
+    "descricao": "SOQUETE SEXTAVADO 70 MM"
+  },
+  {
+    "codigo": "4.09.00000018051",
+    "descricao": "SOQUETE ESTRIADO 1.7/16\" - REF. D21-1.7/16\""
+  },
+  {
     "codigo": "4.09.00000018052",
     "descricao": "SOQUETE 1'.1/2''"
   },
   {
     "codigo": "4.09.00000018053",
-    "descricao": "SOQUETE  1'.5/8''"
+    "descricao": "SOQUETE 1'.5/8''"
   },
   {
     "codigo": "4.09.00000018054",
-    "descricao": "SOQUETE  1'.11/16''"
+    "descricao": "SOQUETE 1'.11/16''"
   },
   {
     "codigo": "4.09.00000018055",
-    "descricao": "SOQUETE  1'.3/4''"
+    "descricao": "SOQUETE 1'.3/4''"
+  },
+  {
+    "codigo": "4.09.00000018057",
+    "descricao": "SOQUETE ESTRIADO 1.7/8\" - REF. D21-1.7/8\""
+  },
+  {
+    "codigo": "4.09.00000018210",
+    "descricao": "CABO P/ MARRETA"
   },
   {
     "codigo": "4.09.00000018220",
     "descricao": "EXTENÇÃO CURTA 8''"
   },
   {
+    "codigo": "4.09.00000018230",
+    "descricao": "EXTENSÃO 16\" - REF. 2190-16\""
+  },
+  {
     "codigo": "4.09.00000018840",
     "descricao": "JG BROCA AR PARAL 1 – 13MM 25PC DOR"
+  },
+  {
+    "codigo": "4.09.00000019008",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 13 MM - REF. GEDORE 19 - 13"
+  },
+  {
+    "codigo": "4.09.00000019009",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 14 MM - REF. GEDORE 19 - 14"
+  },
+  {
+    "codigo": "4.09.00000019010",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 15 MM - REF. GEDORE 19 - 15"
+  },
+  {
+    "codigo": "4.09.00000019011",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 16 MM - REF. GEDORE 19 - 16"
+  },
+  {
+    "codigo": "4.09.00000019012",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 17 MM - REF. GEDORE 19 - 17"
+  },
+  {
+    "codigo": "4.09.00000019013",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 18 MM - REF. GEDORE 19 - 18"
+  },
+  {
+    "codigo": "4.09.00000019014",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 19 MM - REF. GEDORE 19 - 19"
+  },
+  {
+    "codigo": "4.09.00000019019",
+    "descricao": "SOQUETE SEXTAVADO DE IMPACTO 1/2\" - REF. K 19 - 24"
+  },
+  {
+    "codigo": "4.09.00000019022",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 27 MM - REF. GEDORE 19 - 27"
+  },
+  {
+    "codigo": "4.09.00000019025",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 30 MM - REF. GEDORE 19 - 30"
+  },
+  {
+    "codigo": "4.09.00000019027",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 32 MM - REF. GEDORE 19 - 32"
   },
   {
     "codigo": "4.09.00000019031",
@@ -3365,7 +5861,11 @@
   },
   {
     "codigo": "4.09.00000019047",
-    "descricao": "DISCO DESBASTE  \"115\" BDA50"
+    "descricao": "DISCO DESBASTE \"115\" BDA50"
+  },
+  {
+    "codigo": "4.09.00000019116",
+    "descricao": "SOQUETE SEXTAVADO LONGO DE IMPACTO 1/2\" - REF. K 19 L - 21"
   },
   {
     "codigo": "4.09.00000019716",
@@ -3384,8 +5884,12 @@
     "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 9/16\" - REF. GEDORE 19 - 9/16\""
   },
   {
+    "codigo": "4.09.20000MC1000",
+    "descricao": "MEDIDOR DE COMPRESSÃO - MC1000"
+  },
+  {
     "codigo": "4.09.00000020001",
-    "descricao": "SOQUETE  IMPACTO 20MM"
+    "descricao": "SOQUETE IMPACTO 20MM"
   },
   {
     "codigo": "4.09.00000020005",
@@ -3396,8 +5900,28 @@
     "descricao": "SOQUETE IMPACTO 25MM"
   },
   {
+    "codigo": "4.09.00000020017",
+    "descricao": "SOQUETE SEXTAVADO DE IMPACTO - REF. K 32 - 38 MM - 3/4\""
+  },
+  {
     "codigo": "4.09.00000020103",
     "descricao": "SOQUETE IMPACTO K 32 L - 21 SEX ENC.3/4"
+  },
+  {
+    "codigo": "4.09.00000020109",
+    "descricao": "SOQUETE DE IMPACTO 27MM LONGO"
+  },
+  {
+    "codigo": "4.09.00000020113",
+    "descricao": "SOQUETE DE IMPACTO 32MM LONGO ENCAIXE DE 1\" POLEGADA"
+  },
+  {
+    "codigo": "4.09.00000020114",
+    "descricao": "SOQUETE DE IMPACTO 33MM LONGO"
+  },
+  {
+    "codigo": "4.09.00000020159",
+    "descricao": "SOQUETE DE IMPACTO 1 1/8 LONGO"
   },
   {
     "codigo": "4.09.00000020303",
@@ -3409,7 +5933,7 @@
   },
   {
     "codigo": "4.09.00000020407",
-    "descricao": "JOGO DE CHAVES L TIPO TORX®  C/ GUIA REF. T10-T40 20407"
+    "descricao": "JOGO DE CHAVES L TIPO TORX® C/ GUIA REF. T10-T40 20407"
   },
   {
     "codigo": "4.09.00000020902",
@@ -3420,16 +5944,40 @@
     "descricao": "EXTENÇÃO 1/4\" LONGA DE 6\" REF. GEDORE 2090 - 6\""
   },
   {
+    "codigo": "4.09.00000021006",
+    "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 24 MM - REF. GEDORE 19 - 24"
+  },
+  {
+    "codigo": "4.09.00000021009",
+    "descricao": "SOQUETE SEXTAVADO DE IMPACTO - 27MM - REF. K 21 - 27"
+  },
+  {
+    "codigo": "4.09.00000021012",
+    "descricao": "SOQUETE SEXTAVADO DE IMPACTO - 30MM - REF. K 21 - 30"
+  },
+  {
+    "codigo": "4.09.00000021016",
+    "descricao": "SOQUETE SEXTAVADO DE IMPACTO - 38MM"
+  },
+  {
+    "codigo": "4.09.00000021027",
+    "descricao": "SOQUETE SEXTAVADO DE IMPACTO - 33MM - REF. K 21 - 33"
+  },
+  {
     "codigo": "4.09.00000021062",
     "descricao": "SOQUETE IMPACTO 1'/5/16''"
   },
   {
     "codigo": "4.09.00000021063",
-    "descricao": "SOQUETE  IMPACTO 1'3/8''"
+    "descricao": "SOQUETE IMPACTO 1'3/8''"
   },
   {
     "codigo": "4.09.00000021066",
     "descricao": "SOQUETE IMPACTO 1'9/16''"
+  },
+  {
+    "codigo": "4.09.00000021114",
+    "descricao": "SOQUETE SEXTAVADO DE IMPACTO - 36MM - REF. K 21 L - 36"
   },
   {
     "codigo": "4.09.00000021165",
@@ -3524,20 +6072,188 @@
     "descricao": "BROCA DE AÇO HSS 06MM"
   },
   {
+    "codigo": "4.09.00000023007",
+    "descricao": "ADAPTADOR DE IMPACTO P/ SOQUETE 3/4\" X 1/2\" - REF. KB 3219"
+  },
+  {
     "codigo": "4.09.00000024600",
     "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T6"
+  },
+  {
+    "codigo": "4.09.00000024601",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T7"
+  },
+  {
+    "codigo": "4.09.00000024602",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T8"
+  },
+  {
+    "codigo": "4.09.00000024603",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T9"
+  },
+  {
+    "codigo": "4.09.00000024604",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T10"
+  },
+  {
+    "codigo": "4.09.00000024605",
+    "descricao": "CHAVE L TIPO TORX - REF .GEDORE 43 TX - T15"
+  },
+  {
+    "codigo": "4.09.00000024606",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T20"
+  },
+  {
+    "codigo": "4.09.00000024607",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T25"
+  },
+  {
+    "codigo": "4.09.00000024608",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T27"
+  },
+  {
+    "codigo": "4.09.00000024609",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T30"
+  },
+  {
+    "codigo": "4.09.00000024610",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T40"
+  },
+  {
+    "codigo": "4.09.00000024613",
+    "descricao": "CHAVE L TIPO TORX - REF. GEDORE 43 TX - T55"
+  },
+  {
+    "codigo": "4.09.00000024620",
+    "descricao": "JOGO DE CHAVES L TIPO TORX® - REF. 43TX-09"
+  },
+  {
+    "codigo": "4.09.00000024795",
+    "descricao": "JOGO DE CHAVES SOQUETE TORX® - REF - ITX 19 TX - 017"
+  },
+  {
+    "codigo": "4.09.00000024880",
+    "descricao": "CHAVE TORX RETA 163BTX-20 - REF.163 BTX - T20"
+  },
+  {
+    "codigo": "4.09.00000025000",
+    "descricao": "CHAVE BIELA 8 X 8 MM"
+  },
+  {
+    "codigo": "4.09.00000025001",
+    "descricao": "CHAVE BIELA 10 X 10 MM"
+  },
+  {
+    "codigo": "4.09.00000025002",
+    "descricao": "CHAVE BIELA 11 X 11 MM"
+  },
+  {
+    "codigo": "4.09.00000025003",
+    "descricao": "CHAVE BIELA 12 X 12 MM"
+  },
+  {
+    "codigo": "4.09.00000025004",
+    "descricao": "CHAVE BIELA 13 X 13 MM"
+  },
+  {
+    "codigo": "4.09.00000025005",
+    "descricao": "CHAVE BIELA 14 X 14 MM"
+  },
+  {
+    "codigo": "4.09.00000025006",
+    "descricao": "CHAVE BIELA 15 X 15 MM"
+  },
+  {
+    "codigo": "4.09.00000025007",
+    "descricao": "CHAVE BIELA 16 X 16 MM"
+  },
+  {
+    "codigo": "4.09.00000025008",
+    "descricao": "CHAVE BIELA 17 X 17 MM"
+  },
+  {
+    "codigo": "4.09.00000025009",
+    "descricao": "CHAVE BIELA 18 X 18 MM"
+  },
+  {
+    "codigo": "4.09.00000025010",
+    "descricao": "CHAVE BIELA 19 X 19 MM"
+  },
+  {
+    "codigo": "4.09.00000025011",
+    "descricao": "CHAVE BIELA 9 X 9 MM"
+  },
+  {
+    "codigo": "4.09.00000025051",
+    "descricao": "CHAVE BIELA 7/16 X 7/16\""
+  },
+  {
+    "codigo": "4.09.00000025052",
+    "descricao": "CHAVE BIELA 1/2 X 1/2\" MM REF. GEDORE 25 B - 1/2 X 1/2\""
+  },
+  {
+    "codigo": "4.09.00000025053",
+    "descricao": "CHAVE BIELA 9/16 X 9/16\" MM"
   },
   {
     "codigo": "4.09.00000025054",
     "descricao": "CHAVE BIELA 5/8 X 5/8\""
   },
   {
+    "codigo": "4.09.00000025490",
+    "descricao": "JG. DE BITS C/ MARTELETE MANUAL DE IMPACTO - ENCAIXE 1/4\" - REF. K 1900 - 613"
+  },
+  {
     "codigo": "4.09.00000025719",
     "descricao": "JG CH COMBINADA POL 1/4-1.1/4 16PCS"
   },
   {
+    "codigo": "4.09.00000026175",
+    "descricao": "CHAVE DE RODA 21x38"
+  },
+  {
+    "codigo": "4.09.00000026270",
+    "descricao": "CHAVE DE VELA - 13/16 LONGO REF. 067692"
+  },
+  {
+    "codigo": "4.09.00000026280",
+    "descricao": "CHAVE DE VELA - 5/8 LONGO REF. 067689"
+  },
+  {
+    "codigo": "4.09.00000026326",
+    "descricao": "ESPATULA CHATA 150MM - REF. 38 - 6\""
+  },
+  {
+    "codigo": "4.09.00000026329",
+    "descricao": "ESPATULA CHATA 400 MM - REF. 38 - 16\""
+  },
+  {
     "codigo": "4.09.00000026330",
     "descricao": "ESPATULA CHATA 450 MM REF. GEDORE 38 - 18\""
+  },
+  {
+    "codigo": "4.09.00000026340",
+    "descricao": "ESPÁTULA 470 MM - REF. 38A - 18\""
+  },
+  {
+    "codigo": "4.09.00000026350",
+    "descricao": "CENTELHADOR COPINHO CARBOGRAF"
+  },
+  {
+    "codigo": "4.09.00000026610",
+    "descricao": "ALICATE DE BICO RETO E LONGO COM ISOLAMENTO REF. GEDORE 8136 - JC"
+  },
+  {
+    "codigo": "4.09.00000026670",
+    "descricao": "ALICATE TIPO TELEFONE BICO CURVO 45º"
+  },
+  {
+    "codigo": "4.09.00000027020",
+    "descricao": "CHAVE CANHAO DE 4 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027030",
+    "descricao": "CHAVE CANHAO DE 5 MM 17900M"
   },
   {
     "codigo": "4.09.00000027033",
@@ -3546,6 +6262,46 @@
   {
     "codigo": "4.09.00000027034",
     "descricao": "TROLE MANUAL 1TON TM050"
+  },
+  {
+    "codigo": "4.09.00000027040",
+    "descricao": "CHAVE CANHAO DE 6 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027050",
+    "descricao": "CHAVE CANHAO DE 7 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027060",
+    "descricao": "CHAVE CANHAO DE 8 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027070",
+    "descricao": "CHAVE CANHAO DE 9 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027080",
+    "descricao": "CHAVE CANHAO DE 10 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027090",
+    "descricao": "CHAVE CANHAO DE 11 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027100",
+    "descricao": "CHAVE CANHAO DE 12 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027110",
+    "descricao": "CHAVE CANHAO DE 13 MM 17900M"
+  },
+  {
+    "codigo": "4.09.00000027220",
+    "descricao": "CHAVE SOQUETE COM CABO (TIPO CANHÃO) 3/16\""
+  },
+  {
+    "codigo": "4.09.00000027240",
+    "descricao": "CHAVE CANHAO DE 1/4\" REF. GEDORE 33 - 1/4\""
   },
   {
     "codigo": "4.09.00000027510",
@@ -3568,12 +6324,28 @@
     "descricao": "CHAVE CANHÃO TIPO TORX® E10 - REF. 33 TX - E10"
   },
   {
-    "codigo": "4.09.0000002801F",
-    "descricao": "FURADEIRA DE COLUNA 1 HP TRIFASICA 220v REF. RDM-2801F MOTOMIL"
+    "codigo": "4.09.00000028004",
+    "descricao": "CHAVE AJUSTAVEL - REF. GEDORE 62 - 300 (12\") - ATE 34 MM"
+  },
+  {
+    "codigo": "4.09.00000028005",
+    "descricao": "CHAVE AJUSTAVEL - REF. GEDORE 62 - 375 (15\") - ATE 43 MM"
+  },
+  {
+    "codigo": "4.09.00000028006",
+    "descricao": "CHAVE AJUSTAVEL - REF. GEDORE 62 - 450 (18) - ATE 53 MM"
   },
   {
     "codigo": "4.09.00000028122",
     "descricao": "BROCA DE AÇO HSS 04,50MM"
+  },
+  {
+    "codigo": "4.09.00000028201",
+    "descricao": "CHAVE AJUSTAVEL - REF. GEDORE 62 - 150 (6\") - ATE 18 MM"
+  },
+  {
+    "codigo": "4.09.00000028202",
+    "descricao": "CHAVE AJUSTAVEL - REF. GEDORE 62 - 200 (8\") - ATE 23 MM"
   },
   {
     "codigo": "4.09.00000028514",
@@ -3584,8 +6356,72 @@
     "descricao": "BROCA METAL DURO 338 11.00 MM TDC (CÓDIGO FÁBRICA 33891100)"
   },
   {
+    "codigo": "4.09.00000029010",
+    "descricao": "ALICATE DE PRESSÃO 10\" POLEGADAS"
+  },
+  {
+    "codigo": "4.09.00000029080",
+    "descricao": "ALICATE BOMBA D' ÁGUA CABO COM ISOLAMENTO - REF.141-10 ICP"
+  },
+  {
+    "codigo": "4.09.00000029125",
+    "descricao": "ALICATE BOMBA DÁGUA 10\""
+  },
+  {
     "codigo": "4.09.00000029130",
     "descricao": "ALICATE BOMBA DÁGUA 15\" REF: GEDORE 145 - 15\" C"
+  },
+  {
+    "codigo": "4.09.00000029137",
+    "descricao": "LIXADEIRA DEWALT 7\" MOD: 849 220V"
+  },
+  {
+    "codigo": "4.09.00000029200",
+    "descricao": "ALICATE PARA ANEIS EXTERNOS PONTA FIXAS - PONTAS RETAS REF. GEDORE 8000 A 0"
+  },
+  {
+    "codigo": "4.09.00000029205",
+    "descricao": "ALICATE PARA ANÉIS EXTERNOS PONTAS FIXAS - PONTAS CURVAS 90°"
+  },
+  {
+    "codigo": "4.09.00000029210",
+    "descricao": "ALICATE PARA ANEIS EXTERNOS PONTA FIXAS - PONTAS RETAS"
+  },
+  {
+    "codigo": "4.09.00000029220",
+    "descricao": "ALICATE PARA ANÉIS EXTERNOS PONTAS FIXAS - PONTAS CURVAS 90° - REF. GEDORE 8000 A 11"
+  },
+  {
+    "codigo": "4.09.00000029230",
+    "descricao": "ALICATE PARA ANEIS INTERNOS PONTAS FIXAS - PONTA RETA"
+  },
+  {
+    "codigo": "4.09.00000029240",
+    "descricao": "ALICATE PARA ANÉIS INTERNOS PONTAS FIXAS - PONTAS CURVAS 90º"
+  },
+  {
+    "codigo": "4.09.00000029250",
+    "descricao": "ALICATE PARA ANEIS EXTERNOS PONTAS FIXAS - PONTAS RETAS"
+  },
+  {
+    "codigo": "4.09.00000029260",
+    "descricao": "ALICATE PARA ANÉIS EXTERNOS PONTAS FIXAS - PONTAS CURVAS 90° - REF. GEDORE 8000 A 21"
+  },
+  {
+    "codigo": "4.09.00000029265",
+    "descricao": "ALICATE PARA ANÉIS INTERNOS PONTAS FIXAS - PONTAS CURVAS 90º"
+  },
+  {
+    "codigo": "4.09.00000029270",
+    "descricao": "ALICATE PARA ANEIS INTERNOS PONTAS FIXAS - PONTAS RETAS REF. 8000 J 2"
+  },
+  {
+    "codigo": "4.09.00000029275",
+    "descricao": "ALICATE PARA ANÉIS INTERNOS PONTAS FIXAS - PONTAS RETAS"
+  },
+  {
+    "codigo": "4.09.00000029280",
+    "descricao": "ALICATE PARA ANÉIS INTERNOS PONTA FIXA - PONTA CURVA 90º"
   },
   {
     "codigo": "4.09.00000029290",
@@ -3594,6 +6430,46 @@
   {
     "codigo": "4.09.00000029310",
     "descricao": "ALICATE PARA ANEL TRAVA INTERNO 8000/J4290"
+  },
+  {
+    "codigo": "4.09.00000029340",
+    "descricao": "ALICATE DE UNIVERSAL 6'' - REF.8280"
+  },
+  {
+    "codigo": "4.09.00000029370",
+    "descricao": "ALICATE UNIVERSAL 7\" REF. GEDORE 8280-180 IOX"
+  },
+  {
+    "codigo": "4.09.00000029390",
+    "descricao": "ALICATE UNIVERSAL"
+  },
+  {
+    "codigo": "4.09.00000029400",
+    "descricao": "ALICATE UNIVERSAL 8\" REF: GEDORE 8280-200 IOX"
+  },
+  {
+    "codigo": "4.09.00000029440",
+    "descricao": "ALICATE DE CORTE DIAGONAL MODELO SUECO COM ISOLAMENTO - REF. 8310-5 IOX"
+  },
+  {
+    "codigo": "4.09.00000029460",
+    "descricao": "ALICATE CORTE DIAGONAL"
+  },
+  {
+    "codigo": "4.09.00000029487",
+    "descricao": "ALICATE DE CORTE DIAGONAL 6.1/4\" - REF. 8314-160 IOX"
+  },
+  {
+    "codigo": "4.09.00000029640",
+    "descricao": "ALICATE TIPO TELEFONE BICO RETO COM ISOLAMENTO - REF. 8132-8 IOX"
+  },
+  {
+    "codigo": "4.09.00000029670",
+    "descricao": "ALICATE TIPO TELEFONE BICO CURVO"
+  },
+  {
+    "codigo": "4.09.00000029820",
+    "descricao": "ALICATE PARA ANÉIS (TRAVA DE CÂMBIO)"
   },
   {
     "codigo": "4.09.00000029892",
@@ -3624,6 +6500,18 @@
     "descricao": "LIMA PARA RECUPERAR ROSCA POLEGADA REF. GEDORE 140 A"
   },
   {
+    "codigo": "4.09.00000032210",
+    "descricao": "CHAVE SACA FILTROS CORRENTE 4"
+  },
+  {
+    "codigo": "4.09.00000032215",
+    "descricao": "CHAVE CORRENTE (TIPO LEVE) - REF.211-5"
+  },
+  {
+    "codigo": "4.09.00000032295",
+    "descricao": "CHAVE SACA FILTRO DE ÓLEO CORREIA 36 - 1"
+  },
+  {
     "codigo": "4.09.00000032736",
     "descricao": "MACACO HIDRÁULICO GARRAFA 20T MT20B"
   },
@@ -3644,8 +6532,36 @@
     "descricao": "GARRA DE BATERIA 100 A VERMELHO"
   },
   {
+    "codigo": "4.09.00000033060",
+    "descricao": "CHAVE PARA TUBOS (GRIFO)"
+  },
+  {
     "codigo": "4.09.00000033130",
     "descricao": "MARTELO BOLA 500 G CABO TUBULAR"
+  },
+  {
+    "codigo": "4.09.00000033140",
+    "descricao": "CHAVE PARA TUDOS (GRIFO) - REF. 227 - 14"
+  },
+  {
+    "codigo": "4.09.00000033150",
+    "descricao": "CHAVE PARA TUDOS (GRIFO) - REF. 227 - 18"
+  },
+  {
+    "codigo": "4.09.00000033170",
+    "descricao": "CHAVE PARA TUDOS (GRIFO) - REF. 227 - 36"
+  },
+  {
+    "codigo": "4.09.00000033190",
+    "descricao": "CHAVE PARA TUDOS (GRIFO) - REF. 227 - 60"
+  },
+  {
+    "codigo": "4.09.00000033253",
+    "descricao": "CHAVE PARA CANO CABEÇA RETA - 12\""
+  },
+  {
+    "codigo": "4.09.00000033975",
+    "descricao": "CONJUNTO DE FLANGEADOR"
   },
   {
     "codigo": "4.09.00000034016",
@@ -3676,8 +6592,168 @@
     "descricao": "ASSENTADOR DE TALÃO"
   },
   {
+    "codigo": "4.09.00000036020",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/8 X 4\" REF. GEDORE 150 - 1/8 X 4\""
+  },
+  {
+    "codigo": "4.09.00000036030",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/8 X 5\" REF. GEDORE 150 - 1/8 X 5\""
+  },
+  {
+    "codigo": "4.09.00000036040",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/8 X 6\" REF. GEDORE 150 - 1/8 X 6\""
+  },
+  {
+    "codigo": "4.09.00000036042",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/8 X 8\" REF. GEDORE 150 - 1/8 X 8\""
+  },
+  {
+    "codigo": "4.09.00000036044",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/8 X 10\" REF. GEDORE 150 - 1/8 X 10\""
+  },
+  {
+    "codigo": "4.09.00000036060",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/16 X 4\" REF. GEDORE 150 - 3/16 X 4\""
+  },
+  {
+    "codigo": "4.09.00000036070",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/16 X 5\" REF. GEDORE 150 - 3/16 X 5\""
+  },
+  {
+    "codigo": "4.09.00000036080",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/16 X 6\" REF. GEDORE 150 - 3/16 X 6\""
+  },
+  {
+    "codigo": "4.09.00000036084",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/16 X 10\" REF. GEDORE 150 - 3/16 X 10\""
+  },
+  {
+    "codigo": "4.09.00000036090",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/4 X 3\" REF. GEDORE 150 - 1/4 X 3\""
+  },
+  {
+    "codigo": "4.09.00000036100",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/4 X 5\" REF. GEDORE 150 - 1/4 X 5\""
+  },
+  {
+    "codigo": "4.09.00000036130",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/4 X 10'' REF. GEDORE 150 - 1/4 X 10\""
+  },
+  {
     "codigo": "4.09.00000036188",
     "descricao": "CHAVE DE FENDA SIMPLES 5/16 X 4\" - REF. 150-5/16 X 4\""
+  },
+  {
+    "codigo": "4.09.00000036190",
+    "descricao": "CHAVE DE FENDA SIMPLES 5/16 X 6'' REF. GEDORE 150 - 5/16 X 6\""
+  },
+  {
+    "codigo": "4.09.00000036200",
+    "descricao": "CHAVE DE FENDA SIMPLES 5/16 X 8\" - REF. 150-5/16 X 8\""
+  },
+  {
+    "codigo": "4.09.00000036210",
+    "descricao": "CHAVE DE FENDA SIMPLES 5/16 X 10\" REF. GEDORE 150 - 5/16 X 10\""
+  },
+  {
+    "codigo": "4.09.00000036228",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/8 X 5\" REF. GEDORE 150 - 3/8 X 5\""
+  },
+  {
+    "codigo": "4.09.00000036240",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/8 X 10\" REF. GEDORE 150 - 3/8 X 10\""
+  },
+  {
+    "codigo": "4.09.00000036244",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/2 X 12\" REF. GEDORE 150 - 1/2 X 12\""
+  },
+  {
+    "codigo": "4.09.00000036250",
+    "descricao": "CHAVE DE FENDA SIMPLES 3/16 X 1.1/2\" TIPO TOCO"
+  },
+  {
+    "codigo": "4.09.00000036290",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/8 X 2.3/8\" REF. GEDORE 160 - 1/8 X 2.3/8\" PH0"
+  },
+  {
+    "codigo": "4.09.00000036292",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/8 X 4\" REF. GEDORE 160 - 1/8 X 4\" PH0"
+  },
+  {
+    "codigo": "4.09.00000036294",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/8 X 6\" REF. GEDORE 160 - 1/8 X 6\" PH0"
+  },
+  {
+    "codigo": "4.09.00000036296",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/8 X 10\" REF. GEDORE 160 - 1/8 X 10\" PH0"
+  },
+  {
+    "codigo": "4.09.00000036300",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 3/16 X 3\" REF. GEDORE 160 - 3/16 X 3\" PH1"
+  },
+  {
+    "codigo": "4.09.00000036302",
+    "descricao": "CHAVE PHILIPS 4,5 X 125MM"
+  },
+  {
+    "codigo": "4.09.00000036304",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 3/16 X 6\" REF. GEDORE 160 - 3/16 X 6\" PH1"
+  },
+  {
+    "codigo": "4.09.00000036306",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 3/16 X 8\" REF. GEDORE 160 - 3/16 X 8\" PH3"
+  },
+  {
+    "codigo": "4.09.00000036308",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 3/16 X 10\" REF. GEDORE 160 - 3/16 X 10\" PH1"
+  },
+  {
+    "codigo": "4.09.00000036310",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILIPS 3/16 X 4\" REF. GEDORE 160 - 3/16 X 4\" PH1"
+  },
+  {
+    "codigo": "4.09.00000036316",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/4 X 4\" REF. GEDORE 160 - 1/4 X 4\" PH2"
+  },
+  {
+    "codigo": "4.09.00000036318",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/4 X 5\" REF. GEDORE 160 - 1/4 X 5\" PH2"
+  },
+  {
+    "codigo": "4.09.00000036320",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILIPS 1/4 X 6\" REF. GEDORE 160 - 1/4 X 6\" PH2"
+  },
+  {
+    "codigo": "4.09.00000036324",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/4 X 10\" REF. GEDORE 160 - 1/4 X 10\" PH2"
+  },
+  {
+    "codigo": "4.09.00000036326",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 1/4 X 14\" REF. GEDORE 160 - 1/4\" X 14\" PH2"
+  },
+  {
+    "codigo": "4.09.00000036330",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILIPS 5/16 X 6\" REF. GEDORE 160 - 5/16 X 6\" PH3"
+  },
+  {
+    "codigo": "4.09.00000036340",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 5/16 X 8\" REF. GEDORE 160 - 5/16 X 8\" PH3"
+  },
+  {
+    "codigo": "4.09.00000036360",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS 3/8 X 8\" REF. GEDORE 160 - 3/8 X 8\" PH4"
+  },
+  {
+    "codigo": "4.09.00000036410",
+    "descricao": "CHAVE DE FENDA CRUZADA PHILLIPS ( TIPO TOCO ) 3/16 X 1.1/2\" REF. GEDORE 161 - 3/16 X 1.1/2\" PH"
+  },
+  {
+    "codigo": "4.09.00000036420",
+    "descricao": "CHAVE DE FENDA SIMPLES 1/4 X 1.1/2\" TIPO TOCO - REF. GEDORE 153 1/4 X 1.1/2\""
+  },
+  {
+    "codigo": "4.09.00000036450",
+    "descricao": "JOGO DE CHAVES DE FENDA SIMPLES E CRUZADA"
   },
   {
     "codigo": "4.09.00000036725",
@@ -3686,6 +6762,18 @@
   {
     "codigo": "4.09.00000036726",
     "descricao": "JG CH ALLEN CURTA 5/32-7/8 220902 BELZER"
+  },
+  {
+    "codigo": "4.09.00000037020",
+    "descricao": "MARTELO TIPO BOLA 200 gr REF. GEDORE 8601 - 200"
+  },
+  {
+    "codigo": "4.09.00000037030",
+    "descricao": "MARTELO TIPO BOLA 500 gr REF. GEDORE 8601 - 500"
+  },
+  {
+    "codigo": "4.09.00000037040",
+    "descricao": "MARTELO TIPO BOLA 700G"
   },
   {
     "codigo": "4.09.00000037055",
@@ -3700,12 +6788,24 @@
     "descricao": "MARTELO ANTI FAISCA"
   },
   {
+    "codigo": "4.09.00000037210",
+    "descricao": "MARTELO DE BORRACHA 60 MM"
+  },
+  {
     "codigo": "4.09.00000037211",
     "descricao": "MARTELO DE BORRACHA 80 MM"
   },
   {
     "codigo": "4.09.00000037693",
     "descricao": "CHAVE ALLEN COM CABO 42C 5/64"
+  },
+  {
+    "codigo": "4.09.00000038001",
+    "descricao": "PUNÇÃO DE CENTRO - REF. GEDORE 350 - 4"
+  },
+  {
+    "codigo": "4.09.00000038002",
+    "descricao": "PUNÇÃO DE CENTRO - REF. GEDORE 350 - 5"
   },
   {
     "codigo": "4.09.00000038051",
@@ -3724,6 +6824,10 @@
     "descricao": "TALHADEIRA 11 MM REF. GEDORE 352 - 11"
   },
   {
+    "codigo": "4.09.00000038104",
+    "descricao": "TALHADEIRA 19 MM REF. GEDORE 352 - 19"
+  },
+  {
     "codigo": "4.09.00000038105",
     "descricao": "TALHADEIRA 25 MM REF. GEDORE 352 - 25"
   },
@@ -3732,20 +6836,52 @@
     "descricao": "SACA PINO PARALELO 2,5 MM MARCA BELZER"
   },
   {
+    "codigo": "4.09.00000038210",
+    "descricao": "SACA PINO PARALELO 2 MM MARCA BELZER"
+  },
+  {
+    "codigo": "4.09.00000038220",
+    "descricao": "SACA PINO PARALELO 3 MM"
+  },
+  {
     "codigo": "4.09.00000038227",
     "descricao": "VALVULA CORTA CHAMA VPRO CARBOGRAFITE"
+  },
+  {
+    "codigo": "4.09.00000038230",
+    "descricao": "SACA PINO PARALELO 4 MM MARCA BELZER"
+  },
+  {
+    "codigo": "4.09.00000038240",
+    "descricao": "SACA PINO PARALELO 5 MM"
+  },
+  {
+    "codigo": "4.09.00000038250",
+    "descricao": "SACA PINO PARALELO 6 MM"
+  },
+  {
+    "codigo": "4.09.00000038260",
+    "descricao": "SACA PINO PARALELO 8 MM MARCA BELZER"
   },
   {
     "codigo": "4.09.00000038278",
     "descricao": "TORNO BANCADA 8 FIXO A NOD N8 47X20X17 MARCON"
   },
   {
-    "codigo": "4.09.00000038507",
-    "descricao": "MARRETA DE AÇO OITAVADA  CABO TUBULAR 1,5 KG"
+    "codigo": "4.09.00000038304",
+    "descricao": "JOGO DE FERRAMENTAS (TALHADEIRA-PUNÇÃO- SACA-PINO) REF. GEDORE 246 A"
   },
   {
-    "codigo": "4.09.00000038A23",
-    "descricao": "ESPATULA REDONDA 600MM FER: GEDORNE 4 .09.38A23"
+    "codigo": "4.09.00000038305",
+    "descricao": "JOGO DE SACA-PINO PARALELO - (CHAVES DE 2-3-4-5-6-8 X 150 MM)"
+  },
+  {
+    "codigo": "4.09.00000038507",
+    "descricao": "MARRETA DE AÇO OITAVADA CABO TUBULAR 1,5 KG"
+  },
+  {
+    "codigo": "4.09.00000039001",
+    "descricao": "ARCO DE SERRA PARA METAIS"
   },
   {
     "codigo": "4.09.00000039042",
@@ -3760,12 +6896,28 @@
     "descricao": "FURADEIRA DE IMPACTO 10MM 3/8 COM 50 ACESSÓRIOS 480W HD400K50"
   },
   {
+    "codigo": "4.09.00000040060",
+    "descricao": "SACA-POLIA COM 3 GARRAS"
+  },
+  {
     "codigo": "4.09.00000040228",
     "descricao": "GUINCHO HIDRÁULICO EXTENSÍVEL 1T MGH1TP"
   },
   {
+    "codigo": "4.09.00000040410",
+    "descricao": "MINI-EXTRATOR"
+  },
+  {
+    "codigo": "4.09.00000040417",
+    "descricao": "SACA POLIA 2 GARRAS DESLIZANTES (REF. 8220 - 20 HSP 1 GEDORE)"
+  },
+  {
     "codigo": "4.09.00000040418",
     "descricao": "SACA POLIA 2 GARRAS DESLIZANTES (REF. 8220 - 10 HSP 1 GEDORE)"
+  },
+  {
+    "codigo": "4.09.00000040420",
+    "descricao": "SACA MINI EXTRATOR C/ DUAS GARRAS"
   },
   {
     "codigo": "4.09.00000040425",
@@ -3776,8 +6928,20 @@
     "descricao": "CHAVE IMPACTOR 3/4 BAT 18V 3AH DTW1001RFJ BIV MAKITA"
   },
   {
+    "codigo": "4.09.00000040800",
+    "descricao": "JOGO DE EXTRATOR DE PARAFUSOS - REF. GEDORE 8551-88"
+  },
+  {
+    "codigo": "4.09.00000040923",
+    "descricao": "EXTRATOR INTERNO REF: GEDORE 40923"
+  },
+  {
     "codigo": "4.09.00000040942",
     "descricao": "MACACO UNHA HID 10 TON 470MM MU10000 BOVENAU"
+  },
+  {
+    "codigo": "4.09.00000040984",
+    "descricao": "EXTR PARAFUS IRWIN 394002 BOLTGRIP 5PC"
   },
   {
     "codigo": "4.09.00000041020",
@@ -3804,6 +6968,14 @@
     "descricao": "VALVULA CORTA CHAMA VPRG CARBOGRAFITE"
   },
   {
+    "codigo": "4.09.00000042002",
+    "descricao": "PINÇA PONTA CURVA 45° SERRILHADA COM GUIA 1,4mm - REF. 720-l"
+  },
+  {
+    "codigo": "4.09.00000042006",
+    "descricao": "PINÇA PONTA FINA LONGA SERRILHADA COM GUIA 1 MM - REF. GEDORE 723 - I"
+  },
+  {
     "codigo": "4.09.00000042104",
     "descricao": "SERRA COPO AR 41MM SH0158/FCH0158 STARRETT"
   },
@@ -3825,7 +6997,7 @@
   },
   {
     "codigo": "4.09.00000043941",
-    "descricao": "ARMÁRIO DE FERRAMENTAS PLANEJADO 1800 X  1800 X 600"
+    "descricao": "ARMÁRIO DE FERRAMENTAS PLANEJADO 1800 X 1800 X 600"
   },
   {
     "codigo": "4.09.00000043960",
@@ -3848,12 +7020,20 @@
     "descricao": "BROCA ASDS/PLUS 6X50X110"
   },
   {
+    "codigo": "4.09.00000045001",
+    "descricao": "TESOURA TIPO FUNILEIRO"
+  },
+  {
     "codigo": "4.09.00000046205",
     "descricao": "CHAVE DE IMPACTO PNEUMATICA 1 3520NM AT3008TKPUMA"
   },
   {
     "codigo": "4.09.00000047040",
     "descricao": "JOGO SOQ. ALLEN 1/2 GE 3.16-5/8INI9/9P"
+  },
+  {
+    "codigo": "4.09.00000047200",
+    "descricao": "TORQUIMETRO C RELOGIO 1 2 R200 4506 ( GEDORE )"
   },
   {
     "codigo": "4.09.00000047235",
@@ -3864,16 +7044,12 @@
     "descricao": "CARRO ABERTO P/FERRAMENTAS"
   },
   {
-    "codigo": "4.09.00000047896",
-    "descricao": "BOMBA VOLUMÉTRICA (VALVULA PUMP)"
-  },
-  {
     "codigo": "4.09.00000047897",
     "descricao": "KIT GERADOR ESPUMA FARTAFOAM MOD. 053A"
   },
   {
-    "codigo": "4.09.00000048405",
-    "descricao": "ALICATE CORTE DIAGONAL 5.1/2\" VDE46 1 BI CRV UNIOR 1000V EN60900"
+    "codigo": "4.09.00000050083",
+    "descricao": "ESPÁTULA CURVAS (TIPO COLHER) NIQUELADA - REF. 284"
   },
   {
     "codigo": "4.09.00000050145",
@@ -3881,7 +7057,7 @@
   },
   {
     "codigo": "4.09.00000050149",
-    "descricao": "MARRETA CABO DE FRIBA  20F-3"
+    "descricao": "MARRETA CABO DE FRIBA 20F-3"
   },
   {
     "codigo": "4.09.00000050160",
@@ -3901,7 +7077,7 @@
   },
   {
     "codigo": "4.09.00000050446",
-    "descricao": "MEGOMETRO DIGITAL  DMG 5K S"
+    "descricao": "MEGOMETRO DIGITAL DMG 5K S"
   },
   {
     "codigo": "4.09.00000050447",
@@ -3934,10 +7110,6 @@
   {
     "codigo": "4.09.00000050454",
     "descricao": "CHAVE DE IMPACTO PNEUMATICA 3/4” PRO-170 1820NM TWIN HAMMER COM MALETA"
-  },
-  {
-    "codigo": "4.09.00000050455",
-    "descricao": "EXTENSAO IMPACTO PARA SOQUETE 1X8” 44934/108 ENCAIXE 1”"
   },
   {
     "codigo": "4.09.00000050456",
@@ -4028,10 +7200,6 @@
     "descricao": "CHAVE TORQUE LONGA T- 50"
   },
   {
-    "codigo": "4.09.00000050478",
-    "descricao": "KIT DE CARREGAMENTO DE NITROGENIO"
-  },
-  {
     "codigo": "4.09.00000050479",
     "descricao": "CHAVE TORQUE LONGA T- 27"
   },
@@ -4069,7 +7237,7 @@
   },
   {
     "codigo": "4.09.00000050488",
-    "descricao": "EXTRATOR DE PARAFUSO  (SACADOR)"
+    "descricao": "EXTRATOR DE PARAFUSO (SACADOR)"
   },
   {
     "codigo": "4.09.00000050489",
@@ -4081,7 +7249,7 @@
   },
   {
     "codigo": "4.09.00000050491",
-    "descricao": "JOGO CHAVE FENDA  C/ 5 PEÇAS"
+    "descricao": "JOGO CHAVE FENDA C/ 5 PEÇAS"
   },
   {
     "codigo": "4.09.00000050492",
@@ -4141,7 +7309,7 @@
   },
   {
     "codigo": "4.09.00000050506",
-    "descricao": "CONTAINER MARITIMO 20 PES  362344-2"
+    "descricao": "CONTAINER MARITIMO 20 PES 362344-2"
   },
   {
     "codigo": "4.09.00000050507",
@@ -4162,6 +7330,10 @@
   {
     "codigo": "4.09.00000050511",
     "descricao": "MARTELETE REBARBADOR PNEUMATICO MR190"
+  },
+  {
+    "codigo": "4.09.00000050512",
+    "descricao": "PRENSA ENFARDADEIRA HORIZONTAL CONTINUA AUTOMATICA MODELO PHA-CA 30T"
   },
   {
     "codigo": "4.09.00000050513",
@@ -4186,10 +7358,6 @@
   {
     "codigo": "4.09.00000050518",
     "descricao": "CAVALETE PARA CAMINHAO 10T 107703"
-  },
-  {
-    "codigo": "4.09.00000050519",
-    "descricao": "CARREGADOR DE BATERIA BIVOLT 100A 2-12/24V KME100A/2B RAPIDO E LENTO COM AUXILIAR DE PARTIDA"
   },
   {
     "codigo": "4.09.00000050520",
@@ -4288,14 +7456,6 @@
     "descricao": "ALAVANCA LISA REDONDA 1X1.8M"
   },
   {
-    "codigo": "4.09.00000050544",
-    "descricao": "PAQUIMETRO 150 MM QUAD 530-104 MITUTOYO"
-  },
-  {
-    "codigo": "4.09.00000050545",
-    "descricao": "MULTIMETRO DIGIT. FLUKE-107 AC/DC 600V CATIII"
-  },
-  {
     "codigo": "4.09.00000050546",
     "descricao": "TORQUIMETRO EST. 3/4 200-1000NM 44508/401"
   },
@@ -4373,7 +7533,7 @@
   },
   {
     "codigo": "4.09.00000050565",
-    "descricao": "JOGO CHAVE ALLEN (1.5 A 10 MM)  9  PEÇAS CURTA"
+    "descricao": "JOGO CHAVE ALLEN (1.5 A 10 MM) 9 PEÇAS CURTA"
   },
   {
     "codigo": "4.09.00000050566",
@@ -4408,6 +7568,14 @@
     "descricao": "PISTOLA DE GRAXA"
   },
   {
+    "codigo": "4.09.00000052850",
+    "descricao": "CABO T ENC 1\""
+  },
+  {
+    "codigo": "4.09.00000052990",
+    "descricao": "EXTENÇÃO ENC 1\""
+  },
+  {
     "codigo": "4.09.00000054184",
     "descricao": "MANÔMETRO C/GLICERINA A 25 BAR"
   },
@@ -4432,6 +7600,14 @@
     "descricao": "PRENSADORA DE TERMINAL"
   },
   {
+    "codigo": "4.09.00000055974",
+    "descricao": "CALIBRADOR DE LAMINA"
+  },
+  {
+    "codigo": "4.09.00000057339",
+    "descricao": "SOQUETE IMPACTO 3/4 46 MM K32"
+  },
+  {
     "codigo": "4.09.00000057840",
     "descricao": "ESCADA ALUMINIO TREPADEIRA 14DEG-3,5M TR352 ALULEV 4 CORRIMAOS CAPAC.150KG"
   },
@@ -4444,12 +7620,28 @@
     "descricao": "VALVULA DE CONTROLE DE OLEO 5031NEW"
   },
   {
-    "codigo": "4.09.0000005HP2P",
-    "descricao": "COMPRESSOR AR AP TRIF 20PCM-200L CMAV-2C-PROF MOTOMIL MOTOR 5HP2P"
+    "codigo": "4.09.00000058671",
+    "descricao": "CAIXA DE SOQUETE 1/4 28 PÇ"
+  },
+  {
+    "codigo": "4.09.00000059274",
+    "descricao": "MEDIDOR DE GASES"
+  },
+  {
+    "codigo": "4.09.000059560MM",
+    "descricao": "MARCADR MILLE.MHG 5 9 5-6,0MM C/100 AM HEL REF:4.09.000059560MM"
+  },
+  {
+    "codigo": "4.09.00000061925",
+    "descricao": "CALIBRADOR DE LÂMINA - 0,05 A 1,00 MM"
   },
   {
     "codigo": "4.09.00000062740",
     "descricao": "ALFABETO AÇO 6 MM PLK-40"
+  },
+  {
+    "codigo": "4.09.00000062840",
+    "descricao": "ALGARISMO AÇO 6 MM PLK-08"
   },
   {
     "codigo": "4.09.00000064504",
@@ -4484,8 +7676,16 @@
     "descricao": "MARTELO UNHA 34MM TRAMON 40370/034"
   },
   {
+    "codigo": "4.09.00000066052",
+    "descricao": "JOGO DE CHAVE RELOJOEIRO - STANLEY"
+  },
+  {
     "codigo": "4.09.00000066115",
     "descricao": "SOQUETE ESTRIADO 1/2\" X 16MM"
+  },
+  {
+    "codigo": "4.09.00000066540",
+    "descricao": "JG EXTRATOR PARAF 2-11,0MM 5 ADES"
   },
   {
     "codigo": "4.09.00000066937",
@@ -4494,6 +7694,26 @@
   {
     "codigo": "4.09.00000067672",
     "descricao": "SOQUETE SEXT LONGO M (1/2 X 13MM) GEDORE REF.067672"
+  },
+  {
+    "codigo": "4.09.00000067915",
+    "descricao": "CHAVE COMBINADA 20 MM REF. GEDORE 1 B - 20"
+  },
+  {
+    "codigo": "4.09.00000067951",
+    "descricao": "CHAVE COMBINADA 1/4\""
+  },
+  {
+    "codigo": "4.09.00000067953",
+    "descricao": "CHAVE COMBINADA 41 MM"
+  },
+  {
+    "codigo": "4.09.00000067959",
+    "descricao": "CHAVE COMBINADA 3/4\""
+  },
+  {
+    "codigo": "4.09.00000067963",
+    "descricao": "SOQUETE SEXTAVADO LONGO 1/2\" DE 7/8\""
   },
   {
     "codigo": "4.09.00000068054",
@@ -4510,10 +7730,6 @@
   {
     "codigo": "4.09.00000069988",
     "descricao": "CHAVE COMB C/CATRACA 19MM"
-  },
-  {
-    "codigo": "4.09.0000007022T",
-    "descricao": "BOMBA MANUAL 7022T TUBO TELESCOPICO 200 LITROS BOZZA"
   },
   {
     "codigo": "4.09.00000070750",
@@ -4632,6 +7848,14 @@
     "descricao": "JOGO DE CHAVES L TIPO TORX 6 PONTAS C/ GUIA REF: YT0512 (CHAVES T10-T15-T20-T25-T27-T30-T40-T45-T50)"
   },
   {
+    "codigo": "4.09.00000079518",
+    "descricao": "MANOMETRO BAIXA PRESSÃO 600 PSI"
+  },
+  {
+    "codigo": "4.09.00000079521",
+    "descricao": "MANOMETRO ALTA PRESSÃO 3000 PSI"
+  },
+  {
     "codigo": "4.09.00000079921",
     "descricao": "MEDIDOR DE PRESSÃO BOMBA ÓLEO MPO500 PLANA"
   },
@@ -4646,6 +7870,10 @@
   {
     "codigo": "4.09.00000081228",
     "descricao": "SACA POLIA UNIVERSAL"
+  },
+  {
+    "codigo": "4.09.00000083105",
+    "descricao": "ALICATE DE CORTE DIAGONAL MODELO SUECO SEM ISOLAMENTO - 5\" OX - COD. 029430"
   },
   {
     "codigo": "4.09.00000083232",
@@ -4666,6 +7894,10 @@
   {
     "codigo": "4.09.00000085444",
     "descricao": "ABRIDOR DE TAMBOR EM FERRO FUNDIDO"
+  },
+  {
+    "codigo": "4.09.00000085653",
+    "descricao": "SACA POLIA 3 GARRAS 3,0 TON"
   },
   {
     "codigo": "4.09.00000086416",
@@ -4725,7 +7957,7 @@
   },
   {
     "codigo": "4.09.00000088824",
-    "descricao": "MANOMETRO HORIZONTAL 1/4 BSP  63  10KG  0-150PSl"
+    "descricao": "MANOMETRO HORIZONTAL 1/4 BSP 63 10KG 0-150PSl"
   },
   {
     "codigo": "4.09.00000088848",
@@ -4748,10 +7980,6 @@
     "descricao": "MANOMETRO GLICERINADO 60 BAR/900PSI"
   },
   {
-    "codigo": "4.09.00000090567",
-    "descricao": "KIT DE ANEL ORING 419PÇ C/ESTOJO"
-  },
-  {
     "codigo": "4.09.00000090730",
     "descricao": "CHAVE RODA CRUZ 4 BOCAS 14"
   },
@@ -4760,8 +7988,20 @@
     "descricao": "CARRO PARA FERRAMENTAS GRAFITE/LAR FECHADO"
   },
   {
+    "codigo": "4.09.00000091844",
+    "descricao": "ALICATE TIPO TELEFONE BICO RETO VDE"
+  },
+  {
     "codigo": "4.09.00000093030",
     "descricao": "MACACO HIDRAULICO INDUSTRIAL TIPO UNHA 5TON REF: 93030 BOVENAL"
+  },
+  {
+    "codigo": "4.09.00000094630",
+    "descricao": "RELOGIO COMPARADOR 0-100-0 MM1 - REF. 21095-10"
+  },
+  {
+    "codigo": "4.09.00000094800",
+    "descricao": "BASE MAGNETICA P/ RELOGIO COMPARADOR ( MODELO 3657AA )"
   },
   {
     "codigo": "4.09.00000095203",
@@ -4805,7 +8045,7 @@
   },
   {
     "codigo": "4.09.00000099982",
-    "descricao": "BLOCO LEVANTAMENTO DE MASSA 55KG"
+    "descricao": "BLOCO LEVANTAMENTO DE MASSA 55KG"
   },
   {
     "codigo": "4.09.00000099991",
@@ -4816,144 +8056,16 @@
     "descricao": "BOMBA DE SUCÇÃO MANUAL"
   },
   {
-    "codigo": "4.09.000000A3500",
-    "descricao": "MANOMETRO GLICERINA 0 A 3500 PSI / 0 A 250 BAR"
-  },
-  {
-    "codigo": "4.09.000000BS500",
-    "descricao": "MESA HIDRAULICA PANTOGRAFICA BOVENAL ME 300"
-  },
-  {
-    "codigo": "4.09.000000CH450",
-    "descricao": "CHAVE PARA PORCA SKF COD: 450"
-  },
-  {
-    "codigo": "4.09.000000CHL75",
-    "descricao": "LIXADEIRA ORBITAL 6 POL. REF: CHIAPERINI 4.09.CHL75"
-  },
-  {
-    "codigo": "4.09.000000CL20B",
-    "descricao": "CARREGADOR DE BATERIAS CL20B OKEY"
-  },
-  {
-    "codigo": "4.09.000000CL30B",
-    "descricao": "CARREGADOR DE BATERIAS 18V-160C"
-  },
-  {
-    "codigo": "4.09.000000CT100",
-    "descricao": "CENTELHADOR PARA TESTE DE FAÍSCA EM CABOS DE VELA"
-  },
-  {
-    "codigo": "4.09.000000ET095",
-    "descricao": "ESPELHO TELESCOPIO ET095"
-  },
-  {
-    "codigo": "4.09.000000F1469",
-    "descricao": "CADEADO E-35 PADO HASTE LONGA"
-  },
-  {
-    "codigo": "4.09.000000G3000",
-    "descricao": "GUINCHO HIDRAULICO 3 TONELADAS RODAGEM DE FERRO G3000 BOVENAU"
-  },
-  {
-    "codigo": "4.09.000000GM20T",
-    "descricao": "MACACO HIDRAULICO TIPO GARRAFA 20 TONELADAS REF: MARCON 4.9.GM20T"
-  },
-  {
-    "codigo": "4.09.000000K2350",
-    "descricao": "LAVADORA DE ALTA PRESSÃO"
-  },
-  {
-    "codigo": "4.09.000000KRONA",
-    "descricao": "ELETRODUTO PVC A.CHAMA C/R.H 3/4 X3M KRONA REF:4.09.KRONA"
-  },
-  {
-    "codigo": "4.09.000000M0016",
-    "descricao": "MACHO MANUAL M16 DIN 352"
-  },
-  {
-    "codigo": "4.09.000000M2175",
-    "descricao": "MACHO MANUAL M2 / 1,75MM"
-  },
-  {
-    "codigo": "4.09.000000MATSU",
-    "descricao": "KIT MONTAGEM E DESMONTAGEM PNEU CAMINHÃO REF MATSU"
-  },
-  {
-    "codigo": "4.09.000000ME500",
-    "descricao": "MOTO ESMERIL BAMBOZZI ME500 6\""
-  },
-  {
-    "codigo": "4.09.000000MORSA",
-    "descricao": "MORSA"
-  },
-  {
-    "codigo": "4.09.000000MR052",
-    "descricao": "MACHO MANUAL M10 / 1,5 mm - 3 peças"
-  },
-  {
-    "codigo": "4.09.000000MR053",
-    "descricao": "MACHO MANUAL M12 / 2,0 mm - 3 peças"
-  },
-  {
-    "codigo": "4.09.000000SK79S",
-    "descricao": "CHAVE DE IMPACTO PNEUMATICA DE 1\" COM EIXO ESTENDIDO 4.200Nm REF. SHALLPER-SK79/S"
-  },
-  {
-    "codigo": "4.09.000000TR101",
-    "descricao": "ESCADA PLATAFORMA EM ALUMINIO 4 DEGRAUS TR-101"
-  },
-  {
-    "codigo": "4.09.000000TR175",
-    "descricao": "ESCADA  DURALUMINIO MOD. TREPADEIRA TR-175 C/6 DGS. MAIS PLATAFORMA"
-  },
-  {
-    "codigo": "4.09.000000TR300",
-    "descricao": "ESCADA  DURALUMINIO MOD. TREPADEIRA TR-300 C/11 DGS. MAIS PLATAFORMA ALUSTAR"
-  },
-  {
-    "codigo": "4.09.000000TXT10",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T10"
-  },
-  {
-    "codigo": "4.09.000000TXT15",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T15"
-  },
-  {
-    "codigo": "4.09.000000TXT20",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T20"
-  },
-  {
-    "codigo": "4.09.000000TXT25",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T25"
-  },
-  {
-    "codigo": "4.09.000000TXT27",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T27"
-  },
-  {
-    "codigo": "4.09.000000TXT30",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T30"
-  },
-  {
-    "codigo": "4.09.000000TXT40",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T40"
-  },
-  {
-    "codigo": "4.09.000000TXT45",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T45"
-  },
-  {
-    "codigo": "4.09.000000TXT50",
-    "descricao": "CHAVE L TIPO TORX COM GUIA 6 PONTAS - T50"
-  },
-  {
     "codigo": "4.09.00000100000",
     "descricao": "LANTERNA DE LED RECARREGAVEL REF. 1300mAH"
   },
   {
     "codigo": "4.09.00000100033",
     "descricao": "BANQUETA MECANICO ASSENTO GIRATORIO"
+  },
+  {
+    "codigo": "4.09.00000100070",
+    "descricao": "BASE MAGNETICA P/ TORK ANGULAR - RAVEN"
   },
   {
     "codigo": "4.09.00000100300",
@@ -4974,6 +8086,10 @@
   {
     "codigo": "4.09.00000101439",
     "descricao": "BOLSA LONA 550X400X200MM CG–445 CARBOG"
+  },
+  {
+    "codigo": "4.09.00000102400",
+    "descricao": "CARRINHO SUPORTE PARA CAIXA MARCHA VW"
   },
   {
     "codigo": "4.09.00000102600",
@@ -5008,10 +8124,6 @@
     "descricao": "JG CH ESTRIA 6-32 MM 12PCS"
   },
   {
-    "codigo": "4.09.00000115121",
-    "descricao": "TRIPE P/REFLETOR AJUSTAV SLP–TP1 SOLVER"
-  },
-  {
     "codigo": "4.09.00000115136",
     "descricao": "REFLETOR PORT RECARR 10W PRO SLP501 SOLV"
   },
@@ -5037,7 +8149,7 @@
   },
   {
     "codigo": "4.09.00000127516",
-    "descricao": "REDUÇAO 1 X 3/4 2132 GEDORE  REF.127516"
+    "descricao": "REDUÇAO 1 X 3/4 2132 GEDORE REF.127516"
   },
   {
     "codigo": "4.09.00000131154",
@@ -5104,16 +8216,12 @@
     "descricao": "CARREGADOR BATER 90AH/12V"
   },
   {
-    "codigo": "4.09.00000171019",
-    "descricao": "CARREGADOR BATER 150AH/12V/24V"
-  },
-  {
     "codigo": "4.09.00000175919",
     "descricao": "CARRINHO PARA TRANSPORTAR CILINDRO DE OXIGENIO / ACETILENO CAP. 2 CILINDROS G"
   },
   {
     "codigo": "4.09.00000178178",
-    "descricao": "CHAVE COMB 1  7/8 GEDORE"
+    "descricao": "CHAVE COMB 1 7/8 GEDORE"
   },
   {
     "codigo": "4.09.00000191116",
@@ -5140,16 +8248,12 @@
     "descricao": "SOQUETE SEXTAVADO DE 1/2\" DE 29/32\" - REF. GEDORE 19 - 29/32\""
   },
   {
-    "codigo": "4.09.000002000MM",
-    "descricao": "CANETA PVC ABERTA HD-2P 30X030X2000MM HELFER: 4.09.2000MM"
-  },
-  {
     "codigo": "4.09.00000200144",
     "descricao": "CARRO SOLDA 2 CILIND GRANDE 600X250X1500"
   },
   {
     "codigo": "4.09.00000200215",
-    "descricao": "CHUMBADOR CBA 3/8\"  X 110 C/ PRISIONEIRO 4.000 PC X 3.4"
+    "descricao": "CHUMBADOR CBA 3/8\" X 110 C/ PRISIONEIRO 4.000 PC X 3.4"
   },
   {
     "codigo": "4.09.00000202002",
@@ -5160,12 +8264,32 @@
     "descricao": "MOTO ESMERIL 360W - 220V"
   },
   {
+    "codigo": "4.09.00000204021",
+    "descricao": "MACHO AR SERI MF 10-1,0 2P DO E105 DORMER"
+  },
+  {
+    "codigo": "4.09.00000205966",
+    "descricao": "MACHO AR SERI UNF 1/4 2P DOR E111 DORMER"
+  },
+  {
+    "codigo": "4.09.00000206046",
+    "descricao": "LIMA DE ROSCA \"M\""
+  },
+  {
+    "codigo": "4.09.00000206048",
+    "descricao": "LIMA DE ROSCA \"P\""
+  },
+  {
     "codigo": "4.09.00000206128",
     "descricao": "ALIC B M CAN RETO 6.1/2 VDE8132-160H"
   },
   {
     "codigo": "4.09.00000206336",
     "descricao": "MACHO MANUAL AR BSW 1 - 8F"
+  },
+  {
+    "codigo": "4.09.00000206340",
+    "descricao": "ESPATULA DE AÇO CABO DE MADEIRA 80 MM"
   },
   {
     "codigo": "4.09.00000206410",
@@ -5180,16 +8304,12 @@
     "descricao": "CHAVE DE IMP. PN 1POL LONGA - 320KGM C/ KIT PRO - 190"
   },
   {
-    "codigo": "4.09.000002100SD",
-    "descricao": "MEDIDOR DIGITAL P/ OLEO 2100S-D SAMOA"
-  },
-  {
     "codigo": "4.09.00000219056",
     "descricao": "ALICATE PARA ANEL EXTERNO BICO CURVO 9\""
   },
   {
     "codigo": "4.09.00000222263",
-    "descricao": "CHAVE COMB   2 GEDORE"
+    "descricao": "CHAVE COMB 2 GEDORE"
   },
   {
     "codigo": "4.09.00000224255",
@@ -5208,12 +8328,24 @@
     "descricao": "LAV PRES 2400LB 5CV 220V TRIF WAP"
   },
   {
+    "codigo": "4.09.00000234402",
+    "descricao": "JOGO DE SOQUETE EM POLEGADAS ENCAIXE 1/4'' DE 3/16 A 1/2\""
+  },
+  {
     "codigo": "4.09.00000235681",
     "descricao": "FRESADORA ERKAT MODELO ER50"
   },
   {
+    "codigo": "4.09.000248011BR",
+    "descricao": "ALAVANCA PARA MECANICO REF: BELZER 36011"
+  },
+  {
     "codigo": "4.09.00000251162",
     "descricao": "CARRO AJUD FECH 3G 65X41X85 C06 AZUL"
+  },
+  {
+    "codigo": "4.09.00000255023",
+    "descricao": "TORQUIMETRO DE 50 A 250 NM ENCAIXE DE 1/2 (REF:BELZER MOD.1025BR)"
   },
   {
     "codigo": "4.09.00000257886",
@@ -5228,8 +8360,8 @@
     "descricao": "PAQUIMETRO UNIV 200MM"
   },
   {
-    "codigo": "4.09.00000260135",
-    "descricao": "PAQUIMETRO SERV PESAD 500MM"
+    "codigo": "4.09.00000260310",
+    "descricao": "MALA PARA FERRAMENTAS DE VIAGEM E ELETRTONICA"
   },
   {
     "codigo": "4.09.00000293041",
@@ -5241,7 +8373,7 @@
   },
   {
     "codigo": "4.09.00000308490",
-    "descricao": "CHAVE DE IMPACTO  1\"X 260 LONGA"
+    "descricao": "CHAVE DE IMPACTO 1\"X 260 LONGA"
   },
   {
     "codigo": "4.09.00000308491",
@@ -5252,12 +8384,52 @@
     "descricao": "CHAVE IMPACTO BATERIA 3/4"
   },
   {
+    "codigo": "4.09.00000329016",
+    "descricao": "EXTENSÃO LONGA 3/4"
+  },
+  {
     "codigo": "4.09.00000333333",
     "descricao": "SOQUETE 33MM SEXTAVADO DE IMPACTO COM ENCAIXE DE 1 PO REF: 4.09.333333"
   },
   {
     "codigo": "4.09.00000345554",
     "descricao": "CHAVE DE VELA - 1/2 x 13/16"
+  },
+  {
+    "codigo": "4.09.000346623DG",
+    "descricao": "TORQUIMETRO DE ESTALO COM ENCAIXE DE 3/4\" 200 A 1000Nm REF. KINGTONY-346623DG"
+  },
+  {
+    "codigo": "4.09.00000353108",
+    "descricao": "BROCA AR PAR 338 5,0 MM DOR A114 DORMER"
+  },
+  {
+    "codigo": "4.09.00000353205",
+    "descricao": "BROCA AR PAR 338 5,0 MM DOR A114 DORMER"
+  },
+  {
+    "codigo": "4.09.00000353302",
+    "descricao": "BROCA AR PAR 338 6,0 MM DOR A114 DORMER"
+  },
+  {
+    "codigo": "4.09.00000353400",
+    "descricao": "BROCA AR PAR 338 7,0 MM DOR A114 DORMER"
+  },
+  {
+    "codigo": "4.09.00000353507",
+    "descricao": "BROCA AR PAR 338 8,0 MM DOR A114 DORMER"
+  },
+  {
+    "codigo": "4.09.00000353604",
+    "descricao": "BROCA AR PAR 338 9,0 MM DOR A114 DORMER"
+  },
+  {
+    "codigo": "4.09.00000353701",
+    "descricao": "BROCA AR PAR 338 10,0 MM DOR A114 DORMER"
+  },
+  {
+    "codigo": "4.09.00000353906",
+    "descricao": "BROCA AR PAR 338 12,0 MM DOR A114 DORMER"
   },
   {
     "codigo": "4.09.00000357921",
@@ -5278,6 +8450,10 @@
   {
     "codigo": "4.09.00000386880",
     "descricao": "VARREDEIRA S650"
+  },
+  {
+    "codigo": "4.09.00000400120",
+    "descricao": "CALIBRE FOLGA 0,05-1,0M 20L"
   },
   {
     "codigo": "4.09.00000400288",
@@ -5322,10 +8498,6 @@
   {
     "codigo": "4.09.00000400994",
     "descricao": "JOGO DE BROCAS REF COFERMETA.: 400994"
-  },
-  {
-    "codigo": "4.09.00000400KGF",
-    "descricao": "MANOMETRO INDUSTRIAL 0-400KGF/6000PSI COM ROSCA DE 1/2\" REF. TECNO MM400KGF6KPSI"
   },
   {
     "codigo": "4.09.00000401011",
@@ -5476,10 +8648,6 @@
     "descricao": "PISTOLA DE PINTURA ALFA 5"
   },
   {
-    "codigo": "4.09.00000500006",
-    "descricao": "(USADO) GUINCHO COLUNA TALHA ELETRICA 220V 3000KG"
-  },
-  {
     "codigo": "4.09.00000500007",
     "descricao": "CHAVE DE BASCULA - PN 1862466"
   },
@@ -5521,15 +8689,7 @@
   },
   {
     "codigo": "4.09.00000500019",
-    "descricao": "SERRA COPO 17 MM = 11/16  HSS BI-METAL"
-  },
-  {
-    "codigo": "4.09.00000500020",
-    "descricao": "(USADO) MACACO  12 TONELADAS"
-  },
-  {
-    "codigo": "4.09.00000500021",
-    "descricao": "TALHA MANUAL 3 TONELADAS"
+    "descricao": "SERRA COPO 17 MM = 11/16 HSS BI-METAL"
   },
   {
     "codigo": "4.09.00000500022",
@@ -5572,12 +8732,8 @@
     "descricao": "LAMINA SERRA TICO-TICO T 118 G"
   },
   {
-    "codigo": "4.09.00000500032",
-    "descricao": "TORQUES DE ARMADOR"
-  },
-  {
     "codigo": "4.09.00000500033",
-    "descricao": "CORTADOR  FILTRO OLEO"
+    "descricao": "CORTADOR FILTRO OLEO"
   },
   {
     "codigo": "4.09.00000500034",
@@ -5644,10 +8800,6 @@
     "descricao": "(USADO) LIXADEIRA ANGULAR 7"
   },
   {
-    "codigo": "4.09.00000500050",
-    "descricao": "(USADO) BOMBA MANUAL DE OLEO PARA TAMBORES 50 A 200 LITROS"
-  },
-  {
     "codigo": "4.09.00000500051",
     "descricao": "BROCA 8,5 MM"
   },
@@ -5657,7 +8809,7 @@
   },
   {
     "codigo": "4.09.00000500053",
-    "descricao": "CHAVE RODA 32 MM  PN 21045767"
+    "descricao": "CHAVE RODA 32 MM PN 21045767"
   },
   {
     "codigo": "4.09.00000500054",
@@ -5693,7 +8845,7 @@
   },
   {
     "codigo": "4.09.00000500062",
-    "descricao": "CHAVE FIXA UMA BOCA 55MM -  894 GEDORE"
+    "descricao": "CHAVE FIXA UMA BOCA 55MM - 894 GEDORE"
   },
   {
     "codigo": "4.09.00000500063",
@@ -5701,15 +8853,15 @@
   },
   {
     "codigo": "4.09.00000500064",
-    "descricao": "SERRA COPO 114MM = 4.1/2  HSS BI-METAL"
+    "descricao": "SERRA COPO 114MM = 4.1/2 HSS BI-METAL"
   },
   {
     "codigo": "4.09.00000500065",
-    "descricao": "SERRA COPO 14 MM = 9/16  HSS BI-METAL"
+    "descricao": "SERRA COPO 14 MM = 9/16 HSS BI-METAL"
   },
   {
     "codigo": "4.09.00000500066",
-    "descricao": "CHAVE FIXA UMA BOCA 60MM  - 894 GEDORE"
+    "descricao": "CHAVE FIXA UMA BOCA 60MM - 894 GEDORE"
   },
   {
     "codigo": "4.09.00000500067",
@@ -5745,7 +8897,7 @@
   },
   {
     "codigo": "4.09.00000500075",
-    "descricao": "MARTELO DE BOLA  1KG"
+    "descricao": "MARTELO DE BOLA 1KG"
   },
   {
     "codigo": "4.09.00000500076",
@@ -5793,11 +8945,11 @@
   },
   {
     "codigo": "4.09.00000500087",
-    "descricao": "SOQUETE PERFIL TORX  E12MM ENCAIXE 1/2"
+    "descricao": "SOQUETE PERFIL TORX E12MM ENCAIXE 1/2"
   },
   {
     "codigo": "4.09.00000500088",
-    "descricao": "SOQUETE PERFIL TORX  E14MM ENCAIXE 1/2"
+    "descricao": "SOQUETE PERFIL TORX E14MM ENCAIXE 1/2"
   },
   {
     "codigo": "4.09.00000500089",
@@ -5805,7 +8957,7 @@
   },
   {
     "codigo": "4.09.00000500090",
-    "descricao": "BICO DE CONTATO 1.0  REBAIXADO SOLDA MG"
+    "descricao": "BICO DE CONTATO 1.0 REBAIXADO SOLDA MG"
   },
   {
     "codigo": "4.09.00000500091",
@@ -5841,7 +8993,7 @@
   },
   {
     "codigo": "4.09.00000500099",
-    "descricao": "CHAVE TARRACHA  FEMEA ROSCA EXTERNA"
+    "descricao": "CHAVE TARRACHA FEMEA ROSCA EXTERNA"
   },
   {
     "codigo": "4.09.00000500100",
@@ -5849,7 +9001,7 @@
   },
   {
     "codigo": "4.09.00000500101",
-    "descricao": "CHAVE DE RODA 28MM  X 38MM"
+    "descricao": "CHAVE DE RODA 28MM X 38MM"
   },
   {
     "codigo": "4.09.00000500102",
@@ -5905,7 +9057,7 @@
   },
   {
     "codigo": "4.09.00000500115",
-    "descricao": "SERRA COPO 38MM = 1.1/2  HSS BI-METAL"
+    "descricao": "SERRA COPO 38MM = 1.1/2 HSS BI-METAL"
   },
   {
     "codigo": "4.09.00000500116",
@@ -5937,11 +9089,11 @@
   },
   {
     "codigo": "4.09.00000500123",
-    "descricao": "SOQUETE SEXTAVADO 1.9/16  ENCAIXE 3/4"
+    "descricao": "SOQUETE SEXTAVADO 1.9/16 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500124",
-    "descricao": "SOQUETE SEXTAVADO 1.3/16  ENCAIXE 3/4"
+    "descricao": "SOQUETE SEXTAVADO 1.3/16 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500125",
@@ -5953,11 +9105,11 @@
   },
   {
     "codigo": "4.09.00000500127",
-    "descricao": "SOQUETE SEXTAVADO 1.7/8  ENCAIXE 1"
+    "descricao": "SOQUETE SEXTAVADO 1.7/8 ENCAIXE 1"
   },
   {
     "codigo": "4.09.00000500128",
-    "descricao": "SOQUETE ESTRIADO 1.11/16  ENCAIXE  1"
+    "descricao": "SOQUETE ESTRIADO 1.11/16 ENCAIXE 1"
   },
   {
     "codigo": "4.09.00000500129",
@@ -5989,7 +9141,7 @@
   },
   {
     "codigo": "4.09.00000500136",
-    "descricao": "SOQUETE ESTRIADO 1.1/2  ENCAIXE 3/4"
+    "descricao": "SOQUETE ESTRIADO 1.1/2 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500137",
@@ -6009,7 +9161,7 @@
   },
   {
     "codigo": "4.09.00000500141",
-    "descricao": "SOQUETE ESTRIADO 1  ENCAIXE 3/4"
+    "descricao": "SOQUETE ESTRIADO 1 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500142",
@@ -6025,15 +9177,15 @@
   },
   {
     "codigo": "4.09.00000500145",
-    "descricao": "SOQUETE ESTRIADO 1.5/8  ENCAIXE 3/4"
+    "descricao": "SOQUETE ESTRIADO 1.5/8 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500146",
-    "descricao": "SOQUETE ESTRIADO 1.7/8  ENCAIXE 3/4"
+    "descricao": "SOQUETE ESTRIADO 1.7/8 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500147",
-    "descricao": "SERRA COPO 19MM = 3/4  HSS BI-METAL"
+    "descricao": "SERRA COPO 19MM = 3/4 HSS BI-METAL"
   },
   {
     "codigo": "4.09.00000500148",
@@ -6073,7 +9225,7 @@
   },
   {
     "codigo": "4.09.00000500157",
-    "descricao": "SOQUETE ESTRIADO 7/8  ENCAIXE 3/4"
+    "descricao": "SOQUETE ESTRIADO 7/8 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500158",
@@ -6101,7 +9253,7 @@
   },
   {
     "codigo": "4.09.00000500164",
-    "descricao": "SOQUETE ESTRIADO 1.1/16  ENCAIXE 3/4"
+    "descricao": "SOQUETE ESTRIADO 1.1/16 ENCAIXE 3/4"
   },
   {
     "codigo": "4.09.00000500165",
@@ -6145,7 +9297,7 @@
   },
   {
     "codigo": "4.09.00000500245",
-    "descricao": "CHAVE DE BATER ESTRIA  2´´"
+    "descricao": "CHAVE DE BATER ESTRIA 2´´"
   },
   {
     "codigo": "4.09.00000500255",
@@ -6257,7 +9409,7 @@
   },
   {
     "codigo": "4.09.00000500282",
-    "descricao": "CALIBRADOR DE PNEUS ANALOGICO  0-170 PSI"
+    "descricao": "CALIBRADOR DE PNEUS ANALOGICO 0-170 PSI"
   },
   {
     "codigo": "4.09.00000500283",
@@ -6481,7 +9633,7 @@
   },
   {
     "codigo": "4.09.00000500338",
-    "descricao": "CHAVE DE IMPACTO PNEUMÁTICA 3/4'' 1200Nm Mod.:AT-6607TK  - PUMA"
+    "descricao": "CHAVE DE IMPACTO PNEUMÁTICA 3/4'' 1200Nm Mod.:AT-6607TK - PUMA"
   },
   {
     "codigo": "4.09.00000500339",
@@ -6489,7 +9641,7 @@
   },
   {
     "codigo": "4.09.00000500340",
-    "descricao": "JOGO DE SOQUETE ESTRIADO 3/8\" COM 34 PEÇAS - PN 203403MPBJ  - BELZER"
+    "descricao": "JOGO DE SOQUETE ESTRIADO 3/8\" COM 34 PEÇAS - PN 203403MPBJ - BELZER"
   },
   {
     "codigo": "4.09.00000500341",
@@ -6614,10 +9766,6 @@
   {
     "codigo": "4.09.00000500371",
     "descricao": "TRENA LONGA 50 M X 12,5 MM SPARTA"
-  },
-  {
-    "codigo": "4.09.00000500372",
-    "descricao": "CHAVETA MEIA LUA"
   },
   {
     "codigo": "4.09.00000500373",
@@ -6773,7 +9921,7 @@
   },
   {
     "codigo": "4.09.00000500411",
-    "descricao": "RÉGUA DE BITOLA E SUPER ELEVAÇÃO  TGC- 1435MM"
+    "descricao": "RÉGUA DE BITOLA E SUPER ELEVAÇÃO TGC- 1435MM"
   },
   {
     "codigo": "4.09.00000500412",
@@ -6797,11 +9945,11 @@
   },
   {
     "codigo": "4.09.00000500417",
-    "descricao": "LIMA  ROTATIVA CONICA"
+    "descricao": "LIMA ROTATIVA CONICA"
   },
   {
     "codigo": "4.09.00000500418",
-    "descricao": "LIMA  ROTATIVA PARALA"
+    "descricao": "LIMA ROTATIVA PARALA"
   },
   {
     "codigo": "4.09.00000500419",
@@ -6809,7 +9957,7 @@
   },
   {
     "codigo": "4.09.00000500420",
-    "descricao": "KIT PEÇAS PARA MANUTENÇÃO BASICA DA  MIW3"
+    "descricao": "KIT PEÇAS PARA MANUTENÇÃO BASICA DA MIW3"
   },
   {
     "codigo": "4.09.00000500422",
@@ -6817,7 +9965,7 @@
   },
   {
     "codigo": "4.09.00000500423",
-    "descricao": "MEDIDOR DE VIBRAÇAO DIGITAL  -  MV 690"
+    "descricao": "MEDIDOR DE VIBRAÇAO DIGITAL - MV 690"
   },
   {
     "codigo": "4.09.00000500424",
@@ -6869,7 +10017,7 @@
   },
   {
     "codigo": "4.09.00000500436",
-    "descricao": "MAQUINA DE SOLDA  INVERSORA (MIN. 400A)"
+    "descricao": "MAQUINA DE SOLDA INVERSORA (MIN. 400A)"
   },
   {
     "codigo": "4.09.00000500437",
@@ -7081,19 +10229,15 @@
   },
   {
     "codigo": "4.09.00000500618",
-    "descricao": "CARRO ESTEIRA  150 KG -900MM"
+    "descricao": "CARRO ESTEIRA 150 KG -900MM"
   },
   {
     "codigo": "4.09.00000500619",
-    "descricao": "SOQUETE  UNIVERSAL 2 POLOS"
+    "descricao": "SOQUETE UNIVERSAL 2 POLOS"
   },
   {
     "codigo": "4.09.00000500620",
     "descricao": "TESOURA PROFISSIONAL GIMAP 10'' PARA CORTE DE MANTA"
-  },
-  {
-    "codigo": "4.09.00000500621",
-    "descricao": "MULTIMETRO DIGITAL ET-1002 MINIPA"
   },
   {
     "codigo": "4.09.00000500622",
@@ -7109,11 +10253,11 @@
   },
   {
     "codigo": "4.09.00000500625",
-    "descricao": "SOQUETE  ALLEN CURTO 1/2X14MM"
+    "descricao": "SOQUETE ALLEN CURTO 1/2X14MM"
   },
   {
     "codigo": "4.09.00000500626",
-    "descricao": "SOQUETE  ALLEN CURTO 1/2X12MM"
+    "descricao": "SOQUETE ALLEN CURTO 1/2X12MM"
   },
   {
     "codigo": "4.09.00000500627",
@@ -7192,16 +10336,12 @@
     "descricao": "EXTENSAO CURTA ENCAIXE 1/2\" X 05"
   },
   {
-    "codigo": "4.09.00000500646",
-    "descricao": "EXTINTOR DE PÓ QUÍMICO ABC 1 KG"
-  },
-  {
     "codigo": "4.09.00000500647",
     "descricao": "EXTENSAO CURTA ENCAIXE 3/4\" X 08"
   },
   {
     "codigo": "4.09.00000500648",
-    "descricao": "ALICATE ANEL  BICO INTERNO RETO 7\""
+    "descricao": "ALICATE ANEL BICO INTERNO RETO 7\""
   },
   {
     "codigo": "4.09.00000500649",
@@ -7221,11 +10361,11 @@
   },
   {
     "codigo": "4.09.00000500653",
-    "descricao": "JOGO CHAVE TORQUE T09 A 150  10 PEÇAS LONGA"
+    "descricao": "JOGO CHAVE TORQUE T09 A 150 10 PEÇAS LONGA"
   },
   {
     "codigo": "4.09.00000500654",
-    "descricao": "JOGO ALLEN 1.5 A 10MM   9 PEÇAS  LONGA"
+    "descricao": "JOGO ALLEN 1.5 A 10MM 9 PEÇAS LONGA"
   },
   {
     "codigo": "4.09.00000500655",
@@ -7324,10 +10464,6 @@
     "descricao": "CHAVE PARA MANDRIL N3 5/8"
   },
   {
-    "codigo": "4.09.00000500679",
-    "descricao": "INTERRUPTOR DIFERENCIAL 4P 63A"
-  },
-  {
     "codigo": "4.09.00000500680",
     "descricao": "GRAVADOR VIBRAT"
   },
@@ -7345,7 +10481,7 @@
   },
   {
     "codigo": "4.09.00000500684",
-    "descricao": "CALIBRE PARA  UNIDADE INJETORA PDE SCANIA"
+    "descricao": "CALIBRE PARA UNIDADE INJETORA PDE SCANIA"
   },
   {
     "codigo": "4.09.00000500685",
@@ -7400,12 +10536,16 @@
     "descricao": "BROCA DE VIDEA BOSCH 12MM"
   },
   {
+    "codigo": "4.09.00000500698",
+    "descricao": "CONJUNTO MOVEL DE BRITAGEM E PENEIRAMENTO"
+  },
+  {
     "codigo": "4.09.00000500699",
     "descricao": "MAÇARICO DE SOLDA - SOLDOX 200W"
   },
   {
     "codigo": "4.09.00000500700",
-    "descricao": "LAVADORA DE ALTA PRESSAO - MODELO BL 1300 C   127 V - BRANCO"
+    "descricao": "LAVADORA DE ALTA PRESSAO - MODELO BL 1300 C 127 V - BRANCO"
   },
   {
     "codigo": "4.09.00000500701",
@@ -7413,7 +10553,7 @@
   },
   {
     "codigo": "4.09.00000500702",
-    "descricao": "PONTEIRO PARA ROMPEDOR 5011E  RAMMER"
+    "descricao": "PONTEIRO PARA ROMPEDOR 5011E RAMMER"
   },
   {
     "codigo": "4.09.00000500703",
@@ -7421,11 +10561,11 @@
   },
   {
     "codigo": "4.09.00000500704",
-    "descricao": "TORNO BANCADA INDRUSTRIAL  N10"
+    "descricao": "TORNO BANCADA INDRUSTRIAL N10"
   },
   {
     "codigo": "4.09.00000504450",
-    "descricao": "CHAVE DE BATER ESTRIA  1.3/4´´"
+    "descricao": "CHAVE DE BATER ESTRIA 1.3/4´´"
   },
   {
     "codigo": "4.09.00000519580",
@@ -7436,16 +10576,52 @@
     "descricao": "TORQUESA ARMADOR 12 POL. SAO ROMAO"
   },
   {
+    "codigo": "4.09.000530109B1",
+    "descricao": "PAQUIMETRO UNIVERSAL 150 MM / 6\""
+  },
+  {
+    "codigo": "4.09.00000530114",
+    "descricao": "PAQUIMETRO UNIVERSAL 300 MM / 12\""
+  },
+  {
+    "codigo": "4.09.000530560MM",
+    "descricao": "MARCADOR MILLE MHG2/5 3 0,5-60, 0MM C/100 AM HEL REF: 4.09.530560MM"
+  },
+  {
+    "codigo": "4.09.000540560MM",
+    "descricao": "MARCADOR MILLE.MHG2/5 4 0,5-6,0MM C/100 AM HEL FER:4.09540560MM"
+  },
+  {
+    "codigo": "4.09.000550560MM",
+    "descricao": "MARACDOR MILLR.MHG2/5 5 0,5-6,00MM C/100 AM HEL REF: 4.09.550560MM"
+  },
+  {
     "codigo": "4.09.00000555485",
-    "descricao": "BICO DE CONTATO 1.2  REBAIXADO SOLDA MG"
+    "descricao": "BICO DE CONTATO 1.2 REBAIXADO SOLDA MG"
   },
   {
     "codigo": "4.09.00000558123",
-    "descricao": "COMPRESSOR 15 180 LITROS 3HP 140 LBF  MARCA PRESSURE"
+    "descricao": "COMPRESSOR 15 180 LITROS 3HP 140 LBF MARCA PRESSURE"
+  },
+  {
+    "codigo": "4.09.000560560MM",
+    "descricao": "MARCADOR MILLE MHG2/5 6 0,5-6,0MM C/100 AM HEL REF:4.09.560560MM"
+  },
+  {
+    "codigo": "4.09.000570560MM",
+    "descricao": "MARCADOR MILLE.MHG2/5 7 5-6,0MM C/100 AH HEL REF:4.09.000570560MM"
+  },
+  {
+    "codigo": "4.09.000580560MM",
+    "descricao": "MARCADOR MILLE MHG.5 8 5-6,0MM C/100 AM HELL FER:4.09.580560MM"
+  },
+  {
+    "codigo": "4.09.000590560MM",
+    "descricao": "MARCADOR MILLE.MHG2/5 9 0,5-6,0MM C/100 AM HEL REF:4.09.000590560MM"
   },
   {
     "codigo": "4.09.00000599147",
-    "descricao": "SERRA COPO 76MM = 3  HSS BI-METAL"
+    "descricao": "SERRA COPO 76MM = 3 HSS BI-METAL"
   },
   {
     "codigo": "4.09.00000605000",
@@ -7492,8 +10668,68 @@
     "descricao": "LAVADORA DE ALTA PRESSAO KARCHER HD 6/15-4 MAXI- 220V"
   },
   {
+    "codigo": "4.09.00000665401",
+    "descricao": "JG. EXTRATOR PARAFUSO 2-11,0 MM - ADES"
+  },
+  {
+    "codigo": "4.09.00000666807",
+    "descricao": "VIRA MACHO 18,0 - 25,0 MM 5 ADES"
+  },
+  {
     "codigo": "4.09.00000678235",
     "descricao": "TRENA AÇO 3 METROS"
+  },
+  {
+    "codigo": "4.09.00000688029",
+    "descricao": "FURADEIRA BANCADA 5/8 FSB 110V"
+  },
+  {
+    "codigo": "4.09.00000750506",
+    "descricao": "TORNO BANCADA FIXO 5 33890/005"
+  },
+  {
+    "codigo": "4.09.00000758540",
+    "descricao": "ELETRODO 2.50X350MM 0K4600"
+  },
+  {
+    "codigo": "4.09.00000770892",
+    "descricao": "MAÇARICO DE CORTE"
+  },
+  {
+    "codigo": "4.09.00000770893",
+    "descricao": "MAÇARICO CORTE WHITE M C531N 90GR"
+  },
+  {
+    "codigo": "4.09.00000770894",
+    "descricao": "MAÇARICO CORTE CO-1500 90GR CONDOR"
+  },
+  {
+    "codigo": "4.09.00000770895",
+    "descricao": "BICO CORTE CONDOR 1502 N2 101002/101357"
+  },
+  {
+    "codigo": "4.09.00000770896",
+    "descricao": "BICO CORTE CONDOR 1502 N4 101004/101265"
+  },
+  {
+    "codigo": "4.09.00000770897",
+    "descricao": "BICO CORTE CONDOR 1502 N6 101005/101266"
+  },
+  {
+    "codigo": "4.09.00000770898",
+    "descricao": "BICO CORTE CONDOR 1502 N8 101006/101267"
+  },
+  {
+    "codigo": "4.09.00000770899",
+    "descricao": "BICO CORTE WHITE 1502 M2"
+  },
+  {
+    "codigo": "4.09.00000770900",
+    "descricao": "BICO CORTE WHITE 1502 M6"
+  },
+  {
+    "codigo": "4.09.00000770901",
+    "descricao": "BICO CORTE WHITE 1502 M8"
   },
   {
     "codigo": "4.09.00000770902",
@@ -7518,10 +10754,6 @@
   {
     "codigo": "4.09.00000795151",
     "descricao": "PISTOLA PINT SUCC DAIX PROD VOYLET EURO"
-  },
-  {
-    "codigo": "4.09.000008020G3",
-    "descricao": "BOMBA DE GRAXA LUBRIFICANTE MANUAL PARA 14 KGS 8020-G3 - BOZZA"
   },
   {
     "codigo": "4.09.00000807782",
@@ -7549,7 +10781,7 @@
   },
   {
     "codigo": "4.09.00000882842",
-    "descricao": "JUNTA UNIVERSAL IMP 3/4 GED  KB3295"
+    "descricao": "JUNTA UNIVERSAL IMP 3/4 GED KB3295"
   },
   {
     "codigo": "4.09.00000887847",
@@ -7557,7 +10789,7 @@
   },
   {
     "codigo": "4.09.00000888244",
-    "descricao": "EXTENSAO ENC 3/4 GED  8  3290"
+    "descricao": "EXTENSAO ENC 3/4 GED 8 3290"
   },
   {
     "codigo": "4.09.00000889522",
@@ -7566,10 +10798,6 @@
   {
     "codigo": "4.09.00000899999",
     "descricao": "FURADEIRA IMPACTO 220V"
-  },
-  {
-    "codigo": "4.09.000009000LD",
-    "descricao": "FILTRO REGULADOR 1/4\" P/PROPULSORA"
   },
   {
     "codigo": "4.09.00000903131",
@@ -7613,11 +10841,15 @@
   },
   {
     "codigo": "4.09.00000963500",
-    "descricao": "ENGATE RAP INT 1/4 X  1/4 F"
+    "descricao": "ENGATE RAP INT 1/4 X 1/4 F"
   },
   {
     "codigo": "4.09.00000966298",
     "descricao": "CAVALETE 14TON 520MM CP-35"
+  },
+  {
+    "codigo": "4.09.00000979724",
+    "descricao": "EXTRATOR DE VOLANTE F1000/L200 125001"
   },
   {
     "codigo": "4.09.00000982668",
@@ -7625,107 +10857,19 @@
   },
   {
     "codigo": "4.09.00000993506",
-    "descricao": "FERRAMENTA PARA COMPRESSÃO VALVULA  DE CABEÇOTE - RAVEN REF. 131004 / 131156"
+    "descricao": "FERRAMENTA PARA COMPRESSÃO VALVULA DE CABEÇOTE - RAVEN REF. 131004 / 131156"
+  },
+  {
+    "codigo": "4.09.000994758PC",
+    "descricao": "BRUNIDOR DE CAMISA CILINDRO - REF. 99475-8-PC"
   },
   {
     "codigo": "4.09.00000998466",
-    "descricao": "JOGO SOQUETE 3/8 COM  33PCS"
+    "descricao": "JOGO SOQUETE 3/8 COM 33PCS"
   },
   {
     "codigo": "4.09.00000999999",
     "descricao": "ESCADA TIPO TESOURA 5 DEGRAUS"
-  },
-  {
-    "codigo": "4.09.00000AJ7558",
-    "descricao": "ASPIRADOR PO E LIQUIDO 2800 W 75 L REF: AJ7558 JACTO CLEAN"
-  },
-  {
-    "codigo": "4.09.00000DR3862",
-    "descricao": "LIXADEIRA PNEUMATICA ROLOC 3 POL. REF: LDR2 4.09.DR3862"
-  },
-  {
-    "codigo": "4.09.00000DVS029",
-    "descricao": "PA ANTI FAISCA COM CABO DE MADEIRA"
-  },
-  {
-    "codigo": "4.09.00000ET1605",
-    "descricao": "MULTIMETRO DIGITAL MINIPA ET-1605"
-  },
-  {
-    "codigo": "4.09.00000FBS402",
-    "descricao": "MOTOBOMBA SUBMERCIVEL INDUSTRIAL FAMAC MODELO ( FBS40/2 TRIFASICO 3.0 CV )"
-  },
-  {
-    "codigo": "4.09.00000GSA300",
-    "descricao": "GRUPO SOCARIA DE AUTOPORTANTE GSA300"
-  },
-  {
-    "codigo": "4.09.00000HD613C",
-    "descricao": "PISTOLA PROFISSIONAL"
-  },
-  {
-    "codigo": "4.09.00000KB1932",
-    "descricao": "ADAPTADOR IMPACTO 1/2\" P 3/4\""
-  },
-  {
-    "codigo": "4.09.00000LAB475",
-    "descricao": "FONTE MIG LAB 475 AMPERES"
-  },
-  {
-    "codigo": "4.09.00000LUB18E",
-    "descricao": "CHAVE SACA FILTRO DE ÓLEO TIPO CINTA"
-  },
-  {
-    "codigo": "4.09.00000LUB440",
-    "descricao": "BOMBA DE GRAXA C/ COMPAC. 7KG LUMAGI"
-  },
-  {
-    "codigo": "4.09.00000M14020",
-    "descricao": "MACHO MANUAL AR M 14,0 – 2,0 3P HWM"
-  },
-  {
-    "codigo": "4.09.00000M20025",
-    "descricao": "MACHO MANUAL AR M 20,0 – 2,5 3P HWM"
-  },
-  {
-    "codigo": "4.09.00000M24030",
-    "descricao": "MACHO MANUAL AR M 24,0 – 3,0 3P HWM"
-  },
-  {
-    "codigo": "4.09.00000MALAJB",
-    "descricao": "MALA FERRAMENTAS"
-  },
-  {
-    "codigo": "4.09.00000MC1000",
-    "descricao": "MACACO HIDRAULICO PARA CAIXA DE CAMBIO 1 TON REF. BOVENAU MC-1000"
-  },
-  {
-    "codigo": "4.09.00000MT2001",
-    "descricao": "DESMONTADORA DE PNEUS DE CAMINHÃO"
-  },
-  {
-    "codigo": "4.09.00000MT5000",
-    "descricao": "MACACO HIDRAULICO MT 5000 - MT 50 TON"
-  },
-  {
-    "codigo": "4.09.00000PL2000",
-    "descricao": "LANTERNA DE SEGURANCA INTRISECAMENTE SEGURA REF: PL2000"
-  },
-  {
-    "codigo": "4.09.00000RM0003",
-    "descricao": "MACACO TIPO JACARE 5 TON - LONGO REF. REBEIRO RM0003"
-  },
-  {
-    "codigo": "4.09.00000SKIL01",
-    "descricao": "FURADEIRA DE IMPACTO"
-  },
-  {
-    "codigo": "4.09.00000TPH600",
-    "descricao": "TRANSPORTADOR E POSICIONADOR HIDRAULICO DE PNEU 600KG"
-  },
-  {
-    "codigo": "4.09.00000WF3000",
-    "descricao": "BOMBA SUBMERSA WF 3000 MOTOR AQUÁRIO LAGO FONTE ELEVA 3 METR."
   },
   {
     "codigo": "4.09.00001006096",
@@ -7768,10 +10912,6 @@
     "descricao": "JOGO FERRAMENTAS COM 150PCS MM E POL ST09510SJ SATA"
   },
   {
-    "codigo": "4.09.00001034503",
-    "descricao": "ALICATE CORTE MODELO SUECO 8314-140JC"
-  },
-  {
     "codigo": "4.09.00001038439",
     "descricao": "MACACO HID. PNEUMATICO 30,0T MTP-30M P/MOLEIRO"
   },
@@ -7786,10 +10926,6 @@
   {
     "codigo": "4.09.00001078754",
     "descricao": "PINGADEIRA 24 LITROS C/3 FUNIS 1010-CF-G2 BOZZA"
-  },
-  {
-    "codigo": "4.09.00001082192",
-    "descricao": "MACACO HIDRAULICO JACARE 10 TONELADAS"
   },
   {
     "codigo": "4.09.00001084486",
@@ -7810,18 +10946,6 @@
   {
     "codigo": "4.09.00001092619",
     "descricao": "CARRO HIDR.PALET. 2,OT 1150X685MM CSV206 RODA NYLON SIMPLES 6889200685"
-  },
-  {
-    "codigo": "4.09.00001094500",
-    "descricao": "MULTIMETRO DIGIT.ET-1000"
-  },
-  {
-    "codigo": "4.09.000011020G2",
-    "descricao": "PROPULSORA PNEUMATICA 30 KG PARA GRAXA COM BALDE + ACESSÓRIOS REF. BOZZA 11020-G2"
-  },
-  {
-    "codigo": "4.09.000011030G2",
-    "descricao": "PROPULSORA PNEUMATICA 20 KG PARA GRAXA PARA BALDE + CARRINHO + ACESSORIO REF. BOZZA 11030-G2"
   },
   {
     "codigo": "4.09.00001104238",
@@ -7845,11 +10969,23 @@
   },
   {
     "codigo": "4.09.00001600045",
-    "descricao": "HASTE T-45 MF  3660 REF:1600045"
+    "descricao": "HASTE T-45 MF 3660 REF:1600045"
   },
   {
     "codigo": "4.09.00001622002",
     "descricao": "FURADEIRA C/ BASE MAGNÉTICA 1200W 50MM"
+  },
+  {
+    "codigo": "4.09.00001690698",
+    "descricao": "ESMERILHADEIRA ANG.7' GA7020 - 110V"
+  },
+  {
+    "codigo": "4.09.00001699181",
+    "descricao": "GARRA DE BATERIA GA 200 PRETA KITA-KITA"
+  },
+  {
+    "codigo": "4.09.00001699199",
+    "descricao": "GARRA DE BATERIA GA 200 VERMELHA KITA-KITA"
   },
   {
     "codigo": "4.09.00001699200",
@@ -7860,6 +10996,14 @@
     "descricao": "ESCADA FIXA ESCAMOTEÁVEL COM 2 DEGRAUS PARA CAMINHÃO"
   },
   {
+    "codigo": "4.09.00001700359",
+    "descricao": "CARREGADOR DE BATERIA"
+  },
+  {
+    "codigo": "4.09.00001700707",
+    "descricao": "TESTE PARA BATERIA TB 200AFSO DE 36A H ATÉ 150A H"
+  },
+  {
     "codigo": "4.09.00001753700",
     "descricao": "KIT DE REPARO ELETRICO DEUTSCH REF: SOTREQ 4.09.175-3700"
   },
@@ -7868,16 +11012,20 @@
     "descricao": "ALICATE FECHAR TRAVA RETO 7\" 1864053 VISE-GRIP"
   },
   {
-    "codigo": "4.09.00001999400",
-    "descricao": "LONA POLIETILENO AZUL 6X5MT 200 MICRAS"
-  },
-  {
     "codigo": "4.09.00002000006",
     "descricao": "COROA DE BOTON 3”1/2 T-45 REF:2000006"
   },
   {
-    "codigo": "4.09.000020F1000",
-    "descricao": "MARRETA AÇO CABO FIBRA 1,0KG GEDORE"
+    "codigo": "4.09.00002031744",
+    "descricao": "MOTOR WEG CV MONOF.P2 60HZ"
+  },
+  {
+    "codigo": "4.09.00002035723",
+    "descricao": "MOTO ESMERIL BANCA 2CV TRIF 220V MT-200"
+  },
+  {
+    "codigo": "4.09.00002064146",
+    "descricao": "MACHO MANUAL AR M 30,0 - 3,5 3P"
   },
   {
     "codigo": "4.09.00002334054",
@@ -7885,7 +11033,7 @@
   },
   {
     "codigo": "4.09.00002362500",
-    "descricao": "MICROTUBO M16X2  1/4\""
+    "descricao": "MICROTUBO M16X2 1/4\""
   },
   {
     "codigo": "4.09.00002400106",
@@ -7896,6 +11044,10 @@
     "descricao": "BOMBA TRANSF OLEO TAMB 7801M BOZZA"
   },
   {
+    "codigo": "4.09.00002589834",
+    "descricao": "PROPULSORA PNEUMÁTICA C/T 4050 200KG 14800"
+  },
+  {
     "codigo": "4.09.00002900025",
     "descricao": "PUNHO HL 600 T-45 REF: 2900025"
   },
@@ -7904,16 +11056,16 @@
     "descricao": "TORQUIMETRO DE ESTALO COM CATRACA REVERSIVEL 300-1500 Nm - ENCAIXE 1''"
   },
   {
+    "codigo": "4.09.00003004856",
+    "descricao": "MANOMETRO FILTRO REG/LUB"
+  },
+  {
     "codigo": "4.09.00003338105",
     "descricao": "TALHADEIRA 22 MM REF. GEDORE 352 - 22"
   },
   {
     "codigo": "4.09.00003469200",
     "descricao": "TORQUIMETRO ESTALO ENC 3/4 100-500NN 44506/401"
-  },
-  {
-    "codigo": "4.09.0000352HS19",
-    "descricao": "TALHADEIRA C/EMPUNHADURA 250 X19MM"
   },
   {
     "codigo": "4.09.00004001732",
@@ -7932,12 +11084,20 @@
     "descricao": "CHAVE GRIFO 18 HEAVY DUTY"
   },
   {
+    "codigo": "4.09.00005001102",
+    "descricao": "MÁQUINA DE CORTAR FERRO 12'- POLICORT"
+  },
+  {
     "codigo": "4.09.00005005590",
     "descricao": "CHAVE FIXA DE BATER 46MM"
   },
   {
     "codigo": "4.09.00005005591",
-    "descricao": "CHAVE DE BATER ESTRIA  1.1/8´´"
+    "descricao": "CHAVE DE BATER ESTRIA 1.1/8´´"
+  },
+  {
+    "codigo": "4.09.00005050502",
+    "descricao": "PORTA ELETRODO 300/500A"
   },
   {
     "codigo": "4.09.00005050503",
@@ -7956,20 +11116,16 @@
     "descricao": "SOQUETE EXTRIADO DE 3/4\" DE 1.7/8\" REF. GEDORE D 32 - 1.7/8\""
   },
   {
-    "codigo": "4.09.000050LT303",
-    "descricao": "COLETOR DE OLEO C/ CARRINHO 50 LT 303 JACTOIL"
+    "codigo": "4.09.005448314NV",
+    "descricao": "DETECTOR DE GAS MULTI PRO LEL/O2/CO/H2S"
   },
   {
     "codigo": "4.09.00005478521",
-    "descricao": "CHAVE DE BATER ESTRIA  2.1/4"
+    "descricao": "CHAVE DE BATER ESTRIA 2.1/4"
   },
   {
     "codigo": "4.09.00005478532",
     "descricao": "CAMBÃO PARA REBOQUE (EMPILHADEIRAS DE 50VX A 70VX)"
-  },
-  {
-    "codigo": "4.09.000059560MM",
-    "descricao": "MARCADR MILLE.MHG 5 9 5-6,0MM C/100 AM HEL REF:4.09.000059560MM"
   },
   {
     "codigo": "4.09.00006428884",
@@ -8012,6 +11168,10 @@
     "descricao": "CHAVE AJUST.P/PORCA 8\"ABER.26MM OXIDO 213008BX BELZER"
   },
   {
+    "codigo": "4.09.0007250130Z",
+    "descricao": "CONTAINER DE SEGURANCA TIPO II COM MANGUEIRA 1 POL"
+  },
+  {
     "codigo": "4.09.00007295227",
     "descricao": "ELETRODO INOX E308l - 17/6130 2,00 P/204/308 2KG 0302014 ESAB"
   },
@@ -8024,24 +11184,16 @@
     "descricao": "EXTRATOR HIDR.3G 200X105MM 8565 040450 040450 8565-4 HSP1L GEDORE"
   },
   {
-    "codigo": "4.09.00007777219",
-    "descricao": "MANG. HIDRAUL. SAE 100R7 AT 3/8 TEXTIL"
-  },
-  {
     "codigo": "4.09.00007889496",
     "descricao": "EXTENSÃO FLEX IMANTADA 450/01 050973"
   },
   {
+    "codigo": "4.09.00007902565",
+    "descricao": "MOTOR ESMERIL 0,5 CV MONF.110/220V"
+  },
+  {
     "codigo": "4.09.00007968710",
     "descricao": "CHAVE ALLEN JG. 0,7-10 E1/16-3/8 42-25MP 012107 012107 42-25MP GEDORE"
-  },
-  {
-    "codigo": "4.09.00008000A21",
-    "descricao": "ALICATE ABRIR TRAVA CURVO 6.3/4\" 8000A21"
-  },
-  {
-    "codigo": "4.09.00008000J21",
-    "descricao": "ALICATE FECHAR TRAVA CURVO 6.3/4\" 8000J21"
   },
   {
     "codigo": "4.09.00008294488",
@@ -8096,102 +11248,6 @@
     "descricao": "GUINCHO HID RODA NYLON 500KG"
   },
   {
-    "codigo": "4.09.0000BALANÇA",
-    "descricao": "BALANÇA"
-  },
-  {
-    "codigo": "4.09.0000BSP0400",
-    "descricao": "MANOMETRO 0 A 400 BAR ROSCA TRASEIRA DE 1/4 BSP"
-  },
-  {
-    "codigo": "4.09.0000D707045",
-    "descricao": "CHAVE DE IMPACTO 3/4"
-  },
-  {
-    "codigo": "4.09.0000DR34824",
-    "descricao": "MINI RETIFICA PNEUMATICA PINÇA DE 1/4  REF: LDR2"
-  },
-  {
-    "codigo": "4.09.0000ENX001F",
-    "descricao": "ENXADA PVC RIGIDO ANTIFAISCA C CABO DE MADEIRA"
-  },
-  {
-    "codigo": "4.09.0000ESMERIL",
-    "descricao": "MOTO ESMERIL MMI-50 MOTO MIL"
-  },
-  {
-    "codigo": "4.09.0000ETE7255",
-    "descricao": "SOQUETE ETE 7255"
-  },
-  {
-    "codigo": "4.09.0000GWS6115",
-    "descricao": "ESMERILHADEIRA ANGULAR 4.1/2\" 670 WATTS ROTAÇAO DE 11.000 RPM - GWS 6-115"
-  },
-  {
-    "codigo": "4.09.0000HD1215S",
-    "descricao": "MAQUINA LAVAR TRIFASICA 220V 2100PSI HD12/15S KARCHER"
-  },
-  {
-    "codigo": "4.09.0000IDS1000",
-    "descricao": "INJETOR DE SINAL E SIMULADOR DE SENSOR DE ROTAÇÃO"
-  },
-  {
-    "codigo": "4.09.0000LUB7000",
-    "descricao": "PROPULSORA PNEUMATICA DE GRAXA P/ TB COMPLETA C/ MANG 15MTS LUMAGI"
-  },
-  {
-    "codigo": "4.09.0000MA00002",
-    "descricao": "MACHO AR SERI MG 16-2,0 3PDO E100"
-  },
-  {
-    "codigo": "4.09.0000MGH2TPP",
-    "descricao": "GUINCHO HIDRAULICO 2 TON."
-  },
-  {
-    "codigo": "4.09.0000MIGMB26",
-    "descricao": "BICO MIG QM 1,2 MB 26 OXIMIG"
-  },
-  {
-    "codigo": "4.09.0000MOV0476",
-    "descricao": "CONTAINER MODULO DUPLO"
-  },
-  {
-    "codigo": "4.09.0000MOV0479",
-    "descricao": "CONTAINER MODULO ALMOXARIFADO TERMO ACUSTICO"
-  },
-  {
-    "codigo": "4.09.0000PLAT500",
-    "descricao": "ESCADA  PLATAFORMA 0,50M 01 DEGR + PLAT"
-  },
-  {
-    "codigo": "4.09.0000PLAT750",
-    "descricao": "ESCADA  PLATAFORMA 0,75M 02 DEGR + PLAT"
-  },
-  {
-    "codigo": "4.09.0000ROUTE66",
-    "descricao": "BANCADA FECHADA C/ 4 PORTAS ROUTE 66 RLL-213L ROTTERMAN (VIDE OBSERVAÇÃO)"
-  },
-  {
-    "codigo": "4.09.0000SHP5000",
-    "descricao": "SHAMPOOZEIRA ELETRONICA COM TEMPO AJUSTAVEL 220V REF: PLANATAC SHP5000"
-  },
-  {
-    "codigo": "4.09.0000STCAN01",
-    "descricao": "CANETA TESTE DE POLARIDADE"
-  },
-  {
-    "codigo": "4.09.0000TB7120D",
-    "descricao": "SOQUETE ESTRIADO 3/4\" X  5/8\" X 51MM"
-  },
-  {
-    "codigo": "4.09.0000TORK001",
-    "descricao": "TORQUIMETRO ESTALO 1/2  25  135 NM ROB 2550 / 13"
-  },
-  {
-    "codigo": "4.09.0000TRMS177",
-    "descricao": "MULTIMETRO DIGITAL AC/DC TRMS FLUKE 177"
-  },
-  {
     "codigo": "4.09.00010019710",
     "descricao": "GRAMPO TERRA CARBORAFITE FER: N-500 4.09.10019710"
   },
@@ -8216,10 +11272,6 @@
     "descricao": "TALHA MANUAL DE CORRENTE HOVAM"
   },
   {
-    "codigo": "4.09.000100AMHEL",
-    "descricao": "MARCADOR MILLE.MHG2/5 0 0,5-6,0MM C/100 AM HEL FER: 4.09.100AMHEL"
-  },
-  {
     "codigo": "4.09.00010119131",
     "descricao": "CAIXA,SUPERIOR,WKM,9 METROS"
   },
@@ -8228,8 +11280,16 @@
     "descricao": "CAIXA INFERIOR WKM 9 METROS"
   },
   {
+    "codigo": "4.09.010119483SP",
+    "descricao": "TRAVA 9M E 15M SRL UN"
+  },
+  {
     "codigo": "4.09.00010119715",
     "descricao": "ETIQUETA LOGO MSA"
+  },
+  {
+    "codigo": "4.09.010121513SP",
+    "descricao": "ROTULO INFERIOR DA CAIXA - WKM 9 MTS"
   },
   {
     "codigo": "4.09.00010250003",
@@ -8272,8 +11332,8 @@
     "descricao": "KIT DE FERRAMENTAS X16"
   },
   {
-    "codigo": "4.09.000248011BR",
-    "descricao": "ALAVANCA PARA MECANICO REF: BELZER 36011"
+    "codigo": "4.09.0024230220V",
+    "descricao": "ESMERILHADEIRA ANGULAR 9 POL 2400W GWA 4.09.24220V BOSCH"
   },
   {
     "codigo": "4.09.00026001013",
@@ -8282,10 +11342,6 @@
   {
     "codigo": "4.09.00029929784",
     "descricao": "KIT ABASTECIMENTO P/ ÓLEO LUBRIFICANTE"
-  },
-  {
-    "codigo": "4.09.0003010MH25",
-    "descricao": "CARRETEL MANUAL B.SIMPLES P/OLEO C/ 25MT MANGUEIRA"
   },
   {
     "codigo": "4.09.00034001004",
@@ -8302,10 +11358,6 @@
   {
     "codigo": "4.09.00034455040",
     "descricao": "TORQUIMETRO TORCOFIX 3/4 POL RAHSOL 75 400NM 4550 40"
-  },
-  {
-    "codigo": "4.09.000346623DG",
-    "descricao": "TORQUIMETRO DE ESTALO COM ENCAIXE DE 3/4\" 200 A 1000Nm REF. KINGTONY-346623DG"
   },
   {
     "codigo": "4.09.00035010149",
@@ -8336,10 +11388,6 @@
     "descricao": "MARRETA OIT 10KG CABO DE FIBRA 40721/020 - CABO PLASTICO"
   },
   {
-    "codigo": "4.09.000425DCTRI",
-    "descricao": "MÁQUINA DE SOLDA RETIFICADORA TRIFÁSICO 430A - BAMBOZZI-TRR2600S"
-  },
-  {
     "codigo": "4.09.00044027008",
     "descricao": "EXTRATOR 2G 200X290MM 44027/008 TRAMONTPRO"
   },
@@ -8356,32 +11404,8 @@
     "descricao": "EXTENSAO CURTA 3\" ENCAIXE 1/2\""
   },
   {
-    "codigo": "4.09.000530560MM",
-    "descricao": "MARCADOR MILLE MHG2/5 3 0,5-60, 0MM C/100 AM HEL REF: 4.09.530560MM"
-  },
-  {
-    "codigo": "4.09.000540560MM",
-    "descricao": "MARCADOR MILLE.MHG2/5 4 0,5-6,0MM C/100 AM HEL FER:4.09540560MM"
-  },
-  {
     "codigo": "4.09.00054785412",
-    "descricao": "CHAVE DE BATER ESTRIA  2.3/8"
-  },
-  {
-    "codigo": "4.09.000550560MM",
-    "descricao": "MARACDOR MILLR.MHG2/5 5 0,5-6,00MM C/100 AM HEL REF: 4.09.550560MM"
-  },
-  {
-    "codigo": "4.09.000560560MM",
-    "descricao": "MARCADOR MILLE MHG2/5 6 0,5-6,0MM C/100 AM HEL REF:4.09.560560MM"
-  },
-  {
-    "codigo": "4.09.000570560MM",
-    "descricao": "MARCADOR MILLE.MHG2/5 7 5-6,0MM C/100 AH HEL REF:4.09.000570560MM"
-  },
-  {
-    "codigo": "4.09.000580560MM",
-    "descricao": "MARCADOR MILLE MHG.5 8 5-6,0MM C/100 AM HELL FER:4.09.580560MM"
+    "descricao": "CHAVE DE BATER ESTRIA 2.3/8"
   },
   {
     "codigo": "4.09.00058468741",
@@ -8396,10 +11420,6 @@
     "descricao": "REBITADOR MANUAL 3/32 A 3/16"
   },
   {
-    "codigo": "4.09.000590560MM",
-    "descricao": "MARCADOR MILLE.MHG2/5 9 0,5-6,0MM C/100 AM HEL REF:4.09.000590560MM"
-  },
-  {
     "codigo": "4.09.00067005240",
     "descricao": "CH P TUBO AM ROBUST 061.550 1227-24\""
   },
@@ -8408,12 +11428,20 @@
     "descricao": "CHAVE DE FENDA/PHILLIPS 5 PEÇAS 150/160S 1/8X5A1/4X6\""
   },
   {
-    "codigo": "4.09.0007250130Z",
-    "descricao": "CONTAINER DE SEGURANCA TIPO II COM MANGUEIRA 1 POL"
-  },
-  {
     "codigo": "4.09.00077395105",
     "descricao": "ESPATULA CABO PLASTICO"
+  },
+  {
+    "codigo": "4.09.00082014000",
+    "descricao": "CAVADEIRA MANUAL"
+  },
+  {
+    "codigo": "4.09.00082014001",
+    "descricao": "BROCA AR 3MM"
+  },
+  {
+    "codigo": "4.09.00082014002",
+    "descricao": "CONJUNTO DE CAVALETES C/4 PEÇAS"
   },
   {
     "codigo": "4.09.00082014003",
@@ -8636,10 +11664,6 @@
     "descricao": "CHAVE CATRACA TELESCOPICA 1/2 (12)"
   },
   {
-    "codigo": "4.09.00099890941",
-    "descricao": "MULTIMETRO DIGITAL 10A AC/DC IND 1000V 77-4"
-  },
-  {
     "codigo": "4.09.00099890942",
     "descricao": "CHAVE FIXA UMA BOCA VDE 9 MM ISOLADA"
   },
@@ -8697,7 +11721,7 @@
   },
   {
     "codigo": "4.09.00099890956",
-    "descricao": "TRENA LASER  40M"
+    "descricao": "TRENA LASER 40M"
   },
   {
     "codigo": "4.09.00099890957",
@@ -8709,7 +11733,7 @@
   },
   {
     "codigo": "4.09.00099890959",
-    "descricao": "UNIDADE MOVEL FILTRAGEM OLEO 220V TRIF. VAZAO 45L/MIN  PRESSAO 3BAR C/FILTRO PRESSAO ABSOLUTO MFO-2"
+    "descricao": "UNIDADE MOVEL FILTRAGEM OLEO 220V TRIF. VAZAO 45L/MIN PRESSAO 3BAR C/FILTRO PRESSAO ABSOLUTO MFO-2"
   },
   {
     "codigo": "4.09.00099890960",
@@ -8797,7 +11821,7 @@
   },
   {
     "codigo": "4.09.00099890981",
-    "descricao": "LAVADORA  1500W220V K1 COMPACTA"
+    "descricao": "LAVADORA 1500W220V K1 COMPACTA"
   },
   {
     "codigo": "4.09.00099890982",
@@ -8961,7 +11985,7 @@
   },
   {
     "codigo": "4.09.00099891023",
-    "descricao": "MANOMETRO DE PRENSA  30 TONELADAS ROSCA 1/2"
+    "descricao": "MANOMETRO DE PRENSA 30 TONELADAS ROSCA 1/2"
   },
   {
     "codigo": "4.09.00099891024",
@@ -8981,7 +12005,7 @@
   },
   {
     "codigo": "4.09.00099891028",
-    "descricao": "GALAO METAL 5 LITROS GASOLINA  O,06MM"
+    "descricao": "GALAO METAL 5 LITROS GASOLINA O,06MM"
   },
   {
     "codigo": "4.09.00099891029",
@@ -9185,7 +12209,7 @@
   },
   {
     "codigo": "4.09.00099891079",
-    "descricao": "CH ESPECIAL ENC 3/4  P/PORC REDOND ARV PRIM CX RAVEN"
+    "descricao": "CH ESPECIAL ENC 3/4 P/PORC REDOND ARV PRIM CX RAVEN"
   },
   {
     "codigo": "4.09.00099891080",
@@ -9344,12 +12368,20 @@
     "descricao": "PROPULSORA PN GRAXA CAP 20KG C/RESERVAT/RODIZ 8596 BREMEN PRESSOL"
   },
   {
-    "codigo": "4.09.00099891119",
-    "descricao": "CORAL PISO CINZA MEDIO"
-  },
-  {
     "codigo": "4.09.00099891120",
     "descricao": "JOGO SOQUETE ENC.1/2\" SEXT. (10 A 32MM) 24 PCS GEDORE"
+  },
+  {
+    "codigo": "4.09.00099891121",
+    "descricao": "MACACO HIDRAULICO TIPO GARRAFA 32 TON"
+  },
+  {
+    "codigo": "4.09.00099891122",
+    "descricao": "CADEADO 30MM X 75MM"
+  },
+  {
+    "codigo": "4.09.00099891123",
+    "descricao": "PORTA CADEADO 4¨1/2 ZINCADO"
   },
   {
     "codigo": "4.09.00099980000",
@@ -9370,162 +12402,6 @@
   {
     "codigo": "4.09.00099980004",
     "descricao": "CHAVE SOQUETE IMPACTO ENC. 3/4\" X 36MM GEDORE"
-  },
-  {
-    "codigo": "4.09.000CIIR0026",
-    "descricao": "DISP DE SEGURANCA ANTICHICOTEAMENTO REF:CIIR0026"
-  },
-  {
-    "codigo": "4.09.000CL504020",
-    "descricao": "CAIXA P/M.0500X400X200MM CL504020 LUMIBRAS REF: 4.09.CL504020"
-  },
-  {
-    "codigo": "4.09.000CMT2CV2P",
-    "descricao": "LAVADORA CMT 2CV2P CARR.MA ZM 220/380V"
-  },
-  {
-    "codigo": "4.09.000CPO15024",
-    "descricao": "CANETA DE POLARIDADE 24V"
-  },
-  {
-    "codigo": "4.09.000DS703068",
-    "descricao": "SACA CUBO VW MAHLE"
-  },
-  {
-    "codigo": "4.09.000DS704042",
-    "descricao": "CHAVE TRAVA CUBO UNIVERSAL"
-  },
-  {
-    "codigo": "4.09.000DS800023",
-    "descricao": "SACA VENTIL R12/R134"
-  },
-  {
-    "codigo": "4.09.000DS800044",
-    "descricao": "ALICATE CORTE MANGUEIRA"
-  },
-  {
-    "codigo": "4.09.000DS800080",
-    "descricao": "CLIPADEIRA HIDRAULICA COMPLETA"
-  },
-  {
-    "codigo": "4.09.000EE007571",
-    "descricao": "CHAVE DE FENDA 3/8 X 6"
-  },
-  {
-    "codigo": "4.09.000EE110016",
-    "descricao": "REMOVEDOR E INSTALADOR DE PNEU AGRICOLA PEQ."
-  },
-  {
-    "codigo": "4.09.000FE004788",
-    "descricao": "JG SOQ EST 1/2 D19PMU 10MM 1.1/4 GE"
-  },
-  {
-    "codigo": "4.09.000FE007884",
-    "descricao": "SACA POLIA MINI 2G"
-  },
-  {
-    "codigo": "4.09.000FE044180",
-    "descricao": "PUNÇÃO CENTRO BEZ 120 X 5 MM 16400"
-  },
-  {
-    "codigo": "4.09.000FE062830",
-    "descricao": "ALGARISMO ACO 5 MM PLK-07"
-  },
-  {
-    "codigo": "4.09.000FE065935",
-    "descricao": "ALICATE BOMBA D' ÁGUA  12 IS"
-  },
-  {
-    "codigo": "4.09.000FE066965",
-    "descricao": "SOQUETE P/ VELA - 1/2 x 5/8"
-  },
-  {
-    "codigo": "4.09.000FE066971",
-    "descricao": "SOQUETE P/ VELA - 1/2 x 13/16"
-  },
-  {
-    "codigo": "4.09.000FE067685",
-    "descricao": "JOGO DE SOQUETE 1/2   - 8 - 32MM"
-  },
-  {
-    "codigo": "4.09.000FE068070",
-    "descricao": "SACA POLIA DE 2G DESLIZ TRAM 44025/018"
-  },
-  {
-    "codigo": "4.09.000FE068433",
-    "descricao": "ESPÁTULA P/ PNEU MED.: 608X19MM CHATA A-222"
-  },
-  {
-    "codigo": "4.09.000FE079983",
-    "descricao": "VACUOMETRO 30/760 MMHG VAC 001 PLANA"
-  },
-  {
-    "codigo": "4.09.000FE143734",
-    "descricao": "SERRA MANUAL (LÂMINA DE SERRA)"
-  },
-  {
-    "codigo": "4.09.000FE251160",
-    "descricao": "CARRO ESTEIRA MECANICO 85 X 42 X100 N1 100KG"
-  },
-  {
-    "codigo": "4.09.000HS35219E",
-    "descricao": "EMPUNHADURA P/TALHAD GED HS352–19E"
-  },
-  {
-    "codigo": "4.09.000K2001220",
-    "descricao": "SOLDADOR REVOLVER K 2001 220V"
-  },
-  {
-    "codigo": "4.09.000KB012E8L",
-    "descricao": "KOMBO DIAMANTADO ESFERICO PARA BOTOES DE 12MM"
-  },
-  {
-    "codigo": "4.09.000KB014E8L",
-    "descricao": "KOMBO DIAMANTADO ESFERICO PARA BOTOES DE 14MM"
-  },
-  {
-    "codigo": "4.09.000LAV2000I",
-    "descricao": "LAVADORA LAV-2000I 220V 1600LBS"
-  },
-  {
-    "codigo": "4.09.000MCDI3000",
-    "descricao": "COMPRESSIMETRO MOTOR A DIESEL REF: MCD/I-3000"
-  },
-  {
-    "codigo": "4.09.000MGMVLRAC",
-    "descricao": "4.09.000MGMVLRAC CONTAINER VAO LIVRE REVESTIDO DE AR CONDICIONADO MGM 037"
-  },
-  {
-    "codigo": "4.09.000ORIGO420",
-    "descricao": "MAQUINA DE SOLDA - RETIFICADOR ESAB MOD. ORIGO ARC 420 - COD. 406734 - TRIFÁSICA 220/380/440V"
-  },
-  {
-    "codigo": "4.09.000PARAFUSA",
-    "descricao": "PARAFUSADEIRA TRAMON"
-  },
-  {
-    "codigo": "4.09.000R6004506",
-    "descricao": "TORQUIMETRO C RELOGIO  3/4 R600 4506 ( GEDORE )"
-  },
-  {
-    "codigo": "4.09.000RI500166",
-    "descricao": "GARRAFA INJETORA DE FLUIDO R141B"
-  },
-  {
-    "codigo": "4.09.000RID10280",
-    "descricao": "CAMERA DE INSPEÇÃO DIGITAL SEESNAKE MICRO DE 9,5MM COM LED DE 2,5MM RIDGID 10280"
-  },
-  {
-    "codigo": "4.09.000SCHULZ01",
-    "descricao": "KIT FERRAMENTAS COM 160 PEÇAS (MARCA SCHULZ)"
-  },
-  {
-    "codigo": "4.09.000TB890016",
-    "descricao": "SOQUETE ESTRIADO 3/4\" X 16MM X 51MM"
-  },
-  {
-    "codigo": "4.09.000W5150K22",
-    "descricao": "KIT CHAVE DE IMPACTO 1/2\", C/ 2 BATERIA"
   },
   {
     "codigo": "4.09.00100000000",
@@ -9556,12 +12432,12 @@
     "descricao": "ESCAREGADOR DREMEL 107"
   },
   {
-    "codigo": "4.09.001313K4401",
-    "descricao": "HANDSET CURTIS 1313 OEM ACCESS 1313K-4401"
+    "codigo": "4.09.200000100KG",
+    "descricao": "BALANCA ELETRÔNICA P/GARRAFA DE GAS 100 KG"
   },
   {
-    "codigo": "4.09.0024230220V",
-    "descricao": "ESMERILHADEIRA ANGULAR 9 POL 2400W GWA 4.09.24220V BOSCH"
+    "codigo": "4.09.00272210700",
+    "descricao": "HAND SET (PALETEIRAS E MR16)"
   },
   {
     "codigo": "4.09.00296910550",
@@ -9572,32 +12448,32 @@
     "descricao": "ESMERILHADEIRA MOD. 4.1/2\" 1100W 220V"
   },
   {
+    "codigo": "4.09.00358124480",
+    "descricao": "REBITADOR MANUAL - ALFABETO DE AÇO 4 MM DISMA"
+  },
+  {
+    "codigo": "4.09.491192578GT",
+    "descricao": "MANGUEIRA 1/4, STR FEM,STR FEM"
+  },
+  {
     "codigo": "4.09.00500200260",
-    "descricao": "CAIXA DE FERRAMENTA TIPO SANFONADA C/ 7 GAVETAS  500x200x260 507F"
+    "descricao": "CAIXA DE FERRAMENTA TIPO SANFONADA C/ 7 GAVETAS 500x200x260 507F"
   },
   {
-    "codigo": "4.09.00526789100",
-    "descricao": "LIMPA CONTATO ELETRICO QM 200GR COD: 8526798100"
-  },
-  {
-    "codigo": "4.09.005448314NV",
-    "descricao": "DETECTOR DE GAS MULTI PRO LEL/O2/CO/H2S"
-  },
-  {
-    "codigo": "4.09.00580039669",
-    "descricao": "CHICOTE ADAPTADOR DO CANBUS"
+    "codigo": "4.09.00580039668",
+    "descricao": "CHICOTE"
   },
   {
     "codigo": "4.09.00582087557",
     "descricao": "CHICOTE DIAGNOSTICO NCEA - utilizar 3.01.00582087557"
   },
   {
-    "codigo": "4.09.00582114130",
-    "descricao": "CABO INTERFAC PROGRAMACAO DISPLAY"
-  },
-  {
     "codigo": "4.09.00582182400",
     "descricao": "COMPRESSOR SCHULZ PRATIC AIR CSV10/100 MONO"
+  },
+  {
+    "codigo": "4.09.00598356457",
+    "descricao": "MEDIDOR BANDA JUMBO C/ MOSTRADOR"
   },
   {
     "codigo": "4.09.00631114703",
@@ -9616,70 +12492,6 @@
     "descricao": "DENSIMETRO P/ BATERIA"
   },
   {
-    "codigo": "4.09.00AMAT4000V",
-    "descricao": "LAVADORA BRAVA"
-  },
-  {
-    "codigo": "4.09.00C100AMHEL",
-    "descricao": "MARCADOR MILLR.MHG2/5 2 0,5-6,0MM C/100 AM HEL REF: 4.09.C100AMHEL"
-  },
-  {
-    "codigo": "4.09.00C200AMHEL",
-    "descricao": "MARCADOR MILLE.MHG 2/5 1 0,5-6,0MM C/100 AM HEL"
-  },
-  {
-    "codigo": "4.09.00FE0415570",
-    "descricao": "ALICATE BOMBA D AGUA ISOL 9. 1/2"
-  },
-  {
-    "codigo": "4.09.00LAOS62437",
-    "descricao": "TAMPA OIL SAFE BICO LONGO AM LAOS 62437 REF: LAOS62437"
-  },
-  {
-    "codigo": "4.09.00LAOS63618",
-    "descricao": "BARRIL OIL SAFE 5L LAOS 63618 REF: LAOS 63618"
-  },
-  {
-    "codigo": "4.09.00LAOS66251",
-    "descricao": "BARRIL OIL SAFE 10 L LAOS 66251 REF: LAOS66251"
-  },
-  {
-    "codigo": "4.09.00MGMVLC001",
-    "descricao": "CONTAINER VÃO LIVRE COMUM MGM 001"
-  },
-  {
-    "codigo": "4.09.00MGMVLC067",
-    "descricao": "CONTAINER VÃO LIVRE COMUM MGM067"
-  },
-  {
-    "codigo": "4.09.00MGMVLC104",
-    "descricao": "CONTAINER VÃO LIVRE COMUM MGM 104 C/ PORTA MARITIMA"
-  },
-  {
-    "codigo": "4.09.00MGMVLC148",
-    "descricao": "CONTAINER ISOTERMICO"
-  },
-  {
-    "codigo": "4.09.00RI0120201",
-    "descricao": "MACARICO HESA 22 FUROS"
-  },
-  {
-    "codigo": "4.09.00ST11924ST",
-    "descricao": "PEGADOR TELESCOPIO COM IMA ST11924 ST SATA"
-  },
-  {
-    "codigo": "4.09.00ST1355100",
-    "descricao": "SOQUETE TORX ENCAIXE 1/2\" 55 X 100 REF: ST 13 55 100 IFLA"
-  },
-  {
-    "codigo": "4.09.00TLU9003CC",
-    "descricao": "COLETOR DE OLEO TIPO CARRINHO PARA CAMINHOES E TRATORES - 95 L"
-  },
-  {
-    "codigo": "4.09.00V88890300",
-    "descricao": "SCANNER DE DIAGNOSTICO - VOLVO"
-  },
-  {
     "codigo": "4.09.01000002400",
     "descricao": "COMPRESSOR SANDEN 7H15, 8 ORELHAS, 24V, R134A, 2A VERT"
   },
@@ -9690,14 +12502,6 @@
   {
     "codigo": "4.09.01000985000",
     "descricao": "APLICADOR DE PRESSURIZACAO MANUAL"
-  },
-  {
-    "codigo": "4.09.010119483SP",
-    "descricao": "TRAVA 9M E 15M SRL UN"
-  },
-  {
-    "codigo": "4.09.010121513SP",
-    "descricao": "ROTULO INFERIOR DA CAIXA - WKM 9 MTS"
   },
   {
     "codigo": "4.09.01018001001",
@@ -9734,10 +12538,6 @@
   {
     "codigo": "4.09.01247043001",
     "descricao": "DETECTOR DE TENSAO EZ - ALERT MINIPA"
-  },
-  {
-    "codigo": "4.09.02175002006",
-    "descricao": "FOLHA D LIXA NORTON FERRO G:100 REF: 2.175.002.006"
   },
   {
     "codigo": "4.09.02175002010",
@@ -9792,26 +12592,6 @@
     "descricao": "LANTERNA WURTH LED RECARREGÁVEL COM TECNOLOGIA COB"
   },
   {
-    "codigo": "4.09.0BASKET30MM",
-    "descricao": "CINTA SLING 30 mm - 1 METRO - 1 TONELADA VERTICAL - 2 TONELADAS BASKET (U) COR ROXA"
-  },
-  {
-    "codigo": "4.09.0CT10000000",
-    "descricao": "CAVALETE PARA CARROCERIA 10 TON REF: BOVENAU-CT10000"
-  },
-  {
-    "codigo": "4.09.0HS35222E25",
-    "descricao": "EMPUNHADURA P/TALHAD GED HS352–22E/25E"
-  },
-  {
-    "codigo": "4.09.0LAVKAR1215",
-    "descricao": "LAVADORA KARCHER HD 12/05"
-  },
-  {
-    "codigo": "4.09.0SERRABOSCH",
-    "descricao": "SERRA MARMORE BOSCH 127V"
-  },
-  {
     "codigo": "4.09.10000000290",
     "descricao": "SACA BUCHA"
   },
@@ -9830,18 +12610,6 @@
   {
     "codigo": "4.09.12457899135",
     "descricao": "CABO E FIBRA PARA MARRETA"
-  },
-  {
-    "codigo": "4.09.200000100KG",
-    "descricao": "BALANCA ELETRÔNICA P/GARRAFA DE GAS 100 KG"
-  },
-  {
-    "codigo": "4.09.20000MC1000",
-    "descricao": "MEDIDOR DE COMPRESSÃO - MC1000"
-  },
-  {
-    "codigo": "4.09.491192578GT",
-    "descricao": "MANGUEIRA 1/4, STR FEM,STR FEM"
   },
   {
     "codigo": "4.09.50005478541",
@@ -9888,10 +12656,6 @@
     "descricao": "CHAVE DE RODA 24 X 27 KRAUCHER VANADIUM 500 MM"
   },
   {
-    "codigo": "4.09.DIAMETRO34\"",
-    "descricao": "MANILHA CURVA DIAMETRO: 3/4\" - CAPACIDADE: 4,75 TONELADA"
-  },
-  {
     "codigo": "4.09.DIFERENCIAL",
     "descricao": "CHAVE P/ SACAR PORCA DE EIXO DIFERNCIAL"
   },
@@ -9902,5 +12666,9 @@
   {
     "codigo": "4.09.W7150K22000",
     "descricao": "KIT CHAVE DE IMPACTO 1/2\" A BATERIA"
+  },
+  {
+    "codigo": "4.10",
+    "descricao": "EQUIPAMENTOS DE INFORMÁTICA"
   }
 ]
