@@ -1,4 +1,21 @@
 <!DOCTYPE html>
+<!--
+  TRADIMAQ · STATUS DIÁRIO
+  APP_VERSION: 1.2.0
+  APP_UPDATED: 2026-10-20
+
+  CHANGELOG 1.2.0
+  - Importação de PDF textual gerado pelo próprio Status Diário.
+  - Restaura status das máquinas, horímetro e carga/combustível.
+  - Restaura observações, data e mantenedor quando disponíveis.
+  - Detecta a filial pelo cabeçalho do PDF.
+  - PDF filtrado atualiza apenas os equipamentos presentes no documento.
+  - Rejeita PDF rasterizado/sem texto para evitar preenchimento incorreto.
+
+  REGRA DE VERSIONAMENTO
+  PATCH = correção | MINOR = nova função compatível | MAJOR = mudança incompatível.
+-->
+
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -20,6 +37,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 
@@ -546,6 +564,7 @@
     .fab-action-btn.pdf-btn   { background: #2563eb; }
     .fab-action-btn.clear-btn { background: #6b7280; }
     .fab-action-btn.whats-btn { background: #25D366; }
+    .fab-action-btn.import-btn { background: #7c3aed; }
     .fab-toggle-btn { background: var(--brand-dark); }
 
     /* ── TOAST ── */
@@ -738,7 +757,7 @@
     .fab-container{bottom:14px;right:14px;gap:7px}
     .fab-main{width:48px;height:48px;font-size:18px;background:var(--brand)!important;border-radius:12px;color:#17191b;box-shadow:0 5px 16px rgba(0,0,0,.22)}
     .fab-action-btn{width:40px;height:40px;border-radius:10px;font-size:16px}.fab-action-label{font-size:10px;border-radius:5px;padding:5px 8px}
-    .fab-action-btn.pdf-btn{background:#25292e}.fab-action-btn.excel-btn{background:#25292e}.fab-action-btn.whats-btn{background:#25292e}
+    .fab-action-btn.pdf-btn{background:#25292e}.fab-action-btn.excel-btn{background:#25292e}.fab-action-btn.whats-btn{background:#25292e}.fab-action-btn.import-btn{background:#25292e}
 
     .modal-content{border-radius:8px;border-top:3px solid var(--brand)}
     .modal-buttons button{border-radius:5px}.modal-buttons button.selected{background:#25292e;border-color:#25292e;color:#fff}
@@ -1104,7 +1123,7 @@
 
   <div class="page-footer">
     <strong id="footer-total">Total: — equipamentos</strong> &nbsp;·&nbsp;
-    <span id="footer-loc" style="font-size:10px;">TRADIMAQ — Status Diário</span>
+    <span id="footer-loc" style="font-size:10px;">TRADIMAQ — Status Diário</span> &nbsp;·&nbsp; <span id="app-version" style="font-size:9px;opacity:.72;">v1.2.0</span>
   </div>
 
 </div><!-- /main-container -->
@@ -1140,6 +1159,7 @@
 <!-- Ações essenciais -->
 <div class="fab-container" id="fab-container">
   <div class="fab-group" id="fab-group">
+    <div class="fab-action"><span class="fab-action-label">Importar PDF</span><button class="fab-action-btn import-btn" onclick="abrirImportacaoPDF()" title="Importar PDF de Status">⇧</button></div>
     <div class="fab-action"><span class="fab-action-label">Gerar PDF</span><button class="fab-action-btn pdf-btn" onclick="gerarPDF()" title="PDF">▤</button></div>
     <div class="fab-action"><span class="fab-action-label">Gerar Excel</span><button class="fab-action-btn excel-btn" onclick="gerarExcel()" title="Excel">▦</button></div>
     <div class="fab-action"><span class="fab-action-label">WhatsApp</span><button class="fab-action-btn whats-btn" onclick="enviarWhatsApp()" title="WhatsApp">↗</button></div>
@@ -1149,6 +1169,7 @@
 </div>
 
 <div id="toast"></div>
+<input type="file" id="pdf-import-input" accept="application/pdf,.pdf" hidden onchange="importarStatusPDF(event)">
 
 <script>
 /* ══════════════════════════════════════════════
@@ -1158,6 +1179,8 @@ const DB_URL   = 'https://gaberoviva-cloud.github.io/Data/raiox-frota.json';
 const TECH_URL = 'https://gaberoviva-cloud.github.io/Data/tecnicos.json';
 const DB_CACHE = 'tradimaq_raiox_frota_status_cache_v1';
 const TECH_CACHE = 'tradimaq_tecnicos_status_cache_v1';
+const APP_VERSION = '1.2.0';
+const APP_UPDATED = '2026-10-20';
 
 const LOCAIS = {
   mg: { sigla:'MG', nome:'TRADIMAQ MATRIZ' },
@@ -1665,6 +1688,346 @@ function enviarWhatsApp() {
   window.open(`https://wa.me/?text=${encodeURIComponent(gerarResumoTexto())}`, '_blank');
 }
 
+
+/* ══════════════════════════════════════════════
+   IMPORTAÇÃO DE PDF · STATUS DIÁRIO
+   Reconstrói o preenchimento a partir do PDF textual gerado pelo app.
+   PDFs filtrados são atualização parcial: somente as máquinas presentes
+   no documento são alteradas. O restante do status atual é preservado.
+   ══════════════════════════════════════════════ */
+function abrirImportacaoPDF(){
+  if(fabOpen) toggleFab();
+  const inp=document.getElementById('pdf-import-input');
+  if(!inp)return;
+  inp.value='';
+  inp.click();
+}
+
+function pdfImportNorm(v){
+  return normalizeText(String(v??'')).replace(/\s+/g,' ').trim();
+}
+function pdfImportTag(v){
+  const m=String(v||'').toUpperCase().match(/\bTPE[\s-]?(\d{2,6})\b/);
+  return m?'TPE-'+m[1]:'';
+}
+function pdfImportDateToISO(br){
+  const m=String(br||'').match(/\b(\d{2})\/(\d{2})\/(\d{4})\b/);
+  return m?m[3]+'-'+m[2]+'-'+m[1]:'';
+}
+function pdfImportMm(x){return Number(x||0)*25.4/72;}
+
+function pdfImportGroupLines(items,tol=2.4){
+  const clean=(items||[])
+    .filter(i=>String(i.str||'').trim())
+    .map(i=>({text:String(i.str||'').trim(),x:Number(i.transform?.[4]||0),y:Number(i.transform?.[5]||0),w:Number(i.width||0)}))
+    .sort((a,b)=>Math.abs(b.y-a.y)>.01?b.y-a.y:a.x-b.x);
+  const lines=[];
+  clean.forEach(item=>{
+    let line=lines.find(l=>Math.abs(l.y-item.y)<=tol);
+    if(!line){line={y:item.y,items:[]};lines.push(line);}
+    line.items.push(item);
+  });
+  lines.forEach(l=>{
+    l.items.sort((a,b)=>a.x-b.x);
+    l.x=l.items.length?l.items[0].x:0;
+    l.text=l.items.map(i=>i.text).join(' ').replace(/\s+/g,' ').trim();
+  });
+  return lines.sort((a,b)=>b.y-a.y);
+}
+
+function pdfImportTextCol(line,aMm,bMm){
+  return (line.items||[])
+    .filter(i=>{const mm=pdfImportMm(i.x);return mm>=aMm-.7&&mm<bMm+.7;})
+    .sort((a,b)=>a.x-b.x)
+    .map(i=>i.text)
+    .join(' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function pdfImportStatusDaLinha(line){
+  const xs=(line.items||[])
+    .filter(i=>String(i.text||'').trim().toUpperCase()==='X')
+    .map(i=>pdfImportMm(i.x));
+  if(xs.some(x=>x>=116&&x<138))return 'disponivel';
+  if(xs.some(x=>x>=138&&x<158.5))return 'preventiva';
+  if(xs.some(x=>x>=158.5&&x<179))return 'corretiva';
+  if(xs.some(x=>x>=179&&x<=201))return 'checklist';
+  return 'alugada';
+}
+
+function pdfImportEnergia(v){
+  const n=pdfImportNorm(v);
+  if(!n||n==='—'||n==='-')return 'sem';
+  if(n.includes('carregando'))return 'carregando';
+  if(n.includes('pronta'))return 'pronta';
+  if(n.includes('carga baixa')||n==='baixa')return 'baixa';
+  if(n.includes('cheio'))return 'cheio';
+  if(n.includes('meio'))return 'meio';
+  if(n.includes('baixo'))return 'baixo';
+  if(n.includes('sem info'))return 'sem';
+  return '';
+}
+
+async function lerStatusPDF(file){
+  if(!window.pdfjsLib)throw new Error('Leitor de PDF não carregou. Recarregue a página e tente novamente.');
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  const data=new Uint8Array(await file.arrayBuffer());
+  const pdf=await pdfjsLib.getDocument({data}).promise;
+  const pages=[];
+  let totalItems=0;
+
+  for(let p=1;p<=pdf.numPages;p++){
+    const page=await pdf.getPage(p);
+    const tc=await page.getTextContent({normalizeWhitespace:true});
+    const items=(tc.items||[]).filter(i=>String(i.str||'').trim());
+    totalItems+=items.length;
+    pages.push({page:p,items,lines:pdfImportGroupLines(items)});
+  }
+
+  if(totalItems<10){
+    throw new Error('Este PDF não possui texto selecionável. Ele parece ter sido reimpresso ou convertido em imagem. Use o PDF puro gerado pelo Status Diário.');
+  }
+
+  const allText=pages.map(p=>p.lines.map(l=>l.text).join('\n')).join('\n');
+  const allNorm=pdfImportNorm(allText);
+
+  let detectedLoc='';
+  for(const [key,cfg] of Object.entries(LOCAIS)){
+    if(allNorm.includes(pdfImportNorm(cfg.nome))){detectedLoc=key;break;}
+  }
+
+  const maquinas=[];
+  const seen=new Set();
+
+  pages.forEach(pg=>{
+    pg.lines.forEach(line=>{
+      // A coluna TPE do PDF textual fica aproximadamente entre 35 e 53 mm.
+      const tagItem=(line.items||[]).find(i=>{
+        const x=pdfImportMm(i.x);
+        return x>=33&&x<=56&&!!pdfImportTag(i.text);
+      });
+      if(!tagItem)return;
+
+      const tag=pdfImportTag(tagItem.text);
+      if(!tag||seen.has(tag))return;
+
+      // Evita interpretar TPE citado em observação como linha da tabela.
+      const hasModelo=(line.items||[]).some(i=>pdfImportMm(i.x)>=10&&pdfImportMm(i.x)<35&&String(i.text||'').trim());
+      if(!hasModelo)return;
+
+      seen.add(tag);
+      const modelo=pdfImportTextCol(line,11,35);
+      const serie=pdfImportTextCol(line,53,78);
+      const energiaTxt=pdfImportTextCol(line,78,100);
+      const horTxt=pdfImportTextCol(line,100,117);
+      const horimetro=(horTxt.match(/\d+/g)||[]).join('');
+      maquinas.push({
+        tag,
+        modelo,
+        serie:serie==='—'?'':serie,
+        energia:pdfImportEnergia(energiaTxt),
+        horimetro,
+        status:pdfImportStatusDaLinha(line)
+      });
+    });
+  });
+
+  const dataMatch=allText.match(/\b\d{2}\/\d{2}\/\d{4}\b/);
+  const dataISO=dataMatch?pdfImportDateToISO(dataMatch[0]):'';
+
+  // Mantenedor: valor logo abaixo do rótulo MANTENEDOR na primeira página.
+  let mantenedor='';
+  const first=pages[0];
+  if(first){
+    const lab=first.lines.find(l=>pdfImportNorm(l.text)==='mantenedor');
+    if(lab){
+      const cands=first.lines
+        .filter(l=>l.y<lab.y-1.5&&lab.y-l.y<30&&l.x<270)
+        .sort((a,b)=>b.y-a.y);
+      const cand=cands.find(l=>{
+        const n=pdfImportNorm(l.text);
+        return n&&n!=='data'&&n!=='—'&&n!=='-'&&!n.includes('equipamento')&&!n.includes('frota');
+      });
+      if(cand)mantenedor=cand.text.trim();
+    }
+  }
+
+  // Observações: pega somente o conteúdo abaixo do título OBSERVAÇÕES.
+  const obsParts=[];
+  pages.forEach(pg=>{
+    const lab=pg.lines.find(l=>pdfImportNorm(l.text).startsWith('observacoes'));
+    if(!lab)return;
+    const lines=pg.lines
+      .filter(l=>l.y<lab.y-2&&l.y>48)
+      .filter(l=>l.items.some(i=>i.x>35&&i.x<570))
+      .filter(l=>{
+        const n=pdfImportNorm(l.text);
+        if(!n)return false;
+        if(n.startsWith('tradimaq ')&&n.includes('status diario'))return false;
+        if(/^pagina \d+/.test(n))return false;
+        if(n==='observacoes'||n.startsWith('observacoes continuacao'))return false;
+        return true;
+      })
+      .sort((a,b)=>b.y-a.y)
+      .map(l=>l.text.trim());
+    if(lines.length)obsParts.push(lines.join('\n'));
+  });
+  let observacoes=obsParts.join('\n').replace(/\n{3,}/g,'\n\n').trim();
+  if(observacoes==='—'||observacoes==='-')observacoes='';
+
+  if(!maquinas.length&&!observacoes){
+    throw new Error('O PDF tem texto, mas não reconheci a estrutura do Status Diário Tradimaq.');
+  }
+
+  return {detectedLoc,maquinas,observacoes,dataISO,mantenedor,paginas:pdf.numPages};
+}
+
+async function aplicarStatusImportado(parsed){
+  if(parsed.detectedLoc&&parsed.detectedLoc!==localAtual){
+    const atual=LOCAIS[localAtual]?.sigla||String(localAtual||'').toUpperCase();
+    const nova=LOCAIS[parsed.detectedLoc]?.sigla||String(parsed.detectedLoc).toUpperCase();
+    if(!confirm('O PDF é da filial '+nova+' e a tela está em '+atual+'.\n\nTrocar para '+nova+' e importar?'))return {cancelado:true};
+    await iniciarComLocal(parsed.detectedLoc);
+    localStorage.setItem('status_local',parsed.detectedLoc);
+  }
+
+  const rows=Array.from(document.querySelectorAll('#equipamentos-table tbody tr'));
+  const byTag=new Map();
+  const bySerie=new Map();
+  rows.forEach(tr=>{
+    const tag=pdfImportTag(tr.cells[1]?.textContent||'');
+    const serie=pdfImportNorm(tr.cells[2]?.textContent||'');
+    if(tag)byTag.set(tag,tr);
+    if(serie&&serie!=='—')bySerie.set(serie,tr);
+  });
+
+  let aplicadas=0;
+  let porSerie=0;
+  const naoEncontradas=[];
+
+  parsed.maquinas.forEach(m=>{
+    let tr=byTag.get(m.tag);
+    if(!tr&&m.serie){
+      tr=bySerie.get(pdfImportNorm(m.serie));
+      if(tr)porSerie++;
+    }
+    if(!tr){naoEncontradas.push(m.tag);return;}
+
+    const tag=tr.cells[1].textContent.trim();
+
+    // Status da máquina presente no PDF.
+    tr.classList.remove('disponivel','preventiva','corretiva','checklist','alugada');
+    tr.querySelectorAll('.status-radio').forEach(cb=>cb.checked=false);
+    localStorage.removeItem(cacheKey('status_'+tag));
+    if(m.status&&m.status!=='alugada'){
+      const cb=tr.querySelector('[data-status="'+m.status+'"]');
+      if(cb){
+        cb.checked=true;
+        tr.classList.add(m.status);
+        localStorage.setItem(cacheKey('status_'+tag),m.status);
+      }
+    }
+
+    // Horímetro: para a máquina presente no PDF, o valor do documento é a referência.
+    const hi=tr.querySelector('.horimetro-input');
+    if(hi){
+      hi.value=m.horimetro||'';
+      if(m.horimetro)localStorage.setItem(cacheKey('horimetro_'+tag),m.horimetro);
+      else localStorage.removeItem(cacheKey('horimetro_'+tag));
+    }
+
+    // Carga / combustível.
+    const eq=equipamentos.find(e=>e.tag===tag);
+    const tipo=inferEnergy(eq?.modelo||m.modelo||'');
+    if(tipo==='eletrico'){
+      const val=['pronta','baixa','carregando'].includes(m.energia)?m.energia:'sem';
+      if(val==='sem')localStorage.removeItem(cacheKey('carga_'+tag));
+      else localStorage.setItem(cacheKey('carga_'+tag),val);
+      refreshCargaCell(tag);
+    }else if(tipo==='combustao'){
+      const val=['cheio','meio','baixo'].includes(m.energia)?m.energia:'sem';
+      if(val==='sem')localStorage.removeItem(cacheKey('comb_'+tag));
+      else localStorage.setItem(cacheKey('comb_'+tag),val);
+      refreshCombCell(tag);
+    }
+
+    aplicadas++;
+  });
+
+  // Campos gerais do documento.
+  obsInput.value=parsed.observacoes||'';
+  obsPrint.textContent=obsInput.value;
+  localStorage.setItem(cacheKey('observacoes'),obsInput.value);
+
+  if(parsed.dataISO){
+    dataInput.value=parsed.dataISO;
+    localStorage.setItem(cacheKey('data'),parsed.dataISO);
+  }
+
+  if(parsed.mantenedor){
+    const n=pdfImportNorm(parsed.mantenedor);
+    const tech=tecnicosAtivos.find(t=>pdfImportNorm(t.nome)===n);
+    const nome=tech?String(tech.nome||''):parsed.mantenedor;
+    mantenedorInput.value=nome;
+    localStorage.setItem(cacheKey('mantenedor'),nome);
+  }
+
+  updateDashboard();
+  updateChart();
+  updateModeloChart();
+  updateCorretivaChart();
+  applyVisibility();
+  markSaved();
+
+  return {aplicadas,porSerie,naoEncontradas};
+}
+
+async function importarStatusPDF(event){
+  const input=event?.target;
+  const file=input?.files?.[0];
+  if(!file)return;
+
+  showToast('Lendo PDF…');
+  try{
+    const parsed=await lerStatusPDF(file);
+    const filial=parsed.detectedLoc?LOCAIS[parsed.detectedLoc]?.sigla:'não identificada';
+    const msg=[
+      'IMPORTAR STATUS DO PDF?',
+      '',
+      'Filial: '+filial,
+      'Máquinas reconhecidas: '+parsed.maquinas.length,
+      parsed.dataISO?'Data: '+formatDateBR(parsed.dataISO):'',
+      parsed.mantenedor?'Mantenedor: '+parsed.mantenedor:'',
+      parsed.observacoes?'Observações: encontradas':'Observações: vazias',
+      '',
+      'Somente as máquinas existentes no PDF serão alteradas.',
+      'Isso permite importar também PDFs filtrados.'
+    ].filter(Boolean).join('\n');
+
+    if(!confirm(msg)){showToast('Importação cancelada');return;}
+
+    const result=await aplicarStatusImportado(parsed);
+    if(result?.cancelado){showToast('Importação cancelada');return;}
+
+    let final='PDF importado · '+result.aplicadas+' máquina'+(result.aplicadas===1?'':'s');
+    if(result.naoEncontradas.length)final+=' · '+result.naoEncontradas.length+' não encontrada'+(result.naoEncontradas.length===1?'':'s');
+    showToast(final);
+
+    if(result.naoEncontradas.length){
+      console.warn('TPEs do PDF não encontrados na filial atual:',result.naoEncontradas);
+    }
+  }catch(err){
+    console.error('Importar PDF:',err);
+    alert('Não foi possível importar este PDF.\n\n'+(err?.message||String(err)));
+    showToast('Falha ao importar PDF');
+  }finally{
+    if(input)input.value='';
+  }
+}
+
+
 function gerarExcel() {
   if(fabOpen) toggleFab();
   const cfg = LOCAIS[localAtual];
@@ -1993,7 +2356,7 @@ async function gerarPDF() {
 
 if('serviceWorker' in navigator){
   const sw = `
-    const C='genie-status-v1';
+    const C='genie-status-v1.2.0';
     self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll([self.location.pathname])).then(()=>self.skipWaiting())));
     self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
     self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>r))));
