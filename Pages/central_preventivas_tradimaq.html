@@ -1773,6 +1773,8 @@ function renderPrecos(){
   el.innerHTML=h;
 }
 
+// ordem fixa das filiais: MG, SP, GO, ES, PA (ordem do CENTRO_MAP); desconhecidas vão pro fim
+function ordemFilial(a,b){const o=Object.values(CENTRO_MAP).map(x=>x[0]),ia=o.indexOf(a),ib=o.indexOf(b);return(ia<0?99:ia)-(ib<0?99:ib)||String(a).localeCompare(String(b),"pt-BR");}
 function expPeriodo(){
   const f=filtrosBase(),out=[];
   Array.from({length:f.hr},(_,i)=>addMonths(f.mr,f.ar,i)).forEach(({m,a})=>EQUIPAMENTOS.filter(e=>(!f.ff||e.filial===f.ff)&&(!f.mf||e.modelo===f.mf)).forEach(e=>{
@@ -1789,7 +1791,7 @@ function previsaoPivot(){
     if(!PLANOS[e.plano]){semPlano++;return;}
     itensPlano(e,e.tipo,"material").forEach(it=>{const q=Number(it.qtd)||0,u=precoUnit(it.codigo,it.descricao);L.push({i,m:e.m,a:e.ano,filial:e.filial,codigo:it.codigo,descricao:it.descricao,categoria:materialCategoria(it.descricao),qtd:q,unit:u,custo:u==null?0:q*u,sem:u==null});});
   });
-  const cols=visao==="filial"?[...new Set(eq.map(e=>e.filial).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR")):CATS_MAT;
+  const cols=visao==="filial"?[...new Set(eq.map(e=>e.filial).filter(Boolean))].sort(ordemFilial):CATS_MAT;
   const meses=m0.map((x,i)=>{const o=osm[i];return{m:x.m,a:x.a,label:`${MF[x.m-1]} ${x.a}`,short:`${MA[x.m-1]}/${String(x.a).slice(2)}`,os:o,osN:o[250]+o[500]+o[1000]+o[2000],vals:Object.fromEntries(cols.map(c=>[c,0])),total:0,acum:0};});
   L.forEach(l=>{const mm=meses[l.i],k=visao==="filial"?l.filial:l.categoria;if(k in mm.vals)mm.vals[k]+=l.custo;mm.total+=l.custo;});
   let ac=0;meses.forEach(m=>{ac+=m.total;m.acum=ac;});
@@ -1822,11 +1824,28 @@ function renderPrevisao(){
 }
 function exportarPrevisaoExcel(){
   const P=previsaoPivot();if(!P.calc.linhas.length){alert("Não há consumo previsto para o período e filtros da barra superior.");return;}
-  const wb=XLSX.utils.book_new(),r2=v=>Math.round(v*100)/100,sum=k=>P.meses.reduce((s,m)=>s+m.os[k],0);
-  const mesRows=P.meses.map(m=>{const r={'Mês':m.label,'OS':m.osN,'250h':m.os[250],'500h':m.os[500],'1000h':m.os[1000],'2000h':m.os[2000]};P.cols.forEach(c=>r[c]=r2(m.vals[c]));r['Total do mês']=r2(m.total);r['Acumulado']=r2(m.acum);return r;});
-  const tot={'Mês':'TOTAL DO PERÍODO','OS':P.osTotal,'250h':sum(250),'500h':sum(500),'1000h':sum(1000),'2000h':sum(2000)};P.cols.forEach(c=>tot[c]=r2(P.meses.reduce((s,m)=>s+m.vals[c],0)));tot['Total do mês']=r2(P.total);tot['Acumulado']='';mesRows.push(tot);
-  XLSX.utils.book_append_sheet(wb,prepararSheet(XLSX.utils.json_to_sheet(mesRows),[20,8,8,8,8,8,...P.cols.map(()=>16),16,16]),'Gasto mês a mês');
-  const fils=[...new Set(P.calc.eq.map(e=>e.filial).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"pt-BR")),porFil=P.meses.map((m,i)=>{const r={'Mês':m.label};fils.forEach(f=>r[f]=r2(P.calc.linhas.filter(l=>l.i===i&&l.filial===f).reduce((s,l)=>s+l.custo,0)));r['Total']=r2(m.total);return r;});
+  const wb=XLSX.utils.book_new(),r2=v=>Math.round(v*100)/100,fmt='"R$" #,##0.00';
+  // Aba "Gasto mês a mês": cada mês com a linha TODAS e uma linha por filial, separado por categoria de material
+  const E=expPeriodo(),idx=new Map(P.meses.map((m,i)=>[monthKey(m.m,m.a),i])),fl=[...new Set(P.calc.eq.map(e=>e.filial).filter(Boolean))].sort(ordemFilial);
+  const z0=()=>({250:0,500:0,1000:0,2000:0}),osF=P.meses.map(()=>Object.fromEntries(fl.map(f=>[f,z0()])));
+  E.forEach(e=>{const i=idx.get(monthKey(e.m,e.ano));if(i!=null&&osF[i][e.filial])osF[i][e.filial][e.tipo]++;});
+  const linha=(mes,fil,o,ls,ac)=>{
+    const n=o[250]+o[500]+o[1000]+o[2000],z=v=>v?r2(v):null,r={'Mês':mes,'Filial':fil,'OS':n||null,'250h':o[250]||null,'500h':o[500]||null,'1000h':o[1000]||null,'2000h':o[2000]||null};
+    CATS_MAT.forEach(c=>r[c]=z(ls.filter(l=>l.categoria===c).reduce((s,l)=>s+l.custo,0)));
+    r['Total']=z(ls.reduce((s,l)=>s+l.custo,0));r['Acumulado']=ac==null?null:r2(ac);return r;
+  };
+  const mesRows=[];
+  P.meses.forEach((m,i)=>{
+    const Li=P.calc.linhas.filter(l=>l.i===i);mesRows.push(linha(m.label,'TODAS',m.os,Li,m.acum));
+    fl.forEach(f=>mesRows.push(linha(m.label,f,osF[i][f],Li.filter(l=>l.filial===f),null)));
+  });
+  const sumOs=sel=>P.meses.reduce((a,m,i)=>{const o=sel(i,m);[250,500,1000,2000].forEach(k=>a[k]+=o[k]);return a;},z0());
+  mesRows.push(linha('TOTAL DO PERÍODO','TODAS',sumOs((i,m)=>m.os),P.calc.linhas,P.total));
+  fl.forEach(f=>mesRows.push(linha('TOTAL DO PERÍODO',f,sumOs(i=>osF[i][f]),P.calc.linhas.filter(l=>l.filial===f),null)));
+  const wsG=prepararSheet(XLSX.utils.json_to_sheet(mesRows),[20,18,8,8,8,8,8,...CATS_MAT.map(()=>16),16,16]);
+  Object.keys(wsG).forEach(k=>{if(k[0]==="!")return;const c=XLSX.utils.decode_cell(k);if(c.r>0&&c.c>=7&&typeof wsG[k].v==="number")wsG[k].z=fmt;});
+  XLSX.utils.book_append_sheet(wb,wsG,'Gasto mês a mês');
+  const fils=[...new Set(P.calc.eq.map(e=>e.filial).filter(Boolean))].sort(ordemFilial),porFil=P.meses.map((m,i)=>{const r={'Mês':m.label};fils.forEach(f=>r[f]=r2(P.calc.linhas.filter(l=>l.i===i&&l.filial===f).reduce((s,l)=>s+l.custo,0)));r['Total']=r2(m.total);return r;});
   XLSX.utils.book_append_sheet(wb,prepararSheet(XLSX.utils.json_to_sheet(porFil),[20,...fils.map(()=>20),16]),'Por filial');
   const mat=P.top.map(x=>{const r={'Código':x.codigo,'Material':x.descricao,'Categoria':x.categoria,'Qtd. no período':r2(x.qtd),'Preço unit.':r2(x.unit),'Custo no período':r2(x.custo)};P.meses.forEach((m,i)=>r[m.short]=r2(x.meses[i]));return r;});
   if(mat.length)XLSX.utils.book_append_sheet(wb,prepararSheet(XLSX.utils.json_to_sheet(mat),[20,54,16,14,12,16,...P.meses.map(()=>11)]),'Materiais');
